@@ -15,6 +15,6 @@ const Character = L.object({
   friends: L.array(L.string)`Names of the character's friends.`,
 })
 
-const character = await $.send(Character).then(dbg)
+const character = await $.value(Character).then(dbg)
 
 await Character.assert(character)

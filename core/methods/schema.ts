@@ -1,10 +1,9 @@
 import { AnnotationContext } from "../annotations/mod.ts"
-import { isType } from "../isType.ts"
 import type { JSONType } from "../JSONSchema.ts"
-import type { PartialType, Type } from "../Type.ts"
+import type { AnyType, Type } from "../Type.ts"
 import { TypeVisitor } from "../TypeVisitor.ts"
 
-export function toJSON(this: Type<unknown, any>): JSONType {
+export function schema(this: Type<unknown, any>): JSONType {
   const ctx = new ToJSONContext(new Map(), {})
   const root = visit([ctx, new AnnotationContext(this)], this)
   const { "0": _root, ...$defs } = ctx.defs
@@ -13,11 +12,11 @@ export function toJSON(this: Type<unknown, any>): JSONType {
 
 class ToJSONContext {
   constructor(
-    readonly ids: Map<PartialType, string>,
+    readonly ids: Map<AnyType, string>,
     readonly defs: Record<string, undefined | JSONType>,
   ) {}
 
-  id(type: PartialType): string {
+  id(type: AnyType): string {
     let id = this.ids.get(type)
     if (id === undefined) {
       id = this.ids.size.toString()
@@ -31,7 +30,7 @@ const visit = TypeVisitor<[ToJSONContext, AnnotationContext, root?: boolean], JS
   hook(next, [toJSONCtx, annotationCtx, root], type) {
     let jsonType: JSONType
     annotationCtx = annotationCtx.child(type)
-    if (isType(type, "array", "object", "union")) {
+    if (["array", "object", "union"].includes(type.type)) {
       const id = toJSONCtx.id(type)
       if (id in toJSONCtx.defs) {
         return toJSONCtx.defs[id] ?? {
@@ -94,7 +93,7 @@ const visit = TypeVisitor<[ToJSONContext, AnnotationContext, root?: boolean], JS
       anyOf: members.map((member) => visit(ctx, member)),
     }
   },
-  ref(ctx, _1, get): JSONType {
+  f(ctx, _1, get): JSONType {
     return visit(ctx, get())
   },
   transform(ctx, _1, from): JSONType {

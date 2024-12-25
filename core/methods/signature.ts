@@ -1,39 +1,26 @@
-import { encodeBase32 } from "@std/encoding"
 import { WeakMemo } from "../../util/WeakMemo.ts"
-import { IntrinsicName } from "../intrinsics_util.ts"
-import type { PartialType } from "../Type.ts"
+import type { AnyType } from "../Type.ts"
 import { TypeVisitor } from "../TypeVisitor.ts"
 
-export function signature(this: PartialType): string {
+export function signature(this: AnyType): string {
   return signatureMemo.getOrInit(this)
 }
 
-export const signatureMemo: WeakMemo<PartialType, string> = new WeakMemo((type) => {
+const signatureMemo: WeakMemo<AnyType, string> = new WeakMemo((type) => {
   const ctx = new SignatureContext()
   visit(ctx, type)
   return `{\n  ${Object.entries(ctx.defs).map(([k, v]) => `${k}: ${v}`).join("\n  ")}\n}`
 })
 
-export function signatureHash(this: PartialType): Promise<string> {
-  return signatureHashMemo.getOrInit(this)
-}
-
-export const signatureHashMemo: WeakMemo<PartialType, Promise<string>> = new WeakMemo((type) =>
-  crypto.subtle
-    .digest("SHA-256", new TextEncoder().encode(signatureMemo.getOrInit(type)))
-    .then(encodeBase32)
-    .then((v) => v.slice(0, -4))
-)
-
 class SignatureContext {
-  ids: Map<PartialType, string> = new Map()
+  ids: Map<AnyType, string> = new Map()
   defs: Record<string, undefined | string> = {}
 }
 
 const visit = TypeVisitor<SignatureContext, string>({
   hook(next, ctx, type): string {
     const { ids, defs } = ctx
-    switch (IntrinsicName(type)) {
+    switch (type.type) {
       case "array":
       case "object":
       case "union": {
@@ -76,14 +63,14 @@ const visit = TypeVisitor<SignatureContext, string>({
   union(ctx, _1, ...members): string {
     return `union(${members.map((member) => visit(ctx, member)).join(", ")})`
   },
-  ref(ctx, _1, get): string {
+  f(ctx, _1, get): string {
     return visit(ctx, get())
   },
   transform(ctx, _1, from): string {
     return visit(ctx, from)
   },
   fallback(_0, type) {
-    return IntrinsicName(type)
+    return type.type
   },
 })
 

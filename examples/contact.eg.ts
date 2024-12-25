@@ -18,6 +18,6 @@ $({
   content: "Extract contact data from the supplied message.",
 }, "Please call John Doe at 555-123-4567 or email him at john.doe@example.com.")
 
-const contact = await $.send(Contact).then(dbg)
+const contact = await $.value(Contact).then(dbg)
 
 await Contact.assert(contact)

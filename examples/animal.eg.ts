@@ -1,11 +1,10 @@
 import "@std/dotenv/load"
-import { L, Liminal, OllamaAdapter } from "liminal"
-import { Ollama } from "ollama"
+import { L, Liminal, OpenAIAdapter } from "liminal"
+import OpenAI from "openai"
 import { dbg } from "testing"
 
-const $ = Liminal(OllamaAdapter({
-  ollama: new Ollama(),
-  defaultModel: "llama3.2",
+const line = Liminal(OpenAIAdapter({
+  openai: new OpenAI(),
 }))
 
 const Dog = L.object({
@@ -24,6 +23,6 @@ const Animal = L.TaggedUnion({
   SlowLoris: null,
 })
 
-const animal = await $.send(Animal).then(dbg)
+const animal = await line.value(Animal).then(dbg)
 
 await Animal.assert(animal)

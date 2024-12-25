@@ -1,8 +1,8 @@
 import type { ArrayOfLength } from "../../util/mod.ts"
 import * as I from "../intrinsics.ts"
-import type { PartialType, Type } from "../Type.ts"
+import type { AnyType, Type } from "../Type.ts"
 
-export function Tuple<M extends Array<PartialType>>(
+export function Tuple<M extends Array<AnyType>>(
   ...members: M
 ): Type<{ [I in keyof M]: M[I]["T"] }, M[number]["D"]> {
   return I.transform(

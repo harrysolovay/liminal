@@ -1,6 +1,6 @@
 import * as I from "../intrinsics.ts"
 import type { JSONType } from "../JSONSchema.ts"
-import type { PartialType, Type } from "../Type.ts"
+import type { AnyType, Type } from "../Type.ts"
 import { Hydrated } from "./Hydrated.ts"
 import { Record } from "./Record.ts"
 import { TaggedUnion } from "./TaggedUnion.ts"
@@ -13,15 +13,15 @@ const JSONType_: Type<JSONType> = I.transform(
     number: null,
     string: null,
     array: I.object({
-      items: I.ref((): PartialType => JSONType_),
+      items: I.f((): AnyType => JSONType_),
     }),
-    object: I.transform(Record(I.ref((): PartialType => JSONType_)), (properties) => ({
+    object: I.transform(Record(I.f((): AnyType => JSONType_)), (properties) => ({
       properties,
       required: Object.keys(properties),
       additionalProperties: false,
     })),
     union: I.object({
-      anyOf: I.ref(() => JSONType_),
+      anyOf: I.f(() => JSONType_),
     }),
   }),
   ({ type, value }) => ({

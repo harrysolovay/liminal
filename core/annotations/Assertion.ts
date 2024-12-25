@@ -3,7 +3,7 @@ import { isTemplateStringsArray, type PromiseOr, recombine } from "../../util/mo
 export type AssertLike<T = any> = (value: T) => PromiseOr<void | boolean>
 
 export interface Assertion<T = any> {
-  type: "Assertion"
+  node: "Assertion"
   description: string
   f?: AssertLike<T>
 }
@@ -23,12 +23,12 @@ export function assert<T>(
 ): Assertion<T> {
   if (isTemplateStringsArray(e0)) {
     return {
-      type: "Assertion",
+      node: "Assertion",
       description: recombine(e0, [...e1 ? [e1] : [], ...eRest]),
     }
   }
   return {
-    type: "Assertion",
+    node: "Assertion",
     description: e0,
     f: e1 as never,
   }

@@ -37,7 +37,7 @@ function OpenAIFinalResponseFormat<T>(
     json_schema: {
       name,
       description,
-      schema: type.toJSON(),
+      schema: type.schema(),
       strict: true,
     },
     deserialize: (completion: ChatCompletion): T =>

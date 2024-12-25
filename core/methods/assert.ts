@@ -1,69 +1,26 @@
 import { assert as assert_, assertArrayIncludes, assertEquals } from "@std/assert"
-import type { PartialType } from "../Type.ts"
+import type { Diagnostic } from "../Diagnostic.ts"
+import type { AnyType } from "../Type.ts"
 import { TypeVisitor } from "../TypeVisitor.ts"
 
-export async function assert(this: PartialType, value: unknown): Promise<void> {
-  const ctx = new AssertContext([], [], "root", value)
-  visit(ctx, this)
-  const diagnostics = [
-    ...ctx.structuralDiagnostics,
-    ...await Promise.all(ctx.annotationDiagnostics ?? []).then((v) => v.filter((e) => !!e)),
-  ]
+export function assert<T>(this: AnyType<T>, value: unknown): asserts value is T {
+  const diagnostics: Array<Diagnostic> = []
+  visit(new AssertContext(diagnostics, "root", value), this)
   if (diagnostics.length) {
     throw new AggregateError(diagnostics.map(({ exception }) => exception))
   }
 }
 
-export interface Diagnostic {
-  type: PartialType
-  description?: string
-  path: string
-  value: unknown
-  exception?: unknown
-}
-
-export namespace Diagnostic {
-  export function toString({ description, exception, path, value }: Diagnostic): string {
-    return `Assertion${description ? ` "${description}"` : ""} failed ${
-      exception
-        ? exception instanceof Error ? `with Error "${exception.name}"` : "with exception"
-        : ""
-    } on value \`${JSON.stringify(value)}\` at \`root${path}\`: ${
-      exception instanceof Error ? exception.message : JSON.stringify(exception)
-    }`
-  }
-}
-
-export function matchUnionMember(members: Array<PartialType>, value: unknown): PartialType | void {
-  const queue = [...members]
-  while (queue.length) {
-    const current = queue.pop()!
-    const diagnostics: Array<Diagnostic> = []
-    visit(new AssertContext(diagnostics, undefined, "", value), current)
-    if (diagnostics.length) {
-      continue
-    }
-    return current
-  }
-}
-
 export class AssertContext {
   constructor(
-    readonly structuralDiagnostics: Array<Diagnostic>,
-    readonly annotationDiagnostics: undefined | Array<Promise<Diagnostic | void>>,
+    readonly diagnostics: Array<Diagnostic>,
     readonly path: string,
     readonly value: unknown,
     readonly junction?: number | string,
   ) {}
 
   descend = (value: unknown, junction?: number | string): AssertContext =>
-    new AssertContext(
-      this.structuralDiagnostics,
-      this.annotationDiagnostics,
-      this.path,
-      value,
-      junction,
-    )
+    new AssertContext(this.diagnostics, this.path, value, junction)
 }
 
 const visit = TypeVisitor<AssertContext, void>({
@@ -72,42 +29,12 @@ const visit = TypeVisitor<AssertContext, void>({
     try {
       next(ctx, type)
     } catch (exception: unknown) {
-      ctx.structuralDiagnostics.push({
+      ctx.diagnostics.push({
         type,
         path,
         exception,
         value: ctx.value,
       })
-    }
-    const { annotationDiagnostics } = ctx
-    if (annotationDiagnostics) {
-      type.annotations
-        .filter((annotation) => typeof annotation === "object" && annotation?.type === "Assertion")
-        .forEach(({ f, description }) => {
-          if (f) {
-            annotationDiagnostics.push((async () => {
-              try {
-                const passed = await f(ctx.value)
-                if (!passed) {
-                  return {
-                    type,
-                    path,
-                    description,
-                    value: ctx.value,
-                  }
-                }
-              } catch (exception: unknown) {
-                return {
-                  type,
-                  path,
-                  exception,
-                  description,
-                  value: ctx.value,
-                }
-              }
-            })())
-          }
-        })
     }
   },
   null({ value }) {
@@ -151,7 +78,20 @@ const visit = TypeVisitor<AssertContext, void>({
     assert_(match)
     visit(ctx, match)
   },
-  ref(ctx, _1, get) {
+  f(ctx, _1, get) {
     visit(ctx, get())
   },
 })
+
+export function matchUnionMember(members: Array<AnyType>, value: unknown): AnyType | void {
+  const queue = [...members]
+  while (queue.length) {
+    const current = queue.pop()!
+    const diagnostics: Array<Diagnostic> = []
+    visit(new AssertContext(diagnostics, "", value), current)
+    if (diagnostics.length) {
+      continue
+    }
+    return current
+  }
+}

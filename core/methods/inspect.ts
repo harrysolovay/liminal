@@ -1,8 +1,8 @@
-import type { PartialType } from "../Type.ts"
+import type { AnyType } from "../Type.ts"
 
 export const inspect = {
   [Symbol.for("Deno.customInspect")](
-    this: PartialType,
+    this: AnyType,
     _inspect: (value: unknown, opts: unknown) => string,
     _opts: unknown,
   ): string {

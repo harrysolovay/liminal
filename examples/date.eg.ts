@@ -23,6 +23,6 @@ const LDate: Type<Date> = L.transform(
   ([y, m, d]) => new Date(y, m, d),
 )
 
-const date = await $.send(LDate).then(dbg)
+const date = await $.value(LDate).then(dbg)
 
 await LDate.assert(date)

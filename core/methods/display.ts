@@ -1,14 +1,13 @@
-import { IntrinsicName } from "../intrinsics_util.ts"
-import type { PartialType } from "../Type.ts"
+import type { AnyType } from "../Type.ts"
 import { TypeVisitor } from "../TypeVisitor.ts"
 
-export function display(this: PartialType, depth: number = 0): string {
+export function display(this: AnyType, depth: number = 0): string {
   return visit(new DisplayContext(this, false, depth), this)
 }
 
 class DisplayContext {
   constructor(
-    readonly rootType: PartialType,
+    readonly rootType: AnyType,
     readonly visitedRoot: boolean,
     readonly depth: number,
   ) {}
@@ -52,14 +51,14 @@ const visit = TypeVisitor<DisplayContext, string>({
       )
     }\n)`
   },
-  ref(ctx, _1, get): string {
+  f(ctx, _1, get): string {
     return visit(ctx, get())
   },
   transform(ctx, _1, from): string {
     return `f(${visit(ctx, from)})`
   },
   fallback(_0, type) {
-    return IntrinsicName(type)
+    return type.type
   },
 })
 

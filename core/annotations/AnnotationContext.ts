@@ -1,15 +1,15 @@
 import { assert } from "@std/assert"
 import type { AssertTrue, IsNever } from "conditional-type-checks"
 import { recombine } from "../../util/mod.ts"
-import type { PartialType } from "../Type.ts"
+import type { AnyType } from "../Type.ts"
 import type { Assertion } from "./Assertion.ts"
 import { DescriptionParamKey, isDescriptionParamValue } from "./DescriptionParam.ts"
 
 export class AnnotationContext {
   constructor(
-    readonly type: PartialType,
+    readonly type: AnyType,
     readonly descriptions: Array<string> = [],
-    readonly pins: Map<PartialType, string> = new Map(),
+    readonly pins: Map<AnyType, string> = new Map(),
     readonly args: Record<symbol, Array<unknown>> = {},
     readonly assertions: Array<Assertion> = [],
   ) {
@@ -19,16 +19,16 @@ export class AnnotationContext {
       } else if (typeof annotation === "number") {
         descriptions.push(annotation.toString())
       } else if (annotation) {
-        switch (annotation.type) {
+        switch (annotation.node) {
           case "Template": {
             descriptions.push(recombine(
               annotation.template,
               annotation.parts.map((part) => {
                 if (typeof part === "string" || typeof part === "number") {
                   return part
-                } else if (part.type === "Type") {
+                } else if (part.node === "Type") {
                   return this.pin(part)
-                } else if (part.type === "Param") {
+                } else if (part.node === "Param") {
                   const values = args[part.key]
                   assert(values && values.length)
                   const eL = values[values.length - 1]!
@@ -77,7 +77,7 @@ export class AnnotationContext {
     })
   }
 
-  pin = (type: PartialType): string => {
+  pin = (type: AnyType): string => {
     let pin = this.pins.get(type)
     if (!pin) {
       pin = `T${this.pins.size}`
@@ -86,7 +86,7 @@ export class AnnotationContext {
     return pin
   }
 
-  child = (type: PartialType): AnnotationContext =>
+  child = (type: AnyType): AnnotationContext =>
     new AnnotationContext(type, [], this.pins, { ...this.args }, [])
 
   format = (declarePins?: boolean): string | undefined => {

@@ -9,7 +9,7 @@ const $ = Liminal(OllamaAdapter({
 }))
 
 const result = await $`Describe the weather in New York City?`
-  .send(L.string, {
+  .value(L.string, {
     tools: { weather },
   })
 

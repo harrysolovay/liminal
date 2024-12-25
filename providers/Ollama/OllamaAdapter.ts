@@ -40,7 +40,7 @@ export function OllamaAdapter({
       return ollama.chat({
         model,
         messages,
-        format: type.toJSON(),
+        format: type.schema(),
         stream: false,
         options,
       }).then((v) => v.message)

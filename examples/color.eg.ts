@@ -16,6 +16,6 @@ const ColorHex: Type<string> = L.transform(
   (rgb) => rgb.map((channel) => channel.toString(16).padStart(2, "0")).join(""),
 )
 
-const colorHex = await $.send(ColorHex).then(dbg)
+const colorHex = await $.value(ColorHex).then(dbg)
 
 await ColorHex.assert(colorHex)

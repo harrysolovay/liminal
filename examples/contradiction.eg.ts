@@ -14,4 +14,4 @@ const Contradiction = L.string`A reason to be sad.`(
   L.assert`Is a reason to be happy.`,
 )
 
-await $.send(Contradiction).then(dbg)
+await $.value(Contradiction).then(dbg)

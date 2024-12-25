@@ -7,32 +7,46 @@ import {
   display,
   extract,
   inspect,
+  schema,
   signature,
-  signatureHash,
-  toJSON,
 } from "./methods/mod.ts"
 import type { ReduceDependencies } from "./ReduceDependencies.ts"
-import { type PartialType, type Type, type TypeDeclaration, TypeKey } from "./Type.ts"
+import type { AnyType, Type, TypeDeclaration } from "./Type.ts"
 
 export { null_ as null }
 const null_: Type<null> = declare({
-  getAtom: () => null_,
+  type: "null",
+  self() {
+    return null_
+  },
 })
 
 export const boolean: Type<boolean> = declare({
-  getAtom: () => boolean,
+  type: "boolean",
+  self() {
+    return boolean
+  },
 })
 
 export const integer: Type<number> = declare({
-  getAtom: () => integer,
+  type: "integer",
+  self() {
+    return integer
+  },
 })
 
 export const number: Type<number> = declare({
-  getAtom: () => number,
+  type: "number",
+  self() {
+    return number
+  },
 })
 
 export const string: Type<string> = declare({
-  getAtom: () => string,
+  type: "string",
+  self() {
+    return string
+  },
 })
 
 export { const_ as const }
@@ -41,7 +55,10 @@ function const_<T, P extends symbol, const A extends T>(
   value: A,
 ): Type<A, P> {
   return declare({
-    factory: const_,
+    type: "const",
+    self() {
+      return const_
+    },
     args: [type, value],
   })
 }
@@ -49,16 +66,22 @@ Object.defineProperty(const_, "name", { value: "const" })
 
 export function array<T, P extends symbol>(element: Type<T, P>): Type<Array<T>, P> {
   return declare({
-    factory: array,
+    type: "array",
+    self() {
+      return array
+    },
     args: [element],
   })
 }
 
-export function object<F extends Record<string, PartialType>>(
+export function object<F extends Record<string, AnyType>>(
   fields: F,
 ): Type<{ [K in keyof F]: F[K]["T"] }, F[keyof F]["D"]> {
   return declare({
-    factory: object,
+    type: "object",
+    self() {
+      return object
+    },
     args: [Object.fromEntries(Object.keys(fields).toSorted().map((key) => [key, fields[key]]))],
   })
 }
@@ -66,24 +89,33 @@ export function object<F extends Record<string, PartialType>>(
 export { enum_ as enum }
 function enum_<V extends Array<string>>(...values: V): Type<V[number]> {
   return declare({
-    factory: enum_,
+    type: "enum",
+    self() {
+      return enum_
+    },
     args: values.toSorted(),
   })
 }
 Object.defineProperty(enum_, "name", { value: "enum" })
 
-export function union<M extends Array<PartialType>>(
+export function union<M extends Array<AnyType>>(
   ...members: M
 ): Type<M[number]["T"], M[number]["D"]> {
   return declare({
-    factory: union,
+    type: "union",
+    self() {
+      return union
+    },
     args: members,
   })
 }
 
-export function ref<T, P extends symbol>(get: () => Type<T, P>): Type<T, P> {
+export function f<T, P extends symbol>(get: () => Type<T, P>): Type<T, P> {
   return declare({
-    factory: ref,
+    type: "f",
+    self() {
+      return f
+    },
     args: [get],
   }) as never
 }
@@ -93,7 +125,10 @@ export function transform<T, P extends symbol, R>(
   f: (value: T) => R,
 ): Type<R, P> {
   return declare({
-    factory: transform,
+    type: "transform",
+    self() {
+      return transform
+    },
     args: [from, f],
   })
 }
@@ -105,21 +140,27 @@ function declare<T, D extends symbol>(
   return Object.assign(
     Type,
     inspect,
+    declaration,
     {
-      [TypeKey]: true,
-      type: "Type",
+      node: "Type",
       trace: new Error().stack!,
-      declaration,
       annotations,
       display,
       extract,
       description,
       signature,
-      signatureHash,
-      toJSON,
+      schema,
       deserialize,
       assert,
-    } satisfies Omit<Type<T, D>, "T" | "D"> as never,
+      is(value): value is T {
+        try {
+          assert.call(this as Type<T, D>, value)
+          return true
+        } catch (_e: unknown) {
+          return false
+        }
+      },
+    } satisfies Omit<Type<T, D>, keyof TypeDeclaration | "T" | "D"> as never,
   )
 
   function Type<A extends Array<TemplatePart>>(
@@ -133,7 +174,7 @@ function declare<T, D extends symbol>(
   ): Type<T, symbol> {
     if (isTemplateStringsArray(e0)) {
       return declare(declaration, [...annotations, {
-        type: "Template",
+        node: "Template",
         template: e0,
         parts: eRest as Array<TemplatePart>,
       }])

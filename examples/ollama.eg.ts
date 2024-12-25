@@ -15,7 +15,7 @@ const T = L.object({
   available: L.boolean,
 })
 
-const t = await $.send(T).then(dbg)
+const t = await $.value(T).then(dbg)
 
 // @egts:cut
 await T.assert(t)

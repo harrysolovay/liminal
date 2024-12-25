@@ -18,6 +18,5 @@ export interface AdapterCompleteConfig<T, P extends Provider> {
   type: Type<T, never>
   messages?: Array<P["I" | "O"]>
   model?: P["M"]
-  name?: string
   options?: P["E"]
 }

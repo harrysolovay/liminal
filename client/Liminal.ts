@@ -1,6 +1,6 @@
-import type { Type } from "../core/mod.ts"
+import { L, type Type } from "../core/mod.ts"
 import { isTemplateStringsArray } from "../util/isTemplateStringsArray.ts"
-import { recombine } from "../util/mod.ts"
+import { type PromiseOr, recombine } from "../util/mod.ts"
 import type { Adapter, Provider } from "./Adapter.ts"
 import type { Tool } from "./Tool.ts"
 
@@ -11,34 +11,37 @@ export interface Liminal<P extends Provider> {
   adapter: Adapter<P>
   messages: Array<P["I" | "O"]>
 
-  send: <T>(type: Type<T, never>, config?: CompleteConfig<P>) => Promise<T>
-  // TODO: better name
-  next: (f: (messages: Array<P["I" | "O"]>) => Array<P["I" | "O"]>) => Liminal<P>
+  type(config?: ValueConfig<P>): Promise<Type<unknown, never>>
+  value: <T>(type: Type<T, never>, config?: ValueConfig<P>) => Promise<T>
+  map: (f: (messages: Array<P["I" | "O"]>) => Array<P["I" | "O"]>) => Liminal<P>
 }
 
-export interface CompleteConfig<P extends Provider> {
+export interface ValueConfig<P extends Provider> {
   model?: P["M"]
-  name?: string
   options?: P["E"]
   tools?: Record<string, Tool>
 }
 
 export function Liminal<P extends Provider>(
   adapter: Adapter<P>,
-  messages_?: Array<P["I" | "O"]>,
+  options?: LiminalOptions<P>,
 ): Liminal<P> {
-  const messages = messages_ ? [...messages_] : []
-  const self = Object.assign($, {
+  const messages = options?.messages ?? []
+  return Object.assign($, {
     adapter,
     messages,
-    send,
-    next,
+    type,
+    value,
+    map,
   })
-  return self
 
-  function $(...texts: Array<number | string | P["I" | "O"]>): Liminal<P>
-  function $(template: TemplateStringsArray, ...values: Array<number | string>): Liminal<P>
-  function $(...args: Array<unknown>) {
+  function $(this: Liminal<P>, ...texts: Array<number | string | P["I" | "O"]>): Liminal<P>
+  function $(
+    this: Liminal<P>,
+    template: TemplateStringsArray,
+    ...values: Array<number | string>
+  ): Liminal<P>
+  function $(this: Liminal<P>, ...args: Array<unknown>): Liminal<P> {
     const [e0, ...rest] = args
     if (isTemplateStringsArray(e0)) {
       messages.push(adapter.formatInput(recombine(e0, rest)))
@@ -53,28 +56,35 @@ export function Liminal<P extends Provider>(
         )
       })
     }
-    return self
+    return this
   }
 
-  function send<T>(type: Type<T, never>, config?: CompleteConfig<P>): Promise<T> {
+  function type(config?: ValueConfig<P>): Promise<Type<unknown, never>> {
+    return value(L.MetaType, config)
+  }
+
+  function value<T>(type: Type<T, never>, config?: ValueConfig<P>): Promise<T> {
     type = adapter.transform?.(type) ?? type
     return adapter.complete({
       type,
       messages,
       model: config?.model,
-      name: config?.name,
     }).then((message) => {
       messages.push(message)
       return type.deserialize(adapter.unwrapOutput(message))
     })
   }
 
-  function next(f: (messages: Array<P["I" | "O"]>) => Array<P["I" | "O"]>): Liminal<P> {
-    return Liminal(adapter, f(messages))
+  function map(f: (messages: Array<P["I" | "O"]>) => Array<P["I" | "O"]>): Liminal<P> {
+    return Liminal(adapter, {
+      ...options ?? {},
+      messages: f(messages),
+    })
   }
 }
 
-// parent?: Liminal<C>
-// branch: () => Liminal<C>
-// serialize: () => Array<C["I" | "O"]>
-// merge
+export interface LiminalOptions<P extends Provider> extends ValueConfig<P> {
+  messages?: Array<P["I" | "O"]>
+  onMessage?: (message: P["I" | "O"]) => PromiseOr<void>
+  tools?: Record<string, Tool>
+}

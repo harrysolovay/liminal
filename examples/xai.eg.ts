@@ -11,6 +11,6 @@ const $ = Liminal(OpenAIAdapter({
 
 $`How are you today?`
 
-const how = await $.send(L.string)
+const how = await $.value(L.string)
 
 await L.string.assert(how)

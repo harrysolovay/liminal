@@ -1,3 +1,4 @@
+import { encodeBase32 } from "@std/encoding"
 import type Openai from "openai"
 import type { ChatModel } from "openai/resources/chat/chat"
 import type {
@@ -6,7 +7,8 @@ import type {
   ChatCompletionMessageParam,
 } from "openai/resources/chat/completions"
 import { type Adapter, DEFAULT_INSTRUCTIONS } from "../../client/mod.ts"
-import { JSONTypeName } from "../../core/mod.ts"
+import { type AnyType, JSONTypeName } from "../../core/mod.ts"
+import { WeakMemo } from "../../util/mod.ts"
 import { transform } from "../provider_common.ts"
 import { unwrapCompletion, unwrapOutput } from "./openai_util.ts"
 import { OpenAIResponseFormat } from "./OpenAIResponseFormat.ts"
@@ -39,7 +41,7 @@ export function OpenAIAdapter({
       content,
     }),
     unwrapOutput,
-    complete: async ({ name, type, messages, model, options }) => {
+    complete: async ({ type, messages, model, options }) => {
       if (!messages || !messages.length) {
         messages = [{
           role: "system",
@@ -53,7 +55,7 @@ export function OpenAIAdapter({
           model: model ?? defaultModel,
         }).then(unwrapCompletion)
       }
-      const response_format = OpenAIResponseFormat(name ?? await type.signatureHash(), type)
+      const response_format = OpenAIResponseFormat(await signatureHashMemo.getOrInit(type), type)
       return openai.chat.completions
         .create({
           model,
@@ -65,3 +67,10 @@ export function OpenAIAdapter({
     },
   }
 }
+
+const signatureHashMemo: WeakMemo<AnyType, Promise<string>> = new WeakMemo((type) =>
+  crypto.subtle
+    .digest("SHA-256", new TextEncoder().encode(type.signature()))
+    .then(encodeBase32)
+    .then((v) => v.slice(0, -4))
+)

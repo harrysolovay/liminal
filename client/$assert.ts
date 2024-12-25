@@ -15,9 +15,7 @@ export async function $assert<P extends Provider>(
     ${JSON.stringify(value, null, 2)}
     \`\`\
   `
-  const reason = await $.send(L.Option(L.string`Reason behind the assertion failure.`), {
-    name: "liminal_assert",
-  })
+  const reason = await $.value(L.Option(L.string`Reason behind the assertion failure.`))
   if (reason) {
     throw new AssertionError(reason)
   }

@@ -1,9 +1,9 @@
-import type { PartialType } from "../Type.ts"
+import type { AnyType } from "../Type.ts"
 import type { DescriptionParamValue } from "./DescriptionParam.ts"
 import type { AnyParam } from "./Param.ts"
 
 export interface Template {
-  type: "Template"
+  node: "Template"
   template: TemplateStringsArray
   parts: Array<TemplatePart>
 }
@@ -11,5 +11,5 @@ export interface Template {
 export type TemplatePart =
   | number
   | string
-  | PartialType
+  | AnyType
   | AnyParam<number | string | DescriptionParamValue>

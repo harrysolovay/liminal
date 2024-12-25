@@ -8,10 +8,10 @@ const $ = Liminal(OpenAIAdapter({
 }))
 
 $`Declare a type that describes the ontology of a magical story world.`
-const World = await $.send(L.MetaType).then(dbg)
+const World = await $.value(L.MetaType).then(dbg)
 
 $`Generate the story world's data.`
-const world = await $.send(World).then(dbg)
+const world = await $.value(World).then(dbg)
 
 // @egts:cut-start
 await L.MetaType.assert(World)

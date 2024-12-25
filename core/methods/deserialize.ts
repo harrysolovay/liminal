@@ -1,16 +1,13 @@
 import { assert } from "@std/assert"
-import type { PartialType } from "../Type.ts"
+import type { AnyType } from "../Type.ts"
 import { TypeVisitor } from "../TypeVisitor.ts"
 import { matchUnionMember } from "./assert.ts"
 
-export function deserialize<T>(this: PartialType, jsonText: string): T {
+export function deserialize<T>(this: AnyType, jsonText: string): T {
   return visit(JSON.parse(jsonText), this) as never
 }
 
 const visit = TypeVisitor<unknown, unknown>({
-  hook(next, value, type) {
-    return next(value, type)
-  },
   array(value, _1, element): unknown {
     return (value as Array<unknown>).map((e) => visit(e, element))
   },
@@ -24,7 +21,7 @@ const visit = TypeVisitor<unknown, unknown>({
     assert(matched)
     return visit(value, matched)
   },
-  ref(ctx, _1, get): unknown {
+  f(ctx, _1, get): unknown {
     return visit(ctx, get())
   },
   transform(ctx, _1, from, f): unknown {

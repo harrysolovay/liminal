@@ -1,9 +1,9 @@
 import * as A from "@std/assert"
 import { testIntrinsics } from "testing"
 import * as I from "../intrinsics.ts"
-import type { PartialType } from "../Type.ts"
+import type { AnyType } from "../Type.ts"
 
-testIntrinsics<[PartialType, unknown, errorCount?: number]>("assert", assertErrors, {
+testIntrinsics<[AnyType, unknown, errorCount?: number]>("assert", assertErrors, {
   null: [
     [I.null, null],
     [I.null, undefined, 1],
@@ -46,7 +46,7 @@ testIntrinsics<[PartialType, unknown, errorCount?: number]>("assert", assertErro
 
 async function assertErrors(
   _t: Deno.TestContext,
-  type: PartialType,
+  type: AnyType,
   value: unknown,
   errorCount?: number,
 ): Promise<void> {

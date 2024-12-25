@@ -11,11 +11,11 @@ const $ = Liminal(OpenAIAdapter({
 
 const Character = L.MetaType`A character of a superhero story.`
 
-const Hero = $.send(Character`The superhero.`)
-const Villain = $.send(Character`The supervillain.`)
-const Civilian = $.send(Character`Civilians.`)
-const Sidekick = $.send(Character`The sidekick.`)
+const Hero = $.value(Character`The superhero.`)
+const Villain = $.value(Character`The supervillain.`)
+const Civilian = $.value(Character`Civilians.`)
+const Sidekick = $.value(Character`The sidekick.`)
 
 const Archetypes = L.Tuple(...await Promise.all([Hero, Villain, Civilian, Sidekick]))
 
-await $.send(Archetypes).then(dbg)
+await $.value(Archetypes).then(dbg)

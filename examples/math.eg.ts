@@ -27,6 +27,6 @@ $(
   "How can I solve 8x + 7 = -23?",
 )
 
-const reasoning = await $.send(MathReasoning).then(dbg)
+const reasoning = await $.value(MathReasoning).then(dbg)
 
 await MathReasoning.assert(reasoning)

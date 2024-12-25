@@ -1,7 +1,6 @@
-import { unreachable } from "@std/assert"
 import type { Expand } from "../util/mod.ts"
 import * as I from "./intrinsics.ts"
-import type { PartialType } from "./Type.ts"
+import type { AnyType } from "./Type.ts"
 
 export type JSONType = JSONTypes[JSONTypeName]
 export type JSONTypeName = keyof JSONTypes
@@ -51,8 +50,8 @@ namespace JSONTypes {
   }
 }
 
-export function JSONTypeName(type: PartialType): JSONTypeName {
-  switch (type.declaration.getAtom?.()) {
+export function JSONTypeName(type: AnyType): JSONTypeName {
+  switch (type.self()) {
     case I.null: {
       return "null"
     }
@@ -68,10 +67,8 @@ export function JSONTypeName(type: PartialType): JSONTypeName {
     case I.string: {
       return "string"
     }
-  }
-  switch (type.declaration.factory) {
     case I.const: {
-      return JSONTypeName(type.declaration.args[0] as PartialType)
+      return JSONTypeName(type.args?.[0]! as AnyType)
     }
     case I.array: {
       return "array"
@@ -85,12 +82,14 @@ export function JSONTypeName(type: PartialType): JSONTypeName {
     case I.union: {
       return "union"
     }
-    case I.ref: {
+    case I.f: {
       return "ref"
     }
     case I.transform: {
-      return JSONTypeName(type.declaration.args[0] as PartialType)
+      return JSONTypeName(type.args?.[0] as AnyType)
+    }
+    default: {
+      throw 0
     }
   }
-  unreachable()
 }
