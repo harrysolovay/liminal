@@ -1,4 +1,4 @@
-import { isTemplateStringsArray } from "../../util/isTemplateStringsArray.ts"
+import { isTemplateStringsArray } from "../../../util/isTemplateStringsArray.ts"
 import { declareRune } from "../_declareRune.ts"
 import type { Runic } from "../_Rune.ts"
 import type { Annotation, Type, TypeMembers } from "../Type.ts"

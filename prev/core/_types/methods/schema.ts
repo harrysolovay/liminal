@@ -1,4 +1,4 @@
-import { WeakMemo } from "../../../util/WeakMemo.ts"
+import { WeakMemo } from "../../../../util/WeakMemo.ts"
 import { RecursiveVisitorState } from "../../_RecursiveVisitorState.ts"
 import { Visitor } from "../../_Visitor.ts"
 import type { JSONType } from "../../JSONType.ts"

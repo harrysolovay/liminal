@@ -1,4 +1,4 @@
-import type { Falsy } from "../util/Falsy.ts"
+import type { Falsy } from "../../util/Falsy.ts"
 import type { Rune } from "./_Rune.ts"
 import type { JSONType } from "./JSONType.ts"
 

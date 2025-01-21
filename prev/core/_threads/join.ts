@@ -1,5 +1,5 @@
-import type { Expand } from "../../util/Expand.ts"
-import type { U2I } from "../../util/U2I.ts"
+import type { Expand } from "../../../util/Expand.ts"
+import type { U2I } from "../../../util/U2I.ts"
 import type { Thread } from "../Thread.ts"
 import { declareThread } from "./_declareThread.ts"
 

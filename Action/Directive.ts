@@ -1,21 +1,21 @@
 import { isTemplateStringsArray } from "../util/isTemplateStringsArray.ts"
 
-export interface System {
-  kind: "System"
+export interface Directive {
+  kind: "Directive"
   instructions: string
 }
 
-export function System(
+export function directive(
   template: TemplateStringsArray,
   ...substitutions: Array<string>
-): Generator<System, () => void>
-export function System(instructions: string): Generator<System, () => void>
-export function* System(
+): Generator<Directive, () => void>
+export function directive(instructions: string): Generator<Directive, () => void>
+export function* directive(
   e0: TemplateStringsArray | string,
   ...rest: Array<string>
-): Generator<System, () => void> {
+): Generator<Directive, () => void> {
   return yield {
-    kind: "System",
+    kind: "Directive",
     instructions: isTemplateStringsArray(e0) ? String.raw(e0, ...rest) : e0,
   }
 }

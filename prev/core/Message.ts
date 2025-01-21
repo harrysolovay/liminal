@@ -1,4 +1,4 @@
-import type { Falsy } from "../util/Falsy.ts"
+import type { Falsy } from "../../util/Falsy.ts"
 
 export type MessageLike = Falsy | string | Message
 

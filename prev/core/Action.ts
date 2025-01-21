@@ -1,5 +1,5 @@
-import type { Expand } from "../util/Expand.ts"
-import type { U2I } from "../util/U2I.ts"
+import type { Expand } from "../../util/Expand.ts"
+import type { U2I } from "../../util/U2I.ts"
 import type { E as E_ } from "./E.ts"
 import type { MessageLike } from "./Message.ts"
 import type { Model } from "./Model.ts"

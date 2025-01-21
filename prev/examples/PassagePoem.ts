@@ -1,22 +1,14 @@
-import { directive, E, Exec, Thread, Type as L } from "liminal"
-import { model } from "liminal/openai"
+import { E, Exec, System, Thread, Type as L } from "liminal"
 import OpenAI from "openai"
+import { model } from "../prev/providers/openai.ts"
 
 const text = await Deno.readTextFile(new URL("dracula.txt", import.meta.url))
 const SAMPLE_LENGTH = 1000
 
-for await (const e of Exec(Main())) {
-  switch (e.event) {
-    case "A": {
-      switch (e.value) {}
-    }
-  }
-}
-
-const y = Thread.new("A", PassagePoem())
+for await (const _ of Exec(Main())) {}
 
 function* Main() {
-  const x = yield* Thread.parallel(
+  const x = yield* Thread.join(
     Thread.new("A", PassagePoem()),
     Thread.new("B", PassagePoem()),
     Thread.new("C", PassagePoem()),
@@ -25,9 +17,9 @@ function* Main() {
 }
 
 function* PassagePoem() {
-  yield* directive`You are a helpful assistant.`
-
   yield model(new OpenAI(), "gpt-4o-mini")
+
+  yield* System`You are a helpful assistant.`
 
   yield "Summarize the following passage from Bram Stoker's Dracula."
 
@@ -36,7 +28,7 @@ function* PassagePoem() {
 
   yield L.string
 
-  yield "Use that summary to create a poem."
+  yield "Use the summary to create a poem."
 
   const poem = yield* L.string
 

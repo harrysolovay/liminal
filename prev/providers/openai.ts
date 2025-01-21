@@ -1,12 +1,12 @@
 import type OpenAI from "openai"
 import type { ChatModel } from "openai/resources/chat/chat"
-import { type Model, Type } from "../mod.ts"
-import { assert } from "../util/assert.ts"
+import { type Model, Type } from "../../mod.ts"
+import { assert } from "../../util/assert.ts"
 
 export function model(openai: OpenAI, model: (string & {}) | ChatModel): Model {
   return {
     kind: "Model",
-    complete: async (messages, type) => {
+    complete: async (type, system, messages) => {
       const response_format = type.self() === Type.string ? undefined : {
         type: "json_schema" as const,
         json_schema: {
