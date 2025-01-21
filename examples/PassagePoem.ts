@@ -5,13 +5,13 @@ import OpenAI from "openai"
 const text = await Deno.readTextFile(new URL("dracula.txt", import.meta.url))
 const SAMPLE_LENGTH = 1000
 
-for await (const e of Exec(Main())) {}
+for await (const e of Exec(Main)) {}
 
 function* Main() {
   const x = yield* Thread.parallel(
-    Thread.new("A", PassagePoem()),
-    Thread.new("B", PassagePoem()),
-    Thread.new("C", PassagePoem()),
+    Thread.new("A", PassagePoem),
+    Thread.new("B", PassagePoem),
+    Thread.new("C", PassagePoem),
   )
   // console.log(A, B, C)
 }
@@ -32,7 +32,7 @@ function* PassagePoem() {
 
   const poem = yield* L.string
 
-  const x = yield* Thread.branch("something", Inner())
+  const x = yield* Thread.branch("something", Inner)
 
   yield E("PassagePoem", poem)
 
