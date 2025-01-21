@@ -10,13 +10,13 @@ import type { Type } from "./Type/mod.ts"
 
 export type Action = Model | Directive | Relay | MessageLike | Type | EAction | Thread
 
-export type ExtractE<Y extends Action> = Expand<
-  U2I<
-    Y extends EAction<infer K, infer V> ? { [_ in K]: Leaf<V> }
-      : Y extends Thread<any, infer E> ? E
-      : never
-  >
->
+export type ExtractE<Y extends Action> = Y extends EAction<infer K, infer V> ? { [_ in K]: Leaf<V> }
+  : Y extends Thread<any, infer E> ? E
+  : never
+
+export type ExtractMaybeE<K extends string, Y extends Action> = ExtractE<Y> extends infer E
+  ? [E] extends [never] ? never : { [_ in K]: Expand<U2I<E>> }
+  : never
 
 export namespace Leaf {
   export declare const Key: unique symbol
@@ -27,9 +27,17 @@ export interface Leaf<V> {
 
 export type ExecEvent<ETree> = Expand<
   {
-    [K in keyof ETree]: {
-      key: K
-      value: ETree[K] extends Leaf<infer V> ? V : ExecEvent<ETree[K]>
-    }
+    [K in keyof ETree]:
+      & { key: K }
+      & (
+        ETree[K] extends Leaf<infer V> ? {
+            value: V
+            thread?: never
+          }
+          : {
+            value?: never
+            thread: ExecEvent<ETree[K]>
+          }
+      )
   }[keyof ETree]
 >

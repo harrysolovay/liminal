@@ -2,9 +2,9 @@ import type { Action, ExtractMaybeE } from "../../Action.ts"
 import { declareThread } from "../_declareThread.ts"
 import type { Thread } from "../Thread.ts"
 
-export function branch<K extends string, Y extends Action, R>(
+export function reduce<K extends string, Y extends Action, R>(
   key: K,
   iter: Iterator<Y, R> | AsyncIterator<Y, R>,
 ): Thread<Awaited<R>, ExtractMaybeE<K, Y>> {
-  return declareThread(() => branch<K, Y, R>, [key, iter])
+  return declareThread(() => reduce<K, Y, R>, [key, iter])
 }

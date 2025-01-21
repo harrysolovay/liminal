@@ -5,15 +5,7 @@ import OpenAI from "openai"
 const text = await Deno.readTextFile(new URL("dracula.txt", import.meta.url))
 const SAMPLE_LENGTH = 1000
 
-for await (const e of Exec(Main())) {
-  switch (e.event) {
-    case "A": {
-      switch (e.value) {}
-    }
-  }
-}
-
-const y = Thread.new("A", PassagePoem())
+for await (const e of Exec(Main())) {}
 
 function* Main() {
   const x = yield* Thread.parallel(
