@@ -1,2 +1,4 @@
+*.tsbuildinfo
 .env
-.liminal
+node_modules
+target
