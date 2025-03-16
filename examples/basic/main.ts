@@ -1,4 +1,4 @@
-import { struct as L } from "../../liminal/Action/L/intrinsics/struct.ts"
+import { L, agent, branch } from "liminal"
 
 // declare const g: L<string, number>
 
@@ -8,12 +8,25 @@ const x = L({
   inner: [L.string],
   another: {
     nested: {
-      blah: L.integer,
+      blah: L.array(L.integer),
     },
   },
 })
 
-console.log(x.toJSONSchema())
+const Main = agent<{ testing: "this" }>`
+  Description of what it does!
+`(async function* (blah) {
+  blah
+  yield ""
+  const g = yield* branch("something", function* () {
+    // ...
+    yield ""
+    return 2
+  })
+  return await Promise.resolve("HELLO")
+}, L.string)
+
+console.log(JSON.stringify(x.toJSONSchema(), null, 2))
 
 // import { L, agent, E, branch, stream, Exec, child } from "liminal"
 

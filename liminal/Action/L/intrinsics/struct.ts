@@ -5,12 +5,13 @@ import type { Expand } from "../../../util/Expand.ts"
 import { boolean } from "./boolean.ts"
 import { integer } from "./integer.ts"
 import { string } from "./string.ts"
+import { array } from "./array.ts"
 
 export const struct = Object.assign(
   <const S extends StructFields, I extends StructT<S, "I">, O extends StructT<S, "O">>(
     fields: S,
   ): L<Expand<I>, Expand<O>> => declare(() => struct<S, I, O>, [fields]),
-  { boolean, integer, string },
+  { boolean, integer, string, array },
 )
 
 export type StructFields = TupleStructFields | RecordStructFields

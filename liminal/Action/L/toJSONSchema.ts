@@ -3,10 +3,15 @@ import { isL, type L } from "./L.ts"
 import { RecursiveTypeVisitorState } from "./RecursiveTypeVisitorState.ts"
 import { TypeVisitor } from "./TypeVisitor.ts"
 import type { StructFields } from "./intrinsics/struct.ts"
+import { WeakMemo } from "../../util/WeakMemo.ts"
 
-export function toJSONSchema(this: L, visitorState = new SchemaState(this, new Map())): JSONType {
-  return visit(visitorState, this)
+export function toJSONSchema(this: L): JSONType {
+  return memo(this)
 }
+
+const memo = WeakMemo((type: L) => {
+  return visit(new SchemaState(type, new Map()), type)
+})
 
 class SchemaState extends RecursiveTypeVisitorState {
   $defs: Record<string, undefined | JSONType> = {}
@@ -26,6 +31,12 @@ const visit = TypeVisitor<SchemaState, JSONType>({
   string() {
     return {
       type: "string",
+    }
+  },
+  array(state, _1, elementType): JSONType {
+    return {
+      type: "array",
+      items: visit(state, elementType),
     }
   },
   struct(state, _1, fields): JSONType {
