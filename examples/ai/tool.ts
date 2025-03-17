@@ -5,6 +5,11 @@ import { AIExec } from "liminal-ai"
 
 await AIExec(
   function* () {
+    yield* system`
+      You are solving math problems. Reason step by step. Use the calculator when necessary.
+      When you give the final answer, provide an explanation for how you arrived at it.
+    `
+
     yield* tool`
       A tool for evaluating mathematical expressions. Example expressions:
 
@@ -12,11 +17,6 @@ await AIExec(
       - \`12.7 cm to inch\`
       - \`sin(45 deg) ^ 2\`
     `((expression) => mathjs.evaluate(expression), L.array(L.string))()
-
-    yield system`
-      You are solving math problems. Reason step by step. Use the calculator when necessary.
-      When you give the final answer, provide an explanation for how you arrived at it.
-    `
 
     yield `
       A taxi driver earns $9461 per 1-hour of work. If he works 12 hours a day and in 1 hour
