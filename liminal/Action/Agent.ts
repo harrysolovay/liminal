@@ -2,41 +2,30 @@ import type { Expand } from "../util/Expand.js"
 import type { StructFields, StructT } from "./L/intrinsics/struct.js"
 import type { L } from "./L/L.js"
 
-export function agent<E = never>(template: TemplateStringsArray, ...values: Array<string | number>) {
-  return null! as AgentFactory<E>
+export function tool<E = never>(template: TemplateStringsArray, ...values: Array<string | number>) {
+  return null! as ImplementTool<E>
 }
 
-export interface AgentFactory<E> {
+export interface ImplementTool<E> {
   <Y, T>(
     f: (...rest: [E] extends [never] ? [] : [this: E]) => Generator<Y, T, void> | AsyncGenerator<Y, T, void>,
-  ): Agent<E, never, Y, T>
+  ): ToolFactory<E>
   <
     Y,
     T,
     S extends L | StructFields,
-    A = Expand<S extends L<any, infer O> ? O : S extends StructFields ? StructT<S, "O"> : never>,
+    A = S extends L<any, infer O> ? O : Expand<S extends StructFields ? StructT<S, "O"> : never>,
   >(
     f: (
       ...rest: [...([E] extends [never] ? [] : [this: E]), args: A]
     ) => Generator<Y, T, void> | AsyncGenerator<Y, T, void>,
     params: S,
-  ): Agent<E, A, Y, T>
+  ): ToolFactory<E>
 }
 
-export type Agent<E = any, A = any, Y = any, T = any> = (
-  ...env: [E] extends [never] ? [] : [env: E]
-) => AgentInstance<T>
+export type ToolFactory<E = any> = (...env: [E] extends [never] ? [] : [env: E]) => Generator<Tool, () => void, void>
 
-export interface AgentInstance<T> extends Generator<Dispatch, T, void> {
-  asTool: () => Generator<RegisterTool, () => void, void>
-}
-
-export interface Dispatch {
-  kind: "Dispatch"
-  agent: Agent
-}
-
-export interface RegisterTool {
-  kind: "RegisterTool"
-  agent: Agent
+export interface Tool {
+  kind: "Tool"
+  tool: ToolFactory
 }

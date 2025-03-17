@@ -8,6 +8,20 @@
 - [Examples &rarr;](https://liminal.land/examples)<br />Examples illustrating
   common use cases.
 
+## Why?
+
+- Attaching descriptions to schemas / virtual types that cater better to the LLM
+  use case
+- Allow tools to specify requirements – type-safe
+- Eliminating completion API boilerplate
+- Keeping model selection decoupled from flows.
+- Abstracting away direct management of context buffers
+- Observability within complex flows
+
+## Other Perks
+
+- Handles dedent-ing
+
 ---
 
 ## **Code of Conduct**

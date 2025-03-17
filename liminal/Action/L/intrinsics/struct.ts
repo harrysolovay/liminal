@@ -22,9 +22,9 @@ export const struct = Object.assign(
 )
 
 export type StructFields = TupleStructFields | RecordStructFields
-export type TupleStructFields = Array<L | StructFields>
+export type TupleStructFields = Array<L | StructFields | string>
 export interface RecordStructFields {
-  [key: string]: L | StructFields
+  [key: string]: L | StructFields | string
 }
 
 export type StructT<S extends StructFields, T extends "I" | "O"> = {
@@ -32,5 +32,7 @@ export type StructT<S extends StructFields, T extends "I" | "O"> = {
     ? { I: I; O: O }[T]
     : S[K] extends StructFields
       ? Expand<StructT<S[K], T>>
-      : never
+      : S[K] extends string
+        ? S[K]
+        : never
 }

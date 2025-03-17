@@ -1,16 +1,14 @@
-export function* branch<K extends number | string, Y, T>(
-  key: K,
-  f: Iterator<Y, T, void> | AsyncIterator<Y, T, void> | (() => Iterator<Y, T, void> | AsyncIterator<Y, T, void>),
-): Generator<Branch<K, Y, T>, T> {
-  return yield {
-    kind: "Branch",
-    key,
-    f,
-  }
-}
+import type { BranchLike } from "../util/BranchLike.js"
+import type { DeferredOr } from "../util/DeferredOr.js"
+import type { IteratorLike } from "../util/IteratorLike.js"
 
-export interface Branch<K extends number | string, Y, T> {
+export declare function branch<A extends Array<BranchLike>>(
+  ...branches: A
+): Iterable<any, { [K in keyof A]: A[K] extends DeferredOr<IteratorLike<any, infer T>> ? T : never }>
+export declare function branch<A extends Record<string, BranchLike>>(
+  branches: A,
+): Iterable<any, { [K in keyof A]: A[K] extends DeferredOr<IteratorLike<any, infer T>> ? T : never }>
+
+export interface Branch {
   kind: "Branch"
-  key: K
-  f: Iterator<Y, T, void> | AsyncIterator<Y, T, void> | (() => Iterator<Y, T, void> | AsyncIterator<Y, T, void>)
 }

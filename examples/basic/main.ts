@@ -1,4 +1,4 @@
-import { L, agent, branch } from "liminal"
+import { L, tool, branch } from "liminal"
 
 // declare const g: L<string, number>
 
@@ -13,7 +13,7 @@ const x = L({
   },
 })
 
-const Main = agent<{ testing: "this" }>`
+const Main = tool<{ testing: "this" }>`
   Description of what it does!
 `(async function* (blah) {
   blah
@@ -27,7 +27,7 @@ const Main = agent<{ testing: "this" }>`
   return await Promise.resolve("HELLO")
 }, L.string)
 
-const Another = agent``(function* (a) {
+const Another = tool``(function* (a) {
   // ...
   yield ""
   return ""

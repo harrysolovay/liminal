@@ -1,10 +1,12 @@
 import type { L } from "./L.js"
 
 export class RecursiveTypeVisitorState {
-  constructor(
-    readonly root: L,
-    readonly ids: Map<L, string>,
-  ) {}
+  root: L
+  ids: Map<L, string>
+  constructor(root: L, ids: Map<L, string>) {
+    this.root = root
+    this.ids = ids
+  }
 
   id(type: L): string {
     let id = this.ids.get(type)
