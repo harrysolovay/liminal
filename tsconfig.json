@@ -6,6 +6,9 @@
     },
     {
       "path": "./examples/basic"
+    },
+    {
+      "path": "./packages/ai"
     }
   ]
 }

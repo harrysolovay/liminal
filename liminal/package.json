@@ -2,13 +2,9 @@
   "name": "liminal",
   "private": true,
   "exports": {
-    ".": "./index.ts"
+    ".": "./index.js"
   },
   "peerDependencies": {
-    "@anthropic-ai/sdk": "^0.39.0",
-    "@google/generative-ai": "^0.24.0",
-    "@standard-schema/spec": "^1.0.0",
-    "ollama": "^0.5.14",
-    "openai": "^4.87.3"
+    "@standard-schema/spec": "^1.0.0"
   }
 }

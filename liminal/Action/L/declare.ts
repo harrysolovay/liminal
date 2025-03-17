@@ -1,8 +1,9 @@
-import type { Falsy } from "../../util/Falsy.ts"
-import { isTemplateStringsArray } from "../../util/isTemplateStringsArray.ts"
-import { LTag, type LMembers } from "./LMembers.ts"
-import type { L } from "./L.ts"
-import { toJSONSchema } from "./toJSONSchema.ts"
+import type { Falsy } from "../../util/Falsy.js"
+import { isTemplateStringsArray } from "../../util/isTemplateStringsArray.js"
+import type { LMembers } from "./LMembers.js"
+import { LTag } from "./isL.js"
+import type { L } from "./L.js"
+import { toJSONSchema } from "./toJSONSchema.js"
 
 export function declare<I, O>(
   self: () => L<I, O> | ((...args: any) => L<I, O>),

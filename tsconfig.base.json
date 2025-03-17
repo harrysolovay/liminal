@@ -1,14 +1,14 @@
 {
   "compilerOptions": {
-    "allowImportingTsExtensions": true,
     "allowJs": false,
+    "composite": true,
+    "declaration": true,
     "esModuleInterop": true,
     "isolatedModules": true,
     "lib": ["ESNext", "DOM", "DOM.iterable"],
     "module": "ESNext",
     "moduleDetection": "force",
     "moduleResolution": "bundler",
-    "noEmit": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
@@ -24,5 +24,5 @@
     "useDefineForClassFields": true,
     "verbatimModuleSyntax": true
   },
-  "exclude": ["node_modules"]
+  "exclude": ["**/dist", "node_modules"]
 }

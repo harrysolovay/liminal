@@ -1,5 +1,5 @@
-import { type Intrinsics, getIntrinsicLookup } from "./intrinsics/Intrinsics.ts"
-import type { L } from "./L.ts"
+import { type Intrinsics, getIntrinsicLookup } from "./intrinsics/Intrinsics.js"
+import type { L } from "./L.js"
 
 export type VisitorArms<S, R> = {
   hook?: (next: (state: S, type: L) => R, state: S, type: L) => R

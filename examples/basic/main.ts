@@ -21,10 +21,17 @@ const Main = agent<{ testing: "this" }>`
   const g = yield* branch("something", function* () {
     // ...
     yield ""
+    const x = yield* Another()
     return 2
   })
   return await Promise.resolve("HELLO")
 }, L.string)
+
+const Another = agent``(function* (a) {
+  // ...
+  yield ""
+  return ""
+}, L.integer)
 
 console.log(JSON.stringify(x.toJSONSchema(), null, 2))
 

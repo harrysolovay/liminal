@@ -1,10 +1,11 @@
-import type { L } from "../L.ts"
-import { array } from "./array.ts"
-import { boolean } from "./boolean.ts"
-import { integer } from "./integer.ts"
-import { string } from "./string.ts"
-import { struct } from "./struct.ts"
-import { Memo } from "../../../util/Memo.ts"
+import type { L } from "../L.js"
+import { array } from "./array.js"
+import { boolean } from "./boolean.js"
+import { integer } from "./integer.js"
+import { string } from "./string.js"
+import { struct } from "./struct.js"
+import { Memo } from "../../../util/Memo.js"
+import { enum as enum_ } from "./enum.js"
 
 export type Intrinsics = ReturnType<typeof getIntrinsics>
 
@@ -14,6 +15,7 @@ export const getIntrinsics = Memo(() => ({
   string,
   struct,
   array,
+  enum: enum_,
 }))
 
 export const getIntrinsicLookup = Memo(

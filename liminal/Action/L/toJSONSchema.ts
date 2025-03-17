@@ -1,9 +1,10 @@
-import type { JSONType } from "./JSONType.ts"
-import { isL, type L } from "./L.ts"
-import { RecursiveTypeVisitorState } from "./RecursiveTypeVisitorState.ts"
-import { TypeVisitor } from "./TypeVisitor.ts"
-import type { StructFields } from "./intrinsics/struct.ts"
-import { WeakMemo } from "../../util/WeakMemo.ts"
+import type { JSONType } from "./JSONType.js"
+import { isL } from "./isL.js"
+import type { L } from "./L.js"
+import { RecursiveTypeVisitorState } from "./RecursiveTypeVisitorState.js"
+import { TypeVisitor } from "./TypeVisitor.js"
+import type { StructFields } from "./intrinsics/struct.js"
+import { WeakMemo } from "../../util/WeakMemo.js"
 
 export function toJSONSchema(this: L): JSONType {
   return memo(this)
@@ -35,8 +36,14 @@ const visit = TypeVisitor<SchemaState, JSONType>({
   },
   array(state, _1, elementType): JSONType {
     return {
-      type: "array",
+      type: "array", // TODO
       items: visit(state, elementType),
+    }
+  },
+  enum(_0, _1, values) {
+    return {
+      type: "string" as never,
+      enum: values,
     }
   },
   struct(state, _1, fields): JSONType {

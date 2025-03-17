@@ -1,4 +1,4 @@
-import type { L } from "./L.ts"
+import type { L } from "./L.js"
 
 export class RecursiveTypeVisitorState {
   constructor(

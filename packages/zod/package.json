@@ -1,0 +1,11 @@
+{
+  "name": "liminal-zod",
+  "private": true,
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "peerDependencies": {
+    "liminal": "workspace:*",
+    "zod": "^3.24.2"
+  }
+}

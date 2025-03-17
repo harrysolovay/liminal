@@ -1,0 +1,12 @@
+{
+  "name": "liminal-ai",
+  "private": true,
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "peerDependencies": {
+    "ai": "^4.1.61",
+    "liminal": "workspace:*",
+    "liminal-zod": "workspace:*"
+  }
+}

@@ -1,8 +1,9 @@
 {
   "private": true,
-  "workspaces": ["liminal", "examples/*"],
+  "workspaces": ["liminal", "packages/*", "examples/*"],
   "scripts": {
-    "check": "tsc -b"
+    "build": "tsc -b",
+    "watch": "tsc -b --watch"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",

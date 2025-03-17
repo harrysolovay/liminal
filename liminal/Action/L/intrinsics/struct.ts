@@ -1,17 +1,24 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
-import { declare } from "../declare.ts"
-import type { L } from "../L.ts"
-import type { Expand } from "../../../util/Expand.ts"
-import { boolean } from "./boolean.ts"
-import { integer } from "./integer.ts"
-import { string } from "./string.ts"
-import { array } from "./array.ts"
+import { declare } from "../declare.js"
+import type { L } from "../L.js"
+import type { Expand } from "../../../util/Expand.js"
+import { boolean } from "./boolean.js"
+import { integer } from "./integer.js"
+import { string } from "./string.js"
+import { array } from "./array.js"
+import { enum as enum_ } from "./enum.js"
 
 export const struct = Object.assign(
   <const S extends StructFields, I extends StructT<S, "I">, O extends StructT<S, "O">>(
     fields: S,
   ): L<Expand<I>, Expand<O>> => declare(() => struct<S, I, O>, [fields]),
-  { boolean, integer, string, array },
+  {
+    boolean,
+    integer,
+    string,
+    array,
+    enum: enum_,
+  },
 )
 
 export type StructFields = TupleStructFields | RecordStructFields

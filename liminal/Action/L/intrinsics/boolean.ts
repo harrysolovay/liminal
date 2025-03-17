@@ -1,4 +1,4 @@
-import { declare } from "../declare.ts"
-import type { L } from "../L.ts"
+import { declare } from "../declare.js"
+import type { L } from "../L.js"
 
 export const boolean: L<boolean> = declare(() => boolean)

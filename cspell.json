@@ -9,5 +9,6 @@
   ],
   "enableGlobDot": true,
   "dictionaries": ["project-words"],
-  "ignorePaths": [".git", "LICENSE", "target"]
+  "ignorePaths": ["LICENSE"],
+  "useGitignore": true
 }
