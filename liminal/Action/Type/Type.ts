@@ -1,10 +1,9 @@
-import type { StandardSchemaV1 } from "@standard-schema/spec"
 import type { Falsy } from "../../util/Falsy.js"
 import type { TypeMembers } from "./TypeMembers.js"
 
 export { object as Type } from "./intrinsics/object.js"
 
-export interface Type<I = any, O = I> extends TypeMembers<I, O>, StandardSchemaV1<I, O> {
+export interface Type<I = any, O = I> extends TypeMembers<I, O> {
   (template: TemplateStringsArray, ...substitutions: Array<string>): this
   (...values: Array<Falsy | string>): this
 }

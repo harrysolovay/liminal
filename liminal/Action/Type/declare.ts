@@ -19,7 +19,7 @@ export function declare<I, O>(
     *[Symbol.iterator]() {
       return yield {
         kind: "Complete",
-        type: this as Type<I, O>,
+        toJSONSchema: () => (this as Type<I, O>).toJSONSchema(),
       }
     },
     "~standard": {

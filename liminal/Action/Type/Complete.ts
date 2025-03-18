@@ -1,6 +1,5 @@
-import type { Type } from "./Type.js"
-
-export interface Complete<I = any, O = any> {
+export interface Complete {
   kind: "Complete"
-  type: Type<I, O>
+  // Subtle differences between vtype libs cause issues; avoid specificity of JSONType interface.
+  toJSONSchema?: () => object
 }

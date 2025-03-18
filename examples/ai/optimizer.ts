@@ -1,4 +1,6 @@
-import { Type, system } from "liminal"
+import { system } from "liminal"
+import { type } from "arktype"
+import { from } from "liminal-arktype"
 
 export function* translateWithFeedback(text: string, targetLanguage: string) {
   yield* system`You are an expert literary translator.`
@@ -7,7 +9,7 @@ export function* translateWithFeedback(text: string, targetLanguage: string) {
 
     ${text}
   `
-  let currentTranslation = yield* Type.string
+  let currentTranslation = yield* from(type.string)
   let iterations = 0
   const MAX_ITERATIONS = 3
   while (iterations < MAX_ITERATIONS) {
@@ -23,14 +25,16 @@ export function* translateWithFeedback(text: string, targetLanguage: string) {
       3. Preservation of nuance
       4. Cultural accuracy
     `
-    const evaluation = yield* Type({
-      qualityScore: Type.integer`Min of 1, max of 10`,
-      preservesTone: Type.boolean,
-      preservesNuance: Type.boolean,
-      culturallyAccurate: Type.boolean,
-      specificIssues: Type.array(Type.string),
-      improvementSuggestions: Type.array(Type.string),
-    })
+    const evaluation = yield* from(
+      type({
+        qualityScore: "1 <= number.integer <= 10",
+        preservesTone: "boolean",
+        preservesNuance: "boolean",
+        culturallyAccurate: "boolean",
+        specificIssues: "string[]",
+        improvementSuggestions: "string[]",
+      }),
+    )
     if (
       evaluation.qualityScore >= 8 &&
       evaluation.preservesTone &&
@@ -48,7 +52,7 @@ export function* translateWithFeedback(text: string, targetLanguage: string) {
       Original: ${text}
       Current Translation: ${currentTranslation}
     `
-    const improvedTranslation = yield* Type.string
+    const improvedTranslation = yield* from(type.string)
     currentTranslation = improvedTranslation
     iterations++
   }

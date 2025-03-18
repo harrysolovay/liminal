@@ -1,7 +1,0 @@
-{
-  "name": "example-basic",
-  "private": true,
-  "dependencies": {
-    "liminal": "workspace:*"
-  }
-}

@@ -1,4 +1,6 @@
-import { Type, model, system } from "liminal"
+import { model, system } from "liminal"
+import { from } from "liminal-arktype"
+import { type } from "arktype"
 
 export function* handleCustomerQuery(query: string) {
   yield `
@@ -11,11 +13,13 @@ export function* handleCustomerQuery(query: string) {
     2. Complexity (simple or complex)
     3. Brief reasoning for classification
   `
-  const classification = yield* Type({
-    reasoning: Type.string,
-    type: Type.enum("general", "refund", "technical"),
-    complexity: Type.enum("simple", "complex"),
-  })
+  const classification = yield* from(
+    type({
+      reasoning: "string",
+      type: "'general' | 'refund' | 'technical'",
+      complexity: "'simple' | 'complex'",
+    }),
+  )
   yield* system(PROMPTS[classification.type])
   if (classification.complexity === "complex") {
     yield* model("reasoning")
@@ -23,7 +27,7 @@ export function* handleCustomerQuery(query: string) {
   yield query
   return {
     classification,
-    response: yield* Type.string,
+    response: yield* from(type.string),
   }
 }
 

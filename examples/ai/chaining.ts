@@ -1,8 +1,9 @@
-import { Type } from "liminal"
+import { from } from "liminal-arktype"
+import { type } from "arktype"
 
 export function* generateMarketingCopy(input: string) {
   yield `Write persuasive marketing copy for: ${input}. Focus on benefits and emotional appeal.`
-  let copy = yield* Type.string
+  let copy = yield* from(type.string)
   yield `
     Evaluate this marketing copy for:
 
@@ -12,11 +13,13 @@ export function* generateMarketingCopy(input: string) {
 
     Copy to evaluate: ${copy}
   `
-  const qualityMetrics = yield* Type({
-    hasCallToAction: Type.boolean,
-    emotionalAppeal: Type.integer,
-    clarity: Type.integer,
-  })
+  const qualityMetrics = yield* from(
+    type({
+      hasCallToAction: "boolean",
+      emotionalAppeal: "number.integer",
+      clarity: "number.integer",
+    }),
+  )
   if (!qualityMetrics.hasCallToAction || qualityMetrics.emotionalAppeal < 7 || qualityMetrics.clarity < 7) {
     yield `
       Rewrite this marketing copy with:
@@ -27,7 +30,7 @@ export function* generateMarketingCopy(input: string) {
 
       Original copy: ${copy}
     `
-    copy = yield* Type.string
+    copy = yield* from(type.string)
   }
   return { copy, qualityMetrics }
 }

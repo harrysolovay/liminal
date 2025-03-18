@@ -1,9 +1,11 @@
 arktype
 bunx
 cspotcode
+initdb
 llms
 ollama
 pgvector
 supabase
 tmpfs
 valibot
+vtype

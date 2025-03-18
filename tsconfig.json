@@ -5,10 +5,16 @@
       "path": "./liminal"
     },
     {
-      "path": "./examples/basic"
+      "path": "./examples/ai"
     },
     {
       "path": "./packages/ai"
+    },
+    {
+      "path": "./packages/arktype"
+    },
+    {
+      "path": "./packages/zod"
     }
   ]
 }

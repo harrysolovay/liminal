@@ -1,4 +1,6 @@
-import { branch, Type, system } from "liminal"
+import { branch, system } from "liminal"
+import { type } from "arktype"
+import { from } from "liminal-arktype"
 
 export function* implementFeature(featureRequest: string) {
   yield* system`You are a senior software architect planning feature implementations.`
@@ -7,16 +9,16 @@ export function* implementFeature(featureRequest: string) {
 
     ${featureRequest}
   `
-  const implementationPlan = yield* Type({
-    files: Type.array(
-      Type({
-        purpose: Type.string,
-        filePath: Type.string,
-        changeType: Type.enum("create", "modify", "delete"),
-      }),
-    ),
-    estimatedComplexity: Type.enum("create", "medium", "high"),
-  })
+  const implementationPlan = yield* from(
+    type({
+      files: type({
+        purpose: "string",
+        filePath: "string",
+        changeType: "'create' | 'modify' | 'delete'",
+      }).array(),
+      estimatedComplexity: "'create' | 'medium' | 'high'",
+    }),
+  )
 
   const fileChanges = yield* branch(
     ...implementationPlan.files.map(function* (file) {
@@ -38,10 +40,12 @@ export function* implementFeature(featureRequest: string) {
 
         ${featureRequest}
       `
-      const implementation = yield* Type({
-        explanation: Type.string,
-        code: Type.string,
-      })
+      const implementation = yield* from(
+        type({
+          explanation: "string",
+          code: "string",
+        }),
+      )
       return { file, implementation }
     }),
   )

@@ -1,0 +1,11 @@
+{
+  "name": "liminal-arktype",
+  "private": true,
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "peerDependencies": {
+    "arktype": "^2.1.9",
+    "liminal": "workspace:*"
+  }
+}

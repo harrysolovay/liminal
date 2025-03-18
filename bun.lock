@@ -2,13 +2,11 @@
   "lockfileVersion": 1,
   "workspaces": {
     "": {
-      "dependencies": {
-        "typescript": "^5.8.2",
-      },
       "devDependencies": {
         "@biomejs/biome": "^1.9.4",
         "@types/bun": "latest",
         "conditional-type-checks": "^1.0.6",
+        "typescript": "^5.8.2",
       },
     },
     "examples/ai": {
@@ -16,16 +14,11 @@
       "dependencies": {
         "@ai-sdk/openai": "^1.2.5",
         "ai": "^4.1.61",
+        "arktype": "^2.1.9",
         "liminal": "workspace:*",
         "liminal-ai": "workspace:*",
+        "liminal-arktype": "workspace:*",
         "mathjs": "^14.3.1",
-        "zod": "^3.24.2",
-      },
-    },
-    "examples/basic": {
-      "name": "example-basic",
-      "dependencies": {
-        "liminal": "workspace:*",
       },
     },
     "liminal": {
@@ -42,11 +35,19 @@
         "liminal-zod": "workspace:*",
       },
     },
+    "packages/arktype": {
+      "name": "liminal-arktype",
+      "peerDependencies": {
+        "arktype": "^2.1.9",
+        "liminal": "workspace:*",
+      },
+    },
     "packages/zod": {
       "name": "liminal-zod",
       "peerDependencies": {
         "liminal": "workspace:*",
         "zod": "^3.24.2",
+        "zod-to-json-schema": "^3.24.4",
       },
     },
   },
@@ -60,6 +61,10 @@
     "@ai-sdk/react": ["@ai-sdk/react@1.1.23", "", { "dependencies": { "@ai-sdk/provider-utils": "2.1.13", "@ai-sdk/ui-utils": "1.1.19", "swr": "^2.2.5", "throttleit": "2.1.0" }, "peerDependencies": { "react": "^18 || ^19 || ^19.0.0-rc", "zod": "^3.0.0" }, "optionalPeers": ["react", "zod"] }, "sha512-R+PG9ya0GLs6orzt+1MxmjrWFuZM0gVs+l8ihBr1u+42wwkVeojY4CAtQjW4nrfGTVbdJYkl5y+r/VKfjr42aQ=="],
 
     "@ai-sdk/ui-utils": ["@ai-sdk/ui-utils@1.1.19", "", { "dependencies": { "@ai-sdk/provider": "1.0.11", "@ai-sdk/provider-utils": "2.1.13", "zod-to-json-schema": "^3.24.1" }, "peerDependencies": { "zod": "^3.0.0" }, "optionalPeers": ["zod"] }, "sha512-rDHy2uxlPMt3jjS9L6mBrsfhEInZ5BVoWevmD13fsAt2s/XWy2OwwKmgmUQkdLlY4mn/eyeYAfDGK8+5CbOAgg=="],
+
+    "@ark/schema": ["@ark/schema@0.44.4", "", { "dependencies": { "@ark/util": "0.44.4" } }, "sha512-TsZTX+k5J7xsGABsFjVdRUNgViGDMLv73sikBM8JNxC4STe0suTuMNa1OJ/AFP2N+LpJ1zL9tdWlg28PRqAYhg=="],
+
+    "@ark/util": ["@ark/util@0.44.4", "", {}, "sha512-zLfNZrsq5Dq+8B0pHJwL/wD3xNBHb8FoP0FuPB455w7HpqVaqO5qPXvn+YoO8v1Y6pNwLVsM9vCIiO221LoODQ=="],
 
     "@babel/runtime": ["@babel/runtime@7.26.10", "", { "dependencies": { "regenerator-runtime": "^0.14.0" } }, "sha512-2WJMeRQPHKSPemqk/awGrAiuFfzBmOIPXKizAsVhWH9YJqLZ0H+HS4c8loHGgW6utJ3E/ejXQUsiGaQy2NZ9Fw=="],
 
@@ -95,6 +100,8 @@
 
     "ai": ["ai@4.1.61", "", { "dependencies": { "@ai-sdk/provider": "1.0.11", "@ai-sdk/provider-utils": "2.1.13", "@ai-sdk/react": "1.1.23", "@ai-sdk/ui-utils": "1.1.19", "@opentelemetry/api": "1.9.0", "eventsource-parser": "^3.0.0", "jsondiffpatch": "0.6.0" }, "peerDependencies": { "react": "^18 || ^19 || ^19.0.0-rc", "zod": "^3.0.0" }, "optionalPeers": ["react", "zod"] }, "sha512-Y9SAyGJEeW23F6C7PSHZXYNEvbH2cqJm0rVW2AoeFaXFT13ttx8rAqs8wz2w466C1UB329yl5PXayFcHqofSEA=="],
 
+    "arktype": ["arktype@2.1.9", "", { "dependencies": { "@ark/schema": "0.44.4", "@ark/util": "0.44.4" } }, "sha512-bq46shcLpfop4D9acVQN/+quZ+hIGs4OUzoLq2vCaZLdkITOlWkfamBk9abMuC6fbgxW1fu/2PamcQgggWhTwQ=="],
+
     "bun-types": ["bun-types@1.2.5", "", { "dependencies": { "@types/node": "*", "@types/ws": "~8.5.10" } }, "sha512-3oO6LVGGRRKI4kHINx5PIdIgnLRb7l/SprhzqXapmoYkFl5m4j6EvALvbDVuuBFaamB46Ap6HCUxIXNLCGy+tg=="],
 
     "chalk": ["chalk@5.4.1", "", {}, "sha512-zgVZuo2WcZgfUEmsn6eO3kINexW8RAE4maiQ8QNs8CtpPCSyMiYsULR3HQYkm3w8FIA3SberyMJMSldGsW+U3w=="],
@@ -115,8 +122,6 @@
 
     "example-ai": ["example-ai@workspace:examples/ai"],
 
-    "example-basic": ["example-basic@workspace:examples/basic"],
-
     "fraction.js": ["fraction.js@5.2.1", "", {}, "sha512-Ah6t/7YCYjrPUFUFsOsRLMXAdnYM+aQwmojD2Ayb/Ezr82SwES0vuyQ8qZ3QO8n9j7W14VJuVZZet8U3bhSdQQ=="],
 
     "javascript-natural-sort": ["javascript-natural-sort@0.7.1", "", {}, "sha512-nO6jcEfZWQXDhOiBtG2KvKyEptz7RVbpGP4vTD2hLBdmNQSsCiicO2Ioinv6UI4y9ukqnBpy+XZ9H6uLNgJTlw=="],
@@ -128,6 +133,8 @@
     "liminal": ["liminal@workspace:liminal"],
 
     "liminal-ai": ["liminal-ai@workspace:packages/ai"],
+
+    "liminal-arktype": ["liminal-arktype@workspace:packages/arktype"],
 
     "liminal-zod": ["liminal-zod@workspace:packages/zod"],
 
