@@ -7,8 +7,9 @@ export function from<T>(type: Type<T>): TypeLike<T> {
     *[Symbol.iterator]() {
       return yield {
         kind: "Complete",
-        toJSONSchema: () => this.toJSONSchema(),
+        typeLike: this,
       }
     },
+    isString: type.extends("string"),
   }
 }

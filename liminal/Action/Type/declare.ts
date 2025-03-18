@@ -19,7 +19,7 @@ export function declare<I, O>(
     *[Symbol.iterator]() {
       return yield {
         kind: "Complete",
-        toJSONSchema: () => (this as Type<I, O>).toJSONSchema(),
+        typeLike: this,
       }
     },
     "~standard": {
@@ -28,6 +28,7 @@ export function declare<I, O>(
       // TODO
       validate: (value) => ({ value: value as O }),
     },
+    isString: false,
   } satisfies TypeMembers<I, O>) as never
 
   function annotate(template: TemplateStringsArray, ...substitutions: Array<string>): Type<I, O>
