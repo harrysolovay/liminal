@@ -1,14 +1,14 @@
-import type { L } from "./L.js"
+import type { Type } from "./Type.js"
 
 export class RecursiveTypeVisitorState {
-  root: L
-  ids: Map<L, string>
-  constructor(root: L, ids: Map<L, string>) {
+  root: Type
+  ids: Map<Type, string>
+  constructor(root: Type, ids: Map<Type, string>) {
     this.root = root
     this.ids = ids
   }
 
-  id(type: L): string {
+  id(type: Type): string {
     let id = this.ids.get(type)
     if (id === undefined) {
       id = this.ids.size.toString()

@@ -1,10 +1,10 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
 import type { Falsy } from "../../util/Falsy.js"
-import type { LMembers } from "./LMembers.js"
+import type { TypeMembers } from "./TypeMembers.js"
 
-export { struct as L } from "./intrinsics/struct.js"
+export { object as Type } from "./intrinsics/object.js"
 
-export interface L<I = any, O = I> extends LMembers<I, O>, StandardSchemaV1<I, O> {
+export interface Type<I = any, O = I> extends TypeMembers<I, O>, StandardSchemaV1<I, O> {
   (template: TemplateStringsArray, ...substitutions: Array<string>): this
   (...values: Array<Falsy | string>): this
 }

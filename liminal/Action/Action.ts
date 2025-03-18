@@ -1,4 +1,4 @@
-import type { Complete } from "./L/Complete.js"
-import type { Dispatch } from "./Agent.js"
+import type { Complete } from "./Type/Complete.js"
+import type { Agent } from "./Agent.js"
 
-export type Action = Complete | Dispatch
+export type Action = Complete | Agent

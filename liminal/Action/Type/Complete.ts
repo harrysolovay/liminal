@@ -1,6 +1,6 @@
-import type { L } from "./L.js"
+import type { Type } from "./Type.js"
 
 export interface Complete<I = any, O = any> {
   kind: "Complete"
-  type: L<I, O>
+  type: Type<I, O>
 }

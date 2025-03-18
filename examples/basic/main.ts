@@ -1,39 +1,39 @@
-import { L, tool, branch } from "liminal"
+// import { Type, tool, branch } from "liminal"
 
-// declare const g: L<string, number>
+// // declare const g: L<string, number>
 
-const x = L({
-  x: L.string,
-  y: L.string,
-  inner: [L.string],
-  another: {
-    nested: {
-      blah: L.array(L.integer),
-    },
-  },
-})
+// const x = Type({
+//   x: Type.string,
+//   y: Type.string,
+//   inner: [Type.string],
+//   another: {
+//     nested: {
+//       blah: Type.array(Type.integer),
+//     },
+//   },
+// })
 
-const Main = tool<{ testing: "this" }>`
-  Description of what it does!
-`(async function* (blah) {
-  blah
-  yield ""
-  const g = yield* branch("something", function* () {
-    // ...
-    yield ""
-    const x = yield* Another()
-    return 2
-  })
-  return await Promise.resolve("HELLO")
-}, L.string)
+// const Main = tool<{ testing: "this" }>`
+//   Description of what it does!
+// `(async function* (blah) {
+//   blah
+//   yield ""
+//   const g = yield* branch("something", function* () {
+//     // ...
+//     yield ""
+//     const x = yield* Another()
+//     return 2
+//   })
+//   return await Promise.resolve("HELLO")
+// }, Type.string)
 
-const Another = tool``(function* (a) {
-  // ...
-  yield ""
-  return ""
-}, L.integer)
+// const Another = tool``(function* (a) {
+//   // ...
+//   yield ""
+//   return ""
+// }, Type.integer)
 
-console.log(JSON.stringify(x.toJSONSchema(), null, 2))
+// console.log(JSON.stringify(x.toJSONSchema(), null, 2))
 
 // import { L, agent, E, branch, stream, Exec, child } from "liminal"
 

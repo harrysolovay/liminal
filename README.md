@@ -10,6 +10,10 @@
 
 ## Why?
 
+- Establish a TypeScript-centric way to define reusable flows without getting
+  locked into specific LLM providers or client libraries
+- Inject model upon flow execution. This means that we can share flow libraries
+  without being bound to a specific LLM
 - Attaching descriptions to schemas / virtual types that cater better to the LLM
   use case
 - Allow tools to specify requirements – type-safe

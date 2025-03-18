@@ -1,8 +1,8 @@
-import { L } from "liminal"
+import { Type } from "liminal"
 
 export function* generateMarketingCopy(input: string) {
   yield `Write persuasive marketing copy for: ${input}. Focus on benefits and emotional appeal.`
-  let copy = yield* L.string
+  let copy = yield* Type.string
   yield `
     Evaluate this marketing copy for:
 
@@ -12,10 +12,10 @@ export function* generateMarketingCopy(input: string) {
 
     Copy to evaluate: ${copy}
   `
-  const qualityMetrics = yield* L({
-    hasCallToAction: L.boolean,
-    emotionalAppeal: L.integer,
-    clarity: L.integer,
+  const qualityMetrics = yield* Type({
+    hasCallToAction: Type.boolean,
+    emotionalAppeal: Type.integer,
+    clarity: Type.integer,
   })
   if (!qualityMetrics.hasCallToAction || qualityMetrics.emotionalAppeal < 7 || qualityMetrics.clarity < 7) {
     yield `
@@ -27,7 +27,7 @@ export function* generateMarketingCopy(input: string) {
 
       Original copy: ${copy}
     `
-    copy = yield* L.string
+    copy = yield* Type.string
   }
   return { copy, qualityMetrics }
 }

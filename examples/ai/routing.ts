@@ -1,4 +1,4 @@
-import { L, model, system } from "liminal"
+import { Type, model, system } from "liminal"
 
 export function* handleCustomerQuery(query: string) {
   yield `
@@ -11,10 +11,10 @@ export function* handleCustomerQuery(query: string) {
     2. Complexity (simple or complex)
     3. Brief reasoning for classification
   `
-  const classification = yield* L({
-    reasoning: L.string,
-    type: L.enum("general", "refund", "technical"),
-    complexity: L.enum("simple", "complex"),
+  const classification = yield* Type({
+    reasoning: Type.string,
+    type: Type.enum("general", "refund", "technical"),
+    complexity: Type.enum("simple", "complex"),
   })
   yield* system(PROMPTS[classification.type])
   if (classification.complexity === "complex") {
@@ -23,7 +23,7 @@ export function* handleCustomerQuery(query: string) {
   yield query
   return {
     classification,
-    response: yield* L.string,
+    response: yield* Type.string,
   }
 }
 

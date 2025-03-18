@@ -1,4 +1,4 @@
-import { L, system } from "liminal"
+import { Type, system } from "liminal"
 
 export function* translateWithFeedback(text: string, targetLanguage: string) {
   yield* system`You are an expert literary translator.`
@@ -7,7 +7,7 @@ export function* translateWithFeedback(text: string, targetLanguage: string) {
 
     ${text}
   `
-  let currentTranslation = yield* L.string
+  let currentTranslation = yield* Type.string
   let iterations = 0
   const MAX_ITERATIONS = 3
   while (iterations < MAX_ITERATIONS) {
@@ -23,13 +23,13 @@ export function* translateWithFeedback(text: string, targetLanguage: string) {
       3. Preservation of nuance
       4. Cultural accuracy
     `
-    const evaluation = yield* L({
-      qualityScore: L.integer`Min of 1, max of 10`,
-      preservesTone: L.boolean,
-      preservesNuance: L.boolean,
-      culturallyAccurate: L.boolean,
-      specificIssues: L.array(L.string),
-      improvementSuggestions: L.array(L.string),
+    const evaluation = yield* Type({
+      qualityScore: Type.integer`Min of 1, max of 10`,
+      preservesTone: Type.boolean,
+      preservesNuance: Type.boolean,
+      culturallyAccurate: Type.boolean,
+      specificIssues: Type.array(Type.string),
+      improvementSuggestions: Type.array(Type.string),
     })
     if (
       evaluation.qualityScore >= 8 &&
@@ -48,7 +48,7 @@ export function* translateWithFeedback(text: string, targetLanguage: string) {
       Original: ${text}
       Current Translation: ${currentTranslation}
     `
-    const improvedTranslation = yield* L.string
+    const improvedTranslation = yield* Type.string
     currentTranslation = improvedTranslation
     iterations++
   }

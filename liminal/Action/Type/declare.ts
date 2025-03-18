@@ -1,17 +1,17 @@
 import type { Falsy } from "../../util/Falsy.js"
 import { isTemplateStringsArray } from "../../util/isTemplateStringsArray.js"
-import type { LMembers } from "./LMembers.js"
-import { LTag } from "./isL.js"
-import type { L } from "./L.js"
+import type { TypeMembers } from "./TypeMembers.js"
+import { TypeTag } from "./isType.js"
+import type { Type } from "./Type.js"
 import { toJSONSchema } from "./toJSONSchema.js"
 
 export function declare<I, O>(
-  self: () => L<I, O> | ((...args: any) => L<I, O>),
+  self: () => Type<I, O> | ((...args: any) => Type<I, O>),
   args?: Array<unknown>,
   descriptions: Array<string> = [],
-): L<I, O> {
+): Type<I, O> {
   return Object.assign(annotate, {
-    [LTag]: true,
+    [TypeTag]: true,
     self,
     args,
     descriptions,
@@ -19,7 +19,7 @@ export function declare<I, O>(
     *[Symbol.iterator]() {
       return yield {
         kind: "Complete",
-        type: this as L<I, O>,
+        type: this as Type<I, O>,
       }
     },
     "~standard": {
@@ -28,11 +28,11 @@ export function declare<I, O>(
       // TODO
       validate: (value) => ({ value: value as O }),
     },
-  } satisfies LMembers<I, O>) as never
+  } satisfies TypeMembers<I, O>) as never
 
-  function annotate(template: TemplateStringsArray, ...substitutions: Array<string>): L<I, O>
-  function annotate(...values: Array<Falsy | string>): L<I, O>
-  function annotate(e0: TemplateStringsArray | Falsy | string, ...rest: Array<Falsy | string>): L<I, O> {
+  function annotate(template: TemplateStringsArray, ...substitutions: Array<string>): Type<I, O>
+  function annotate(...values: Array<Falsy | string>): Type<I, O>
+  function annotate(e0: TemplateStringsArray | Falsy | string, ...rest: Array<Falsy | string>): Type<I, O> {
     return declare(self, args, [
       ...descriptions,
       ...(isTemplateStringsArray(e0) ? [String.raw(e0, ...rest)] : [e0, ...rest].filter((v): v is string => !!v)),

@@ -1,4 +1,4 @@
-import { branch, L, system } from "liminal"
+import { branch, Type, system } from "liminal"
 
 export function* implementFeature(featureRequest: string) {
   yield* system`You are a senior software architect planning feature implementations.`
@@ -7,15 +7,15 @@ export function* implementFeature(featureRequest: string) {
 
     ${featureRequest}
   `
-  const implementationPlan = yield* L({
-    files: L.array(
-      L({
-        purpose: L.string,
-        filePath: L.string,
-        changeType: L.enum("create", "modify", "delete"),
+  const implementationPlan = yield* Type({
+    files: Type.array(
+      Type({
+        purpose: Type.string,
+        filePath: Type.string,
+        changeType: Type.enum("create", "modify", "delete"),
       }),
     ),
-    estimatedComplexity: L.enum("create", "medium", "high"),
+    estimatedComplexity: Type.enum("create", "medium", "high"),
   })
 
   const fileChanges = yield* branch(
@@ -38,9 +38,9 @@ export function* implementFeature(featureRequest: string) {
 
         ${featureRequest}
       `
-      const implementation = yield* L({
-        explanation: L.string,
-        code: L.string,
+      const implementation = yield* Type({
+        explanation: Type.string,
+        code: Type.string,
       })
       return { file, implementation }
     }),

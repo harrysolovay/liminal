@@ -36,6 +36,9 @@
       },
       "correctness": {
         "useImportExtensions": "error"
+      },
+      "complexity": {
+        "useArrowFunction": "off"
       }
     }
   },
