@@ -4,9 +4,9 @@ import { toJSONSchema } from "standard-json-schema"
 import { openai } from "@ai-sdk/openai"
 import type { FlowLike } from "../common/FlowLike.js"
 import type { DeferredOr } from "../util/DeferredOr.js"
-import type { Model } from "../Action/Requirement.js"
+import type { Model } from "../Action/Model.js"
 import type { Agent } from "../Action/Agent.js"
-import type { LiminalEvent } from "../Event.js"
+import type { LiminalEvent } from "../Spec.js"
 
 export interface Exec<Y extends Propagated, T> extends AsyncIterable<LiminalEvent<Y, T>, void> {}
 
