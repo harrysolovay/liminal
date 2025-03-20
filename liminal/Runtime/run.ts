@@ -6,9 +6,19 @@ import type { FlowLike } from "../common/FlowLike.js"
 import type { DeferredOr } from "../util/DeferredOr.js"
 import type { Model } from "../Action/Requirement.js"
 import type { Agent } from "../Action/Agent.js"
+import type { LiminalEvent } from "../Event.js"
 
-export async function* Exec<Y extends Action, T>(flow: DeferredOr<FlowLike<Y, T>>, modelConfig: ModelConfig<Y>) {
-  yield* iter(flow)
+export interface Exec<Y extends Propagated, T> extends AsyncIterable<LiminalEvent<Y, T>, void> {}
+
+export interface ExecConfig<Y extends Action> {
+  models: ModelConfig<Y>
+}
+
+export async function* Exec<Y extends Action, T>(
+  flow: DeferredOr<FlowLike<Y, T>>,
+  config: ExecConfig<Y>,
+): Exec<Extract<Y, Propagated>, T> {
+  yield* iter(flow) as any
 }
 
 export type ModelConfig<Y extends Action> = {
@@ -37,7 +47,7 @@ export async function* iter(flow: DeferredOr<FlowLike>, system?: string): AsyncG
       continue
     }
     switch (action.kind) {
-      case "E": {
+      case "Emit": {
         console.log(action)
         break
       }
