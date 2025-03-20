@@ -1,28 +1,32 @@
-import type { Action } from "../Action/Action.js"
-import { generateObject, generateText, type CoreMessage, jsonSchema } from "ai"
+import type { Action, Propagated } from "../Action/Action.js"
+import { generateObject, generateText, type CoreMessage, jsonSchema, type LanguageModelV1 } from "ai"
 import { toJSONSchema } from "standard-json-schema"
 import { openai } from "@ai-sdk/openai"
 import type { FlowLike } from "../common/FlowLike.js"
 import type { DeferredOr } from "../util/DeferredOr.js"
+import type { Model } from "../Action/Requirement.js"
+import type { Agent } from "../Action/Agent.js"
+
+export async function* Exec<Y extends Action, T>(flow: DeferredOr<FlowLike<Y, T>>, modelConfig: ModelConfig<Y>) {
+  yield* iter(flow)
+}
+
+export type ModelConfig<Y extends Action> = {
+  default: LanguageModelV1
+} & {
+  [K in Extract<Y, Model>["key"] | Extract<Y, Agent>["M"]]: LanguageModelV1
+}
 
 const model = openai("gpt-4o-mini")
 
-export async function* iter<Y extends Action, T>(
-  flow: DeferredOr<FlowLike<Y, T>>,
-  system?: string,
-): AsyncGenerator<Y, T> {
-  let instance: FlowLike<Y, T>
+export async function* iter(flow: DeferredOr<FlowLike>, system?: string): AsyncGenerator<unknown, unknown> {
+  const instance = typeof flow === "function" ? flow() : flow
   const messages: Array<CoreMessage> = []
-  if (typeof flow === "function") {
-    instance = flow()
-  } else {
-    instance = flow
-  }
-  let next: unknown = undefined
+  let next: unknown
   while (true) {
     const current = await instance.next(next)
     if (current.done) {
-      return current.value as T
+      return current.value
     }
     const action = current.value as Action
     if (typeof action === "string") {
@@ -58,7 +62,7 @@ export async function* iter<Y extends Action, T>(
         break
       }
       case "Agent": {
-        next = yield* iter(action.implementation, action.description) as any
+        next = yield* iter(action.implementation, action.description)
         break
       }
     }

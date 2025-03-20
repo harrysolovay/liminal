@@ -1,4 +1,4 @@
-import { Agent, AssistantText, AssistantValue, Requirement } from "liminal"
+import { Agent, AssistantText, AssistantValue, Model } from "liminal"
 import { type } from "arktype"
 
 export function* HandleCustomerQuery(query: string) {

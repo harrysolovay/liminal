@@ -1,11 +1,11 @@
-export function* Requirement<K extends keyof any>(key: K): Generator<Requirement<K>, undefined> {
+export function* Model<K extends keyof any>(key: K): Generator<Model<K>, undefined> {
   return yield {
-    kind: "Requirement",
+    kind: "Model",
     key,
   }
 }
 
-export interface Requirement<K extends keyof any = keyof any> {
-  kind: "Requirement"
+export interface Model<K extends keyof any = keyof any> {
+  kind: "Model"
   key: K
 }
