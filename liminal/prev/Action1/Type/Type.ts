@@ -1,4 +1,4 @@
-import type { Falsy } from "../../util/Falsy.js"
+import type { Falsy } from "../../../util2/Falsy.js"
 import type { TypeMembers } from "./TypeMembers.js"
 
 export { object as Type } from "./intrinsics/object.js"

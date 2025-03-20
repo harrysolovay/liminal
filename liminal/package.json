@@ -2,7 +2,12 @@
   "name": "liminal",
   "private": true,
   "exports": {
-    ".": "./index.js"
+    ".": "./dist/index.js"
+  },
+  "dependencies": {
+    "@ai-sdk/openai": "^1.2.7",
+    "ai": "^4.1.65",
+    "standard-json-schema": "^0.1.0-beta.1"
   },
   "peerDependencies": {
     "@standard-schema/spec": "^1.0.0"

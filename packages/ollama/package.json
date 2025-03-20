@@ -1,11 +1,10 @@
 {
-  "name": "liminal-arktype",
+  "name": "liminal-ollama",
   "private": true,
   "exports": {
     ".": "./dist/index.js"
   },
   "peerDependencies": {
-    "arktype": "^2.1.9",
     "liminal": "workspace:*"
   }
 }

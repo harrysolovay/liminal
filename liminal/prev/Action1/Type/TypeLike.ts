@@ -1,4 +1,4 @@
-import type { Complete } from "./Complete.js"
+import type { Complete } from "../Complete.js"
 
 export interface TypeLike<T = any> extends Iterable<Complete, T> {
   isString: boolean

@@ -1,4 +1,4 @@
-import type { Expand } from "../../util/Expand.js"
+import type { Expand } from "../../../util2/Expand.js"
 
 export type JSONType = JSONTypes[keyof JSONTypes]
 export type JSONTypes = JSONTypes.Make<{

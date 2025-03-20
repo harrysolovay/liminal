@@ -8,13 +8,10 @@
       "path": "./examples/ai"
     },
     {
+      "path": "./examples/mocking"
+    },
+    {
       "path": "./packages/ai"
-    },
-    {
-      "path": "./packages/arktype"
-    },
-    {
-      "path": "./packages/zod"
     }
   ]
 }

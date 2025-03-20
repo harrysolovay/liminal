@@ -4,7 +4,7 @@ import { boolean } from "./boolean.js"
 import { integer } from "./integer.js"
 import { string } from "./string.js"
 import { object } from "./object.js"
-import { Memo } from "../../../util/Memo.js"
+import { Memo } from "../../../../util2/Memo.js"
 import { enum as enum_ } from "./enum.js"
 
 export type Intrinsics = ReturnType<typeof getIntrinsics>

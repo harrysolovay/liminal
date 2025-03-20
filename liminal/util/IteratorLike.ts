@@ -1,1 +1,1 @@
-export type IteratorLike<Y = any, T = any> = Iterator<Y, T> | AsyncIterator<Y, T>
+export type IteratorLike<Y = any, O = any> = Iterator<Y, O> | AsyncIterator<Y, O>

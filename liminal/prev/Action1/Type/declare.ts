@@ -1,5 +1,5 @@
-import type { Falsy } from "../../util/Falsy.js"
-import { isTemplateStringsArray } from "../../util/isTemplateStringsArray.js"
+import type { Falsy } from "../../../util2/Falsy.js"
+import { isTemplateStringsArray } from "../../../util2/isTemplateStringsArray.js"
 import type { TypeMembers } from "./TypeMembers.js"
 import { TypeTag } from "./isType.js"
 import type { Type } from "./Type.js"

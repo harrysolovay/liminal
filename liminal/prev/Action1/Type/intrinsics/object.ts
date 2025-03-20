@@ -1,7 +1,7 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
 import { declare } from "../declare.js"
 import type { Type } from "../Type.js"
-import type { Expand } from "../../../util/Expand.js"
+import type { Expand } from "../../../../util2/Expand.js"
 import { boolean } from "./boolean.js"
 import { integer } from "./integer.js"
 import { string } from "./string.js"

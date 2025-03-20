@@ -1,36 +1,41 @@
-import { branch, system } from "liminal"
+import { Branch, Agent, AssistantValue } from "liminal"
 import { type } from "arktype"
-import { from } from "liminal-arktype"
 
-export function* implementFeature(featureRequest: string) {
-  yield* system`You are a senior software architect planning feature implementations.`
-  yield `
-    Analyze this feature request and create an implementation plan:
+const File = type({
+  purpose: "string",
+  filePath: "string",
+  changeType: "'create' | 'modify' | 'delete'",
+})
 
-    ${featureRequest}
-  `
-  const implementationPlan = yield* from(
-    type({
-      files: type({
-        purpose: "string",
-        filePath: "string",
-        changeType: "'create' | 'modify' | 'delete'",
-      }).array(),
-      estimatedComplexity: "'create' | 'medium' | 'high'",
-    }),
-  )
+export function Main(featureRequest: string) {
+  return Agent("", "You are a senior software architect planning feature implementations.", function* () {
+    yield `
+        Analyze this feature request and create an implementation plan:
 
-  const fileChanges = yield* branch(
-    ...implementationPlan.files.map(function* (file) {
-      // Each worker is specialized for the type of change
-      yield* system(
-        {
-          create: "You are an expert at implementing new files following best practices and project patterns.",
-          modify:
-            "You are an expert at modifying existing code while maintaining consistency and avoiding regressions.",
-          delete: "You are an expert at safely removing code while ensuring no breaking changes.",
-        }[file.changeType],
-      )
+        ${featureRequest}
+      `
+    const implementationPlan = yield* AssistantValue(
+      type({
+        files: File.array(),
+        estimatedComplexity: "'create' | 'medium' | 'high'",
+      }),
+    )
+    const fileChanges = yield* Branch(
+      implementationPlan.files.map((file) => ImplementationPlanAgent(featureRequest, file)),
+    )
+    return { fileChanges, implementationPlan }
+  })
+}
+
+function ImplementationPlanAgent(featureRequest: string, file: typeof File.infer) {
+  return Agent(
+    "",
+    {
+      create: "You are an expert at implementing new files following best practices and project patterns.",
+      modify: "You are an expert at modifying existing code while maintaining consistency and avoiding regressions.",
+      delete: "You are an expert at safely removing code while ensuring no breaking changes.",
+    }[file.changeType],
+    function* () {
       yield `
         Implement the changes for ${file.filePath} to support:
 
@@ -40,14 +45,13 @@ export function* implementFeature(featureRequest: string) {
 
         ${featureRequest}
       `
-      const implementation = yield* from(
+      const implementation = yield* AssistantValue(
         type({
           explanation: "string",
           code: "string",
         }),
       )
       return { file, implementation }
-    }),
+    },
   )
-  return { fileChanges, implementationPlan }
 }

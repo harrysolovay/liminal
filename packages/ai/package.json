@@ -6,7 +6,6 @@
   },
   "peerDependencies": {
     "ai": "^4.1.61",
-    "liminal": "workspace:*",
-    "liminal-zod": "workspace:*"
+    "liminal": "workspace:*"
   }
 }

@@ -1,5 +1,5 @@
 {
-  "name": "example-ai",
+  "name": "example-mocking",
   "private": true,
   "dependencies": {
     "@ai-sdk/openai": "^1.2.5",

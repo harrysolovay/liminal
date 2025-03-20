@@ -4,7 +4,7 @@ import type { Type } from "./Type.js"
 import { RecursiveTypeVisitorState } from "./RecursiveTypeVisitorState.js"
 import { TypeVisitor } from "./TypeVisitor.js"
 import type { ObjectFields } from "./intrinsics/object.js"
-import { WeakMemo } from "../../util/WeakMemo.js"
+import { WeakMemo } from "../../../util2/WeakMemo.js"
 
 export function toJSONSchema(this: Type): JSONType {
   return memo(this)
