@@ -7,5 +7,6 @@ ollama
 pgvector
 supabase
 tmpfs
+tsdocs
 valibot
 vtype

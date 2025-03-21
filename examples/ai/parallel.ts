@@ -1,7 +1,7 @@
 import { Branch, AssistantValue, AssistantText, Agent } from "liminal"
 import { type } from "arktype"
 
-export function ParallelAgent(code: string) {
+function ParallelAgent(code: string) {
   return Agent(
     "",
     "You are a technical lead summarizing multiple code reviews. Review the supplied code.",

@@ -1,7 +1,7 @@
 import { AssistantText, AssistantValue, Agent } from "liminal"
 import { type } from "arktype"
 
-export function TranslateWithFeedbackAgent(targetLanguage: string, text: string) {
+function TranslateWithFeedbackAgent(targetLanguage: string, text: string) {
   return Agent(
     "TranslateWithFeedback",
     "You are an expert literary translator. Translate the supplied text to the specified target language, preserving tone and cultural nuances.",

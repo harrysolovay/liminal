@@ -1,31 +1,9 @@
-import type { Action, Propagated } from "../Action/Action.js"
+import type { Action } from "../Action/Action.js"
 import { generateObject, generateText, type CoreMessage, jsonSchema, type LanguageModelV1 } from "ai"
 import { toJSONSchema } from "standard-json-schema"
 import { openai } from "@ai-sdk/openai"
 import type { FlowLike } from "../common/FlowLike.js"
 import type { DeferredOr } from "../util/DeferredOr.js"
-import type { Model } from "../Action/Model.js"
-import type { Agent } from "../Action/Agent.js"
-import type { LiminalEvent } from "../Spec.js"
-
-export interface Exec<Y extends Propagated, T> extends AsyncIterable<LiminalEvent<Y, T>, void> {}
-
-export interface ExecConfig<Y extends Action> {
-  models: ModelConfig<Y>
-}
-
-export async function* Exec<Y extends Action, T>(
-  flow: DeferredOr<FlowLike<Y, T>>,
-  config: ExecConfig<Y>,
-): Exec<Extract<Y, Propagated>, T> {
-  yield* iter(flow) as any
-}
-
-export type ModelConfig<Y extends Action> = {
-  default: LanguageModelV1
-} & {
-  [K in Extract<Y, Model>["key"] | Extract<Y, Agent>["M"]]: LanguageModelV1
-}
 
 const model = openai("gpt-4o-mini")
 

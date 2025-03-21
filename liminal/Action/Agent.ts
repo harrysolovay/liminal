@@ -1,13 +1,13 @@
 import type { Action } from "./Action.js"
 import type { DeferredOr } from "../util/DeferredOr.js"
 import type { FlowLike } from "../common/FlowLike.js"
-import type { ExtractSpec, Spec } from "../Spec.js"
+import type { Spec } from "../Spec.js"
 
 export function* Agent<K extends keyof any, Y extends Action, T>(
   key: K,
   description: string,
   implementation: DeferredOr<FlowLike<Y, T>>,
-): Generator<Agent<ExtractSpec<K, Y, T>>, T> {
+): Generator<Agent<Spec<K, Y, T>>, T> {
   return yield {
     spec: undefined!,
     kind: "Agent",
@@ -18,7 +18,7 @@ export function* Agent<K extends keyof any, Y extends Action, T>(
 }
 
 export interface Agent<S extends Spec = Spec> {
-  spec: Spec
+  spec: S
   kind: "Agent"
   key: S["Key"]
   description: string

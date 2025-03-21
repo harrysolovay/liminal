@@ -7,13 +7,13 @@ const File = type({
   changeType: "'create' | 'modify' | 'delete'",
 })
 
-export function Main(featureRequest: string) {
+function Main(featureRequest: string) {
   return Agent("", "You are a senior software architect planning feature implementations.", function* () {
     yield `
-        Analyze this feature request and create an implementation plan:
+      Analyze this feature request and create an implementation plan:
 
-        ${featureRequest}
-      `
+      ${featureRequest}
+    `
     const implementationPlan = yield* AssistantValue(
       type({
         files: File.array(),
