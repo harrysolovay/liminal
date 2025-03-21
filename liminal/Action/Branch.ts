@@ -1,11 +1,11 @@
-import type { Scope } from "../Scope.js"
+import type { ExtractYScope, Scope } from "../Scope.js"
 import type { FlowLike } from "../common/FlowLike.js"
 
 export function* Branch<const B extends Branches>(
   branches: B,
 ): Generator<
   Branch<{
-    [K in keyof B]: B[K] extends FlowLike<infer Y> ? Scope<Y> : never
+    [K in keyof B]: B[K] extends FlowLike<infer Y> ? ExtractYScope<K, Y> : never
   }>,
   {
     [K in keyof B]: B[K] extends FlowLike<any, infer T> ? Awaited<T> : never

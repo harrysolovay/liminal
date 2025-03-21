@@ -1,12 +1,12 @@
 import type { Action } from "./Action.js"
-import type { Scope } from "../Scope.js"
+import type { ExtractYScope, Scope } from "../Scope.js"
 import type { FlowLike } from "../common/FlowLike.js"
 
 export function* Agent<K extends keyof any, Y extends Action, T>(
   key: K,
   description: string,
   implementation: FlowLike<Y, T>,
-): Generator<Agent<K, Scope<Y>>, Awaited<T>> {
+): Generator<Agent<K, ExtractYScope<K, Y>>, Awaited<T>> {
   return yield {
     kind: "Agent",
     key,

@@ -6,6 +6,7 @@ import type { IteratorLike } from "../../liminal/util/IteratorLike.js"
 for await (const event of Exec(MarketingCopyAgent(""), {
   models: {
     default: openai("gpt-4o-mini"),
+    another: openai("gpt-4o-mini"),
   },
 })) {
 }

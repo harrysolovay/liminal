@@ -1,13 +1,28 @@
 import type { Action } from "./Action/Action.js"
 import type { Agent } from "./Action/Agent.js"
 import type { Branch } from "./Action/Branch.js"
-import type { Emit } from "./Action/Emit.js"
 import type { Model } from "./Action/Model.js"
 import type { Expand } from "./util/Expand.js"
+import type { Value } from "./util/Value.js"
+import type { LiminalEvent } from "./LiminalEvent.js"
 
-export type Scope<Y extends Action = Action> = Expand<{
-  Model: Extract<Y, Model>
-  Emit: Extract<Y, Emit>
-  Agent: Extract<Y, Agent>
-  Branch: Extract<Y, Branch>
+export type Scope = {
+  Key: keyof any
+  ModelKey: keyof any
+  Event: LiminalEvent
+}
+
+export type ExtractYScope<K extends keyof any, Y extends Action> = Expand<{
+  Key: K
+  ModelKey: ExtractModelKey<Y>
+  Event: LiminalEvent<K, Y>
 }>
+
+export type ExtractModelKey<Y extends Action> =
+  | Extract<Y, Model>["model"]
+  | Extract<Y, Agent>["scope"]["ModelKey"]
+  | Extract<Value<Extract<Y, Branch>["scopes"]>, Scope>["ModelKey"]
+
+export type ExtractChildScope<Y extends Action> =
+  | Extract<Y, Agent>["scope"]
+  | Extract<Value<Extract<Y, Branch>["scopes"]>, Scope>
