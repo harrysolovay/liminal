@@ -5,11 +5,12 @@ import type { LanguageModelV1 } from "ai"
 import type { PromiseOr } from "../util/PromiseOr.js"
 import type { Expand } from "../util/Expand.js"
 
-export function Agent<Y extends Action, R>(
+export function Agent<K extends keyof any, Y extends Action, R>(
+  key: K,
   description: string,
   implementation: FlowLike<Y, R>,
-): <K extends keyof any>(key: K) => AgentInstance<K, ExtractYScope<K, Y, R>> {
-  return <K extends keyof any>(key: K) => ({
+): AgentInstance<K, ExtractYScope<K, Y, R>> {
+  return {
     *[Symbol.iterator]() {
       return yield {
         kind: "Agent",
@@ -22,7 +23,7 @@ export function Agent<Y extends Action, R>(
     run: (config) => {
       throw 0
     },
-  })
+  }
 }
 
 export interface AgentInstance<K extends keyof any = keyof any, S extends Scope = Scope>

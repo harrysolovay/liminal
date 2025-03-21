@@ -14,7 +14,7 @@ export const workers = Agent("You are a senior software architect planning featu
       estimatedComplexity: "'create' | 'medium' | 'high'",
     }),
   )
-  const fileChanges = yield* Branch(implementationPlan.files.map((file, i) => Implementation(feat, file)("")))
+  const fileChanges = yield* Branch(implementationPlan.files.map((file, i) => Implementation(feat, file)(i)))
   return { fileChanges, implementationPlan }
 })
 

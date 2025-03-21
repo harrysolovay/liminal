@@ -1,7 +1,7 @@
 import { openai } from "@ai-sdk/openai"
-import { chaining } from "../chaining.js"
+import { Chaining } from "../chaining.js"
 
-chaining("MarketingCopy")
+Chaining()
   .run({
     models: {
       default: openai("gpt-4o-mini"),
