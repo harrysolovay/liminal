@@ -4,22 +4,12 @@ import type { CoreMessage, LanguageModelV1 } from "ai"
 import type { FlowLike } from "../common/FlowLike.js"
 import type { Flow } from "../common/Flow.js"
 import { unwrapDeferred } from "../util/unwrapDeferred.js"
+import type { Expand } from "../util/Expand.js"
+import type { PromiseOr } from "../util/PromiseOr.js"
 
-export async function run<Y extends Action, T, S extends ExtractYScope<"#", Y>>(
-  root: FlowLike<Y, T>,
-  config: ExecConfig<S>,
-  visitors?: (event: S["Event"]) => void,
-): Promise<T> {
-  const rootState = new ExecState(config, root, "default")
-  throw 0
-}
-
-export interface ExecConfig<S extends Scope = Scope> {
-  models: {
-    default: LanguageModelV1
-  } & {
-    [_ in S["ModelKey"]]: LanguageModelV1
-  }
+export type ExecConfig<S extends Scope = Scope> = {
+  models: Record<"default" | S["ModelKey"], LanguageModelV1>
+  handler?: (event: Expand<S["Event"]>) => PromiseOr<void>
   signal?: AbortSignal
 }
 

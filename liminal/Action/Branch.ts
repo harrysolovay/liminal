@@ -5,7 +5,7 @@ export function* Branch<const B extends Branches>(
   branches: B,
 ): Generator<
   Branch<{
-    [K in keyof B]: B[K] extends FlowLike<infer Y> ? ExtractYScope<K, Y> : never
+    [K in keyof B]: B[K] extends FlowLike<infer Y, infer T> ? ExtractYScope<K, Y, T> : never
   }>,
   {
     [K in keyof B]: B[K] extends FlowLike<any, infer T> ? Awaited<T> : never

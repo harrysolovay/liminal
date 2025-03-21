@@ -10,12 +10,14 @@ export type Scope = {
   Key: keyof any
   ModelKey: keyof any
   Event: LiminalEvent
+  Result: any
 }
 
-export type ExtractYScope<K extends keyof any, Y extends Action> = Expand<{
+export type ExtractYScope<K extends keyof any, Y extends Action, R> = Expand<{
   Key: K
   ModelKey: ExtractModelKey<Y>
   Event: LiminalEvent<K, Y>
+  Result: Awaited<R>
 }>
 
 export type ExtractModelKey<Y extends Action> =

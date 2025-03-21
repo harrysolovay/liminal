@@ -1,21 +1,15 @@
 import { Agent, AssistantText, AssistantObject, Model } from "liminal"
 import { type } from "arktype"
 
-function* HandleCustomerQuery(query: string) {
-  const classification = yield* ClassifyQueryAgent(query)
-  const response = yield* UseClassificationAgent(classification)
+export const Routing = Agent("", function* () {
+  const query = prompt("Please enter your query?")!
+  const classification = yield* ClassifyQueryAgent(query)("ClassifyQuery")
+  const response = yield* UseClassificationAgent(classification)("UseClassification")
   return { classification, response }
-}
-
-const Classification = type({
-  reasoning: "string",
-  type: "'general' | 'refund' | 'technical'",
-  complexity: "'simple' | 'complex'",
 })
 
 function ClassifyQueryAgent(query: string) {
   return Agent(
-    "ClassifyQuery",
     `
       Classify this supplied customer query:
 
@@ -32,8 +26,14 @@ function ClassifyQueryAgent(query: string) {
   )
 }
 
+const Classification = type({
+  reasoning: "string",
+  type: "'general' | 'refund' | 'technical'",
+  complexity: "'simple' | 'complex'",
+})
+
 function UseClassificationAgent(classification: typeof Classification.infer) {
-  return Agent("UseClassification", USE_CLASSIFICATION_AGENT_PROMPTS[classification.type], function* () {
+  return Agent(USE_CLASSIFICATION_AGENT_PROMPTS[classification.type], function* () {
     if (classification.complexity === "complex") {
       yield* Model("reasoning")
     }
