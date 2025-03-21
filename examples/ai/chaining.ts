@@ -1,6 +1,7 @@
-import { AssistantText, AssistantObject, Agent, Exec, Emit, Model } from "liminal"
+import { AssistantText, AssistantObject, Agent, Exec, Emit, Model, Branch } from "liminal"
 import { type } from "arktype"
 import { openai } from "@ai-sdk/openai"
+import type { IteratorLike } from "../../liminal/util/IteratorLike.js"
 
 for await (const event of Exec(MarketingCopyAgent(""), {
   models: {

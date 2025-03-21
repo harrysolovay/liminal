@@ -1,30 +1,28 @@
-import type { DeferredOr } from "../util/DeferredOr.js"
+import type { Scope } from "../Scope.js"
 import type { FlowLike } from "../common/FlowLike.js"
-import type { Spec } from "../Spec.js"
 
-export function* Branch<B extends Branches>(
+export function* Branch<const B extends Branches>(
   branches: B,
 ): Generator<
-  Branch<
-    {
-      [K in keyof B]: B[K] extends DeferredOr<FlowLike<infer Y, infer T>> ? Spec<K, Y, Awaited<T>> : never
-    }[B extends Array<any> ? Extract<keyof B, number> : keyof B]
-  >,
+  Branch<{
+    [K in keyof B]: B[K] extends FlowLike<infer Y> ? Scope<Y> : never
+  }>,
   {
-    [K in keyof B]: B[K] extends DeferredOr<FlowLike<any, infer T>> ? Awaited<T> : never
+    [K in keyof B]: B[K] extends FlowLike<any, infer T> ? Awaited<T> : never
   }
 > {
   return yield {
-    spec: undefined!,
+    scopes: undefined!,
     kind: "Branch",
     branches,
   }
 }
 
-export interface Branch<S extends Spec = Spec> {
-  spec: S
+export interface Branch<S extends BranchScopes = BranchScopes> {
   kind: "Branch"
+  scopes: S
   branches: Branches
 }
 
-export type Branches = Array<DeferredOr<FlowLike>> | Record<string, DeferredOr<FlowLike>>
+export type Branches = Array<FlowLike> | Record<string, FlowLike>
+export type BranchScopes = Array<Scope> | Record<string, Scope>

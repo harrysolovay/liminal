@@ -1,6 +1,6 @@
-import type { Spec } from "./Spec.js"
+import type { Scope } from "./Scope.js"
 
-export type LiminalEvent<S extends Spec> =
+export type LiminalEvent<S extends Scope> =
   | UserText
   | AgentText
   | AgentObject
@@ -30,33 +30,33 @@ export interface AgentObject {
   object: object
 }
 
-export interface Model<S extends Spec> {
+export interface Model<S extends Scope> {
   model: S["Model"]["model"]
 }
 
-export type Emit<S extends Spec> = S["Emit"]
+export type Emit<S extends Scope> = S["Emit"]
 
-export interface AgentCreated<S extends Spec> {
+export interface AgentCreated<S extends Scope> {
   type: "AgentCreated"
   agent: S["Agent"]["key"]
 }
 
-export type AgentInner<S extends Spec> = S["Agent"]
+export type AgentInner<S extends Scope> = S["Agent"]
 
-export interface AgentExit<S extends Spec> {
+export interface AgentExit<S extends Scope> {
   agent: S["Agent"]["key"]
 }
 
-export interface Branch<S extends Spec> {
+export interface Branch<S extends Scope> {
   branches: Array<keyof S["Branch"]["branches"]>
 }
 
-export interface BranchCreated<S extends Spec> {
+export interface BranchCreated<S extends Scope> {
   branch: keyof S["Branch"]["branches"]
 }
 
-export type BranchInner<S extends Spec> = S["Branch"]
+export type BranchInner<S extends Scope> = S["Branch"]
 
-export interface BranchExit<S extends Spec> {
+export interface BranchExit<S extends Scope> {
   branch: keyof S["Branch"]["branches"]
 }

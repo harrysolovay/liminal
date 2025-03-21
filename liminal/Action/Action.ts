@@ -5,6 +5,4 @@ import type { AssistantObject } from "./AssistantValue.js"
 import type { Model } from "./Model.js"
 import type { Agent } from "./Agent.js"
 
-export type Action = Propagated | string | AssistantText | AssistantObject
-
-export type Propagated = Agent | Model | Emit | Branch
+export type Action = Agent | Model | Emit | Branch | string | AssistantText | AssistantObject

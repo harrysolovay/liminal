@@ -1,14 +1,13 @@
 import type { Action } from "../Action/Action.js"
-import { generateObject, generateText, type CoreMessage, jsonSchema, type LanguageModelV1 } from "ai"
+import { generateObject, generateText, type CoreMessage, jsonSchema } from "ai"
 import { toJSONSchema } from "standard-json-schema"
 import { openai } from "@ai-sdk/openai"
-import { unwrapDeferred } from "../util/unwrapDeferred.js"
 import type { FlowLike } from "../common/FlowLike.js"
 
 const model = openai("gpt-4o-mini")
 
 export async function* iter(flow: FlowLike, system?: string): AsyncGenerator<unknown, unknown> {
-  const instance = unwrapDeferred(flow)
+  const instance = typeof flow === "function" ? flow() : flow
   const messages: Array<CoreMessage> = []
   let next: unknown
   while (true) {

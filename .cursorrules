@@ -1,0 +1,12 @@
+Prefer installing dependencies via bun's CLI instead of directly writing to `package.json`s.
+
+```bash
+# Run all tests
+bun test
+
+# Run tests in a specific file
+bun test path/to/file.test.ts
+
+# Run a specific test in a specific file
+bun test --test-name-pattern="test name" alchemy/path/to/file.test.ts
+```
