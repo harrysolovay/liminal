@@ -7,11 +7,11 @@ export function* Branch<B extends Branches>(
 ): Generator<
   Branch<
     {
-      [K in keyof B]: B[K] extends DeferredOr<FlowLike<infer Y, infer T>> ? Spec<K, Y, T> : never
-    }[keyof B]
+      [K in keyof B]: B[K] extends DeferredOr<FlowLike<infer Y, infer T>> ? Spec<K, Y, Awaited<T>> : never
+    }[B extends Array<any> ? Extract<keyof B, number> : keyof B]
   >,
   {
-    [K in keyof B]: B[K] extends DeferredOr<FlowLike<any, infer T>> ? T : never
+    [K in keyof B]: B[K] extends DeferredOr<FlowLike<any, infer T>> ? Awaited<T> : never
   }
 > {
   return yield {

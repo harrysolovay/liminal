@@ -7,7 +7,7 @@ export function* Agent<K extends keyof any, Y extends Action, T>(
   key: K,
   description: string,
   implementation: DeferredOr<FlowLike<Y, T>>,
-): Generator<Agent<Spec<K, Y, T>>, T> {
+): Generator<Agent<Spec<K, Y, Awaited<T>>>, Awaited<T>> {
   return yield {
     spec: undefined!,
     kind: "Agent",

@@ -1,4 +1,4 @@
-import { Branch, Agent, AssistantValue } from "liminal"
+import { Branch, Agent, AssistantObject } from "liminal"
 import { type } from "arktype"
 
 const File = type({
@@ -14,7 +14,7 @@ function Main(featureRequest: string) {
 
       ${featureRequest}
     `
-    const implementationPlan = yield* AssistantValue(
+    const implementationPlan = yield* AssistantObject(
       type({
         files: File.array(),
         estimatedComplexity: "'create' | 'medium' | 'high'",
@@ -45,7 +45,7 @@ function ImplementationPlanAgent(featureRequest: string, file: typeof File.infer
 
         ${featureRequest}
       `
-      const implementation = yield* AssistantValue(
+      const implementation = yield* AssistantObject(
         type({
           explanation: "string",
           code: "string",

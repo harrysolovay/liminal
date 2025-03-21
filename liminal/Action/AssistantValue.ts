@@ -1,13 +1,13 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
 
-export function* AssistantValue<T>(type: StandardSchemaV1<unknown, T>): Generator<AssistantValue<T>, T> {
+export function* AssistantObject<T>(type: StandardSchemaV1<unknown, T>): Generator<AssistantObject<T>, T> {
   return yield {
-    kind: "AssistantValue",
+    kind: "AssistantObject",
     type,
   }
 }
 
-export interface AssistantValue<T = any> {
-  kind: "AssistantValue"
+export interface AssistantObject<T = any> {
+  kind: "AssistantObject"
   type: StandardSchemaV1<unknown, T>
 }

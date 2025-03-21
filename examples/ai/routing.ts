@@ -1,4 +1,4 @@
-import { Agent, AssistantText, AssistantValue, Model } from "liminal"
+import { Agent, AssistantText, AssistantObject, Model } from "liminal"
 import { type } from "arktype"
 
 function* HandleCustomerQuery(query: string) {
@@ -27,7 +27,7 @@ function ClassifyQueryAgent(query: string) {
     `,
     function* () {
       yield query
-      return yield* AssistantValue(Classification)
+      return yield* AssistantObject(Classification)
     },
   )
 }

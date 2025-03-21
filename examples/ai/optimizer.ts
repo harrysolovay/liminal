@@ -1,4 +1,4 @@
-import { AssistantText, AssistantValue, Agent } from "liminal"
+import { AssistantText, AssistantObject, Agent } from "liminal"
 import { type } from "arktype"
 
 function TranslateWithFeedbackAgent(targetLanguage: string, text: string) {
@@ -27,7 +27,7 @@ function TranslateWithFeedbackAgent(targetLanguage: string, text: string) {
           3. Preservation of nuance
           4. Cultural accuracy
         `
-        const evaluation = yield* AssistantValue(
+        const evaluation = yield* AssistantObject(
           type({
             qualityScore: "1 <= number.integer <= 10",
             preservesTone: "boolean",

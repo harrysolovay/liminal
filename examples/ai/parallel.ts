@@ -1,4 +1,4 @@
-import { Branch, AssistantValue, AssistantText, Agent } from "liminal"
+import { Branch, AssistantObject, AssistantText, Agent } from "liminal"
 import { type } from "arktype"
 
 function ParallelAgent(code: string) {
@@ -33,7 +33,7 @@ function SecurityReviewAgent() {
     "",
     "You are an expert in code security. Focus on identifying security vulnerabilities, injection risks, and authentication issues.",
     () =>
-      AssistantValue(
+      AssistantObject(
         type({
           type: "'security'",
           vulnerabilities: "string[]",
@@ -49,7 +49,7 @@ function PerformanceReviewAgent() {
     "",
     "You are an expert in code performance. Focus on identifying performance bottlenecks, memory leaks, and optimization opportunities.",
     () =>
-      AssistantValue(
+      AssistantObject(
         type({
           type: "'performance'",
           issues: "string[]",
@@ -65,7 +65,7 @@ function MaintainabilityReviewAgent() {
     "",
     "You are an expert in code quality. Focus on code structure, readability, and adherence to best practices.",
     () =>
-      AssistantValue(
+      AssistantObject(
         type({
           type: "'maintainability'",
           concerns: "string[]",

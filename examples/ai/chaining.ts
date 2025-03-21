@@ -1,4 +1,4 @@
-import { AssistantText, AssistantValue, Agent, Exec, Emit, Model } from "liminal"
+import { AssistantText, AssistantObject, Agent, Exec, Emit, Model } from "liminal"
 import { type } from "arktype"
 import { openai } from "@ai-sdk/openai"
 
@@ -30,7 +30,7 @@ function MarketingCopyAgent(input: string) {
 
         Copy to evaluate: ${copy}
       `
-      const qualityMetrics = yield* AssistantValue(
+      const qualityMetrics = yield* AssistantObject(
         type({
           hasCallToAction: "boolean",
           emotionalAppeal: "number.integer",
