@@ -62,7 +62,7 @@ type Make<T> = {
   [K in keyof T]: Expand<
     {
       id: number
-      event: K
+      type: K
     } & T[K]
   >
 }

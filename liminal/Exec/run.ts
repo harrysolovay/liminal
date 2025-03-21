@@ -1,58 +1,38 @@
+import type { ExtractYScope, Scope } from "../Scope.js"
 import type { Action } from "../Action/Action.js"
-import { generateObject, generateText, type CoreMessage, jsonSchema, type LanguageModelV1 } from "ai"
-import { toJSONSchema } from "standard-json-schema"
-import { openai } from "@ai-sdk/openai"
-import { unwrapDeferred } from "../util/unwrapDeferred.js"
+import type { CoreMessage, LanguageModelV1 } from "ai"
 import type { FlowLike } from "../common/FlowLike.js"
+import type { Flow } from "../common/Flow.js"
+import { unwrapDeferred } from "../util/unwrapDeferred.js"
 
-const model = openai("gpt-4o-mini")
+export async function run<Y extends Action, T, S extends ExtractYScope<"#", Y>>(
+  root: FlowLike<Y, T>,
+  config: ExecConfig<S>,
+  visitors?: (event: S["Event"]) => void,
+): Promise<T> {
+  const rootState = new ExecState(config, root, "default")
+  throw 0
+}
 
-export async function* iter(flow: FlowLike, system?: string): AsyncGenerator<unknown, unknown> {
-  const instance = unwrapDeferred(flow)
-  const messages: Array<CoreMessage> = []
-  let next: unknown
-  while (true) {
-    const current = await instance.next(next)
-    if (current.done) {
-      return current.value
-    }
-    const action = current.value as Action
-    if (typeof action === "string") {
-      messages.push({
-        role: "user",
-        content: action,
-      })
-      continue
-    }
-    switch (action.kind) {
-      case "Emit": {
-        console.log(action)
-        break
-      }
-      case "AssistantText": {
-        const { text } = await generateText({
-          system,
-          model,
-          messages,
-        })
-        next = text
-        break
-      }
-      case "AssistantObject": {
-        const schema = await toJSONSchema(action.type).then(jsonSchema)
-        const { object } = await generateObject({
-          system,
-          model,
-          messages,
-          schema,
-        })
-        next = object
-        break
-      }
-      case "Agent": {
-        next = yield* iter(action.implementation, action.description)
-        break
-      }
-    }
+export interface ExecConfig<S extends Scope = Scope> {
+  models: {
+    default: LanguageModelV1
+  } & {
+    [_ in S["ModelKey"]]: LanguageModelV1
+  }
+  signal?: AbortSignal
+}
+
+export class ExecState {
+  config: ExecConfig
+  flow: Flow
+  model: string
+  messages: Array<CoreMessage>
+  next: unknown
+  constructor(config: ExecConfig, flowLike: FlowLike, model: string, messages: Array<CoreMessage> = []) {
+    this.config = config
+    this.flow = unwrapDeferred(flowLike)
+    this.model = model
+    this.messages = messages
   }
 }
