@@ -1,13 +1,12 @@
 import { openai } from "@ai-sdk/openai"
-import { Parallel } from "../parallel.js"
+import { parallel } from "../parallel.js"
+import { AIExec } from "liminal-ai"
 
-Parallel(await Bun.file(import.meta.url).text())("")
-  .run({
-    models: {
-      default: openai("gpt-4o-mini"),
-    },
-    handler(event) {
-      console.log(event)
-    },
-  })
-  .then(console.log)
+AIExec.exec(parallel(await Bun.file(import.meta.url).text()), {
+  models: {
+    default: openai("gpt-4o-mini"),
+  },
+  handler(event) {
+    console.log(event)
+  },
+}).then(console.log)

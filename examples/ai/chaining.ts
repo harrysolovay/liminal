@@ -1,12 +1,12 @@
-import { AssistantText, AssistantObject, Agent } from "liminal"
+import { Assistant, Agent, Emit } from "liminal"
 import { type } from "arktype"
 
-export function Chaining() {
+export function chaining(subject: string) {
   return Agent(
-    "",
-    `Write persuasive marketing copy for: ${prompt("Please enter the subject.")}. Focus on benefits and emotional appeal.`,
+    "chain",
+    `Write persuasive marketing copy for: ${subject}. Focus on benefits and emotional appeal.`,
     function* () {
-      let copy = yield* AssistantText()
+      let copy = yield* Assistant()
       yield `
         Evaluate this marketing copy for:
 
@@ -16,7 +16,7 @@ export function Chaining() {
 
         Copy to evaluate: ${copy}
       `
-      const qualityMetrics = yield* AssistantObject(
+      const qualityMetrics = yield* Assistant(
         type({
           hasCallToAction: "boolean",
           emotionalAppeal: "number.integer",
@@ -33,7 +33,7 @@ export function Chaining() {
 
           Original copy: ${copy}
         `
-        copy = yield* AssistantText()
+        copy = yield* Assistant()
       }
       return { copy, qualityMetrics }
     },

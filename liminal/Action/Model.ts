@@ -1,11 +1,11 @@
 export function* Model<K extends keyof any>(key: K): Generator<Model<K>, undefined> {
   return yield {
     kind: "Model",
-    model: key,
+    key: key,
   }
 }
 
 export interface Model<K extends keyof any = keyof any> {
   kind: "Model"
-  model: K
+  key: K
 }

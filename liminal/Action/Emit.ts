@@ -1,13 +1,11 @@
-export function* Emit<K extends keyof any, V>(key: K, value: V): Generator<Emit<K, V>, undefined> {
+export function* Emit<K extends keyof any, V>(value: V): Generator<Emit<V>, undefined> {
   return yield {
     kind: "Emit",
-    key,
     value,
   }
 }
 
-export interface Emit<K extends keyof any = keyof any, V = any> {
+export interface Emit<V = any> {
   kind: "Emit"
-  key: K
   value: V
 }

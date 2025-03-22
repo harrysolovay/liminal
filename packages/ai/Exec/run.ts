@@ -1,9 +1,7 @@
-import type { Action } from "../Action/Action.js"
-import { generateObject, generateText, type CoreMessage, jsonSchema, type LanguageModelV1 } from "ai"
+import { generateObject, generateText, type CoreMessage, jsonSchema } from "ai"
 import { toJSONSchema } from "standard-json-schema"
 import { openai } from "@ai-sdk/openai"
-import { unwrapDeferred } from "../util/unwrapDeferred.js"
-import type { FlowLike } from "../common/FlowLike.js"
+import { unwrapDeferred, type FlowLike, type Action } from "liminal"
 
 const model = openai("gpt-4o-mini")
 
@@ -29,28 +27,28 @@ export async function* iter(flow: FlowLike, system?: string): AsyncGenerator<unk
         console.log(action)
         break
       }
-      case "AssistantText": {
-        const { text } = await generateText({
-          system,
-          model,
-          messages,
-        })
-        next = text
-        break
-      }
-      case "AssistantObject": {
-        const schema = await toJSONSchema(action.type).then(jsonSchema)
-        const { object } = await generateObject({
-          system,
-          model,
-          messages,
-          schema,
-        })
-        next = object
+      case "Assistant": {
+        if (action.type) {
+          const schema = await toJSONSchema(action.type).then(jsonSchema)
+          const { object } = await generateObject({
+            system,
+            model,
+            messages,
+            schema,
+          })
+          next = object
+        } else {
+          const { text } = await generateText({
+            system,
+            model,
+            messages,
+          })
+          next = text
+        }
         break
       }
       case "Agent": {
-        next = yield* iter(action.implementation, action.description)
+        next = yield* iter(action.implementation, action.instructions)
         break
       }
     }

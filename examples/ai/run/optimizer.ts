@@ -1,13 +1,9 @@
 import { openai } from "@ai-sdk/openai"
-import { TranslateWithFeedbackAgent } from "../optimizer.js"
+import { optimizer } from "../optimizer.js"
+import { AIExec } from "liminal-ai"
 
-TranslateWithFeedbackAgent(
-  "typescript",
-  "I love you!",
-)("")
-  .run({
-    models: {
-      default: openai("gpt-4o-mini"),
-    },
-  })
-  .then(console.log)
+AIExec.exec(optimizer("typescript", "I love you!"), {
+  models: {
+    default: openai("gpt-4o-mini"),
+  },
+}).then(console.log)

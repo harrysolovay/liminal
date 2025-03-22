@@ -1,9 +1,9 @@
-import { AssistantText, AssistantObject, Agent } from "liminal"
+import { Assistant, Agent } from "liminal"
 import { type } from "arktype"
 
-export function TranslateWithFeedbackAgent(targetLanguage: string, text: string) {
+export function optimizer(targetLanguage: string, text: string) {
   return Agent(
-    "",
+    "TranslateWithFeedbackAgent",
     "You are an expert literary translator. Translate the supplied text to the specified target language, preserving tone and cultural nuances.",
     function* () {
       yield `Target language: ${targetLanguage}`
@@ -11,7 +11,7 @@ export function TranslateWithFeedbackAgent(targetLanguage: string, text: string)
 
         ${text}
       `
-      let currentTranslation = yield* AssistantText()
+      let currentTranslation = yield* Assistant()
       let iterations = 0
       const MAX_ITERATIONS = 3
       while (iterations < MAX_ITERATIONS) {
@@ -27,7 +27,7 @@ export function TranslateWithFeedbackAgent(targetLanguage: string, text: string)
           3. Preservation of nuance
           4. Cultural accuracy
         `
-        const evaluation = yield* AssistantObject(
+        const evaluation = yield* Assistant(
           type({
             qualityScore: "1 <= number.integer <= 10",
             preservesTone: "boolean",
@@ -54,7 +54,7 @@ export function TranslateWithFeedbackAgent(targetLanguage: string, text: string)
           Original: ${text}
           Current Translation: ${currentTranslation}
         `
-        const improvedTranslation = yield* AssistantText()
+        const improvedTranslation = yield* Assistant()
         currentTranslation = improvedTranslation
         iterations++
       }
