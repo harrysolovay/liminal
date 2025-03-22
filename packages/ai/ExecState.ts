@@ -4,18 +4,16 @@ import {
   type Branch,
   type Emit,
   type Model,
-  type Tool,
   LiminalUtil,
   type DisableTool,
   type Flow,
-  type FlowLike,
   type Action,
+  type Source,
+  type Tool,
 } from "liminal"
 import { generateObject, generateText, jsonSchema, type CoreMessage } from "ai"
 import type { ExecConfig } from "./ExecConfig.js"
 import { toJSONSchema } from "standard-json-schema"
-
-export type Source = Flow | Agent | Tool
 
 export class ExecState {
   config: ExecConfig
@@ -48,7 +46,7 @@ export class ExecState {
             })()
           break
         }
-        case "EnableTool": {
+        case "AgentTool": {
           LiminalUtil.unimplemented()
         }
       }
@@ -93,10 +91,10 @@ export class ExecState {
           return this.onEmit(action)
         }
         case "Branch": {
-          return this.onBranch(action)
+          return await this.onBranch(action)
         }
         case "Agent": {
-          return this.onAgent(action)
+          return await this.onAgent(action)
         }
         case "ParentContext": {
           return this.onParentContext()
@@ -104,8 +102,9 @@ export class ExecState {
         case "Context": {
           return this.onContext()
         }
-        case "EnableTool": {
-          return this.onEnableTool(action)
+        case "AgentTool":
+        case "UnitTool": {
+          return this.onTool(action)
         }
         case "DisableTool": {
           return this.onDisableTool(action)
@@ -119,7 +118,6 @@ export class ExecState {
       role: "user",
       content,
     })
-    this.next = undefined
   }
 
   onUserTexts(contents: Array<string>) {
@@ -132,7 +130,6 @@ export class ExecState {
           }) satisfies CoreMessage,
       ),
     )
-    this.next = undefined
   }
 
   async onAssistant(assistant: Assistant) {
@@ -147,25 +144,22 @@ export class ExecState {
         messages,
         schema,
       })
-      this.next = object
+      return object
     } else {
       const { text } = await generateText({
         system,
         model,
         messages,
       })
-      this.next = text
+      return text
     }
   }
 
   onModel(model: Model) {
     this.modelKey = model.key
-    this.next = undefined
   }
 
-  onEmit(emit: Emit) {
-    this.next = undefined
-  }
+  onEmit(emit: Emit) {}
 
   onBranch(branch: Branch) {}
 
@@ -174,16 +168,16 @@ export class ExecState {
   }
 
   onParentContext() {
-    this.next = this.parent ? [...this.parent.messages] : undefined
+    return this.parent ? [...this.parent.messages] : undefined
   }
 
   onContext() {
-    this.next = this.messages
+    return this.messages
   }
 
-  onEnableTool(tool: Tool) {
+  onTool(tool: Tool) {
     this.tools.add(tool)
-    this.next = function* (): Generator<DisableTool, void> {
+    return function* (): Generator<DisableTool, void> {
       yield {
         kind: "DisableTool",
         tool,
