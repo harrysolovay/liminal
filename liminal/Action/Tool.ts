@@ -2,6 +2,7 @@ import type { StandardSchemaV1 } from "@standard-schema/spec"
 import type { FlowLike } from "../common/FlowLike.js"
 import type { ExtractYScope, Scope } from "../Scope.js"
 import type { DisableTool } from "./DisableTool.js"
+import type { ToolEvent } from "../Event.js"
 
 export function* Tool<K extends keyof any, O, R>(
   key: K,
@@ -13,7 +14,7 @@ export function* Tool<K extends keyof any, O, R>(
 > {
   return yield {
     "": undefined!,
-    kind: "Tool",
+    kind: "EnableTool",
     key,
     params,
     implementation,
@@ -22,9 +23,13 @@ export function* Tool<K extends keyof any, O, R>(
 
 export interface Tool<K extends keyof any = keyof any, S extends Scope = Scope> {
   "": S
-  kind: "Tool"
+  kind: "EnableTool"
 
   key: K
   params: StandardSchemaV1
   implementation: (params: any) => any
 }
+
+export type ExtractToolEvent<T extends Tool> = {
+  [K in T["key"]]: ToolEvent<K, Extract<T, Tool<K>>[""]["Event"]>
+}[T["key"]]

@@ -1,9 +1,9 @@
 export function* Context(): Generator<Context, Array<string>> {
   return yield {
-    kind: "ParentContext",
+    kind: "Context",
   }
 }
 
 export interface Context {
-  kind: "ParentContext"
+  kind: "Context"
 }

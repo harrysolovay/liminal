@@ -20,7 +20,7 @@ import type {
 } from "./Event.js"
 import type { Assistant } from "./Action/Assistant.js"
 import type { Expand } from "./util/Expand.js"
-import type { Tool } from "./Action/Tool.js"
+import type { ExtractToolEvent, Tool } from "./Action/Tool.js"
 import type { DisableTool } from "./Action/DisableTool.js"
 
 export interface Scope {
@@ -53,8 +53,8 @@ export interface ExtractYScope<
             | BranchEnterEvent<keyof B["branches"]>
             | ExtractBranchEvent<B>
             | BranchExitEvent<keyof B["branches"]>)
-    | ([ET] extends [never] ? never : EnableToolEvent<ET["key"]>)
-    | ([DT] extends [never] ? never : DisableToolEvent<DT["key"]>)
+    | ([ET] extends [never] ? never : EnableToolEvent<ET["key"]> | ExtractToolEvent<ET>)
+    | ([DT] extends [never] ? never : DisableToolEvent<DT["tool"]["key"]>)
   >
   Result: Awaited<R>
 }

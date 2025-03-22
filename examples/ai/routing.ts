@@ -1,7 +1,17 @@
 import { Agent, Assistant, Model } from "liminal"
 import { type } from "arktype"
+import { exec } from "liminal-ai"
+import { openai } from "@ai-sdk/openai"
 
-export function* routing() {
+exec(routing(), {
+  models: {
+    default: openai("gpt-4o-mini"),
+    reasoning: openai("o1-mini"),
+  },
+  handler: console.log,
+})
+
+function* routing() {
   const query = prompt("Please enter your query?")!
   const classification = yield* classifyQuery(query)
   const response = yield* useClassification(classification)

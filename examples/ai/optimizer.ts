@@ -1,7 +1,16 @@
 import { Assistant, Agent } from "liminal"
 import { type } from "arktype"
+import { exec } from "liminal-ai"
+import { openai } from "@ai-sdk/openai"
 
-export function optimizer(targetLanguage: string, text: string) {
+exec(optimizer("typescript", "I love you!"), {
+  models: {
+    default: openai("gpt-4o-mini"),
+  },
+  handler: console.log,
+})
+
+function optimizer(targetLanguage: string, text: string) {
   return Agent(
     "TranslateWithFeedbackAgent",
     "You are an expert literary translator. Translate the supplied text to the specified target language, preserving tone and cultural nuances.",

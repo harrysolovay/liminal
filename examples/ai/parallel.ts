@@ -1,7 +1,16 @@
 import { Branch, Assistant, Agent } from "liminal"
 import { type } from "arktype"
+import { exec } from "liminal-ai"
+import { openai } from "@ai-sdk/openai"
 
-export function parallel(code: string) {
+exec(parallel(await Bun.file(import.meta.url).text()), {
+  models: {
+    default: openai("gpt-4o-mini"),
+  },
+  handler: console.log,
+})
+
+function parallel(code: string) {
   return Agent(
     "Parallel",
     "You are a technical lead summarizing multiple code reviews. Review the supplied code.",
