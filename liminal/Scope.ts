@@ -15,9 +15,13 @@ import type {
   BranchesEvent,
   BranchEnterEvent,
   BranchExitEvent,
+  EnableToolEvent,
+  DisableToolEvent,
 } from "./Event.js"
 import type { Assistant } from "./Action/Assistant.js"
 import type { Expand } from "./util/Expand.js"
+import type { Tool } from "./Action/Tool.js"
+import type { DisableTool } from "./Action/DisableTool.js"
 
 export interface Scope {
   ModelKey: keyof any
@@ -32,6 +36,8 @@ export interface ExtractYScope<
   E extends Extract<Y, Emit> = Extract<Y, Emit>,
   A extends Extract<Y, Agent> = Extract<Y, Agent>,
   B extends Extract<Y, Branch> = Extract<Y, Branch>,
+  ET extends Extract<Y, Tool> = Extract<Y, Tool>,
+  DT extends Extract<Y, DisableTool> = Extract<Y, DisableTool>,
 > {
   ModelKey: M["key"] | A[""]["ModelKey"] | Value<B[""]>["ModelKey"]
   Event: Expand<
@@ -47,6 +53,8 @@ export interface ExtractYScope<
             | BranchEnterEvent<keyof B["branches"]>
             | ExtractBranchEvent<B>
             | BranchExitEvent<keyof B["branches"]>)
+    | ([ET] extends [never] ? never : EnableToolEvent<ET["key"]>)
+    | ([DT] extends [never] ? never : DisableToolEvent<DT["key"]>)
   >
   Result: Awaited<R>
 }

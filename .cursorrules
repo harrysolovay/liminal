@@ -8,5 +8,5 @@ bun test
 bun test path/to/file.test.ts
 
 # Run a specific test in a specific file
-bun test --test-name-pattern="test name" alchemy/path/to/file.test.ts
+bun test --test-name-pattern="test name" liminal/path/to/file.test.ts
 ```

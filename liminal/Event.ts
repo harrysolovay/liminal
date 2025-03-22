@@ -11,6 +11,8 @@ export type Event =
   | BranchEnterEvent
   | BranchEvent
   | BranchExitEvent
+  | EnableToolEvent
+  | DisableToolEvent
   | ExitEvent
 
 export interface EnterEvent {
@@ -75,6 +77,16 @@ export interface BranchExitEvent<K extends keyof any = keyof any, T = any> {
   type: "BranchExit"
   branch: K
   result: T
+}
+
+export interface EnableToolEvent<K extends keyof any = keyof any> {
+  type: "Tool"
+  key: K
+}
+
+export interface DisableToolEvent<K extends keyof any = keyof any> {
+  type: "DisableTool"
+  key: K
 }
 
 export interface ExitEvent<T = any> {
