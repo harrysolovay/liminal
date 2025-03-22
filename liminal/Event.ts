@@ -4,19 +4,16 @@ export type Event =
   | AssistantEvent
   | ModelEvent
   | EmitEvent
-  | AgentEnterEvent
   | AgentEvent
-  | AgentExitEvent
   | BranchesEvent
-  | BranchEnterEvent
   | BranchEvent
-  | BranchExitEvent
   | EnableToolEvent
-  | AgentToolEvent
+  | ToolEvent
   | DisableToolEvent
   | ExitEvent
 
-export interface EnterEvent {
+export interface EnterEvent<K extends keyof any = keyof any> {
+  key: K
   type: "Enter"
 }
 
@@ -50,31 +47,15 @@ export interface EmitEvent<E = any> {
   value: E
 }
 
-export interface AgentEnterEvent<K extends keyof any = keyof any> {
-  type: "AgentEnter"
-  agent: K
-}
-
 export interface AgentEvent<K extends keyof any = keyof any, E extends Event = Event> {
   type: "AgentEvent"
   agent: K
   event: E
 }
 
-export interface AgentExitEvent<K extends keyof any = keyof any, T = any> {
-  type: "AgentExit"
-  agent: K
-  result: T
-}
-
 export interface BranchesEvent<K extends keyof any = keyof any> {
   type: "Branches"
   branches: Array<K>
-}
-
-export interface BranchEnterEvent<K extends keyof any = keyof any> {
-  type: "BranchEnter"
-  branch: K
 }
 
 export interface BranchEvent<K extends keyof any = keyof any, E extends Event = Event> {
@@ -83,18 +64,12 @@ export interface BranchEvent<K extends keyof any = keyof any, E extends Event = 
   event: E
 }
 
-export interface BranchExitEvent<K extends keyof any = keyof any, T = any> {
-  type: "BranchExit"
-  branch: K
-  result: T
-}
-
 export interface EnableToolEvent<K extends keyof any = keyof any> {
   type: "EnableTool"
   key: K
 }
 
-export interface AgentToolEvent<K extends keyof any = keyof any, E extends Event = Event> {
+export interface ToolEvent<K extends keyof any = keyof any, E extends Event = Event> {
   type: "AgentTool"
   tool: K
   event: E
@@ -105,7 +80,8 @@ export interface DisableToolEvent<K extends keyof any = keyof any> {
   key: K
 }
 
-export interface ExitEvent<T = any> {
+export interface ExitEvent<K extends keyof any = keyof any, T = any> {
   type: "Exit"
+  key: K
   result: T
 }

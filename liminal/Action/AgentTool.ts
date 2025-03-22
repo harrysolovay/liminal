@@ -2,7 +2,7 @@ import type { StandardSchemaV1 } from "@standard-schema/spec"
 import type { FlowLike } from "../common/FlowLike.js"
 import type { ExtractYScope, Scope } from "../Scope.js"
 import type { DisableTool } from "./DisableTool.js"
-import type { AgentToolEvent } from "../Event.js"
+import type { ToolEvent } from "../Event.js"
 
 export function* AgentTool<K extends keyof any, O, R>(
   key: K,
@@ -31,5 +31,5 @@ export interface AgentTool<K extends keyof any = keyof any, S extends Scope = Sc
 }
 
 export type ExtractToolEvent<T extends AgentTool> = {
-  [K in T["key"]]: AgentToolEvent<K, Extract<T, AgentTool<K>>[""]["Event"]>
+  [K in T["key"]]: ToolEvent<K, Extract<T, AgentTool<K>>[""]["Event"]>
 }[T["key"]]

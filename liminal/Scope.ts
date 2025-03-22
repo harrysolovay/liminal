@@ -5,18 +5,16 @@ import type { Model } from "./Action/Model.js"
 import type { Value } from "./util/Value.js"
 import type { Emit } from "./Action/Emit.js"
 import type {
-  AgentEnterEvent,
-  AgentExitEvent,
   AssistantEvent,
   EmitEvent,
   Event,
   ModelEvent,
   UserTextEvent,
   BranchesEvent,
-  BranchEnterEvent,
-  BranchExitEvent,
   EnableToolEvent,
   DisableToolEvent,
+  EnterEvent,
+  ExitEvent,
 } from "./Event.js"
 import type { Assistant } from "./Action/Assistant.js"
 import type { Expand } from "./util/Expand.js"
@@ -47,14 +45,14 @@ export interface ExtractYScope<
     | ([Extract<Y, Assistant>] extends [never] ? never : AssistantEvent)
     | ([M] extends [never] ? never : ModelEvent<M["key"]>)
     | ([E] extends [never] ? never : EmitEvent<E["value"]>)
-    | ([A] extends [never] ? never : AgentEnterEvent<A["key"]> | ExtractAgentEvent<A> | AgentExitEvent<A["key"]>)
+    | ([A] extends [never] ? never : EnterEvent<A["key"]> | ExtractAgentEvent<A> | ExitEvent<A["key"]>)
     | ([B] extends [never]
         ? never
         :
             | BranchesEvent<keyof B["branches"]>
-            | BranchEnterEvent<keyof B["branches"]>
+            | EnterEvent<keyof B["branches"]>
             | ExtractBranchEvent<B>
-            | BranchExitEvent<keyof B["branches"]>)
+            | ExitEvent<keyof B["branches"]>)
     | ([UT] extends [never] ? never : EnableToolEvent<UT["key"]>)
     | ([AT] extends [never] ? never : EnableToolEvent<AT["key"]> | ExtractToolEvent<AT>)
     | ([DT] extends [never] ? never : DisableToolEvent<DT["tool"]["key"]>)

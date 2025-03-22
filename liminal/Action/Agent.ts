@@ -5,14 +5,14 @@ import type { AgentEvent } from "../Event.js"
 
 export function* Agent<K extends keyof any, Y extends Action, R = string>(
   key: K,
-  instructions: string,
+  system: string,
   implementation?: () => Flow<Y, R>,
 ): Generator<Agent<K, ExtractYScope<Y, R>>, Awaited<R>> {
   return yield {
     "": undefined!,
     kind: "Agent",
     key,
-    instructions,
+    system,
     implementation,
   }
 }
@@ -21,7 +21,7 @@ export interface Agent<K extends keyof any = keyof any, S extends Scope = Scope>
   "": S
   kind: "Agent"
   key: K
-  instructions: string
+  system: string
   implementation?: () => Flow
 }
 
