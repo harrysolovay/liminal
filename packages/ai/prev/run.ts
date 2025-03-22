@@ -21,6 +21,17 @@ export async function* iter(flow: FlowLike, system?: string): AsyncGenerator<unk
         content: action,
       })
       continue
+    } else if (Array.isArray(action)) {
+      messages.push(
+        ...action.map(
+          (content) =>
+            ({
+              role: "user",
+              content,
+            }) satisfies CoreMessage,
+        ),
+      )
+      continue
     }
     switch (action.kind) {
       case "Emit": {

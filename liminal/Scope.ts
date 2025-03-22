@@ -41,7 +41,7 @@ export interface ExtractYScope<
 > {
   ModelKey: M["key"] | A[""]["ModelKey"] | Value<B[""]>["ModelKey"]
   Event: Expand<
-    | ([Extract<Y, string>] extends [never] ? never : UserTextEvent)
+    | ([Extract<Y, string | Array<string>>] extends [never] ? never : UserTextEvent)
     | ([Extract<Y, Assistant>] extends [never] ? never : AssistantEvent)
     | ([M] extends [never] ? never : ModelEvent<M["key"]>)
     | ([E] extends [never] ? never : EmitEvent<E["value"]>)

@@ -1,4 +1,4 @@
-import { Assistant, Agent, Emit } from "liminal"
+import { Assistant, Agent } from "liminal"
 import { type } from "arktype"
 
 export function chaining(subject: string) {
