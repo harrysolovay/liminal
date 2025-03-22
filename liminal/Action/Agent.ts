@@ -7,7 +7,7 @@ export function* Agent<K extends keyof any, Y extends Action, R>(
   key: K,
   instructions: string,
   implementation: () => Flow<Y, R>,
-): Generator<Agent<K, ExtractYScope<Y>>, Awaited<R>> {
+): Generator<Agent<K, ExtractYScope<Y, R>>, Awaited<R>> {
   return yield {
     "": undefined!,
     kind: "Agent",

@@ -1,4 +1,5 @@
 export type Event =
+  | EnterEvent
   | UserTextEvent
   | AssistantEvent
   | ModelEvent
@@ -10,6 +11,11 @@ export type Event =
   | BranchEnterEvent
   | BranchEvent
   | BranchExitEvent
+  | ExitEvent
+
+export interface EnterEvent {
+  type: "Enter"
+}
 
 export interface UserTextEvent {
   type: "UserText"
@@ -43,9 +49,10 @@ export interface AgentEvent<K extends keyof any = keyof any, E extends Event = E
   event: E
 }
 
-export interface AgentExitEvent<K extends keyof any = keyof any> {
+export interface AgentExitEvent<K extends keyof any = keyof any, T = any> {
   type: "AgentExit"
   agent: K
+  result: T
 }
 
 export interface BranchesEvent<K extends keyof any = keyof any> {
@@ -59,12 +66,18 @@ export interface BranchEnterEvent<K extends keyof any = keyof any> {
 }
 
 export interface BranchEvent<K extends keyof any = keyof any, E extends Event = Event> {
-  type: "BranchEvent"
+  type: "Branch"
   branch: K
   event: E
 }
 
-export interface BranchExitEvent<K extends keyof any = keyof any> {
+export interface BranchExitEvent<K extends keyof any = keyof any, T = any> {
   type: "BranchExit"
   branch: K
+  result: T
+}
+
+export interface ExitEvent<T = any> {
+  type: "Exit"
+  result: T
 }

@@ -10,6 +10,7 @@
 
 ## Why?
 
+- TRPC/Hono-style event inference
 - Establish a TypeScript-centric way to define reusable flows without getting
   locked into specific LLM providers/models/client libraries
 - Inject model upon flow execution. This means that we can share flow libraries

@@ -6,7 +6,7 @@ import type { Key } from "../util/Key.js"
 export function* Branch<const B extends Branches>(
   branches: B,
 ): Generator<
-  Branch<{ [K in keyof B]: B[K] extends FlowLike<infer Y> ? ExtractYScope<Y> : never }>,
+  Branch<{ [K in keyof B]: B[K] extends FlowLike<infer Y, infer R> ? ExtractYScope<Y, R> : never }>,
   { [K in keyof B]: B[K] extends FlowLike<any, infer R> ? Awaited<R> : never }
 > {
   return yield {

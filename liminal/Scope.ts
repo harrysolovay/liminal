@@ -1,6 +1,6 @@
 import type { Action } from "./Action/Action.js"
 import type { Agent, ExtractAgentEvent } from "./Action/Agent.js"
-import type { Branch } from "./Action/Branch.js"
+import type { Branch, ExtractBranchEvent } from "./Action/Branch.js"
 import type { Model } from "./Action/Model.js"
 import type { Value } from "./util/Value.js"
 import type { Emit } from "./Action/Emit.js"
@@ -17,21 +17,24 @@ import type {
   BranchExitEvent,
 } from "./Event.js"
 import type { Assistant } from "./Action/Assistant.js"
+import type { Expand } from "./util/Expand.js"
 
 export interface Scope {
   ModelKey: keyof any
   Event: Event
+  Result: any
 }
 
 export interface ExtractYScope<
   Y extends Action,
+  R,
   M extends Extract<Y, Model> = Extract<Y, Model>,
   E extends Extract<Y, Emit> = Extract<Y, Emit>,
   A extends Extract<Y, Agent> = Extract<Y, Agent>,
   B extends Extract<Y, Branch> = Extract<Y, Branch>,
 > {
   ModelKey: M["key"] | A[""]["ModelKey"] | Value<B[""]>["ModelKey"]
-  Event:
+  Event: Expand<
     | ([Extract<Y, string>] extends [never] ? never : UserTextEvent)
     | ([Extract<Y, Assistant>] extends [never] ? never : AssistantEvent)
     | ([M] extends [never] ? never : ModelEvent<M["key"]>)
@@ -44,4 +47,6 @@ export interface ExtractYScope<
             | BranchEnterEvent<keyof B["branches"]>
             | ExtractBranchEvent<B>
             | BranchExitEvent<keyof B["branches"]>)
+  >
+  Result: Awaited<R>
 }
