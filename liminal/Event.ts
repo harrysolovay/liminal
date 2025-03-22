@@ -25,11 +25,20 @@ export interface UserTextEvent {
   text: string
 }
 
-export interface AssistantEvent {
+export type AssistantEvent = {
   type: "Assistant"
-  schema: object
-  object: object
-}
+} & (
+  | {
+      schema: object
+      object: object
+      text?: never
+    }
+  | {
+      schema?: never
+      object?: never
+      text: string
+    }
+)
 
 export interface ModelEvent<K extends keyof any = keyof any> {
   type: "Model"

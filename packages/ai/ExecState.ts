@@ -144,6 +144,11 @@ export class ExecState {
         messages,
         schema,
       })
+      this.config.handler?.({
+        type: "Assistant",
+        object: object as object,
+        schema,
+      })
       return object
     } else {
       const { text } = await generateText({
@@ -151,20 +156,33 @@ export class ExecState {
         model,
         messages,
       })
+      this.config.handler?.({
+        type: "Assistant",
+        text,
+      })
       return text
     }
   }
 
   onModel(model: Model) {
+    this.config.handler?.({
+      type: "Model",
+      model: model.key,
+    })
     this.modelKey = model.key
   }
 
-  onEmit(emit: Emit) {}
+  onEmit(emit: Emit) {
+    this.config.handler?.({
+      type: "Emit",
+      value: emit.value,
+    })
+  }
 
   onBranch(branch: Branch) {}
 
   onAgent(agent: Agent) {
-    new ExecState(this.config, this.flow, this.modelKey, [...this.messages], this, agent.instructions, new Set())
+    // new ExecState(this.config, this.flow, this.modelKey, [...this.messages], this, agent.instructions, new Set())
   }
 
   onParentContext() {
@@ -176,6 +194,10 @@ export class ExecState {
   }
 
   onTool(tool: Tool) {
+    this.config.handler?.({
+      type: "EnableTool",
+      key: tool.key,
+    })
     this.tools.add(tool)
     return function* (): Generator<DisableTool, void> {
       yield {
@@ -186,7 +208,10 @@ export class ExecState {
   }
 
   onDisableTool(disableTool: DisableTool) {
+    this.config.handler?.({
+      type: "DisableTool",
+      key: disableTool.tool.key,
+    })
     this.tools.delete(disableTool.tool)
-    this.next = undefined
   }
 }
