@@ -12,8 +12,17 @@ export type Event =
   | DisableToolEvent
   | ExitEvent
 
-export interface EnterEvent<K extends keyof any = keyof any> {
-  key: K
+export type EventPath<
+  E extends Event,
+  A extends Extract<E, AgentEvent> = Extract<E, AgentEvent>,
+  B extends Extract<E, BranchEvent> = Extract<E, BranchEvent>,
+  T extends Extract<E, ToolEvent> = Extract<E, ToolEvent>,
+> =
+  | ([A] extends [never] ? [] : { [K in A["agent"]]: ["agent", A["agent"], ...EventPath<A["event"]>] }[A["agent"]])
+  | ([B] extends [never] ? [] : { [K in B["branch"]]: ["branch", B["branch"], ...EventPath<B["event"]>] }[B["branch"]])
+  | ([T] extends [never] ? [] : { [K in T["tool"]]: ["tool", T["tool"], ...EventPath<T["event"]>] }[T["tool"]])
+
+export interface EnterEvent {
   type: "Enter"
 }
 
@@ -37,51 +46,51 @@ export type AssistantEvent = {
     }
 )
 
-export interface ModelEvent<K extends keyof any = keyof any> {
+export interface ModelEvent<K extends string = string> {
   type: "Model"
   model: K
 }
 
-export interface EmitEvent<E = any> {
+export interface EmitEvent<K extends string = string, E = any> {
   type: "Emit"
+  event: K
   value: E
 }
 
-export interface AgentEvent<K extends keyof any = keyof any, E extends Event = Event> {
-  type: "AgentEvent"
+export interface AgentEvent<K extends string = string, E extends Event = Event> {
+  type: "Agent"
   agent: K
   event: E
 }
 
-export interface BranchesEvent<K extends keyof any = keyof any> {
+export interface BranchesEvent<K extends string = string> {
   type: "Branches"
   branches: Array<K>
 }
 
-export interface BranchEvent<K extends keyof any = keyof any, E extends Event = Event> {
+export interface BranchEvent<K extends string = string, E extends Event = Event> {
   type: "Branch"
   branch: K
   event: E
 }
 
-export interface EnableToolEvent<K extends keyof any = keyof any> {
+export interface EnableToolEvent<K extends string = string> {
   type: "EnableTool"
   key: K
 }
 
-export interface ToolEvent<K extends keyof any = keyof any, E extends Event = Event> {
+export interface ToolEvent<K extends string = string, E extends Event = Event> {
   type: "AgentTool"
   tool: K
   event: E
 }
 
-export interface DisableToolEvent<K extends keyof any = keyof any> {
+export interface DisableToolEvent<K extends string = string> {
   type: "DisableTool"
   key: K
 }
 
-export interface ExitEvent<K extends keyof any = keyof any, T = any> {
+export interface ExitEvent<T = any> {
   type: "Exit"
-  key: K
   result: T
 }

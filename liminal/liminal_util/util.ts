@@ -1,4 +1,5 @@
 export * from "./unimplemented.js"
+export * from "./Value.js"
 export * from "./unwrapDeferred.js"
 export * from "./assert.js"
 export * from "./DeferredOr.js"

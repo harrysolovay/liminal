@@ -44,9 +44,6 @@
     },
     "packages/ai": {
       "name": "liminal-ai",
-      "dependencies": {
-        "standard-json-schema": "^0.1.1",
-      },
       "peerDependencies": {
         "ai": "^4.1.61",
         "liminal": "workspace:*",

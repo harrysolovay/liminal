@@ -1,7 +1,7 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
 import type { DisableTool } from "./DisableTool.js"
 
-export function* UnitTool<K extends keyof any, O, R>(
+export function* UnitTool<K extends string, O, R>(
   key: K,
   params: StandardSchemaV1<object, O>,
   implementation: (params: O) => R,
@@ -14,9 +14,8 @@ export function* UnitTool<K extends keyof any, O, R>(
   }
 }
 
-export interface UnitTool<K extends keyof any = keyof any> {
+export interface UnitTool<K extends string = string> {
   kind: "UnitTool"
-
   key: K
   params: StandardSchemaV1
   implementation: (params: any) => any

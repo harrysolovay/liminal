@@ -1,10 +1,10 @@
 import { generateObject, generateText, jsonSchema, type CoreMessage } from "ai"
 import {
+  Assistant,
   type Agent,
-  type Assistant,
   type Branch,
   type Emit,
-  LiminalUtil,
+  _util,
   type Model,
   type Action,
   type DisableTool,
@@ -16,7 +16,7 @@ import {
 import type { ExecConfig } from "./ExecConfig.js"
 import { toJSONSchema } from "standard-json-schema"
 
-export type FlowSource = LiminalUtil.DeferredOr<Flow | Agent | Branch | AgentTool>
+export type FlowSource = _util.DeferredOr<Flow | Agent | Branch> | AgentTool
 
 export class ExecState {
   config: ExecConfig
@@ -27,9 +27,10 @@ export class ExecState {
   tools: Set<Tool>
   system: string | undefined
   next: any
-  parent?: ExecState
+  parent: ExecState | undefined
   handler: (event: Event) => unknown
   constructor(
+    parent: ExecState | undefined,
     config: ExecConfig,
     source: FlowSource,
     flow: Flow,
@@ -39,6 +40,7 @@ export class ExecState {
     system: string | undefined,
     handler: (event: Event) => unknown,
   ) {
+    this.parent = parent
     this.config = config
     this.source = source
     this.flow = flow
@@ -49,15 +51,21 @@ export class ExecState {
     this.handler = handler
   }
 
-  async consume() {
-    // ENTER
+  async consume(): Promise<unknown> {
+    this.handler({
+      type: "Enter",
+    })
     let current = await this.flow.next(this.next)
     while (!current.done) {
       const { value } = current
       this.next = await this.tick(value)
       current = await this.flow.next(this.next)
     }
-    // EXIT
+    this.handler({
+      type: "Exit",
+      result: current.value,
+    })
+    return current.value
   }
 
   async tick(action: Action) {
@@ -102,16 +110,26 @@ export class ExecState {
     }
   }
 
-  onUserText(content: string) {
+  onUserText(text: string) {
+    this.handler({
+      type: "UserText",
+      text,
+    })
     this.messages.push({
       role: "user",
-      content,
+      content: text,
     })
   }
 
-  onUserTexts(contents: Array<string>) {
+  onUserTexts(texts: Array<string>) {
+    for (const text of texts) {
+      this.handler({
+        type: "UserText",
+        text,
+      })
+    }
     this.messages.push(
-      ...contents.map(
+      ...texts.map(
         (content) =>
           ({
             role: "user",
@@ -124,14 +142,19 @@ export class ExecState {
   async onAssistant(assistant: Assistant) {
     const { messages, system, modelKey } = this
     const model = this.config.models[modelKey]
-    LiminalUtil.assert(model)
+    _util.assert(model)
     if (assistant.type) {
-      const schema = await toJSONSchema(assistant.type).then(jsonSchema)
+      const schema = await toJSONSchema(assistant.type)
+      const aiSchema = jsonSchema(schema)
       const { object } = await generateObject({
         system,
         model,
         messages,
-        schema,
+        schema: aiSchema,
+      })
+      this.messages.push({
+        role: "assistant",
+        content: JSON.stringify(object),
       })
       this.handler({
         type: "Assistant",
@@ -144,6 +167,10 @@ export class ExecState {
         system,
         model,
         messages,
+      })
+      this.messages.push({
+        role: "assistant",
+        content: text,
       })
       this.handler({
         type: "Assistant",
@@ -164,14 +191,56 @@ export class ExecState {
   onEmit(emit: Emit) {
     this.handler({
       type: "Emit",
+      event: emit.key,
       value: emit.value,
     })
   }
 
-  onBranch(branch: Branch) {}
+  async onBranch({ branches }: Branch) {
+    const entries = Object.entries(branches)
+    const result = await Promise.all(
+      entries.map(([key, flowLike]) => {
+        const unwrapped = _util.unwrapDeferred(flowLike)
+        return new ExecState(
+          this,
+          this.config,
+          flowLike,
+          unwrapped,
+          this.modelKey,
+          [...this.messages],
+          new Set(this.tools),
+          this.system,
+          (event) =>
+            this.handler({
+              type: "Branch",
+              branch: key,
+              event,
+            }),
+        ).consume()
+      }),
+    )
+    return Array.isArray(branches)
+      ? Array.from({ length: branches.length }, (_0, i) => result[i])
+      : Object.fromEntries(result.map((value, i) => [value, entries[i]]))
+  }
 
   onAgent(agent: Agent) {
-    // new ExecState(config, flow, modelKey, [...messages], this, agent.instructions, new Set())
+    return new ExecState(
+      this,
+      this.config,
+      agent,
+      agent.implementation?.() ?? Assistant(),
+      this.modelKey,
+      [...this.messages],
+      new Set(),
+      agent.system,
+      (event) =>
+        this.handler({
+          type: "Agent",
+          agent: agent.key,
+          event,
+        }),
+    ).consume()
   }
 
   onParentContext() {

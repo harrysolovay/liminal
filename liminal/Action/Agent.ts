@@ -3,7 +3,7 @@ import type { ExtractYScope, Scope } from "../Scope.js"
 import type { Flow } from "../common/Flow.js"
 import type { AgentEvent } from "../Event.js"
 
-export function* Agent<K extends keyof any, Y extends Action, R = string>(
+export function* Agent<K extends string, Y extends Action, R = string>(
   key: K,
   system: string,
   implementation?: () => Flow<Y, R>,
@@ -17,7 +17,7 @@ export function* Agent<K extends keyof any, Y extends Action, R = string>(
   }
 }
 
-export interface Agent<K extends keyof any = keyof any, S extends Scope = Scope> {
+export interface Agent<K extends string = string, S extends Scope = Scope> {
   "": S
   kind: "Agent"
   key: K

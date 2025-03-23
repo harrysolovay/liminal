@@ -3,14 +3,12 @@ import { type } from "arktype"
 import { exec } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
 
-exec(chaining(prompt("Please enter the subject.")!), {
+exec(chaining(prompt("Please enter the subject:")!), {
   models: {
     default: openai("gpt-4o-mini"),
   },
   handler: (event) => {
-    if (event.type === "AgentEvent") {
-      event.event
-    }
+    console.log(event)
   },
 })
 

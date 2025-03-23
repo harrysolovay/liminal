@@ -4,7 +4,7 @@ import type { ExtractYScope, Scope } from "../Scope.js"
 import type { DisableTool } from "./DisableTool.js"
 import type { ToolEvent } from "../Event.js"
 
-export function* AgentTool<K extends keyof any, O, R>(
+export function* AgentTool<K extends string, O, R>(
   key: K,
   params: StandardSchemaV1<object, O>,
   implementation: (params: O) => R,
@@ -21,10 +21,9 @@ export function* AgentTool<K extends keyof any, O, R>(
   }
 }
 
-export interface AgentTool<K extends keyof any = keyof any, S extends Scope = Scope> {
+export interface AgentTool<K extends string = string, S extends Scope = Scope> {
   "": S
   kind: "AgentTool"
-
   key: K
   params: StandardSchemaV1
   implementation: (params: any) => any

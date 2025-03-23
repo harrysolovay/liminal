@@ -1,13 +1,20 @@
-import type { JSONValue } from "../util/JSONValue.js"
+import type { EmitEvent } from "../Event.js"
+import type { JSONValue } from "../liminal_util/JSONValue.js"
 
-export function* Emit<K extends keyof any, V extends JSONValue>(value: V): Generator<Emit<V>, undefined> {
+export function* Emit<K extends string, V extends JSONValue>(key: K, value: V): Generator<Emit<K, V>, undefined> {
   return yield {
     kind: "Emit",
+    key,
     value,
   }
 }
 
-export interface Emit<V extends JSONValue = any> {
+export interface Emit<K extends string = string, V extends JSONValue = JSONValue> {
   kind: "Emit"
+  key: K
   value: V
 }
+
+export type ExtractEmitEvent<E extends Emit> = {
+  [K in E["key"]]: EmitEvent<K, Extract<E, Emit<K>>["value"]>
+}[E["key"]]
