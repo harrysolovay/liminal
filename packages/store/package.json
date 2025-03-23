@@ -1,0 +1,12 @@
+{
+  "name": "liminal-store",
+  "private": true,
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "peerDependencies": {
+    "drizzle-orm": "^0.41.0",
+    "liminal": "workspace:*",
+    "react": "^19.0.0"
+  }
+}

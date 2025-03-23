@@ -1,16 +1,13 @@
 import { Assistant, Agent } from "liminal"
 import { type } from "arktype"
-import { exec } from "liminal-ai"
+import { AIExec } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
 
-exec(chaining(prompt("Please enter the subject:")!), {
+AIExec(chaining(prompt("Please enter the subject:")!), {
   models: {
     default: openai("gpt-4o-mini"),
   },
-  handler: (event) => {
-    console.log(event)
-  },
-})
+}).run(console.log)
 
 export function chaining(subject: string) {
   return Agent(

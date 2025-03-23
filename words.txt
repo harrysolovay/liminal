@@ -1,9 +1,12 @@
 arktype
 bunx
 cspotcode
+fuzzystrmatch
 initdb
 llms
 ollama
+ossp
+pglite
 pgvector
 supabase
 tmpfs

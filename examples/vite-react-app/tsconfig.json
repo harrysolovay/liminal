@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base",
+  "compilerOptions": {
+    "jsx": "react-jsx"
+  },
+  "include": ["src", "vite.config.ts"],
+  "references": [
+    {
+      "path": "../../packages/ai"
+    },
+    {
+      "path": "../../packages/store"
+    }
+  ]
+}

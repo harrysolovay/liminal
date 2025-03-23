@@ -12,14 +12,15 @@ import {
   type Tool,
   type Event,
   type AgentTool,
+  type FlowLike,
 } from "liminal"
-import type { ExecConfig } from "./ExecConfig.js"
+import type { AIExecConfig } from "./AIExecConfig.js"
 import { toJSONSchema } from "standard-json-schema"
 
-export type FlowSource = _util.DeferredOr<Flow | Agent | Branch> | AgentTool
+export type FlowSource = FlowLike | _util.DeferredOr<Agent | Branch> | AgentTool
 
-export class ExecState {
-  config: ExecConfig
+export class AIExecState {
+  config: AIExecConfig
   source: FlowSource
   flow: Flow
   modelKey: keyof any
@@ -27,11 +28,11 @@ export class ExecState {
   tools: Set<Tool>
   system: string | undefined
   next: any
-  parent: ExecState | undefined
+  parent: AIExecState | undefined
   handler: (event: Event) => unknown
   constructor(
-    parent: ExecState | undefined,
-    config: ExecConfig,
+    parent: AIExecState | undefined,
+    config: AIExecConfig,
     source: FlowSource,
     flow: Flow,
     modelKey: keyof any,
@@ -158,7 +159,7 @@ export class ExecState {
       })
       this.handler({
         type: "Assistant",
-        object: object as object,
+        value: object,
         schema,
       })
       return object
@@ -174,7 +175,7 @@ export class ExecState {
       })
       this.handler({
         type: "Assistant",
-        text,
+        value: text,
       })
       return text
     }
@@ -201,7 +202,7 @@ export class ExecState {
     const result = await Promise.all(
       entries.map(([key, flowLike]) => {
         const unwrapped = _util.unwrapDeferred(flowLike)
-        return new ExecState(
+        return new AIExecState(
           this,
           this.config,
           flowLike,
@@ -219,13 +220,11 @@ export class ExecState {
         ).consume()
       }),
     )
-    return Array.isArray(branches)
-      ? Array.from({ length: branches.length }, (_0, i) => result[i])
-      : Object.fromEntries(result.map((value, i) => [value, entries[i]]))
+    return Array.isArray(branches) ? result : Object.fromEntries(result.map((value, i) => [value, entries[i]]))
   }
 
   onAgent(agent: Agent) {
-    return new ExecState(
+    return new AIExecState(
       this,
       this.config,
       agent,
@@ -238,6 +237,7 @@ export class ExecState {
         this.handler({
           type: "Agent",
           agent: agent.key,
+          system: agent.system,
           event,
         }),
     ).consume()

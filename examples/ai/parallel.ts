@@ -1,14 +1,14 @@
 import { Branch, Assistant, Agent } from "liminal"
 import { type } from "arktype"
-import { exec } from "liminal-ai"
+import { AIExec } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
+import { fileURLToPath } from "node:url"
 
-exec(parallel(await Bun.file(import.meta.url).text()), {
+AIExec(parallel(await Bun.file(fileURLToPath(import.meta.url)).text()), {
   models: {
     default: openai("gpt-4o-mini"),
   },
-  handler: console.log,
-})
+}).run(console.log)
 
 function parallel(code: string) {
   return Agent(

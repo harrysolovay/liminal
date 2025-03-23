@@ -11,7 +11,13 @@
       "path": "./examples/mocking"
     },
     {
+      "path": "./examples/vite-react-app"
+    },
+    {
       "path": "./packages/ai"
+    },
+    {
+      "path": "./packages/store"
     }
   ]
 }

@@ -1,14 +1,13 @@
 import { Branch, Agent, Assistant, Emit } from "liminal"
 import { type } from "arktype"
-import { exec } from "liminal-ai"
+import { AIExec } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
 
-exec(workers, {
+AIExec(workers, {
   models: {
     default: openai("gpt-4o-mini"),
   },
-  handler: console.log,
-})
+}).run(console.log)
 
 function workers() {
   return Agent("Workers", "You are a senior software architect planning feature implementations.", function* () {

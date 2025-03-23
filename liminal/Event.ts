@@ -12,16 +12,6 @@ export type Event =
   | DisableToolEvent
   | ExitEvent
 
-export type EventPath<
-  E extends Event,
-  A extends Extract<E, AgentEvent> = Extract<E, AgentEvent>,
-  B extends Extract<E, BranchEvent> = Extract<E, BranchEvent>,
-  T extends Extract<E, ToolEvent> = Extract<E, ToolEvent>,
-> =
-  | ([A] extends [never] ? [] : { [K in A["agent"]]: ["agent", A["agent"], ...EventPath<A["event"]>] }[A["agent"]])
-  | ([B] extends [never] ? [] : { [K in B["branch"]]: ["branch", B["branch"], ...EventPath<B["event"]>] }[B["branch"]])
-  | ([T] extends [never] ? [] : { [K in T["tool"]]: ["tool", T["tool"], ...EventPath<T["event"]>] }[T["tool"]])
-
 export interface EnterEvent {
   type: "Enter"
 }
@@ -31,20 +21,11 @@ export interface UserTextEvent {
   text: string
 }
 
-export type AssistantEvent = {
+export interface AssistantEvent<V = any> {
   type: "Assistant"
-} & (
-  | {
-      schema: object
-      object: object
-      text?: never
-    }
-  | {
-      schema?: never
-      object?: never
-      text: string
-    }
-)
+  value: V
+  schema?: object
+}
 
 export interface ModelEvent<K extends string = string> {
   type: "Model"
@@ -60,6 +41,7 @@ export interface EmitEvent<K extends string = string, E = any> {
 export interface AgentEvent<K extends string = string, E extends Event = Event> {
   type: "Agent"
   agent: K
+  system: string
   event: E
 }
 
@@ -82,6 +64,7 @@ export interface EnableToolEvent<K extends string = string> {
 export interface ToolEvent<K extends string = string, E extends Event = Event> {
   type: "AgentTool"
   tool: K
+  description: string
   event: E
 }
 

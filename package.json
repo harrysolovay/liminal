@@ -1,9 +1,10 @@
 {
   "private": true,
-  "workspaces": ["liminal", "packages/*", "examples/*"],
+  "workspaces": ["examples/*", "liminal", "packages/*"],
   "scripts": {
     "build": "tsc -b",
-    "watch": "tsc -b --watch"
+    "watch": "tsc -b --watch",
+    "example:vite-react-app": "bun run --filter=liminal-example-vite-react-app dev"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",

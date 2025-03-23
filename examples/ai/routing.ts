@@ -1,15 +1,14 @@
 import { Agent, Assistant, Model } from "liminal"
 import { type } from "arktype"
-import { exec } from "liminal-ai"
+import { AIExec } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
 
-exec(routing(), {
+AIExec(routing(), {
   models: {
     default: openai("gpt-4o-mini"),
     reasoning: openai("o1-mini"),
   },
-  handler: console.log,
-})
+}).run(console.log)
 
 function* routing() {
   const query = prompt("Please enter your query?")!

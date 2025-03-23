@@ -2,6 +2,9 @@
   "[dockercompose]": {
     "editor.defaultFormatter": "dprint.dprint"
   },
+  "[html]": {
+    "editor.defaultFormatter": "dprint.dprint"
+  },
   "[json]": {
     "editor.defaultFormatter": "biomejs.biome"
   },
@@ -15,6 +18,9 @@
     "editor.defaultFormatter": "dprint.dprint"
   },
   "[typescript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescriptreact]": {
     "editor.defaultFormatter": "biomejs.biome"
   },
   "[yaml]": {

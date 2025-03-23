@@ -1,14 +1,13 @@
 import { Assistant, Agent } from "liminal"
 import { type } from "arktype"
-import { exec } from "liminal-ai"
+import { AIExec } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
 
-exec(optimizer("typescript", "I love you!"), {
+AIExec(optimizer("typescript", "I love you!"), {
   models: {
     default: openai("gpt-4o-mini"),
   },
-  handler: console.log,
-})
+}).run(console.log)
 
 function optimizer(targetLanguage: string, text: string) {
   return Agent(
