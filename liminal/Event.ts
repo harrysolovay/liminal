@@ -22,7 +22,7 @@ export interface UserTextEvent {
 }
 
 export interface AssistantEvent<V = any> {
-  type: "Assistant"
+  type: "Completion"
   value: V
   schema?: object
 }
@@ -41,7 +41,6 @@ export interface EmitEvent<K extends string = string, E = any> {
 export interface ContextEvent<K extends string = string, E extends Event = Event> {
   type: "Context"
   context: K
-  system: string
   event: E
 }
 

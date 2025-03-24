@@ -1,5 +1,5 @@
 import type { Action } from "../Action/Action.js"
-import type { Assistant } from "../Action/Assistant.js"
+import type { Completion } from "../Action/Assistant.js"
 import type { Branch } from "../Action/Branch.js"
 import type { Context } from "../Action/Context.js"
 import type { DisableTool } from "../Action/DisableTool.js"
@@ -13,7 +13,7 @@ import type { PromiseOr } from "../liminal_util/PromiseOr.js"
 export interface ProviderReducers<Model_ = any, Message = any> {
   reduceUserText: ActionReducer<string, Model_, Message>
   reduceUserTexts: ActionReducer<Array<string>, Model_, Message>
-  reduceAssistant: ActionReducer<Assistant, Model_, Message>
+  reduceAssistant: ActionReducer<Completion, Model_, Message>
 }
 
 export interface ActionReducers<Model_ = any, Message = any> extends ProviderReducers<Model_, Message> {

@@ -19,7 +19,7 @@ export const reduceAssistant: ProviderReducers<LanguageModelV1, CoreMessage>["re
       schema: aiSchema,
     })
     state.handler({
-      type: "Assistant",
+      type: "Completion",
       value: object,
       schema,
     })
@@ -41,7 +41,7 @@ export const reduceAssistant: ProviderReducers<LanguageModelV1, CoreMessage>["re
     messages,
   })
   state.handler({
-    type: "Assistant",
+    type: "Completion",
     value: text,
   })
   return {

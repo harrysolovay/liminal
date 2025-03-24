@@ -14,7 +14,7 @@ export function reduceAction(this: ActionReducers, state: ExecState, action: Act
     return this.reduceUserTexts(state, action)
   }
   switch (action.kind) {
-    case "Assistant": {
+    case "Completion": {
       return this.reduceAssistant(state, action)
     }
     case "Branch": {

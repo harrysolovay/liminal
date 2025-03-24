@@ -1,4 +1,4 @@
-import { Branch, Context, Assistant, Exec } from "liminal"
+import { Branch, Context, Completion, Exec } from "liminal"
 import { type } from "arktype"
 import { adapter } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
@@ -15,7 +15,7 @@ function CodeReviewers() {
     yield "Analyze this feature request and create an implementation plan:"
     const feat = prompt("Please enter a feature request.")!
     yield feat
-    const implementationPlan = yield* Assistant(
+    const implementationPlan = yield* Completion(
       type({
         files: FileInfo.array(),
         estimatedComplexity: "'create' | 'medium' | 'high'",
@@ -43,7 +43,7 @@ function Implementor(featureRequest: string, file: typeof FileInfo.infer) {
 
       ${featureRequest}
     `
-    const implementation = yield* Assistant(
+    const implementation = yield* Completion(
       type({
         explanation: "string",
         code: "string",

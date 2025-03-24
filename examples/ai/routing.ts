@@ -1,4 +1,4 @@
-import { Context, Assistant, Model, Exec } from "liminal"
+import { Context, Completion, Model, Exec } from "liminal"
 import { type } from "arktype"
 import { adapter } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
@@ -32,7 +32,7 @@ function classifyQuery(query: string) {
     `,
     function* () {
       yield query
-      return yield* Assistant(Classification)
+      return yield* Completion(Classification)
     },
   )
 }
@@ -48,7 +48,7 @@ function useClassification(classification: typeof Classification.infer) {
     if (classification.complexity === "complex") {
       yield* Model("reasoning")
     }
-    return yield* Assistant()
+    return yield* Completion()
   })
 }
 

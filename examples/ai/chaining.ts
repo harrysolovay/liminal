@@ -1,4 +1,4 @@
-import { Assistant, Context, Exec } from "liminal"
+import { Completion, Context, Exec } from "liminal"
 import { type } from "arktype"
 import { adapter } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
@@ -16,7 +16,7 @@ export function MarketingCopy(subject: string) {
     `Write persuasive marketing copy for: ${subject}. Focus on benefits and emotional appeal.`,
     function* () {
       yield "Please generate the first draft."
-      let copy = yield* Assistant()
+      let copy = yield* Completion()
       yield `
         Now evaluate this marketing copy for:
 
@@ -26,7 +26,7 @@ export function MarketingCopy(subject: string) {
 
         Copy to evaluate: ${copy}
       `
-      const qualityMetrics = yield* Assistant(
+      const qualityMetrics = yield* Completion(
         type({
           hasCallToAction: "boolean",
           emotionalAppeal: "number.integer",
@@ -43,7 +43,7 @@ export function MarketingCopy(subject: string) {
 
           Original copy: ${copy}
         `
-        copy = yield* Assistant()
+        copy = yield* Completion()
       }
       return { copy, qualityMetrics }
     },

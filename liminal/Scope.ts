@@ -19,7 +19,7 @@ import type {
   BranchEvent,
   EmitEvent,
 } from "./Event.js"
-import type { Assistant } from "./Action/Assistant.js"
+import type { Completion } from "./Action/Assistant.js"
 import type { Expand } from "./liminal_util/Expand.js"
 import type { DisableTool } from "./Action/DisableTool.js"
 import type { Tool } from "./Action/Tool.js"
@@ -37,7 +37,7 @@ type ExtractNarrow<T, U> = U extends T ? never : T extends U ? T : never
 export interface ExtractScope<
   Y extends Action,
   R,
-  AS extends ExtractNarrow<Y, Assistant> = ExtractNarrow<Y, Assistant>,
+  AS extends ExtractNarrow<Y, Completion> = ExtractNarrow<Y, Completion>,
   M extends ExtractNarrow<Y, Model> = ExtractNarrow<Y, Model>,
   E extends ExtractNarrow<Y, Emit> = ExtractNarrow<Y, Emit>,
   A extends ExtractNarrow<Y, Context> = ExtractNarrow<Y, Context>,
@@ -53,7 +53,7 @@ export interface ExtractScope<
   ModelKey: Extract<M["key"] | A[""]["ModelKey"] | Value<B[""]>["ModelKey"], string>
   Event: Expand<
     | ([Extract<Y, string | Array<string>>] extends [never] ? never : UserTextEvent)
-    | ([AS] extends [Assistant<infer T>] ? AssistantEvent<T> : never)
+    | ([AS] extends [Completion<infer T>] ? AssistantEvent<T> : never)
     | ([M] extends [never] ? never : ModelEvent<M["key"]>)
     | ([E] extends [never] ? never : ExtractEmitEvent<E>)
     | ([A] extends [never] ? never : EnterEvent | ExtractAgentEvent<A> | ExitEvent<A["key"]>)
