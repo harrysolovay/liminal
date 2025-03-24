@@ -1,5 +1,6 @@
 import type { ExtractScope, Scope } from "../Scope.js"
 import type { AgentLike } from "../common/AgentLike.js"
+import { Phantom } from "../liminal_util/Phantom.js"
 
 export function* Branch<const B extends Branches>(
   branches: B,
@@ -11,15 +12,13 @@ export function* Branch<const B extends Branches>(
   }>,
   { [K in keyof B]: B[K] extends AgentLike<any, infer R> ? Awaited<R> : never }
 > {
-  return yield {
-    "": undefined!,
+  return yield Phantom({
     kind: "Branch",
     branches,
-  }
+  })
 }
 
-export interface Branch<S extends BranchScopes = BranchScopes> {
-  "": S
+export interface Branch<S extends BranchScopes = BranchScopes> extends Phantom<S> {
   kind: "Branch"
   branches: Branches
 }
