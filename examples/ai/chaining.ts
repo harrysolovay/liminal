@@ -1,4 +1,4 @@
-import { Assistant, Agent } from "liminal"
+import { Assistant, Context } from "liminal"
 import { type } from "arktype"
 import { AIExec } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
@@ -10,7 +10,7 @@ AIExec(chaining(prompt("Please enter the subject:")!), {
 }).run(console.log)
 
 export function chaining(subject: string) {
-  return Agent(
+  return Context(
     "chain",
     `Write persuasive marketing copy for: ${subject}. Focus on benefits and emotional appeal.`,
     function* () {

@@ -1,28 +1,27 @@
 import { generateObject, generateText, jsonSchema, type CoreMessage } from "ai"
 import {
   Assistant,
-  type Agent,
+  type Context,
   type Branch,
   type Emit,
   _util,
   type Model,
   type Action,
   type DisableTool,
-  type Flow,
+  type Agent,
   type Tool,
   type Event,
-  type AgentTool,
-  type FlowLike,
+  type AgentLike,
 } from "liminal"
 import type { AIExecConfig } from "./AIExecConfig.js"
 import { toJSONSchema } from "standard-json-schema"
 
-export type FlowSource = FlowLike | _util.DeferredOr<Agent | Branch> | AgentTool
+export type AgentSource = AgentLike | _util.DeferredOr<Context | Branch> | Tool
 
 export class AIExecState {
   config: AIExecConfig
-  source: FlowSource
-  flow: Flow
+  source: AgentSource
+  agent: Agent
   modelKey: keyof any
   messages: Array<CoreMessage>
   tools: Set<Tool>
@@ -33,8 +32,8 @@ export class AIExecState {
   constructor(
     parent: AIExecState | undefined,
     config: AIExecConfig,
-    source: FlowSource,
-    flow: Flow,
+    source: AgentSource,
+    agent: Agent,
     modelKey: keyof any,
     messages: Array<CoreMessage>,
     tools: Set<Tool>,
@@ -44,7 +43,7 @@ export class AIExecState {
     this.parent = parent
     this.config = config
     this.source = source
-    this.flow = flow
+    this.agent = agent
     this.modelKey = modelKey
     this.messages = messages
     this.tools = tools
@@ -56,11 +55,11 @@ export class AIExecState {
     this.handler({
       type: "Enter",
     })
-    let current = await this.flow.next(this.next)
+    let current = await this.agent.next(this.next)
     while (!current.done) {
       const { value } = current
       this.next = await this.tick(value)
-      current = await this.flow.next(this.next)
+      current = await this.agent.next(this.next)
     }
     this.handler({
       type: "Exit",
@@ -92,16 +91,12 @@ export class AIExecState {
           return await this.onBranch(action)
         }
         case "Agent": {
-          return await this.onAgent(action)
+          return await this.onContext(action)
         }
-        case "ParentContext": {
-          return this.onParentContext()
+        case "Messages": {
+          return this.onMessages()
         }
-        case "Context": {
-          return this.onContext()
-        }
-        case "AgentTool":
-        case "UnitTool": {
+        case "Tool": {
           return this.onTool(action)
         }
         case "DisableTool": {
@@ -200,12 +195,12 @@ export class AIExecState {
   async onBranch({ branches }: Branch) {
     const entries = Object.entries(branches)
     const result = await Promise.all(
-      entries.map(([key, flowLike]) => {
-        const unwrapped = _util.unwrapDeferred(flowLike)
+      entries.map(([key, agentLike]) => {
+        const unwrapped = _util.unwrapDeferred(agentLike)
         return new AIExecState(
           this,
           this.config,
-          flowLike,
+          agentLike,
           unwrapped,
           this.modelKey,
           [...this.messages],
@@ -223,7 +218,7 @@ export class AIExecState {
     return Array.isArray(branches) ? result : Object.fromEntries(result.map((value, i) => [value, entries[i]]))
   }
 
-  onAgent(agent: Agent) {
+  onContext(agent: Context) {
     return new AIExecState(
       this,
       this.config,
@@ -243,11 +238,7 @@ export class AIExecState {
     ).consume()
   }
 
-  onParentContext() {
-    return "parent" in this && this.parent ? [...this.parent.messages] : undefined
-  }
-
-  onContext() {
+  onMessages() {
     return [...this.messages]
   }
 

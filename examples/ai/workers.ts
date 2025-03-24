@@ -1,4 +1,4 @@
-import { Branch, Agent, Assistant, Emit } from "liminal"
+import { Branch, Context, Assistant, Emit } from "liminal"
 import { type } from "arktype"
 import { AIExec } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
@@ -10,7 +10,7 @@ AIExec(workers, {
 }).run(console.log)
 
 function workers() {
-  return Agent("Workers", "You are a senior software architect planning feature implementations.", function* () {
+  return Context("Workers", "You are a senior software architect planning feature implementations.", function* () {
     yield "Analyze this feature request and create an implementation plan:"
     const feat = prompt("Please enter a feature request.")!
     yield feat
@@ -32,7 +32,7 @@ const FileInfo = type({
 })
 
 function Implementation(featureRequest: string, file: typeof FileInfo.infer) {
-  return Agent("Implementation", IMPLEMENTATION_PROMPTS[file.changeType], function* () {
+  return Context("Implementation", IMPLEMENTATION_PROMPTS[file.changeType], function* () {
     yield `
       Implement the changes for ${file.filePath} to support:
 

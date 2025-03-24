@@ -1,9 +1,9 @@
-import { type Action, type ExtractScope, type FlowLike, type Exec, _util } from "liminal"
+import { type Action, type ExtractScope, type AgentLike, type Exec, _util } from "liminal"
 import type { AIExecConfig } from "./AIExecConfig.js"
 import { AIExecState } from "./AIExecState.js"
 
 export function AIExec<Y extends Action, R, S extends ExtractScope<Y, R>>(
-  source: FlowLike<Y, R>,
+  source: AgentLike<Y, R>,
   config: AIExecConfig<S>,
 ): Exec<S> {
   return {

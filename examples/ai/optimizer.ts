@@ -1,4 +1,4 @@
-import { Assistant, Agent } from "liminal"
+import { Assistant, Context } from "liminal"
 import { type } from "arktype"
 import { AIExec } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
@@ -10,7 +10,7 @@ AIExec(optimizer("typescript", "I love you!"), {
 }).run(console.log)
 
 function optimizer(targetLanguage: string, text: string) {
-  return Agent(
+  return Context(
     "TranslateWithFeedbackAgent",
     "You are an expert literary translator. Translate the supplied text to the specified target language, preserving tone and cultural nuances.",
     function* () {

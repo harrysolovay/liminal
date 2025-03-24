@@ -1,8 +1,8 @@
 import * as mathjs from "mathjs"
-import { Agent, Assistant, AgentTool } from "liminal"
+import { Context, Assistant, Tool } from "liminal"
 import { type } from "arktype"
 
-export const tool = Agent(
+export const tool = Context(
   "Main",
   `
     You are solving math problems. Reason step by step. Use the calculator when necessary.
@@ -13,13 +13,13 @@ export const tool = Agent(
       A taxi driver earns $9461 per 1-hour of work. If he works 12 hours a day and in 1 hour
       he uses 12 liters of petrol with a price  of $134 for 1 liter. How much money does he earn in one day?
     `
-    yield* AgentTool("MathTool", type.string.array(), MathAgent)
+    yield* Tool("MathTool", type.string.array(), MathAgent)
     return yield* Assistant()
   },
 )
 
 function MathAgent(expr: Array<string>) {
-  return Agent(
+  return Context(
     "MathAgent",
     `
       A tool for evaluating mathematical expressions. Example expressions:

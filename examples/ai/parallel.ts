@@ -1,4 +1,4 @@
-import { Branch, Assistant, Agent } from "liminal"
+import { Branch, Assistant, Context } from "liminal"
 import { type } from "arktype"
 import { AIExec } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
@@ -11,7 +11,7 @@ AIExec(parallel(await Bun.file(fileURLToPath(import.meta.url)).text()), {
 }).run(console.log)
 
 function parallel(code: string) {
-  return Agent(
+  return Context(
     "Parallel",
     "You are a technical lead summarizing multiple code reviews. Review the supplied code.",
     function* () {
@@ -27,7 +27,7 @@ function parallel(code: string) {
 
 const LMH = type("'lower' | 'medium' | 'high'")
 
-const securityReview = Agent(
+const securityReview = Context(
   "SecurityReview",
   "You are an expert in code security. Focus on identifying security vulnerabilities, injection risks, and authentication issues.",
   () =>
@@ -41,7 +41,7 @@ const securityReview = Agent(
     ),
 )
 
-const performanceReview = Agent(
+const performanceReview = Context(
   "PerformanceReview",
   "You are an expert in code performance. Focus on identifying performance bottlenecks, memory leaks, and optimization opportunities.",
   () =>
@@ -55,7 +55,7 @@ const performanceReview = Agent(
     ),
 )
 
-const maintainabilityReview = Agent(
+const maintainabilityReview = Context(
   "MaintainabilityReview",
   "You are an expert in code quality. Focus on code structure, readability, and adherence to best practices.",
   () =>

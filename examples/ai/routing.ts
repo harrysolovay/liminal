@@ -1,4 +1,4 @@
-import { Agent, Assistant, Model } from "liminal"
+import { Context, Assistant, Model } from "liminal"
 import { type } from "arktype"
 import { AIExec } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
@@ -18,7 +18,7 @@ function* routing() {
 }
 
 function classifyQuery(query: string) {
-  return Agent(
+  return Context(
     "ClassifyQueryAgent",
     `
       Classify this supplied customer query:
@@ -43,7 +43,7 @@ const Classification = type({
 })
 
 function useClassification(classification: typeof Classification.infer) {
-  return Agent("UseClassificationAgent", USE_CLASSIFICATION_AGENT_PROMPTS[classification.type], function* () {
+  return Context("UseClassificationAgent", USE_CLASSIFICATION_AGENT_PROMPTS[classification.type], function* () {
     if (classification.complexity === "complex") {
       yield* Model("reasoning")
     }

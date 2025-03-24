@@ -1,10 +1,10 @@
 import { pgTable, uuid } from "drizzle-orm/pg-core"
 import { Pk } from "./schema_common/Pk.js"
-import { flows } from "./flows.js"
+import { agents } from "./agents.js"
 
 export const events = pgTable("events", {
   id: Pk(),
-  flowId: uuid()
-    .references(() => flows.id)
+  agentId: uuid()
+    .references(() => agents.id)
     .notNull(),
 })

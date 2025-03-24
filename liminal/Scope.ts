@@ -1,5 +1,5 @@
 import type { Action } from "./Action/Action.js"
-import type { Agent } from "./Action/Agent.js"
+import type { Context } from "./Action/Context.js"
 import type { Branch } from "./Action/Branch.js"
 import type { Model } from "./Action/Model.js"
 import type { Value } from "./liminal_util/Value.js"
@@ -21,9 +21,8 @@ import type {
 } from "./Event.js"
 import type { Assistant } from "./Action/Assistant.js"
 import type { Expand } from "./liminal_util/Expand.js"
-import type { AgentTool } from "./Action/AgentTool.js"
 import type { DisableTool } from "./Action/DisableTool.js"
-import type { UnitTool } from "./Action/UnitTool.js"
+import type { Tool } from "./Action/Tool.js"
 import type { Key } from "./liminal_util/Key.js"
 
 export interface Scope {
@@ -41,16 +40,15 @@ export interface ExtractScope<
   AS extends ExtractNarrow<Y, Assistant> = ExtractNarrow<Y, Assistant>,
   M extends ExtractNarrow<Y, Model> = ExtractNarrow<Y, Model>,
   E extends ExtractNarrow<Y, Emit> = ExtractNarrow<Y, Emit>,
-  A extends ExtractNarrow<Y, Agent> = ExtractNarrow<Y, Agent>,
-  Agents extends Lookup<A> = Lookup<A>,
+  A extends ExtractNarrow<Y, Context> = ExtractNarrow<Y, Context>,
+  Contexts extends Lookup<A> = Lookup<A>,
   B extends ExtractNarrow<Y, Branch> = ExtractNarrow<Y, Branch>,
   BK extends ExtractNarrow<keyof B[""], string> = ExtractNarrow<keyof B[""], string>,
-  UT extends ExtractNarrow<Y, UnitTool> = ExtractNarrow<Y, UnitTool>,
-  AT extends ExtractNarrow<Y, AgentTool> = ExtractNarrow<Y, AgentTool>,
+  T extends ExtractNarrow<Y, Tool> = ExtractNarrow<Y, Tool>,
   DT extends ExtractNarrow<Y, DisableTool> = ExtractNarrow<Y, DisableTool>,
 > {
   Agent: A
-  Agents: Agents
+  Agents: Contexts
 
   ModelKey: M["key"] | A[""]["ModelKey"] | Value<B[""]>["ModelKey"]
   Event: Expand<
@@ -60,8 +58,7 @@ export interface ExtractScope<
     | ([E] extends [never] ? never : ExtractEmitEvent<E>)
     | ([A] extends [never] ? never : EnterEvent | ExtractAgentEvent<A> | ExitEvent<A["key"]>)
     | ([B] extends [never] ? never : BranchesEvent<BK> | EnterEvent | ExtractBranchEvent<B> | ExitEvent<BK>)
-    | ([UT] extends [never] ? never : EnableToolEvent<UT["key"]>)
-    | ([AT] extends [never] ? never : EnableToolEvent<AT["key"]> | ExtractToolEvent<AT>)
+    | ([T] extends [never] ? never : EnableToolEvent<T["key"]> | ExtractToolEvent<T>)
     | ([DT] extends [never] ? never : DisableToolEvent<DT["tool"]["key"]>)
   >
   Result: Awaited<R>
@@ -86,12 +83,12 @@ type Lookup<T extends { key: string }> = {
 
 // type ExtractWithKey<F extends { key: string }, K extends string> = Extract<F, { key: K }>
 
-export type ExtractToolEvent<T extends AgentTool> = {
-  [K in T["key"]]: ToolEvent<K, Extract<T, AgentTool<K>>[""]["Event"]>
+export type ExtractToolEvent<T extends Tool> = {
+  [K in T["key"]]: ToolEvent<K, Extract<T, Tool<K>>[""]["Event"]>
 }[T["key"]]
 
-export type ExtractAgentEvent<A extends Agent> = {
-  [K in A["key"]]: AgentEvent<K, Extract<A, Agent<K>>[""]["Event"]>
+export type ExtractAgentEvent<A extends Context> = {
+  [K in A["key"]]: AgentEvent<K, Extract<A, Context<K>>[""]["Event"]>
 }[A["key"]]
 
 export type ExtractBranchEvent<B extends Branch> = {
