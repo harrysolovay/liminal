@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url"
 
 const code = await Bun.file(fileURLToPath(import.meta.url)).text()
 
-Exec(adapter).run(() => Review(code), {
+Exec(adapter).run(Review(code), {
   models: {
     default: openai("gpt-4o-mini"),
   },

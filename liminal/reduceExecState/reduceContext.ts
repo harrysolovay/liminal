@@ -2,10 +2,10 @@ import { Assistant } from "../Action/Assistant.js"
 import type { Tool } from "../Action/Tool.js"
 import { unwrapDeferred } from "../liminal_util/unwrapDeferred.js"
 import type { ActionReducers } from "./ActionReducers.js"
-import { reduce } from "./reduce.js"
+import { reduce } from "./reduceExecState.js"
 
-export const reduceContext: ActionReducers["reduceContext"] = (state, action) => {
-  return reduce.call(this, {
+export const reduceContext: ActionReducers["reduceContext"] = function (state, action) {
+  return reduce(this, {
     models: state.models,
     source: action,
     agent: unwrapDeferred(action).implementation?.() ?? Assistant(),

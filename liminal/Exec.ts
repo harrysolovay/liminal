@@ -1,21 +1,22 @@
 import type { Action } from "./Action/Action.js"
 import type { Tool } from "./Action/Tool.js"
-import { createReducers } from "./ActionReducers/createReducers.js"
-import { reduce } from "./ActionReducers/reduce.js"
+import { createActionReducers } from "./reduceExecState/createActionReducers.js"
+import { reduce } from "./reduceExecState/reduceExecState.js"
 import type { Adapter } from "./Adapter.js"
-import type { Agent } from "./common/Agent.js"
+import type { AgentLike } from "./common/AgentLike.js"
 import type { ExecConfig } from "./ExecConfig.js"
 import type { ExecState } from "./ExecState.js"
+import { unwrapDeferred } from "./liminal_util/unwrapDeferred.js"
 import type { ExtractScope } from "./Scope.js"
 
 export function Exec<Model, Message>(adapter: Adapter<Model, Message>): Exec<Model> {
   return {
     run: async (agent, config) => {
-      const reducers = createReducers(adapter.providerReducers)
+      const reducers = createActionReducers(adapter.providerReducers)
       const state: ExecState<Model, Message> = {
         models: config.models,
         source: agent,
-        agent: agent(),
+        agent: unwrapDeferred(agent),
         modelKey: "default",
         system: undefined,
         next: undefined,
@@ -31,7 +32,7 @@ export function Exec<Model, Message>(adapter: Adapter<Model, Message>): Exec<Mod
 
 export interface Exec<Model> {
   run: <Y extends Action, R, S extends ExtractScope<Y, R>>(
-    agent: () => Agent<Y, R>,
+    agent: AgentLike<Y, R>,
     config: ExecConfig<Model, S>,
   ) => Promise<S["Result"]>
 }

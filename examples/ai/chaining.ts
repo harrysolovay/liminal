@@ -3,21 +3,22 @@ import { type } from "arktype"
 import { adapter } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
 
-Exec(adapter).run(() => chaining(prompt("Please enter the subject:")!), {
+Exec(adapter).run(MarketingCopy(prompt("Please enter the subject:")!), {
   models: {
     default: openai("gpt-4o-mini"),
   },
   handler: console.log,
 })
 
-export function chaining(subject: string) {
+export function MarketingCopy(subject: string) {
   return Context(
-    "chain",
+    "MarketingCopy",
     `Write persuasive marketing copy for: ${subject}. Focus on benefits and emotional appeal.`,
     function* () {
+      yield "Please generate the first draft."
       let copy = yield* Assistant()
       yield `
-        Evaluate this marketing copy for:
+        Now evaluate this marketing copy for:
 
         1. Presence of call to action (true/false)
         2. Emotional appeal (1-10)

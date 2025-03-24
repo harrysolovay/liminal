@@ -1,12 +1,12 @@
 import { unwrapDeferred } from "../liminal_util/unwrapDeferred.js"
 import type { ActionReducers } from "./ActionReducers.js"
-import { reduce } from "./reduce.js"
+import { reduce } from "./reduceExecState.js"
 
 export const reduceBranch: ActionReducers["reduceBranch"] = async function (state, action) {
   const entries = Object.entries(action.branches)
   const result = await Promise.all(
     entries.map(([key, agentLike]) =>
-      reduce.call(this, {
+      reduce(this, {
         models: state.models,
         source: agentLike,
         agent: unwrapDeferred(agentLike),

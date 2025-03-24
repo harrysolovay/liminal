@@ -3,16 +3,16 @@ import { type } from "arktype"
 import { adapter } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
 
-Exec(adapter).run(() => optimizer("typescript", "I love you!"), {
+Exec(adapter).run(TranslationWithFeedback("typescript", "I love you!"), {
   models: {
     default: openai("gpt-4o-mini"),
   },
   handler: console.log,
 })
 
-function optimizer(targetLanguage: string, text: string) {
+function TranslationWithFeedback(targetLanguage: string, text: string) {
   return Context(
-    "TranslateWithFeedbackAgent",
+    "TranslateWithFeedback",
     "You are an expert literary translator. Translate the supplied text to the specified target language, preserving tone and cultural nuances.",
     function* () {
       yield `Target language: ${targetLanguage}`

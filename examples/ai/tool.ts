@@ -13,7 +13,7 @@ Exec(adapter).run(ToolUser, {
 
 function ToolUser() {
   return Context(
-    "Main",
+    "ToolUser",
     `
       You are solving math problems. Reason step by step. Use the calculator when necessary.
       When you give the final answer, provide an explanation for how you arrived at it.

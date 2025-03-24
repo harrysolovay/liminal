@@ -3,14 +3,14 @@ import { type } from "arktype"
 import { adapter } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
 
-Exec(adapter).run(workers, {
+Exec(adapter).run(CodeReviewers, {
   models: {
     default: openai("gpt-4o-mini"),
   },
   handler: console.log,
 })
 
-function workers() {
+function CodeReviewers() {
   return Context("Workers", "You are a senior software architect planning feature implementations.", function* () {
     yield "Analyze this feature request and create an implementation plan:"
     const feat = prompt("Please enter a feature request.")!
@@ -21,7 +21,7 @@ function workers() {
         estimatedComplexity: "'create' | 'medium' | 'high'",
       }),
     )
-    const fileChanges = yield* Branch(implementationPlan.files.map((file) => Implementation(feat, file)))
+    const fileChanges = yield* Branch(implementationPlan.files.map((file) => Implementor(feat, file)))
     return { fileChanges, implementationPlan }
   })
 }
@@ -32,7 +32,7 @@ const FileInfo = type({
   changeType: "'create' | 'modify' | 'delete'",
 })
 
-function Implementation(featureRequest: string, file: typeof FileInfo.infer) {
+function Implementor(featureRequest: string, file: typeof FileInfo.infer) {
   return Context("Implementation", IMPLEMENTATION_PROMPTS[file.changeType], function* () {
     yield `
       Implement the changes for ${file.filePath} to support:
