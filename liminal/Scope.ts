@@ -15,7 +15,7 @@ import type {
   EnterEvent,
   ExitEvent,
   ToolEvent,
-  AgentEvent,
+  ContextEvent,
   BranchEvent,
   EmitEvent,
 } from "./Event.js"
@@ -50,7 +50,7 @@ export interface ExtractScope<
   Agent: A
   Agents: Contexts
 
-  ModelKey: M["key"] | A[""]["ModelKey"] | Value<B[""]>["ModelKey"]
+  ModelKey: Extract<M["key"] | A[""]["ModelKey"] | Value<B[""]>["ModelKey"], string>
   Event: Expand<
     | ([Extract<Y, string | Array<string>>] extends [never] ? never : UserTextEvent)
     | ([AS] extends [Assistant<infer T>] ? AssistantEvent<T> : never)
@@ -88,7 +88,7 @@ export type ExtractToolEvent<T extends Tool> = {
 }[T["key"]]
 
 export type ExtractAgentEvent<A extends Context> = {
-  [K in A["key"]]: AgentEvent<K, Extract<A, Context<K>>[""]["Event"]>
+  [K in A["key"]]: ContextEvent<K, Extract<A, Context<K>>[""]["Event"]>
 }[A["key"]]
 
 export type ExtractBranchEvent<B extends Branch> = {

@@ -4,7 +4,7 @@ export type Event =
   | AssistantEvent
   | ModelEvent
   | EmitEvent
-  | AgentEvent
+  | ContextEvent
   | BranchesEvent
   | BranchEvent
   | EnableToolEvent
@@ -38,9 +38,9 @@ export interface EmitEvent<K extends string = string, E = any> {
   value: E
 }
 
-export interface AgentEvent<K extends string = string, E extends Event = Event> {
-  type: "Agent"
-  agent: K
+export interface ContextEvent<K extends string = string, E extends Event = Event> {
+  type: "Context"
+  context: K
   system: string
   event: E
 }
@@ -62,7 +62,7 @@ export interface EnableToolEvent<K extends string = string> {
 }
 
 export interface ToolEvent<K extends string = string, E extends Event = Event> {
-  type: "AgentTool"
+  type: "Tool"
   tool: K
   description: string
   event: E

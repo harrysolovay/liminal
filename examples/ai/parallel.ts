@@ -1,16 +1,19 @@
-import { Branch, Assistant, Context } from "liminal"
+import { Branch, Assistant, Context, Exec } from "liminal"
 import { type } from "arktype"
-import { AIExec } from "liminal-ai"
+import { adapter } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
 import { fileURLToPath } from "node:url"
 
-AIExec(parallel(await Bun.file(fileURLToPath(import.meta.url)).text()), {
+const code = await Bun.file(fileURLToPath(import.meta.url)).text()
+
+Exec(adapter).run(() => Review(code), {
   models: {
     default: openai("gpt-4o-mini"),
   },
-}).run(console.log)
+  handler: console.log,
+})
 
-function parallel(code: string) {
+function Review(code: string) {
   return Context(
     "Parallel",
     "You are a technical lead summarizing multiple code reviews. Review the supplied code.",

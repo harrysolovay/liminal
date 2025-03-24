@@ -1,14 +1,15 @@
-import { Context, Assistant, Model } from "liminal"
+import { Context, Assistant, Model, Exec } from "liminal"
 import { type } from "arktype"
-import { AIExec } from "liminal-ai"
+import { adapter } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
 
-AIExec(routing(), {
+Exec(adapter).run(routing, {
   models: {
     default: openai("gpt-4o-mini"),
     reasoning: openai("o1-mini"),
   },
-}).run(console.log)
+  handler: console.log,
+})
 
 function* routing() {
   const query = prompt("Please enter your query?")!

@@ -9,7 +9,7 @@ export function* Context<K extends string, Y extends Action, R = string>(
 ): Generator<Context<K, ExtractScope<Y, R>>, Awaited<R>> {
   return yield {
     "": undefined!,
-    kind: "Agent",
+    kind: "Context",
     key,
     system,
     implementation,
@@ -18,7 +18,7 @@ export function* Context<K extends string, Y extends Action, R = string>(
 
 export interface Context<K extends string = string, S extends Scope = Scope> {
   "": S
-  kind: "Agent"
+  kind: "Context"
   key: K
   system: string
   implementation?: () => Agent

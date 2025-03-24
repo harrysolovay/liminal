@@ -1,13 +1,14 @@
-import { Assistant, Context } from "liminal"
+import { Assistant, Context, Exec } from "liminal"
 import { type } from "arktype"
-import { AIExec } from "liminal-ai"
+import { adapter } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
 
-AIExec(optimizer("typescript", "I love you!"), {
+Exec(adapter).run(() => optimizer("typescript", "I love you!"), {
   models: {
     default: openai("gpt-4o-mini"),
   },
-}).run(console.log)
+  handler: console.log,
+})
 
 function optimizer(targetLanguage: string, text: string) {
   return Context(

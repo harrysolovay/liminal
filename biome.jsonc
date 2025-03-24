@@ -29,7 +29,8 @@
       "style": {
         "noUselessElse": "off",
         "noUnusedTemplateLiteral": "off",
-        "noNonNullAssertion": "off"
+        "noNonNullAssertion": "off",
+        "noParameterAssign": "off"
       },
       "suspicious": {
         "noExplicitAny": "off"

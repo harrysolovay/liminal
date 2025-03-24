@@ -1,13 +1,14 @@
-import { Branch, Context, Assistant, Emit } from "liminal"
+import { Branch, Context, Assistant, Exec } from "liminal"
 import { type } from "arktype"
-import { AIExec } from "liminal-ai"
+import { adapter } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
 
-AIExec(workers, {
+Exec(adapter).run(workers, {
   models: {
     default: openai("gpt-4o-mini"),
   },
-}).run(console.log)
+  handler: console.log,
+})
 
 function workers() {
   return Context("Workers", "You are a senior software architect planning feature implementations.", function* () {
