@@ -8,6 +8,10 @@
 - [Examples &rarr;](https://liminal.land/examples)<br />Examples illustrating
   common use cases.
 
+---
+
+## Example
+
 ```ts
 import { T } from "liminal"
 
