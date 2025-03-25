@@ -2,7 +2,7 @@ import { generateObject, generateText, jsonSchema, type CoreMessage, type Langua
 import { _util, type JSONValue, type ProviderReducers } from "liminal"
 import { toJSONSchema } from "standard-json-schema"
 
-export const reduceAssistant: ProviderReducers<LanguageModelV1, CoreMessage>["reduceT"] = async (state, action) => {
+export const reduceT: ProviderReducers<LanguageModelV1, CoreMessage>["reduceT"] = async (state, action) => {
   const { messages, system, modelKey } = state
   const model = state.models[modelKey]
   _util.assert(model)
