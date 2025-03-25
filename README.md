@@ -8,10 +8,6 @@
 - [Examples &rarr;](https://liminal.land/examples)<br />Examples illustrating
   common use cases.
 
-## TL;DR
-
-Model conversations with generator functions.
-
 ```ts
 import { T } from "liminal"
 
