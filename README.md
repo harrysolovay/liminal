@@ -27,7 +27,7 @@ conversations can be executed with any underlying LLM client; for example, see
 - [Eliminating Boilerplate &rarr;](./docs/why/eliminating_boilerplate.md)<br />Avoid
   redundancies of requesting completions and embeddings.
 
-## Example
+## Overview
 
 Model a conversation as a generator function. Yield user messages (`string`s)
 and assistant `Value`s. Optionally return the result of the conversation (in
