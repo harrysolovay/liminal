@@ -15,11 +15,11 @@ Model conversations with generator functions.
 ```ts
 import { T } from "liminal"
 
-function* Example() {
+function* Conversation() {
   // Buffer a user message.
   yield "What are some key factors that affect plant growth?"
 
-  // Trigger text completion (adds the assistant message to the buffer).
+  // Complete text and add assistant message to the buffer.
   const factors = yield* T()
 
   // Buffer another user message.
@@ -39,7 +39,7 @@ import { Exec } from "liminal"
 import { openai } from "@ai-sdk/openai"
 import { adapter } from "liminal-ai"
 
-const result = await Exec(adapter).run(Example, {
+const result = await Exec(adapter).run(Conversation, {
   models: {
     default: openai("gpt-4o-mini"),
   },
