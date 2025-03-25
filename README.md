@@ -17,16 +17,15 @@ conversations can be executed with any underlying LLM client; for example, see
 ## Benefits
 
 - [Decouple Models From Conversations &rarr;](./docs/why/decoupling_models_from_conversations.md)<br />Ensure
-  conversations can be executed with any provider/model and circumvent vendor
-  lock-in.
-- [Implicit Message Buffer &rarr;](./docs/why/message_buffer_management.md)<br />Conventions-based
-  approach to managing message buffers.
-- [Observing Execution &rarr;](./docs/why/observing_execution.md)<br />Subscribe
-  to receive key events within the conversation and its descendants.
+  conversations can be executed with any provider/model.
+- [Message Buffer Management &rarr;](./docs/why/message_buffer_management.md)<br />Intuitive
+  conventions-based approach to managing message buffers.
+- [Observing Execution &rarr;](./docs/why/observing_execution.md)<br />Handle
+  receive key events within the conversation and its descendants.
 - [Static Type Inference &rarr;](./docs/why/static_type_inference.md)<br />TRPC-style
-  type inference of conversation events for use within consumers.
+  type inference of conversation events.
 - [Eliminating Boilerplate &rarr;](./docs/why/eliminating_boilerplate.md)<br />Avoid
-  redundancies every time you wish to trigger a completion or vectorization.
+  redundancies of requesting completions and embeddings.
 
 ## Example
 
