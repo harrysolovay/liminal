@@ -1,11 +1,11 @@
 # Liminal
 
 Liminal is a model-agnostic library for LLM conversation state management and
-agent definition. It exposes a set of primitives for buffering messages,
-triggering completions, attaching and detaching tools, emitting events to
-observers, and instantiating and branching agents. Liminal conversations can be
-adapted to any underlying client. It currently provides reference
-implementations for the Vercel AI SDK and OpenAI API.
+agents. It exposes a set of primitives for buffering messages, triggering
+completions, attaching and detaching tools, emitting events to observers, and
+instantiating and branching agents. Static types are captured to ensure
+type-safe usage of conversation events. Liminal conversations can be adapted to
+any underlying LLM client.
 
 ## Resources
 
