@@ -8,7 +8,10 @@ const code = await Bun.file(fileURLToPath(import.meta.url)).text()
 
 Exec(adapter).run(Review(code), {
   models: {
-    default: openai("gpt-4o-mini"),
+    language: {
+      default: openai("gpt-4o-mini"),
+    },
+    embedding: {},
   },
   handler: console.log,
 })

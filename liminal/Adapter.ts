@@ -1,9 +1,10 @@
+import type { ExecSpec } from "./ExecSpec.js"
 import type { ProviderReducers } from "./StateReducers/StateReducers.js"
 
-export function Adapter<Model, Message>(providerReducers: ProviderReducers<Model, Message>): Adapter<Model, Message> {
+export function Adapter<S extends ExecSpec>(providerReducers: ProviderReducers<S>): Adapter<S> {
   return { providerReducers }
 }
 
-export interface Adapter<Model, Message> {
-  providerReducers: ProviderReducers<Model, Message>
+export interface Adapter<S extends ExecSpec> {
+  providerReducers: ProviderReducers<S>
 }

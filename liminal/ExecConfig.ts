@@ -1,11 +1,11 @@
-import type { Scope } from "./Scope.js"
+import type { ExecSpec } from "./ExecSpec.js"
 
-export interface ExecConfig<Model, S extends Scope> {
+export interface ExecConfig<S extends ExecSpec = ExecSpec> {
+  handler?: (event: Event) => unknown
   models: {
-    default: Model
-  } & {
-    [_ in S["ModelKey"]]: Model
+    language: Record<string, S["LanguageModel"]>
+    embedding: Record<string, S["EmbeddingModel"]>
   }
-  handler?: (event: S["Event"]) => unknown
   signal?: AbortSignal // TODO
+  encodeTypes?: boolean // TODO: encode values as JSONC and include type comments
 }

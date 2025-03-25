@@ -5,10 +5,11 @@ import type { StateReducers } from "./StateReducers.js"
 
 export const reduceContext: StateReducers["reduceContext"] = async function (state, action) {
   const { result } = await this.reduceState({
-    models: state.models,
+    config: state.config,
     source: action,
     agent: unwrapDeferred(action).implementation?.() ?? T(),
-    modelKey: state.modelKey,
+    languageModelKey: state.languageModelKey,
+    embeddingModelKey: state.embeddingModelKey,
     system: action.system,
     next: undefined,
     parent: state,

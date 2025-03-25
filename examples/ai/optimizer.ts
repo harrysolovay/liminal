@@ -5,7 +5,10 @@ import { openai } from "@ai-sdk/openai"
 
 Exec(adapter).run(TranslationWithFeedback("typescript", "I love you!"), {
   models: {
-    default: openai("gpt-4o-mini"),
+    language: {
+      default: openai("gpt-4o-mini"),
+    },
+    embedding: {},
   },
   handler: console.log,
 })

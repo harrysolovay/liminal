@@ -17,6 +17,9 @@ export function reduceAction(this: StateReducers, state: ExecState, action: Acti
     case "T": {
       return this.reduceT(state, action)
     }
+    case "V": {
+      return this.reduceV(state, action)
+    }
     case "Branch": {
       return this.reduceBranch(state, action)
     }
@@ -32,8 +35,11 @@ export function reduceAction(this: StateReducers, state: ExecState, action: Acti
     case "Messages": {
       return this.reduceMessages(state, action)
     }
-    case "Model": {
-      return this.reduceModel(state, action)
+    case "LanguageModel": {
+      return this.reduceLanguageModel(state, action)
+    }
+    case "EmbeddingModel": {
+      return this.reduceEmbeddingModel(state, action)
     }
     case "Tool": {
       return this.reduceTool(state, action)

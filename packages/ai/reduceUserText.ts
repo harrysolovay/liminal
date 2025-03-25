@@ -1,7 +1,8 @@
-import type { CoreMessage, LanguageModelV1 } from "ai"
+import type { CoreMessage } from "ai"
 import type { ProviderReducers } from "liminal"
+import type { AIExecSpec } from "./AIExecSpec.js"
 
-export const reduceUserText: ProviderReducers<LanguageModelV1, CoreMessage>["reduceUserText"] = (state, action) => {
+export const reduceUserText: ProviderReducers<AIExecSpec>["reduceUserText"] = (state, action) => {
   state.handler({
     type: "UserText",
     text: action,

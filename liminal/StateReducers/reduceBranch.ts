@@ -6,10 +6,11 @@ export const reduceBranch: StateReducers["reduceBranch"] = async function (state
   const result = await Promise.all(
     entries.map(([key, agentLike]) =>
       this.reduceState({
-        models: state.models,
+        config: state.config,
         source: agentLike,
         agent: unwrapDeferred(agentLike),
-        modelKey: state.modelKey,
+        languageModelKey: state.languageModelKey,
+        embeddingModelKey: state.embeddingModelKey,
         system: state.system,
         next: undefined,
         parent: state,

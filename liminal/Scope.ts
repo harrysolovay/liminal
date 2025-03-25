@@ -1,13 +1,13 @@
 import type { Action } from "./Action/Action.js"
 import type { Context } from "./Action/Context.js"
 import type { Branch } from "./Action/Branch.js"
-import type { Model } from "./Action/Model.js"
+import type { LanguageModel } from "./Action/LanguageModel.js"
 import type { Value } from "./liminal_util/Value.js"
 import type { Emit } from "./Action/Emit.js"
 import type {
   TEvent,
   Event,
-  ModelEvent,
+  LanguageModelEvent,
   UserTextEvent,
   BranchesEvent,
   EnableToolEvent,
@@ -38,7 +38,7 @@ export interface ExtractScope<
   Y extends Action,
   R,
   AS extends ExtractNarrow<Y, T> = ExtractNarrow<Y, T>,
-  M extends ExtractNarrow<Y, Model> = ExtractNarrow<Y, Model>,
+  M extends ExtractNarrow<Y, LanguageModel> = ExtractNarrow<Y, LanguageModel>,
   E extends ExtractNarrow<Y, Emit> = ExtractNarrow<Y, Emit>,
   A extends ExtractNarrow<Y, Context> = ExtractNarrow<Y, Context>,
   Contexts extends Lookup<A> = Lookup<A>,
@@ -54,7 +54,7 @@ export interface ExtractScope<
   Event: Expand<
     | ([Extract<Y, string | Array<string>>] extends [never] ? never : UserTextEvent)
     | ([AS] extends [T<infer O>] ? TEvent<O> : never)
-    | ([M] extends [never] ? never : ModelEvent<M["key"]>)
+    | ([M] extends [never] ? never : LanguageModelEvent<M["key"]>)
     | ([E] extends [never] ? never : ExtractEmitEvent<E>)
     | ([A] extends [never] ? never : EnterEvent | ExtractAgentEvent<A> | ExitEvent<A["key"]>)
     | ([B] extends [never] ? never : BranchesEvent<BK> | EnterEvent | ExtractBranchEvent<B> | ExitEvent<BK>)

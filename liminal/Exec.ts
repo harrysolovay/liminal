@@ -7,16 +7,18 @@ import type { ExecConfig } from "./ExecConfig.js"
 import type { ExecState } from "./ExecState.js"
 import { unwrapDeferred } from "./liminal_util/unwrapDeferred.js"
 import type { ExtractScope } from "./Scope.js"
+import type { ExecSpec } from "./ExecSpec.js"
 
-export function Exec<Model, Message>(adapter: Adapter<Model, Message>): Exec<Model> {
+export function Exec<S extends ExecSpec>(adapter: Adapter<S>): Exec<S> {
   return {
     run: async (agent, config) => {
       const reducers = StateReducers(adapter.providerReducers)
-      const state: ExecState<Model, Message> = {
-        models: config.models,
+      const state: ExecState<S> = {
+        config,
         source: agent,
         agent: unwrapDeferred(agent),
-        modelKey: "default",
+        languageModelKey: "default",
+        embeddingModelKey: config.models.embedding?.default,
         system: undefined,
         next: undefined,
         parent: undefined,
@@ -29,9 +31,6 @@ export function Exec<Model, Message>(adapter: Adapter<Model, Message>): Exec<Mod
   }
 }
 
-export interface Exec<Model> {
-  run: <Y extends Action, R, S extends ExtractScope<Y, R>>(
-    agent: AgentLike<Y, R>,
-    config: ExecConfig<Model, S>,
-  ) => Promise<S["Result"]>
+export interface Exec<S extends ExecSpec> {
+  run: <Y extends Action, R>(agent: AgentLike<Y, R>, config: ExecConfig<S>) => Promise<unknown>
 }

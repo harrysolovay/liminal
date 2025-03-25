@@ -5,7 +5,7 @@ import type { Context } from "../Action/Context.js"
 import type { DisableTool } from "../Action/DisableTool.js"
 import type { Emit } from "../Action/Emit.js"
 import type { Messages } from "../Action/Messages.js"
-import type { Model } from "../Action/Model.js"
+import type { LanguageModel } from "../Action/LanguageModel.js"
 import type { Tool } from "../Action/Tool.js"
 import type { ExecState } from "../ExecState.js"
 import type { PromiseOr } from "../liminal_util/PromiseOr.js"
@@ -15,11 +15,15 @@ import { reduceContext } from "./reduceContext.js"
 import { reduceDisableTool } from "./reduceDisableTool.js"
 import { reduceEmit } from "./reduceEmit.js"
 import { reduceMessages } from "./reduceMessages.js"
-import { reduceModel } from "./reduceModel.js"
+import { reduceLanguageModel } from "./reduceLanguageModel.js"
 import { reduceState } from "./reduceState.js"
 import { reduceTool } from "./reduceTool.js"
+import type { V } from "../Action/V.js"
+import type { ExecSpec } from "../ExecSpec.js"
+import type { EmbeddingModel } from "../Action/EmbeddingModel.js"
+import { reduceEmbeddingModel } from "./reduceEmbeddingModel.js"
 
-export function StateReducers<Model_, Message>(providerReducers: ProviderReducers<Model_, Message>): StateReducers {
+export function StateReducers<S extends ExecSpec>(providerReducers: ProviderReducers<S>): StateReducers {
   return {
     ...providerReducers,
     reduceState,
@@ -28,32 +32,35 @@ export function StateReducers<Model_, Message>(providerReducers: ProviderReducer
     reduceContext,
     reduceEmit,
     reduceTool,
-    reduceModel,
+    reduceLanguageModel,
+    reduceEmbeddingModel,
     reduceDisableTool,
     reduceMessages,
   }
 }
 
-export interface ProviderReducers<Model_ = any, Message = any> {
-  reduceUserText: ActionReducer<Model_, Message, [userText: string]>
-  reduceUserTexts: ActionReducer<Model_, Message, [userTexts: Array<string>]>
-  reduceT: ActionReducer<Model_, Message, [t: T]>
+export interface ProviderReducers<S extends ExecSpec = ExecSpec> {
+  reduceUserText: ActionReducer<[userText: string], S>
+  reduceUserTexts: ActionReducer<[userTexts: Array<string>], S>
+  reduceT: ActionReducer<[t: T], S>
+  reduceV: ActionReducer<[v: V], S>
 }
 
-export interface StateReducers<Model_ = any, Message = any> extends ProviderReducers<Model_, Message> {
-  reduceState: ActionReducer<Model_, Message>
-  reduceAction: ActionReducer<Model_, Message, [Action]>
-  reduceModel: ActionReducer<Model_, Message, [Model]>
-  reduceEmit: ActionReducer<Model_, Message, [Emit]>
-  reduceBranch: ActionReducer<Model_, Message, [Branch]>
-  reduceContext: ActionReducer<Model_, Message, [Context]>
-  reduceMessages: ActionReducer<Model_, Message, [Messages]>
-  reduceTool: ActionReducer<Model_, Message, [Tool]>
-  reduceDisableTool: ActionReducer<Model_, Message, [DisableTool]>
+export interface StateReducers extends ProviderReducers {
+  reduceState: ActionReducer<[]>
+  reduceAction: ActionReducer<[Action]>
+  reduceLanguageModel: ActionReducer<[LanguageModel]>
+  reduceEmbeddingModel: ActionReducer<[EmbeddingModel]>
+  reduceEmit: ActionReducer<[Emit]>
+  reduceBranch: ActionReducer<[Branch]>
+  reduceContext: ActionReducer<[Context]>
+  reduceMessages: ActionReducer<[Messages]>
+  reduceTool: ActionReducer<[Tool]>
+  reduceDisableTool: ActionReducer<[DisableTool]>
 }
 
-export type ActionReducer<Model_ = any, Message = any, R extends Array<unknown> = []> = (
+export type ActionReducer<R extends Array<unknown>, S extends ExecSpec = ExecSpec> = (
   this: StateReducers,
-  state: ExecState<Model_, Message>,
+  state: ExecState<S>,
   ...rest: R
-) => PromiseOr<ExecState<Model_, Message>>
+) => PromiseOr<ExecState<S>>

@@ -4,7 +4,8 @@ export type Event =
   | EnterEvent
   | UserTextEvent
   | TEvent
-  | ModelEvent
+  | LanguageModelEvent
+  | EmbeddingModelEvent
   | EmitEvent
   | ContextEvent
   | BranchesEvent
@@ -29,8 +30,13 @@ export interface TEvent<O = any> {
   schema?: object
 }
 
-export interface ModelEvent<K extends string = string> {
-  type: "Model"
+export interface LanguageModelEvent<K extends string = string> {
+  type: "LanguageModel"
+  key: K
+}
+
+export interface EmbeddingModelEvent<K extends string = string> {
+  type: "EmbeddingModel"
   key: K
 }
 

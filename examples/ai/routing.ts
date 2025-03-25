@@ -1,4 +1,4 @@
-import { Context, T, Model, Exec } from "liminal"
+import { Context, T, LanguageModel, Exec } from "liminal"
 import { type } from "arktype"
 import { adapter } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
@@ -11,8 +11,11 @@ Exec(adapter).run(
   },
   {
     models: {
-      default: openai("gpt-4o-mini"),
-      reasoning: openai("o1-mini"),
+      language: {
+        default: openai("gpt-4o-mini"),
+        reasoning: openai("o1-mini"),
+      },
+      embedding: {},
     },
     handler: console.log,
   },
@@ -46,7 +49,7 @@ const Classification = type({
 function useClassification(classification: typeof Classification.infer) {
   return Context("UseClassificationAgent", USE_CLASSIFICATION_AGENT_PROMPTS[classification.type], function* () {
     if (classification.complexity === "complex") {
-      yield* Model("reasoning")
+      yield* LanguageModel("reasoning")
     }
     return yield* T()
   })
