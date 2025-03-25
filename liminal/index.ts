@@ -1,4 +1,5 @@
 export * from "./common/Agent.js"
+export * from "./Action/Messages.js"
 export * from "./common/AgentLike.js"
 export * from "./Action/Action.js"
 export * from "./Action/DisableTool.js"

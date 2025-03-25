@@ -1,5 +1,3 @@
-import type { JSONValue } from "../liminal_util/JSONValue.js"
-
 export function* Emit<K extends string, V>(key: K, value: V): Generator<Emit<K, V>, undefined> {
   return yield {
     kind: "Emit",

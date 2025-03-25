@@ -13,7 +13,7 @@ Exec(adapter).run(CodeReviewers, {
 function CodeReviewers() {
   return Context("Workers", "You are a senior software architect planning feature implementations.", function* () {
     yield "Analyze this feature request and create an implementation plan:"
-    const feat = prompt("Please enter a feature request.")!
+    const feat = "Alert administrators via text whenever site traffic exceeds a certain threshold."
     yield feat
     const implementationPlan = yield* T(
       type({

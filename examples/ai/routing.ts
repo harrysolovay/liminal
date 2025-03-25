@@ -3,20 +3,20 @@ import { type } from "arktype"
 import { adapter } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
 
-Exec(adapter).run(routing, {
-  models: {
-    default: openai("gpt-4o-mini"),
-    reasoning: openai("o1-mini"),
+Exec(adapter).run(
+  function* () {
+    const classification = yield* classifyQuery("I'd like a refund please")
+    const response = yield* useClassification(classification)
+    return { classification, response }
   },
-  handler: console.log,
-})
-
-function* routing() {
-  const query = prompt("Please enter your query?")!
-  const classification = yield* classifyQuery(query)
-  const response = yield* useClassification(classification)
-  return { classification, response }
-}
+  {
+    models: {
+      default: openai("gpt-4o-mini"),
+      reasoning: openai("o1-mini"),
+    },
+    handler: console.log,
+  },
+)
 
 function classifyQuery(query: string) {
   return Context(

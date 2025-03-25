@@ -26,6 +26,7 @@
   "[yaml]": {
     "editor.defaultFormatter": "dprint.dprint"
   },
+  "biome.enabled": true,
   "editor.formatOnSave": true,
   "editor.quickSuggestions": {
     "strings": "on"

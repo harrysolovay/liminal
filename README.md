@@ -8,6 +8,46 @@
 - [Examples &rarr;](https://liminal.land/examples)<br />Examples illustrating
   common use cases.
 
+## TL;DR
+
+Model conversations with generator functions.
+
+```ts
+import { T } from "liminal"
+
+function* Example() {
+  // Buffer a user message.
+  yield "What are some key factors that affect plant growth?"
+
+  // Trigger text completion (adds the assistant message to the buffer).
+  const factors = yield* T()
+
+  // Buffer another user message.
+  yield "Rank those by order of importance"
+
+  // Trigger and return a structured output completion.
+  return yield* T(z.string().array())
+}
+```
+
+Execute the conversation.
+
+```ts
+import { Exec } from "liminal"
+
+// Let's use the Vercel AI SDK under the hood.
+import { openai } from "@ai-sdk/openai"
+import { adapter } from "liminal-ai"
+
+const result = await Exec(adapter).run(Example, {
+  models: {
+    default: openai("gpt-4o-mini"),
+  },
+})
+
+result satisfies Array<string>
+```
+
 ## Why?
 
 - TRPC/Hono-style event inference
