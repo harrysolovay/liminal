@@ -34,14 +34,17 @@ function* Conversation() {
   // Buffer a user message.
   yield "What are some key factors that affect plant growth?"
 
-  // Complete text and add assistant message to the buffer.
+  // Complete text and add it (as an assistant message) to the buffer.
   const factors = yield* T()
 
   // Buffer another user message.
   yield "Rank those by order of importance"
 
-  // Trigger and return a structured output completion.
-  return yield* T(z.string().array())
+  // Same as before, but this time with a `ZodType` (could use another Standard Schema type).
+  const ranking = yield* T(z.string().array())
+
+  // Return a result from the conversation.
+  return ranking
 }
 ```
 
@@ -54,6 +57,7 @@ import { Exec } from "liminal"
 import { openai } from "@ai-sdk/openai"
 import { adapter } from "liminal-ai"
 
+// Execute the conversation.
 const result = await Exec(adapter).run(Conversation, {
   models: {
     default: openai("gpt-4o-mini"),
