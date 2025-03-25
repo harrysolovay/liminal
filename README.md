@@ -13,20 +13,17 @@ implementations for the Vercel AI SDK and OpenAI API.
 - [Examples &rarr;](https://liminal.land/examples)<br />Examples illustrating
   common use cases.
 
-## Rationale
+## Benefits
 
-- [Decoupling Models From Conversations &rarr;](./docs/why/decoupling_models_from_conversations.md)<br />Ensure
+- [Decouple Models From Conversations &rarr;](./docs/why/decoupling_models_from_conversations.md)<br />Ensure
   conversations can be executed with any provider/model and circumvent vendor
   lock-in.
-- [Message Buffer Management &rarr;](./docs/why/message_buffer_management.md)<br />Convention-based
-  approach to managing message buffers. Branching enables exploration of
-  alternative outcomes from a conversation state.
-- [Static Type Inference &rarr;](./docs/why/static_type_inference.md)<br />TRPC/Hono-style
-  type inference of conversation events to ensure type-level soundness from
-  clients.
+- [Implicit Message Buffer &rarr;](./docs/why/message_buffer_management.md)<br />Conventions-based
+  approach to managing message buffers.
+- [Static Type Inference &rarr;](./docs/why/static_type_inference.md)<br />TRPC-style
+  type inference of conversation events for use within consumers.
 - [Eliminating Boilerplate &rarr;](./docs/why/eliminating_boilerplate.md)<br />Avoid
-  re-specifying the same parameters every time you wish to trigger a completion
-  or vectorization.
+  redundancies every time you wish to trigger a completion or vectorization.
 
 ## Example
 
