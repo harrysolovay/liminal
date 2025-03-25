@@ -1,14 +1,32 @@
 # Liminal
 
-> Primitives for LLM tool-calling and context management.
+Liminal is a model-agnostic library for LLM conversation state management and
+agent definition. It exposes a set of primitives for buffering messages,
+triggering completions, attaching and detaching tools, emitting events to
+observers, and instantiating and branching agents. Liminal conversations can be
+adapted to any underlying client. It currently provides reference
+implementations for the Vercel AI SDK and OpenAI API.
+
+## Resources
 
 - [llms.txt &rarr;](./llms.txt)<br />Chunks of truth to be fed into LLMs.
-- [Awesome &rarr;](./AWESOME.md)<br />An awesome list from the open source
-  community
 - [Examples &rarr;](https://liminal.land/examples)<br />Examples illustrating
   common use cases.
 
----
+## Rationale
+
+- [Decoupling Models From Conversations &rarr;](./docs/why/decoupling_models_from_conversations.md)<br />Ensure
+  conversations can be executed with any provider/model and circumvent vendor
+  lock-in.
+- [Message Buffer Management &rarr;](./docs/why/message_buffer_management.md)<br />Convention-based
+  approach to managing message buffers. Branching enables exploration of
+  alternative outcomes from a conversation state.
+- [Static Type Inference &rarr;](./docs/why/static_type_inference.md)<br />TRPC/Hono-style
+  type inference of conversation events to ensure type-level soundness from
+  clients.
+- [Eliminating Boilerplate &rarr;](./docs/why/eliminating_boilerplate.md)<br />Avoid
+  re-specifying the same parameters every time you wish to trigger a completion
+  or vectorization.
 
 ## Example
 
@@ -57,7 +75,6 @@ result satisfies Array<string>
   without being bound to a specific LLM
 - Attaching descriptions to schemas / virtual types that cater better to the LLM
   use case
-- Allow tools to specify requirements – type-safe
 - Eliminating completion API boilerplate
 - Keeping model selection decoupled from flows.
 - Abstracting away direct management of context buffers
