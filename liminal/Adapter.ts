@@ -1,4 +1,4 @@
-import type { ProviderReducers } from "./reduceExecState/ActionReducers.js"
+import type { ProviderReducers } from "./StateReducers/StateReducers.js"
 
 export function Adapter<Model, Message>(providerReducers: ProviderReducers<Model, Message>): Adapter<Model, Message> {
   return { providerReducers }

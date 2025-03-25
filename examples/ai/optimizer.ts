@@ -1,4 +1,4 @@
-import { Completion, Context, Exec } from "liminal"
+import { T, Context, Exec } from "liminal"
 import { type } from "arktype"
 import { adapter } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
@@ -20,7 +20,7 @@ function TranslationWithFeedback(targetLanguage: string, text: string) {
 
         ${text}
       `
-      let currentTranslation = yield* Completion()
+      let currentTranslation = yield* T()
       let iterations = 0
       const MAX_ITERATIONS = 3
       while (iterations < MAX_ITERATIONS) {
@@ -36,7 +36,7 @@ function TranslationWithFeedback(targetLanguage: string, text: string) {
           3. Preservation of nuance
           4. Cultural accuracy
         `
-        const evaluation = yield* Completion(
+        const evaluation = yield* T(
           type({
             qualityScore: "1 <= number.integer <= 10",
             preservesTone: "boolean",
@@ -63,7 +63,7 @@ function TranslationWithFeedback(targetLanguage: string, text: string) {
           Original: ${text}
           Current Translation: ${currentTranslation}
         `
-        const improvedTranslation = yield* Completion()
+        const improvedTranslation = yield* T()
         currentTranslation = improvedTranslation
         iterations++
       }

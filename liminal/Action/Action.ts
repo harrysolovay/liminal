@@ -1,5 +1,5 @@
 import type { Branch } from "./Branch.js"
-import type { Completion } from "./Assistant.js"
+import type { T } from "./T.js"
 import type { Messages } from "./Messages.js"
 import type { Emit } from "./Emit.js"
 import type { Model } from "./Model.js"
@@ -16,7 +16,7 @@ export type Action =
   | Branch
   | string
   | Array<string>
-  | Completion
+  | T
   | Tool
   | DisableTool
   | Messages

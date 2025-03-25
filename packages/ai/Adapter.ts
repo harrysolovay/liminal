@@ -5,7 +5,7 @@ import { reduceUserText } from "./reduceUserText.js"
 import { reduceUserTexts } from "./reduceUserTexts.js"
 
 export const adapter = Adapter<LanguageModelV1, CoreMessage>({
-  reduceAssistant,
+  reduceT: reduceAssistant,
   reduceUserText,
   reduceUserTexts,
 })

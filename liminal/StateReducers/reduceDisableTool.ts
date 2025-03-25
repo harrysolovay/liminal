@@ -1,6 +1,6 @@
-import type { ActionReducers } from "./ActionReducers.js"
+import type { StateReducers } from "./StateReducers.js"
 
-export const reduceDisableTool: ActionReducers["reduceDisableTool"] = (state, action) => {
+export const reduceDisableTool: StateReducers["reduceDisableTool"] = (state, action) => {
   state.handler({
     type: "DisableTool",
     key: action.tool.key,

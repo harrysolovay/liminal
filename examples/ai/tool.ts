@@ -1,5 +1,5 @@
 import * as mathjs from "mathjs"
-import { Context, Completion, Tool, Exec } from "liminal"
+import { Context, T, Tool, Exec } from "liminal"
 import { type } from "arktype"
 import { adapter } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
@@ -23,8 +23,8 @@ function ToolUser() {
         A taxi driver earns $9461 per 1-hour of work. If he works 12 hours a day and in 1 hour
         he uses 12 liters of petrol with a price  of $134 for 1 liter. How much money does he earn in one day?
       `
-      yield* Tool("MathTool", type.string.array(), MathAgent)
-      return yield* Completion()
+      yield* Tool("MathTool", "", type.string.array(), MathAgent)
+      return yield* T()
     },
   )
 }

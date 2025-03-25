@@ -8,6 +8,7 @@ import { Phantom } from "../liminal_util/Phantom.js"
 
 export function* Tool<K extends string, O, R extends PromiseOr<Agent | JSONValue>, T extends Awaited<R>>(
   key: K,
+  description: string,
   params: StandardSchemaV1<object, O>,
   implementation: (params: O) => R,
 ): Generator<
@@ -17,6 +18,7 @@ export function* Tool<K extends string, O, R extends PromiseOr<Agent | JSONValue
   return yield Phantom({
     kind: "Tool",
     key,
+    description,
     params,
     implementation,
   })
@@ -25,6 +27,7 @@ export function* Tool<K extends string, O, R extends PromiseOr<Agent | JSONValue
 export interface Tool<K extends string = string, S extends Scope = Scope> extends Phantom<S> {
   kind: "Tool"
   key: K
+  description: string
   params: StandardSchemaV1
   implementation: (params: any) => PromiseOr<Agent | JSONValue>
 }

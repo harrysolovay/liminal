@@ -1,14 +1,14 @@
-import { Completion } from "../Action/Assistant.js"
+import { T } from "../Action/T.js"
 import type { Tool } from "../Action/Tool.js"
 import { unwrapDeferred } from "../liminal_util/unwrapDeferred.js"
-import type { ActionReducers } from "./ActionReducers.js"
-import { reduceExecState } from "./reduceExecState.js"
+import type { StateReducers } from "./StateReducers.js"
+import { reduceState } from "./reduceState.js"
 
-export const reduceContext: ActionReducers["reduceContext"] = async function (state, action) {
-  const { result } = await reduceExecState(this, {
+export const reduceContext: StateReducers["reduceContext"] = async function (state, action) {
+  const { result } = await this.reduceState({
     models: state.models,
     source: action,
-    agent: unwrapDeferred(action).implementation?.() ?? Completion(),
+    agent: unwrapDeferred(action).implementation?.() ?? T(),
     modelKey: state.modelKey,
     system: state.system,
     next: undefined,
@@ -16,7 +16,7 @@ export const reduceContext: ActionReducers["reduceContext"] = async function (st
     handler: (event) =>
       state.handler({
         type: "Context",
-        context: action.key,
+        key: action.key,
         event,
       }),
     messages: [],

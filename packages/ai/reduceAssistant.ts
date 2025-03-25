@@ -1,11 +1,8 @@
 import { generateObject, generateText, jsonSchema, type CoreMessage, type LanguageModelV1 } from "ai"
-import { _util, type ProviderReducers } from "liminal"
+import { _util, type JSONValue, type ProviderReducers } from "liminal"
 import { toJSONSchema } from "standard-json-schema"
 
-export const reduceAssistant: ProviderReducers<LanguageModelV1, CoreMessage>["reduceAssistant"] = async (
-  state,
-  action,
-) => {
+export const reduceAssistant: ProviderReducers<LanguageModelV1, CoreMessage>["reduceT"] = async (state, action) => {
   const { messages, system, modelKey } = state
   const model = state.models[modelKey]
   _util.assert(model)
@@ -19,8 +16,8 @@ export const reduceAssistant: ProviderReducers<LanguageModelV1, CoreMessage>["re
       schema: aiSchema,
     })
     state.handler({
-      type: "Completion",
-      value: object,
+      type: "T",
+      value: object as JSONValue,
       schema,
     })
     return {
@@ -41,7 +38,7 @@ export const reduceAssistant: ProviderReducers<LanguageModelV1, CoreMessage>["re
     messages,
   })
   state.handler({
-    type: "Completion",
+    type: "T",
     value: text,
   })
   return {

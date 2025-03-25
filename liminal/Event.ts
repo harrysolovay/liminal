@@ -1,7 +1,9 @@
+import type { JSONValue } from "./liminal_util/JSONValue.js"
+
 export type Event =
   | EnterEvent
   | UserTextEvent
-  | AssistantEvent
+  | TEvent
   | ModelEvent
   | EmitEvent
   | ContextEvent
@@ -21,49 +23,50 @@ export interface UserTextEvent {
   text: string
 }
 
-export interface AssistantEvent<V = any> {
-  type: "Completion"
-  value: V
+export interface TEvent<O = any> {
+  type: "T"
+  value: O
   schema?: object
 }
 
 export interface ModelEvent<K extends string = string> {
   type: "Model"
-  model: K
+  key: K
 }
 
 export interface EmitEvent<K extends string = string, E = any> {
   type: "Emit"
-  event: K
+  key: K
   value: E
 }
 
 export interface ContextEvent<K extends string = string, E extends Event = Event> {
   type: "Context"
-  context: K
+  key: K
   event: E
 }
 
 export interface BranchesEvent<K extends string = string> {
   type: "Branches"
-  branches: Array<K>
+  keys: Array<K>
 }
 
 export interface BranchEvent<K extends string = string, E extends Event = Event> {
   type: "Branch"
-  branch: K
+  key: K
   event: E
 }
 
 export interface EnableToolEvent<K extends string = string> {
   type: "EnableTool"
   key: K
+  description: string
+  schema: object
 }
 
 export interface ToolEvent<K extends string = string, E extends Event = Event> {
   type: "Tool"
-  tool: K
-  description: string
+  key: K
   event: E
 }
 

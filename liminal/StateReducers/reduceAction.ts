@@ -1,8 +1,8 @@
 import type { Action } from "../Action/Action.js"
 import type { ExecState } from "../ExecState.js"
-import type { ActionReducers } from "./ActionReducers.js"
+import type { StateReducers } from "./StateReducers.js"
 
-export function reduceAction(this: ActionReducers, state: ExecState, action: Action) {
+export function reduceAction(this: StateReducers, state: ExecState, action: Action) {
   if (!action) {
     return {
       ...state,
@@ -14,8 +14,8 @@ export function reduceAction(this: ActionReducers, state: ExecState, action: Act
     return this.reduceUserTexts(state, action)
   }
   switch (action.kind) {
-    case "Completion": {
-      return this.reduceAssistant(state, action)
+    case "T": {
+      return this.reduceT(state, action)
     }
     case "Branch": {
       return this.reduceBranch(state, action)
