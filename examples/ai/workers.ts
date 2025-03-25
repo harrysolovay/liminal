@@ -1,4 +1,4 @@
-import { Branch, Context, T, Exec } from "liminal"
+import { Branch, Context, Value, Exec } from "liminal"
 import { type } from "arktype"
 import { adapter } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
@@ -18,7 +18,7 @@ function CodeReviewers() {
     yield "Analyze this feature request and create an implementation plan:"
     const feat = "Alert administrators via text whenever site traffic exceeds a certain threshold."
     yield feat
-    const implementationPlan = yield* T(
+    const implementationPlan = yield* Value(
       type({
         files: FileInfo.array(),
         estimatedComplexity: "'create' | 'medium' | 'high'",
@@ -46,7 +46,7 @@ function Implementor(featureRequest: string, file: typeof FileInfo.infer) {
 
       ${featureRequest}
     `
-    const implementation = yield* T(
+    const implementation = yield* Value(
       type({
         explanation: "string",
         code: "string",

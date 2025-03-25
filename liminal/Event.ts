@@ -25,7 +25,7 @@ export interface UserTextEvent {
 }
 
 export interface TEvent<O = any> {
-  type: "T"
+  type: "Value"
   value: O
   schema?: object
 }

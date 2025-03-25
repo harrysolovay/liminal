@@ -1,13 +1,13 @@
 import { Adapter } from "liminal"
-import { reduceT } from "./reduceT.js"
+import { reduceValue } from "./reduceValue.js"
 import { reduceUserText } from "./reduceUserText.js"
 import { reduceUserTexts } from "./reduceUserTexts.js"
 import type { AIExecSpec } from "./AIExecSpec.js"
-import { reduceV } from "./reduceV.js"
+import { reduceEmbedding } from "./reduceEmbedding.js"
 
 export const adapter = Adapter<AIExecSpec>({
-  reduceT,
-  reduceV,
+  reduceValue,
+  reduceEmbedding,
   reduceUserText,
   reduceUserTexts,
 })

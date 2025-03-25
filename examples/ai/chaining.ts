@@ -1,4 +1,4 @@
-import { T, Context, Exec, Messages } from "liminal"
+import { Value, Context, Exec, Messages } from "liminal"
 import { type } from "arktype"
 import { adapter } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
@@ -19,7 +19,7 @@ export function MarketingCopy() {
     `Write persuasive marketing copy for: ${"Buffy The Vampire Slayer"}. Focus on benefits and emotional appeal.`,
     function* () {
       yield "Please generate the first draft."
-      let copy = yield* T()
+      let copy = yield* Value()
       console.log({
         messages: yield* Messages(),
       })
@@ -32,7 +32,7 @@ export function MarketingCopy() {
 
         Copy to evaluate: ${copy}
       `
-      const qualityMetrics = yield* T(
+      const qualityMetrics = yield* Value(
         type({
           hasCallToAction: "boolean",
           emotionalAppeal: "number.integer",
@@ -49,7 +49,7 @@ export function MarketingCopy() {
 
           Original copy: ${copy}
         `
-        copy = yield* T()
+        copy = yield* Value()
       }
       return { copy, qualityMetrics }
     },

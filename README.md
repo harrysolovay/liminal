@@ -21,6 +21,8 @@ conversations can be executed with any underlying LLM client; for example, see
   lock-in.
 - [Implicit Message Buffer &rarr;](./docs/why/message_buffer_management.md)<br />Conventions-based
   approach to managing message buffers.
+- [Observing Execution &rarr;](./docs/why/observing_execution.md)<br />Subscribe
+  to receive key events within the conversation and its descendants.
 - [Static Type Inference &rarr;](./docs/why/static_type_inference.md)<br />TRPC-style
   type inference of conversation events for use within consumers.
 - [Eliminating Boilerplate &rarr;](./docs/why/eliminating_boilerplate.md)<br />Avoid
@@ -67,24 +69,6 @@ const result = await Exec(adapter).run(Conversation, {
 
 result satisfies Array<string>
 ```
-
-## Why?
-
-- TRPC/Hono-style event inference
-- Establish a TypeScript-centric way to define reusable flows without getting
-  locked into specific LLM providers/models/client libraries
-- Inject model upon flow execution. This means that we can share flow libraries
-  without being bound to a specific LLM
-- Attaching descriptions to schemas / virtual types that cater better to the LLM
-  use case
-- Eliminating completion API boilerplate
-- Keeping model selection decoupled from flows.
-- Abstracting away direct management of context buffers
-- Observability within complex flows
-
-## Other Perks
-
-- Handles dedent-ing
 
 ---
 

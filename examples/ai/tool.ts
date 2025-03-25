@@ -1,5 +1,5 @@
 import * as mathjs from "mathjs"
-import { Context, T, Tool, Exec } from "liminal"
+import { Context, Value, Tool, Exec } from "liminal"
 import { type } from "arktype"
 import { adapter } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
@@ -27,7 +27,7 @@ function ToolUser() {
         he uses 12 liters of petrol with a price  of $134 for 1 liter. How much money does he earn in one day?
       `
       yield* Tool("MathTool", "", type.string.array(), MathAgent)
-      return yield* T()
+      return yield* Value()
     },
   )
 }

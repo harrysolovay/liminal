@@ -1,6 +1,6 @@
 import type { Branch } from "./Branch.js"
-import type { V } from "./V.js"
-import type { T } from "./T.js"
+import type { Embedding } from "./Embedding.js"
+import type { Value } from "./Value.js"
 import type { Messages } from "./Messages.js"
 import type { Emit } from "./Emit.js"
 import type { LanguageModel } from "./LanguageModel.js"
@@ -19,8 +19,8 @@ export type Action =
   | Branch
   | string
   | Array<string>
-  | T
-  | V
+  | Value
+  | Embedding
   | Tool
   | DisableTool
   | Messages

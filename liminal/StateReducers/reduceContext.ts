@@ -1,4 +1,4 @@
-import { T } from "../Action/T.js"
+import { Value } from "../Action/Value.js"
 import type { Tool } from "../Action/Tool.js"
 import { unwrapDeferred } from "../liminal_util/unwrapDeferred.js"
 import type { StateReducers } from "./StateReducers.js"
@@ -7,7 +7,7 @@ export const reduceContext: StateReducers["reduceContext"] = async function (sta
   const { result } = await this.reduceState({
     config: state.config,
     source: action,
-    agent: unwrapDeferred(action).implementation?.() ?? T(),
+    agent: unwrapDeferred(action).implementation?.() ?? Value(),
     languageModelKey: state.languageModelKey,
     embeddingModelKey: state.embeddingModelKey,
     system: action.system,

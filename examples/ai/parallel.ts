@@ -1,4 +1,4 @@
-import { Branch, T, Context, Exec } from "liminal"
+import { Branch, Value, Context, Exec } from "liminal"
 import { type } from "arktype"
 import { adapter } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
@@ -25,7 +25,7 @@ function Review(code: string) {
       const reviews = yield* Branch({ securityReview, performanceReview, maintainabilityReview })
       yield JSON.stringify(Object.values(reviews), null, 2)
       yield `You are a technical lead summarizing multiple code reviews.`
-      const summary = yield* T()
+      const summary = yield* Value()
       return { reviews, summary }
     },
   )
@@ -37,7 +37,7 @@ const securityReview = Context(
   "SecurityReview",
   "You are an expert in code security. Focus on identifying security vulnerabilities, injection risks, and authentication issues.",
   () =>
-    T(
+    Value(
       type({
         type: "'security'",
         vulnerabilities: "string[]",
@@ -51,7 +51,7 @@ const performanceReview = Context(
   "PerformanceReview",
   "You are an expert in code performance. Focus on identifying performance bottlenecks, memory leaks, and optimization opportunities.",
   () =>
-    T(
+    Value(
       type({
         type: "'performance'",
         issues: "string[]",
@@ -65,7 +65,7 @@ const maintainabilityReview = Context(
   "MaintainabilityReview",
   "You are an expert in code quality. Focus on code structure, readability, and adherence to best practices.",
   () =>
-    T(
+    Value(
       type({
         type: "'maintainability'",
         concerns: "string[]",

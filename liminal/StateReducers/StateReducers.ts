@@ -1,5 +1,5 @@
 import type { Action } from "../Action/Action.js"
-import type { T } from "../Action/T.js"
+import type { Value } from "../Action/Value.js"
 import type { Branch } from "../Action/Branch.js"
 import type { Context } from "../Action/Context.js"
 import type { DisableTool } from "../Action/DisableTool.js"
@@ -18,7 +18,7 @@ import { reduceMessages } from "./reduceMessages.js"
 import { reduceLanguageModel } from "./reduceLanguageModel.js"
 import { reduceState } from "./reduceState.js"
 import { reduceTool } from "./reduceTool.js"
-import type { V } from "../Action/V.js"
+import type { Embedding } from "../Action/Embedding.js"
 import type { ExecSpec } from "../ExecSpec.js"
 import type { EmbeddingModel } from "../Action/EmbeddingModel.js"
 import { reduceEmbeddingModel } from "./reduceEmbeddingModel.js"
@@ -42,8 +42,8 @@ export function StateReducers<S extends ExecSpec>(providerReducers: ProviderRedu
 export interface ProviderReducers<S extends ExecSpec = ExecSpec> {
   reduceUserText: ActionReducer<[userText: string], S>
   reduceUserTexts: ActionReducer<[userTexts: Array<string>], S>
-  reduceT: ActionReducer<[t: T], S>
-  reduceV: ActionReducer<[v: V], S>
+  reduceValue: ActionReducer<[value: Value], S>
+  reduceEmbedding: ActionReducer<[embedding: Embedding], S>
 }
 
 export interface StateReducers extends ProviderReducers {

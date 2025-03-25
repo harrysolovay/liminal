@@ -14,11 +14,11 @@ export function reduceAction(this: StateReducers, state: ExecState, action: Acti
     return this.reduceUserTexts(state, action)
   }
   switch (action.kind) {
-    case "T": {
-      return this.reduceT(state, action)
+    case "Value": {
+      return this.reduceValue(state, action)
     }
-    case "V": {
-      return this.reduceV(state, action)
+    case "Embedding": {
+      return this.reduceEmbedding(state, action)
     }
     case "Branch": {
       return this.reduceBranch(state, action)

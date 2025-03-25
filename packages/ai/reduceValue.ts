@@ -1,9 +1,9 @@
-import { generateObject, generateText, jsonSchema, type CoreMessage, type LanguageModelV1 } from "ai"
+import { generateObject, generateText, jsonSchema } from "ai"
 import { _util, type JSONValue, type ProviderReducers } from "liminal"
 import { toJSONSchema } from "standard-json-schema"
 import type { AIExecSpec } from "./AIExecSpec.js"
 
-export const reduceT: ProviderReducers<AIExecSpec>["reduceT"] = async (state, action) => {
+export const reduceValue: ProviderReducers<AIExecSpec>["reduceValue"] = async (state, action) => {
   const { messages, system, languageModelKey: modelKey } = state
   const model = state.config.models.language[modelKey]
   _util.assert(model)
@@ -17,7 +17,7 @@ export const reduceT: ProviderReducers<AIExecSpec>["reduceT"] = async (state, ac
       schema: aiSchema,
     })
     state.handler({
-      type: "T",
+      type: "Value",
       value: object as JSONValue,
       schema,
     })
@@ -39,7 +39,7 @@ export const reduceT: ProviderReducers<AIExecSpec>["reduceT"] = async (state, ac
     messages,
   })
   state.handler({
-    type: "T",
+    type: "Value",
     value: text,
   })
   return {
