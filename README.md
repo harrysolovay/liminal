@@ -77,27 +77,35 @@ Actions are the values yielded from Liminal conversations (generator functions
 or iterables). They tell the executor how to update internal state such as the
 model or tool selections.
 
-- [`string | Array<string>` &rarr;](./docs/actions/TODO.md)<br />append user
-  messages to the message buffer.
-- [`Value` &rarr;](./docs/actions/TODO.md)<br />trigger a completion (optional
-  include a [Standard Schema](https://standardschema.dev/) type to inform
-  structured output shape).
-- [`Context` &rarr;](./docs/actions/TODO.md)<br />Create a container with a
-  specified key, system message and untouched message buffer.
-- [`Branch` &rarr;](./docs/actions/TODO.md)<br />Create isolated duplicates of
-  the current conversation and explore different trajectories.
-- [`Tool | DisableTool` &rarr;](./docs/actions/TODO.md)<br />Enable and disable
-  tools to be used by underlying completions calls.
-- [`Emit` &rarr;](./docs/actions/TODO.md)<br />Emit some data that observers can
-  utilize, perhaps for writing to a database or displaying conversation progress
-  to users.
-- [`Messages` &rarr;](./docs/actions/TODO.md)<br />Get the current list of
-  messages contained within the message buffer.
-- [`Embedding` &rarr;](./docs/actions/TODO.md)<br />Get the vector embedding
-  representation of a value.
-- [`LanguageModel | EmbeddingModel` &rarr;](./docs/actions/TODO.md)<br />Declare
-  the intended use of a model by specifying a key to which the executor
-  ultimately binds a model.
+[`string | Array<string>` &rarr;](./docs/actions/TODO.md)<br />append user
+messages to the message buffer.
+
+[`Value` &rarr;](./docs/actions/TODO.md)<br />trigger a completion (optional
+include a [Standard Schema](https://standardschema.dev/) type to inform
+structured output shape).
+
+[`Context` &rarr;](./docs/actions/TODO.md)<br />Create a container with a
+specified key, system message and untouched message buffer.
+
+[`Branch` &rarr;](./docs/actions/TODO.md)<br />Create isolated duplicates of the
+current conversation and explore different trajectories.
+
+[`Tool | DisableTool` &rarr;](./docs/actions/TODO.md)<br />Enable and disable
+tools to be used by underlying completions calls.
+
+[`Emit` &rarr;](./docs/actions/TODO.md)<br />Emit some data that observers can
+utilize, perhaps for writing to a database or displaying conversation progress
+to users.
+
+[`Messages` &rarr;](./docs/actions/TODO.md)<br />Get the current list of
+messages contained within the message buffer.
+
+[`Embedding` &rarr;](./docs/actions/TODO.md)<br />Get the vector embedding
+representation of a value.
+
+[`LanguageModel | EmbeddingModel` &rarr;](./docs/actions/TODO.md)<br />Declare
+the intended use of a model by specifying a key to which the executor ultimately
+binds a model.
 
 ---
 
