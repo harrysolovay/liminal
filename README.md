@@ -29,37 +29,40 @@ conversations can be executed with any underlying LLM client; for example, see
 
 ## Example
 
+Model a conversation as a generator function. Yield user messages (`string`s)
+and assistant `Value`s. Optionally return the result of the conversation (in
+this case `ranking`).
+
 ```ts
-import { T } from "liminal"
+import { Exec, Value } from "liminal"
 
 function* Conversation() {
   // Buffer a user message.
   yield "What are some key factors that affect plant growth?"
 
   // Complete text and add it (as an assistant message) to the buffer.
-  const factors = yield* T()
+  const factors = yield* Value()
 
   // Buffer another user message.
   yield "Rank those by order of importance"
 
   // Same as before, but this time with a `ZodType` (could use another Standard Schema type).
-  const ranking = yield* T(z.string().array())
+  const ranking = yield* Value(z.string().array())
 
   // Return a result from the conversation.
   return ranking
 }
 ```
 
-Execute the conversation.
+Execute `Conversation` with the LLM client library and models of your choosing.
+In this case we use Vercel's AI SDK and specify the `gpt-4o-mini` model.
 
 ```ts
-import { Exec } from "liminal"
+// ...
 
-// Let's use the Vercel AI SDK under the hood.
 import { openai } from "@ai-sdk/openai"
 import { adapter } from "liminal-ai"
 
-// Execute the conversation.
 const result = await Exec(adapter).run(Conversation, {
   models: {
     default: openai("gpt-4o-mini"),
