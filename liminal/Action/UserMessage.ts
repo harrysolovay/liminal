@@ -4,7 +4,8 @@ import type { EventBase } from "./event_common.js"
 
 export function* UserMessage(text: string | Array<string>): Generator<
   UserMessage<{
-    Model: never
+    LanguageModel: never
+    EmbeddingModel: never
     Event: UserMessageEvent
   }>,
   undefined

@@ -7,7 +7,8 @@ export function* DisableTool<K extends string>(
   tool: Tool,
 ): Generator<
   DisableTool<{
-    Model: never
+    LanguageModel: never
+    EmbeddingModel: never
     Event: DisableToolEvent<K>
   }>,
   void

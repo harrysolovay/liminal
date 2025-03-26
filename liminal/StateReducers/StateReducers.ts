@@ -1,4 +1,4 @@
-import type { Action } from "../Action/Action.js"
+import type { ActionLike } from "../Action/Action.js"
 import type { Branch } from "../Action/Branch.js"
 import type { Context } from "../Action/Context.js"
 import type { DisableTool } from "../Action/DisableTool.js"
@@ -23,7 +23,7 @@ import type { ActionReducer } from "./ActionReducer.js"
 
 export interface StateReducers {
   reduceState: ActionReducer<[]>
-  reduceAction: ActionReducer<[Action]>
+  reduceAction: ActionReducer<[ActionLike]>
   reduceUserText: ActionReducer<[string]>
   reduceUserTexts: ActionReducer<[Array<string>]>
   reduceLanguageModel: ActionReducer<[LanguageModel]>

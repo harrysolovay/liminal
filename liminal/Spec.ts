@@ -1,13 +1,17 @@
-import type { Action } from "./Action/Action.js"
+import type { Action, ActionLike } from "./Action/Action.js"
 import type { ActionEvent } from "./Action/ActionEvent.js"
-import type { Falsy } from "./util/Falsy.js"
+import type { Actor } from "./common/Actor.js"
 
-export interface Spec<LM extends string = string, EM extends string = string, E extends ActionEvent = ActionEvent> {
-  Model: {
-    language: LM
-    embedding: EM
-  }
-  Event: E
+export interface Spec {
+  LanguageModel: string
+  EmbeddingModel: string
+  Event: ActionEvent
 }
 
-export type ExtractSpec<Y extends Action> = Exclude<Y, Falsy | string | Array<string>>
+export type ExtractSpec<R> = R extends Actor<infer Y>
+  ? Extract<Y, Action>[""]
+  : {
+      LanguageModel: never
+      EmbeddingModel: never
+      Event: never
+    }

@@ -8,7 +8,8 @@ export interface Messages
   extends ActionBase<
     "Messages",
     {
-      Model: never
+      LanguageModel: never
+      EmbeddingModel: never
       Event: never
     }
   > {}

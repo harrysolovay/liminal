@@ -1,9 +1,9 @@
-import { Context, Generation, LanguageModel, exec } from "liminal"
+import { Context, Generation, LanguageModel, run } from "liminal"
 import { type } from "arktype"
-import { language } from "liminal-ai"
+import { LM } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
 
-exec(
+run(
   function* () {
     const classification = yield* classifyQuery("I'd like a refund please")
     const response = yield* useClassification(classification)
@@ -12,8 +12,8 @@ exec(
   {
     models: {
       language: {
-        default: language(openai("gpt-4o-mini")),
-        reasoning: language(openai("o1-mini")),
+        default: LM(openai("gpt-4o-mini")),
+        reasoning: LM(openai("o1-mini")),
       },
       embedding: {},
     },

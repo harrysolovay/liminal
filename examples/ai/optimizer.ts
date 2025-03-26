@@ -1,14 +1,13 @@
-import { Generation, Context, exec } from "liminal"
+import { Generation, Context, run } from "liminal"
 import { type } from "arktype"
-import { language } from "liminal-ai"
+import { LM } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
 
-exec(TranslationWithFeedback("typescript", "I love you!"), {
+run(TranslationWithFeedback("typescript", "I love you!"), {
   models: {
     language: {
-      default: language(openai("gpt-4o-mini")),
+      default: LM(openai("gpt-4o-mini")),
     },
-    embedding: {},
   },
   handler: console.log,
 })

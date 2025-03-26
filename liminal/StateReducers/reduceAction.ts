@@ -1,9 +1,9 @@
-import type { Action } from "../Action/Action.js"
+import type { ActionLike } from "../Action/Action.js"
 import type { ExecState } from "../ExecState.js"
 import { assert } from "../util/assert.js"
 import type { StateReducers } from "./StateReducers.js"
 
-export function reduceAction(this: StateReducers, state: ExecState, action: Action) {
+export function reduceAction(this: StateReducers, state: ExecState, action: ActionLike) {
   if (!action) {
     return {
       ...state,

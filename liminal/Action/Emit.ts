@@ -8,7 +8,8 @@ export function* Emit<K extends string, V extends JSONValue>(
   value: V,
 ): Generator<
   Emit<{
-    Model: never
+    LanguageModel: never
+    EmbeddingModel: never
     Event: EmitEvent<K, V>
   }>,
   undefined

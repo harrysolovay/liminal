@@ -7,7 +7,8 @@ export function* Embedding<V extends JSONValue>(
   value: V,
 ): Generator<
   Embedding<{
-    Model: never
+    LanguageModel: never
+    EmbeddingModel: never
     Event: EmbeddingEvent<V>
   }>,
   Array<number>

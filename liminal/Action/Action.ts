@@ -12,17 +12,16 @@ import type { Falsy } from "../util/Falsy.js"
 import type { Tool } from "./Tool.js"
 
 export type Action =
-  | Falsy
   | Context
   | LanguageModel
   | EmbeddingModel
   | Emit
   | Branch
-  | string
-  | Array<string>
   | Generation
   | Embedding
   | Tool
   | DisableTool
   | Messages
   | UserMessage
+
+export type ActionLike = Action | Falsy | string | Array<string>

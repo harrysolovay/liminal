@@ -6,7 +6,7 @@ export interface ExecConfig {
   handler?: (event: ActionEvent) => any
   models: {
     language: Record<string, LanguageModelAdapter>
-    embedding: Record<string, EmbeddingModelAdapter>
+    embedding?: Record<string, EmbeddingModelAdapter>
   }
   signal?: AbortSignal
 }

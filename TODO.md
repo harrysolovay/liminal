@@ -1,5 +1,7 @@
 # TODO
 
+- aborting/early exit
+- streaming
 - `Type extends Iterable<Generation<T>, T>`
 - encodeTypes?: boolean // TODO: encode values as JSONC and include type
   comments

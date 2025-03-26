@@ -6,10 +6,8 @@ export function* EmbeddingModel<K extends string>(
   key: K,
 ): Generator<
   EmbeddingModel<{
-    Model: {
-      language: never
-      embedding: K
-    }
+    LanguageModel: never
+    EmbeddingModel: K
     Event: EmbeddingModelEvent<K>
   }>,
   void

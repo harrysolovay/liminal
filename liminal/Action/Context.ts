@@ -1,32 +1,34 @@
-import type { Action } from "./Action.js"
+import type { ActionLike } from "./Action.js"
 import type { ActorLike } from "../common/ActorLike.js"
 import { ActionBase } from "./ActionBase.js"
-import type { EventBase } from "./event_common.js"
+import type { EnterEvent, EventBase, ExitEvent } from "./event_common.js"
 import type { ActionEvent } from "./ActionEvent.js"
-import type { Spec } from "../Spec.js"
+import type { ExtractSpec, Spec } from "../Spec.js"
 
-export function Context<K extends string, Y extends Action, R = string>(
+export function Context<K extends string, Y extends ActionLike, S extends ExtractSpec<Y>, R = string>(
   key: K,
   system: string,
   implementation: ActorLike<Y, R>,
 ): Generator<
   Context<{
-    Model: never
-    Event: never
+    LanguageModel: S["LanguageModel"]
+    EmbeddingModel: S["EmbeddingModel"]
+    Event: EnterEvent | ContextEvent<K, S["Event"]> | ExitEvent<R>
   }>,
   Awaited<R>
 >
-export function Context<K extends string, Y extends Action, R = string>(
+export function Context<K extends string, Y extends ActionLike, S extends ExtractSpec<Y>, R = string>(
   key: K,
   implementation: ActorLike<Y, R>,
 ): Generator<
   Context<{
-    Model: never
-    Event: never
+    LanguageModel: S["LanguageModel"]
+    EmbeddingModel: S["EmbeddingModel"]
+    Event: EnterEvent | ContextEvent<K, S["Event"]> | ExitEvent<R>
   }>,
   Awaited<R>
 >
-export function* Context<Y extends Action, R = string>(
+export function* Context<Y extends ActionLike, R = string>(
   key: string,
   a0: string | ActorLike,
   a1?: ActorLike,

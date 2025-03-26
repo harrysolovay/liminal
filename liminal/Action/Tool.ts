@@ -6,17 +6,24 @@ import type { JSONValue } from "../util/JSONValue.js"
 import type { PromiseOr } from "../util/PromiseOr.js"
 import type { DisableTool } from "./DisableTool.js"
 import type { ActionEvent } from "./ActionEvent.js"
-import type { Spec } from "../Spec.js"
+import type { ExtractSpec, Spec } from "../Spec.js"
 
-export function* Tool<K extends string, O, R extends PromiseOr<Actor | JSONValue>, T extends Awaited<R>>(
+export function* Tool<
+  K extends string,
+  O,
+  R extends PromiseOr<Actor | JSONValue>,
+  T extends Awaited<R>,
+  S extends ExtractSpec<R>,
+>(
   key: K,
   description: string,
   params: StandardSchemaV1<object, O>,
   implementation: (params: O) => R,
 ): Generator<
   Tool<{
-    Model: never
-    Event: EnableToolEvent<K> // TODO: `ToolCallEvent` // R extends Actor<infer Y> ? ...
+    LanguageModel: S["LanguageModel"]
+    EmbeddingModel: S["EmbeddingModel"]
+    Event: EnableToolEvent<K> | ToolCallEvent<K, S["Event"]>
   }>,
   () => Generator<DisableTool, void>
 > {

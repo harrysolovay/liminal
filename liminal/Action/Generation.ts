@@ -6,7 +6,8 @@ import type { Spec } from "../Spec.js"
 
 export function Generation(): Generator<
   Generation<{
-    Model: never
+    LanguageModel: never
+    EmbeddingModel: never
     Event: GenerateEvent<string>
   }>,
   string
@@ -15,7 +16,8 @@ export function Generation<O extends JSONValue>(
   type: StandardSchemaV1<object, O>,
 ): Generator<
   Generation<{
-    Model: never
+    LanguageModel: never
+    EmbeddingModel: never
     Event: GenerateEvent<O>
   }>,
   O
