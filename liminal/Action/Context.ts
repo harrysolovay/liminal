@@ -9,11 +9,23 @@ export function Context<K extends string, Y extends Action, R = string>(
   key: K,
   system: string,
   implementation: ActorLike<Y, R>,
-): Generator<Context, Awaited<R>>
+): Generator<
+  Context<{
+    Model: never
+    Event: never
+  }>,
+  Awaited<R>
+>
 export function Context<K extends string, Y extends Action, R = string>(
   key: K,
   implementation: ActorLike<Y, R>,
-): Generator<Context, Awaited<R>>
+): Generator<
+  Context<{
+    Model: never
+    Event: never
+  }>,
+  Awaited<R>
+>
 export function* Context<Y extends Action, R = string>(
   key: string,
   a0: string | ActorLike,
