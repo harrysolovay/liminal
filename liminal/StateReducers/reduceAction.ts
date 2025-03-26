@@ -14,8 +14,17 @@ export function reduceAction(this: StateReducers, state: ExecState, action: Acti
     return this.reduceUserTexts(state, action)
   }
   switch (action.kind) {
-    case "Value": {
-      return this.reduceValue(state, action)
+    case "UserMessage": {
+      if (typeof action.text === "string") {
+        return this.reduceUserText(state, action.text)
+      }
+      return this.reduceUserTexts(state, action.text)
+    }
+    case "Generation": {
+      return this.reduceGeneration(state, action)
+    }
+    case "Scope": {
+      return this.reduceScope(state, action)
     }
     case "Embedding": {
       return this.reduceEmbedding(state, action)
@@ -35,11 +44,8 @@ export function reduceAction(this: StateReducers, state: ExecState, action: Acti
     case "Messages": {
       return this.reduceMessages(state, action)
     }
-    case "LanguageModel": {
-      return this.reduceLanguageModel(state, action)
-    }
-    case "EmbeddingModel": {
-      return this.reduceEmbeddingModel(state, action)
+    case "Model": {
+      return this.reduceModel(state, action)
     }
     case "Tool": {
       return this.reduceTool(state, action)

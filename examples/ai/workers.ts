@@ -1,4 +1,4 @@
-import { Branch, Context, Value, Exec } from "liminal"
+import { Branch, Context, Generation, Exec, Scope } from "liminal"
 import { type } from "arktype"
 import { adapter } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
@@ -14,19 +14,22 @@ Exec(adapter).run(CodeReviewers, {
 })
 
 function CodeReviewers() {
-  return Context("Workers", "You are a senior software architect planning feature implementations.", function* () {
-    yield "Analyze this feature request and create an implementation plan:"
-    const feat = "Alert administrators via text whenever site traffic exceeds a certain threshold."
-    yield feat
-    const implementationPlan = yield* Value(
-      type({
-        files: FileInfo.array(),
-        estimatedComplexity: "'create' | 'medium' | 'high'",
-      }),
-    )
-    const fileChanges = yield* Branch(implementationPlan.files.map((file) => Implementor(feat, file)))
-    return { fileChanges, implementationPlan }
-  })
+  return Scope(
+    "Workers",
+    Context("You are a senior software architect planning feature implementations.", function* () {
+      yield "Analyze this feature request and create an implementation plan:"
+      const feat = "Alert administrators via text whenever site traffic exceeds a certain threshold."
+      yield feat
+      const implementationPlan = yield* Generation(
+        type({
+          files: FileInfo.array(),
+          estimatedComplexity: "'create' | 'medium' | 'high'",
+        }),
+      )
+      const fileChanges = yield* Branch(implementationPlan.files.map((file) => Implementor(feat, file)))
+      return { fileChanges, implementationPlan }
+    }),
+  )
 }
 
 const FileInfo = type({
@@ -36,8 +39,10 @@ const FileInfo = type({
 })
 
 function Implementor(featureRequest: string, file: typeof FileInfo.infer) {
-  return Context("Implementation", IMPLEMENTATION_PROMPTS[file.changeType], function* () {
-    yield `
+  return Scope(
+    "Implementation",
+    Context(IMPLEMENTATION_PROMPTS[file.changeType], function* () {
+      yield `
       Implement the changes for ${file.filePath} to support:
 
       ${file.purpose}
@@ -46,14 +51,15 @@ function Implementor(featureRequest: string, file: typeof FileInfo.infer) {
 
       ${featureRequest}
     `
-    const implementation = yield* Value(
-      type({
-        explanation: "string",
-        code: "string",
-      }),
-    )
-    return { file, implementation }
-  })
+      const implementation = yield* Generation(
+        type({
+          explanation: "string",
+          code: "string",
+        }),
+      )
+      return { file, implementation }
+    }),
+  )
 }
 
 const IMPLEMENTATION_PROMPTS = {

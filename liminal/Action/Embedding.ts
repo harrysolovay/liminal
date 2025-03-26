@@ -1,4 +1,6 @@
-export function* Embedding(value: any): Generator<Embedding, Array<number>> {
+import type { JSONValue } from "../liminal_util/JSONValue.js"
+
+export function* Embedding(value: JSONValue): Generator<Embedding, Array<number>> {
   return yield {
     kind: "Embedding",
     value,
@@ -7,5 +9,5 @@ export function* Embedding(value: any): Generator<Embedding, Array<number>> {
 
 export interface Embedding {
   kind: "Embedding"
-  value: any
+  value: JSONValue
 }

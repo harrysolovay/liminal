@@ -1,9 +1,10 @@
 import type { StateReducers } from "./StateReducers.js"
 
-export const reduceEmbeddingModel: StateReducers["reduceEmbeddingModel"] = (state, action) => {
+export const reduceModel: StateReducers["reduceModel"] = (state, action) => {
   state.handler({
-    type: "EmbeddingModel",
+    type: "Model",
     key: action.key,
+    capability: action.capability,
   })
   return {
     ...state,

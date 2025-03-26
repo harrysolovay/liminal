@@ -1,14 +1,13 @@
 import { generateObject, generateText, jsonSchema } from "ai"
 import { _util, type JSONValue, type ProviderReducers } from "liminal"
-import { toJSONSchema } from "standard-json-schema"
 import type { AIExecSpec } from "./AIExecSpec.js"
 
-export const reduceValue: ProviderReducers<AIExecSpec>["reduceValue"] = async (state, action) => {
+export const reduceGeneration: ProviderReducers<AIExecSpec>["reduceGeneration"] = async (state, action) => {
   const { messages, system, languageModelKey: modelKey } = state
   const model = state.config.models.language[modelKey]
   _util.assert(model)
   if (action.type) {
-    const schema = await toJSONSchema(action.type)
+    const schema = await _util.JSONSchemaMemo(action.type)
     const aiSchema = jsonSchema(schema)
     const { object } = await generateObject({
       system,

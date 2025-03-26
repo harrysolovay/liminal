@@ -1,21 +1,17 @@
-import { toJSONSchema } from "standard-json-schema"
 import type { StateReducers } from "./StateReducers.js"
+import { DisableTool } from "../Action/DisableTool.js"
+import { JSONSchemaMemo } from "../liminal_util/JSONSchemaMemo.js"
 
 export const reduceTool: StateReducers["reduceTool"] = (state, action) => {
   state.handler({
     type: "EnableTool",
     key: action.key,
     description: action.description,
-    schema: toJSONSchema(action.params),
+    schema: JSONSchemaMemo(action.params),
   })
   return {
     ...state,
     tools: new Set([...state.tools, action]),
-    next: function* () {
-      yield {
-        kind: "DisableTool",
-        tool: action,
-      }
-    },
+    next: () => DisableTool(action),
   }
 }

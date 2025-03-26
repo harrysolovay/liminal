@@ -11,3 +11,9 @@ export interface Emit<K extends string = string, V = any> {
   key: K
   value: V
 }
+
+export interface EmitEvent<K extends string = string, E = any> {
+  type: "Emit"
+  key: K
+  value: E
+}

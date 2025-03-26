@@ -1,27 +1,28 @@
-import type { ExtractScope, Scope } from "../Scope.js"
 import type { AgentLike } from "../common/AgentLike.js"
-import { Phantom } from "../liminal_util/Phantom.js"
 
 export function* Branch<const B extends Branches>(
   branches: B,
-): Generator<
-  Branch<{
-    [K in keyof B as K extends string | number ? `${K}` : never]: B[K] extends AgentLike<infer Y, infer R>
-      ? ExtractScope<Y, R>
-      : never
-  }>,
-  { [K in keyof B]: B[K] extends AgentLike<any, infer R> ? Awaited<R> : never }
-> {
-  return yield Phantom({
+): Generator<Branch, { [K in keyof B]: B[K] extends AgentLike<any, infer R> ? Awaited<R> : never }> {
+  return yield {
     kind: "Branch",
     branches,
-  })
+  }
 }
 
-export interface Branch<S extends BranchScopes = BranchScopes> extends Phantom<S> {
+export interface Branch {
   kind: "Branch"
   branches: Branches
 }
 
 export type Branches = Array<AgentLike> | Record<string, AgentLike>
-export type BranchScopes = Record<string, Scope>
+
+export interface BranchesEvent<K extends string = string> {
+  type: "Branches"
+  keys: Array<K>
+}
+
+export interface BranchEvent<K extends string = string, E extends Event = Event> {
+  type: "Branch"
+  key: K
+  event: E
+}

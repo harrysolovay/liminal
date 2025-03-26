@@ -6,7 +6,6 @@ import type { AgentLike } from "./common/AgentLike.js"
 import type { ExecConfig } from "./ExecConfig.js"
 import type { ExecState } from "./ExecState.js"
 import { unwrapDeferred } from "./liminal_util/unwrapDeferred.js"
-import type { ExtractScope } from "./Scope.js"
 import type { ExecSpec } from "./ExecSpec.js"
 
 export function Exec<S extends ExecSpec>(adapter: Adapter<S>): Exec<S> {

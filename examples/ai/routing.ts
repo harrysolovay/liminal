@@ -1,4 +1,4 @@
-import { Context, Value, LanguageModel, Exec } from "liminal"
+import { Context, Generation, Model, Exec, Scope } from "liminal"
 import { type } from "arktype"
 import { adapter } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
@@ -22,9 +22,10 @@ Exec(adapter).run(
 )
 
 function classifyQuery(query: string) {
-  return Context(
+  return Scope(
     "ClassifyQueryAgent",
-    `
+    Context(
+      `
       Classify this supplied customer query:
 
       Determine:
@@ -33,10 +34,11 @@ function classifyQuery(query: string) {
       2. Complexity (simple or complex)
       3. Brief reasoning for classification
     `,
-    function* () {
-      yield query
-      return yield* Value(Classification)
-    },
+      function* () {
+        yield query
+        return yield* Generation(Classification)
+      },
+    ),
   )
 }
 
@@ -47,12 +49,15 @@ const Classification = type({
 })
 
 function useClassification(classification: typeof Classification.infer) {
-  return Context("UseClassificationAgent", USE_CLASSIFICATION_AGENT_PROMPTS[classification.type], function* () {
-    if (classification.complexity === "complex") {
-      yield* LanguageModel("reasoning")
-    }
-    return yield* Value()
-  })
+  return Scope(
+    "UseClassificationAgent",
+    Context(USE_CLASSIFICATION_AGENT_PROMPTS[classification.type], function* () {
+      if (classification.complexity === "complex") {
+        yield* Model.language("reasoning")
+      }
+      return yield* Generation()
+    }),
+  )
 }
 
 const USE_CLASSIFICATION_AGENT_PROMPTS = {
