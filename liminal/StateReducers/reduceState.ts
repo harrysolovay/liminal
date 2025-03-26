@@ -5,11 +5,11 @@ export async function reduceState(this: StateReducers, state: ExecState): Promis
   state.handler({
     type: "Enter",
   })
-  let current = await state.agent.next()
+  let current = await state.actor.next()
   while (!current.done) {
     const { value } = current
     state = await this.reduceAction(state, value)
-    current = await state.agent.next(state.next)
+    current = await state.actor.next(state.next)
   }
   const { value } = current
   state.handler({

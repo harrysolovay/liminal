@@ -1,14 +1,14 @@
 import type { Tool } from "./Action/Tool.js"
-import type { AgentSource } from "./AgentSource.js"
+import type { ActorSource } from "./common/ActorSource.js"
 // import type { Event } from "./Action/Scope.js"
 import type { ExecConfig } from "./ExecConfig.js"
 import type { ExecSpec } from "./ExecSpec.js"
-import type { Agent } from "./common/Agent.js"
+import type { Actor } from "./common/Actor.js"
 
 export interface ExecState<S extends ExecSpec = ExecSpec> {
   config: ExecConfig<S>
-  source: AgentSource
-  agent: Agent
+  source: ActorSource
+  actor: Actor
   languageModelKey: string
   embeddingModelKey: string | undefined
   messages: Array<S["Message"]>

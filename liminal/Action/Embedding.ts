@@ -1,4 +1,4 @@
-import type { JSONValue } from "../liminal_util/JSONValue.js"
+import type { JSONValue } from "../util/JSONValue.js"
 
 export function* Embedding(value: JSONValue): Generator<Embedding, Array<number>> {
   return yield {

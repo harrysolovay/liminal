@@ -1,10 +1,10 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
-import type { Agent } from "../common/Agent.js"
-import type { JSONValue } from "../liminal_util/JSONValue.js"
-import type { PromiseOr } from "../liminal_util/PromiseOr.js"
+import type { Actor } from "../common/Actor.js"
+import type { JSONValue } from "../util/JSONValue.js"
+import type { PromiseOr } from "../util/PromiseOr.js"
 import type { DisableTool } from "./DisableTool.js"
 
-export function* Tool<K extends string, O, R extends PromiseOr<Agent | JSONValue>, T extends Awaited<R>>(
+export function* Tool<K extends string, O, R extends PromiseOr<Actor | JSONValue>, T extends Awaited<R>>(
   key: K,
   description: string,
   params: StandardSchemaV1<object, O>,
@@ -24,7 +24,7 @@ export interface Tool<K extends string = string> {
   key: K
   description: string
   params: StandardSchemaV1
-  implementation: (params: any) => PromiseOr<Agent | JSONValue>
+  implementation: (params: any) => PromiseOr<Actor | JSONValue>
 }
 
 export interface EnableToolEvent<K extends string = string> {

@@ -1,9 +1,9 @@
 import type { Action } from "./Action.js"
-import type { Agent } from "../common/Agent.js"
+import type { ActorLike } from "../common/ActorLike.js"
 
 export function* Context<Y extends Action, R = string>(
-  system: string,
-  implementation?: () => Agent<Y, R>,
+  system: string | undefined,
+  implementation: ActorLike<Y, R>,
 ): Generator<Context, Awaited<R>> {
   return yield {
     kind: "Context",
@@ -14,8 +14,8 @@ export function* Context<Y extends Action, R = string>(
 
 export interface Context {
   kind: "Context"
-  system: string
-  implementation?: () => Agent
+  system: string | undefined
+  implementation: ActorLike
 }
 
 export interface ContextEvent<E extends Event = Event> {

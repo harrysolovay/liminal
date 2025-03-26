@@ -21,9 +21,6 @@ export function MarketingCopy() {
       function* () {
         yield "Please generate the first draft."
         let copy = yield* Generation()
-        console.log({
-          messages: yield* Messages(),
-        })
         yield `
         Now evaluate this marketing copy for:
 

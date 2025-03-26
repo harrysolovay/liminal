@@ -1,12 +1,12 @@
 import type { Tool } from "../Action/Tool.js"
-import { unwrapDeferred } from "../liminal_util/unwrapDeferred.js"
+import { unwrapDeferred } from "../util/unwrapDeferred.js"
 import type { StateReducers } from "./StateReducers.js"
 
 export const reduceScope: StateReducers["reduceScope"] = async function (state, action) {
   const { result } = await this.reduceState({
     config: state.config,
     source: action,
-    agent: unwrapDeferred(action.implementation),
+    actor: unwrapDeferred(action.implementation),
     languageModelKey: state.languageModelKey,
     embeddingModelKey: state.embeddingModelKey,
     system: state.system,

@@ -1,6 +1,6 @@
 import type { StateReducers } from "./StateReducers.js"
 import { DisableTool } from "../Action/DisableTool.js"
-import { JSONSchemaMemo } from "../liminal_util/JSONSchemaMemo.js"
+import { JSONSchemaMemo } from "../util/JSONSchemaMemo.js"
 
 export const reduceTool: StateReducers["reduceTool"] = (state, action) => {
   state.handler({

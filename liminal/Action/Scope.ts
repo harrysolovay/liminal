@@ -1,9 +1,9 @@
 import type { Action } from "./Action.js"
-import type { AgentLike } from "../common/AgentLike.js"
+import type { ActorLike } from "../common/ActorLike.js"
 
 export function* Scope<K extends string, Y extends Action, R = string>(
   key: K,
-  implementation: AgentLike<Y, R>,
+  implementation: ActorLike<Y, R>,
 ): Generator<Scope, Awaited<R>> {
   return yield {
     kind: "Scope",
@@ -15,7 +15,7 @@ export function* Scope<K extends string, Y extends Action, R = string>(
 export interface Scope<K extends string = string> {
   kind: "Scope"
   key: K
-  implementation: AgentLike
+  implementation: ActorLike
 }
 
 export interface ScopeEvent<K extends string = string, E extends Event = Event> {

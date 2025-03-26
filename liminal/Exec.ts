@@ -2,10 +2,10 @@ import type { Action } from "./Action/Action.js"
 import type { Tool } from "./Action/Tool.js"
 import { StateReducers } from "./StateReducers/StateReducers.js"
 import type { Adapter } from "./Adapter.js"
-import type { AgentLike } from "./common/AgentLike.js"
+import type { ActorLike } from "./common/ActorLike.js"
 import type { ExecConfig } from "./ExecConfig.js"
 import type { ExecState } from "./ExecState.js"
-import { unwrapDeferred } from "./liminal_util/unwrapDeferred.js"
+import { unwrapDeferred } from "./util/unwrapDeferred.js"
 import type { ExecSpec } from "./ExecSpec.js"
 
 export function Exec<S extends ExecSpec>(adapter: Adapter<S>): Exec<S> {
@@ -15,7 +15,7 @@ export function Exec<S extends ExecSpec>(adapter: Adapter<S>): Exec<S> {
       const state: ExecState<S> = {
         config,
         source: agent,
-        agent: unwrapDeferred(agent),
+        actor: unwrapDeferred(agent),
         languageModelKey: "default",
         embeddingModelKey: config.models.embedding?.default,
         system: undefined,
@@ -31,5 +31,5 @@ export function Exec<S extends ExecSpec>(adapter: Adapter<S>): Exec<S> {
 }
 
 export interface Exec<S extends ExecSpec> {
-  run: <Y extends Action, R>(agent: AgentLike<Y, R>, config: ExecConfig<S>) => Promise<unknown>
+  run: <Y extends Action, R>(agent: ActorLike<Y, R>, config: ExecConfig<S>) => Promise<unknown>
 }
