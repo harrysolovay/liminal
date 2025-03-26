@@ -11,7 +11,7 @@ export interface LanguageModelAdapter<LanguageModel = any> {
 
 export function LanguageModelAdapter<LanguageModel>(
   reduceGeneration: ReduceGeneration<LanguageModel>,
-): (embeddingModel: LanguageModel) => LanguageModelAdapter {
+): (languageModel: LanguageModel) => LanguageModelAdapter {
   return (model) => ({
     adapter: "Language",
     model,

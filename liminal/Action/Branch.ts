@@ -1,17 +1,25 @@
 import type { ActorLike } from "../common/ActorLike.js"
+import type { Spec } from "../Spec.js"
+import type { Key } from "../util/Key.js"
 import { ActionBase } from "./ActionBase.js"
 import type { ActionEvent } from "./ActionEvent.js"
 import type { EventBase } from "./event_common.js"
 
-export function* Branch<const B extends Branches>(
+export function* Branch<const B extends Branches, BKey extends `${Key<B>}`>(
   branches: B,
-): Generator<Branch, { [K in keyof B]: B[K] extends ActorLike<any, infer R> ? Awaited<R> : never }> {
+): Generator<
+  Branch<{
+    Model: never
+    Event: BranchesEvent<BKey> // TODO
+  }>,
+  { [K in keyof B]: B[K] extends ActorLike<any, infer R> ? Awaited<R> : never }
+> {
   return yield ActionBase("Branch", {
     branches,
   })
 }
 
-export interface Branch extends ActionBase<"Branch"> {
+export interface Branch<S extends Spec = Spec> extends ActionBase<"Branch", S> {
   branches: Branches
 }
 

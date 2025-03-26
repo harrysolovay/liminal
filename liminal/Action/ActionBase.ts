@@ -1,13 +1,8 @@
-import type { Model } from "./Model.js"
+import type { Spec } from "../Spec.js"
 
-export interface ActionBase<K extends string = string, M extends Model = never, E = never>
-  extends ActionPhantoms<M, E> {
+export interface ActionBase<K extends string = string, S extends Spec = Spec> {
+  "": S
   action: K
-}
-
-export interface ActionPhantoms<M extends Model = Model, E = any> {
-  Model: M
-  Event: E
 }
 
 export function ActionBase<A extends ActionBase>(action: A["action"], fields: Omit<A, keyof ActionBase>): A {

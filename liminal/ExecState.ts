@@ -22,4 +22,5 @@ export interface ExecState<LanguageModel = any, EmbeddingModel = any> {
   parent: ExecState | undefined
   handler: (event: ActionEvent) => unknown
   result?: any
+  aborted?: boolean
 }

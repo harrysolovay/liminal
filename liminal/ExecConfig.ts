@@ -8,6 +8,5 @@ export interface ExecConfig {
     language: Record<string, LanguageModelAdapter>
     embedding: Record<string, EmbeddingModelAdapter>
   }
-  signal?: AbortSignal // TODO
-  encodeTypes?: boolean // TODO: encode values as JSONC and include type comments
+  signal?: AbortSignal
 }

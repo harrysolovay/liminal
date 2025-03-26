@@ -7,7 +7,7 @@ export const reduceContext: StateReducers["reduceContext"] = async function (sta
   const { result } = await this.reduceState({
     config: state.config,
     source: action,
-    actor: unwrapDeferred(action.implementation),
+    actor: action.implementation ? unwrapDeferred(action.implementation) : Generation(),
     languageModelKey: state.languageModelKey,
     languageModel: state.languageModel,
     embeddingModelKey: state.embeddingModelKey,
@@ -18,6 +18,7 @@ export const reduceContext: StateReducers["reduceContext"] = async function (sta
     handler: (inner) =>
       state.handler({
         event: "Context",
+        key: action.key,
         inner,
       }),
     messages: [],

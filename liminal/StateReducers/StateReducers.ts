@@ -3,9 +3,9 @@ import type { Branch } from "../Action/Branch.js"
 import type { Context } from "../Action/Context.js"
 import type { DisableTool } from "../Action/DisableTool.js"
 import type { Emit } from "../Action/Emit.js"
-import { reduceScope } from "./reduceScope.js"
 import type { Messages } from "../Action/Messages.js"
-import type { Model } from "../Action/Model.js"
+import type { LanguageModel } from "../Action/LanguageModel.js"
+import type { EmbeddingModel } from "../Action/EmbeddingModel.js"
 import type { Tool } from "../Action/Tool.js"
 import { reduceAction } from "./reduceAction.js"
 import { reduceBranch } from "./reduceBranch.js"
@@ -15,8 +15,8 @@ import { reduceEmit } from "./reduceEmit.js"
 import { reduceMessages } from "./reduceMessages.js"
 import { reduceState } from "./reduceState.js"
 import { reduceTool } from "./reduceTool.js"
-import { reduceModel } from "./reduceModel.js"
-import type { Scope } from "../Action/Scope.js"
+import { reduceLanguageModel } from "./reduceLanguageModel.js"
+import { reduceEmbeddingModel } from "./reduceEmbeddingModel.js"
 import { reduceUserTexts } from "./reduceUserTexts.js"
 import { reduceUserText } from "./reduceUserText.js"
 import type { ActionReducer } from "./ActionReducer.js"
@@ -24,10 +24,10 @@ import type { ActionReducer } from "./ActionReducer.js"
 export interface StateReducers {
   reduceState: ActionReducer<[]>
   reduceAction: ActionReducer<[Action]>
-  reduceScope: ActionReducer<[Scope]>
   reduceUserText: ActionReducer<[string]>
   reduceUserTexts: ActionReducer<[Array<string>]>
-  reduceModel: ActionReducer<[Model]>
+  reduceLanguageModel: ActionReducer<[LanguageModel]>
+  reduceEmbeddingModel: ActionReducer<[EmbeddingModel]>
   reduceEmit: ActionReducer<[Emit]>
   reduceBranch: ActionReducer<[Branch]>
   reduceContext: ActionReducer<[Context]>
@@ -39,14 +39,14 @@ export interface StateReducers {
 export const StateReducers: StateReducers = {
   reduceState,
   reduceAction,
-  reduceScope,
   reduceUserText,
   reduceUserTexts,
   reduceBranch,
   reduceContext,
   reduceEmit,
   reduceTool,
-  reduceModel,
+  reduceLanguageModel,
+  reduceEmbeddingModel,
   reduceDisableTool,
   reduceMessages,
 }

@@ -5,8 +5,8 @@ import type { DisableToolEvent } from "./DisableTool.js"
 import type { EmbeddingEvent } from "./Embedding.js"
 import type { EmitEvent } from "./Emit.js"
 import type { GenerateEvent } from "./Generation.js"
-import type { ModelEvent } from "./Model.js"
-import type { ScopeEvent } from "./Scope.js"
+import type { LanguageModelEvent } from "./LanguageModel.js"
+import type { EmbeddingModelEvent } from "./EmbeddingModel.js"
 import type { EnableToolEvent, ToolCallEvent } from "./Tool.js"
 import type { UserMessageEvent } from "./UserMessage.js"
 
@@ -20,8 +20,8 @@ export type ActionEvent =
   | EmbeddingEvent
   | EmitEvent
   | GenerateEvent
-  | ModelEvent
-  | ScopeEvent
+  | LanguageModelEvent
+  | EmbeddingModelEvent
   | EnableToolEvent
   | ToolCallEvent
   | UserMessageEvent

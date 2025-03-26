@@ -6,13 +6,20 @@ import type { JSONValue } from "../util/JSONValue.js"
 import type { PromiseOr } from "../util/PromiseOr.js"
 import type { DisableTool } from "./DisableTool.js"
 import type { ActionEvent } from "./ActionEvent.js"
+import type { Spec } from "../Spec.js"
 
 export function* Tool<K extends string, O, R extends PromiseOr<Actor | JSONValue>, T extends Awaited<R>>(
   key: K,
   description: string,
   params: StandardSchemaV1<object, O>,
   implementation: (params: O) => R,
-): Generator<Tool, () => Generator<DisableTool, void>> {
+): Generator<
+  Tool<{
+    Model: never
+    Event: EnableToolEvent<K> // TODO: `ToolCallEvent` // R extends Actor<infer Y> ? ...
+  }>,
+  () => Generator<DisableTool, void>
+> {
   return yield ActionBase("Tool", {
     key,
     description,
@@ -21,8 +28,8 @@ export function* Tool<K extends string, O, R extends PromiseOr<Actor | JSONValue
   })
 }
 
-export interface Tool<K extends string = string> extends ActionBase<"Tool"> {
-  key: K
+export interface Tool<S extends Spec = Spec> extends ActionBase<"Tool", S> {
+  key: string
   description: string
   params: StandardSchemaV1
   implementation: (params: any) => PromiseOr<Actor | JSONValue>

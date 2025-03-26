@@ -1,12 +1,21 @@
 import type { Tool } from "./Tool.js"
 import { ActionBase } from "./ActionBase.js"
 import type { EventBase } from "./event_common.js"
+import type { Spec } from "../Spec.js"
 
-export function* DisableTool<K extends string>(tool: Tool): Generator<DisableTool, void> {
+export function* DisableTool<K extends string>(
+  tool: Tool,
+): Generator<
+  DisableTool<{
+    Model: never
+    Event: DisableToolEvent<K>
+  }>,
+  void
+> {
   return yield ActionBase("DisableTool", { tool })
 }
 
-export interface DisableTool extends ActionBase<"DisableTool"> {
+export interface DisableTool<S extends Spec = Spec> extends ActionBase<"DisableTool", S> {
   tool: Tool
 }
 
