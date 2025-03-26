@@ -3,17 +3,19 @@ import type { ActorSource } from "./common/ActorSource.js"
 import type { ExecConfig } from "./ExecConfig.js"
 import type { Actor } from "./common/Actor.js"
 import type { ActionEvent } from "./Action/ActionEvent.js"
-import type { EmbeddingModelAdapter, LanguageModelAdapter } from "./ModelAdapter.js"
+import type { LanguageModelAdapter } from "./LanguageModelAdapter.js"
+import type { EmbeddingModelAdapter } from "./EmbeddingModelAdapter.js"
+import type { Message } from "./Message.js"
 
-export interface ExecState {
+export interface ExecState<LanguageModel = any, EmbeddingModel = any> {
   config: ExecConfig
   source: ActorSource
   actor: Actor
-  languageModel: LanguageModelAdapter
+  languageModel: LanguageModelAdapter<LanguageModel>
   languageModelKey: string
-  embeddingModel: EmbeddingModelAdapter | undefined
-  embeddingModelKey: string | undefined
-  messages: Array<any>
+  embeddingModel?: EmbeddingModelAdapter<EmbeddingModel> | undefined
+  embeddingModelKey: string
+  messages: Array<Message>
   tools: Set<Tool>
   system: string | undefined
   next: any

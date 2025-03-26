@@ -17,10 +17,9 @@ import { reduceState } from "./reduceState.js"
 import { reduceTool } from "./reduceTool.js"
 import { reduceModel } from "./reduceModel.js"
 import type { Scope } from "../Action/Scope.js"
-import type { PromiseOr } from "../util/PromiseOr.js"
-import type { ExecState } from "../ExecState.js"
 import { reduceUserTexts } from "./reduceUserTexts.js"
 import { reduceUserText } from "./reduceUserText.js"
+import type { ActionReducer } from "./ActionReducer.js"
 
 export interface StateReducers {
   reduceState: ActionReducer<[]>
@@ -51,9 +50,3 @@ export const StateReducers: StateReducers = {
   reduceDisableTool,
   reduceMessages,
 }
-
-export type ActionReducer<R extends Array<unknown>> = (
-  this: StateReducers,
-  state: ExecState,
-  ...rest: R
-) => PromiseOr<ExecState>

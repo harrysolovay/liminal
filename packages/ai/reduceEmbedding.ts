@@ -1,12 +1,9 @@
 import { embed, type EmbeddingModel } from "ai"
-import { _util, type EmbeddingModelAdapterReducers } from "liminal"
+import { _util, type ReduceEmbedding } from "liminal"
 
-export const reduceEmbedding: EmbeddingModelAdapterReducers<EmbeddingModel<any>>["reduceEmbedding"] = async (
-  state,
-  action,
-  model,
-) => {
-  _util.assert(model)
+export const reduceEmbedding: ReduceEmbedding<EmbeddingModel<any>> = async (state, action) => {
+  _util.assert(state.embeddingModel)
+  const { model } = state.embeddingModel
   const { embedding } = await embed({
     model,
     value: action.value,

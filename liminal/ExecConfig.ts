@@ -1,5 +1,6 @@
 import type { ActionEvent } from "./Action/ActionEvent.js"
-import type { EmbeddingModelAdapter, LanguageModelAdapter } from "./ModelAdapter.js"
+import type { LanguageModelAdapter } from "./LanguageModelAdapter.js"
+import type { EmbeddingModelAdapter } from "./EmbeddingModelAdapter.js"
 
 export interface ExecConfig {
   handler?: (event: ActionEvent) => any
