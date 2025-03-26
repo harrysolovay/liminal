@@ -1,15 +1,15 @@
-import { Branch, Generation, Context, Exec, Scope } from "liminal"
+import { Branch, Generation, Context, exec, Scope } from "liminal"
 import { type } from "arktype"
-import { adapter } from "liminal-ai"
+import { language } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
 import { fileURLToPath } from "node:url"
 
 const code = await Bun.file(fileURLToPath(import.meta.url)).text()
 
-Exec(adapter).run(Review(code), {
+exec(Review(code), {
   models: {
     language: {
-      default: openai("gpt-4o-mini"),
+      default: language(openai("gpt-4o-mini")),
     },
     embedding: {},
   },

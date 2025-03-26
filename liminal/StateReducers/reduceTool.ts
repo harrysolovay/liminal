@@ -4,7 +4,7 @@ import { JSONSchemaMemo } from "../util/JSONSchemaMemo.js"
 
 export const reduceTool: StateReducers["reduceTool"] = (state, action) => {
   state.handler({
-    type: "EnableTool",
+    event: "EnableTool",
     key: action.key,
     description: action.description,
     schema: JSONSchemaMemo(action.params),

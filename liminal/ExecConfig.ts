@@ -1,10 +1,11 @@
-import type { ExecSpec } from "./ExecSpec.js"
+import type { ActionEvent } from "./Action/ActionEvent.js"
+import type { EmbeddingModelAdapter, LanguageModelAdapter } from "./ModelAdapter.js"
 
-export interface ExecConfig<S extends ExecSpec = ExecSpec> {
-  handler?: (event: Event) => unknown
+export interface ExecConfig {
+  handler?: (event: ActionEvent) => any
   models: {
-    language: Record<string, S["LanguageModel"]>
-    embedding: Record<string, S["EmbeddingModel"]>
+    language: Record<string, LanguageModelAdapter>
+    embedding: Record<string, EmbeddingModelAdapter>
   }
   signal?: AbortSignal // TODO
   encodeTypes?: boolean // TODO: encode values as JSONC and include type comments

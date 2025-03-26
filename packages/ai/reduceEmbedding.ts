@@ -1,10 +1,11 @@
-import { embed } from "ai"
-import { _util, type ProviderReducers } from "liminal"
-import type { AIExecSpec } from "./AIExecSpec.js"
+import { embed, type EmbeddingModel } from "ai"
+import { _util, type EmbeddingModelAdapterReducers } from "liminal"
 
-export const reduceEmbedding: ProviderReducers<AIExecSpec>["reduceEmbedding"] = async (state, action) => {
-  const { languageModelKey: modelKey } = state
-  const model = state.config.models.embedding[modelKey]
+export const reduceEmbedding: EmbeddingModelAdapterReducers<EmbeddingModel<any>>["reduceEmbedding"] = async (
+  state,
+  action,
+  model,
+) => {
   _util.assert(model)
   const { embedding } = await embed({
     model,

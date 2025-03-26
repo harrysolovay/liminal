@@ -2,7 +2,7 @@ import type { StateReducers } from "./StateReducers.js"
 
 export const reduceDisableTool: StateReducers["reduceDisableTool"] = (state, action) => {
   state.handler({
-    type: "DisableTool",
+    event: "DisableTool",
     key: action.tool.key,
   })
   const tools = new Set([...state.tools])

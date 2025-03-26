@@ -1,10 +1,7 @@
-// TODO: include system message?
+import { ActionBase } from "./ActionBase.js"
+
 export function* Messages(): Generator<Messages, Array<string>> {
-  return yield {
-    kind: "Messages",
-  }
+  return yield ActionBase("Messages", {})
 }
 
-export interface Messages {
-  kind: "Messages"
-}
+export interface Messages extends ActionBase<"Messages"> {}

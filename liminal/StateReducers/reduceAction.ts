@@ -1,5 +1,6 @@
 import type { Action } from "../Action/Action.js"
 import type { ExecState } from "../ExecState.js"
+import { assert } from "../util/assert.js"
 import type { StateReducers } from "./StateReducers.js"
 
 export function reduceAction(this: StateReducers, state: ExecState, action: Action) {
@@ -13,7 +14,7 @@ export function reduceAction(this: StateReducers, state: ExecState, action: Acti
   } else if (Array.isArray(action)) {
     return this.reduceUserTexts(state, action)
   }
-  switch (action.kind) {
+  switch (action.action) {
     case "UserMessage": {
       if (typeof action.text === "string") {
         return this.reduceUserText(state, action.text)
@@ -21,13 +22,14 @@ export function reduceAction(this: StateReducers, state: ExecState, action: Acti
       return this.reduceUserTexts(state, action.text)
     }
     case "Generation": {
-      return this.reduceGeneration(state, action)
+      return state.languageModel.reducers.reduceGeneration(state, action, state.languageModel)
     }
     case "Scope": {
       return this.reduceScope(state, action)
     }
     case "Embedding": {
-      return this.reduceEmbedding(state, action)
+      assert(state.embeddingModel)
+      return state.embeddingModel.reducers.reduceEmbedding(state, action, state.embeddingModel)
     }
     case "Branch": {
       return this.reduceBranch(state, action)

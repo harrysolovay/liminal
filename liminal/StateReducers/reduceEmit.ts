@@ -2,7 +2,7 @@ import type { StateReducers } from "./StateReducers.js"
 
 export const reduceEmit: StateReducers["reduceEmit"] = (state, action) => {
   state.handler({
-    type: "Emit",
+    event: "Emit",
     key: action.key,
     value: action.value,
   })

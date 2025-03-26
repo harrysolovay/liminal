@@ -1,12 +1,12 @@
-import { Generation, Context, Exec, Messages, Scope } from "liminal"
+import { Generation, Context, exec, Messages, Scope } from "liminal"
 import { type } from "arktype"
-import { adapter } from "liminal-ai"
+import { language } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
 
-Exec(adapter).run(MarketingCopy, {
+exec(MarketingCopy, {
   models: {
     language: {
-      default: openai("gpt-4o-mini"),
+      default: language(openai("gpt-4o-mini")),
     },
     embedding: {},
   },

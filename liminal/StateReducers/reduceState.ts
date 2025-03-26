@@ -3,7 +3,7 @@ import type { StateReducers } from "./StateReducers.js"
 
 export async function reduceState(this: StateReducers, state: ExecState): Promise<ExecState> {
   state.handler({
-    type: "Enter",
+    event: "Enter",
   })
   let current = await state.actor.next()
   while (!current.done) {
@@ -13,7 +13,7 @@ export async function reduceState(this: StateReducers, state: ExecState): Promis
   }
   const { value } = current
   state.handler({
-    type: "Exit",
+    event: "Exit",
     result: value,
   })
   return {

@@ -9,16 +9,18 @@ export const reduceBranch: StateReducers["reduceBranch"] = async function (state
         config: state.config,
         source,
         actor: unwrapDeferred(source),
+        languageModel: state.languageModel,
         languageModelKey: state.languageModelKey,
+        embeddingModel: state.embeddingModel,
         embeddingModelKey: state.embeddingModelKey,
         system: state.system,
         next: undefined,
         parent: state,
-        handler: (event) =>
+        handler: (inner) =>
           state.handler({
-            type: "Branch",
-            key: key,
-            event,
+            event: "Branch",
+            key,
+            inner,
           }),
         messages: [...state.messages],
         tools: new Set(state.tools),

@@ -9,14 +9,16 @@ export const reduceContext: StateReducers["reduceContext"] = async function (sta
     source: action,
     actor: unwrapDeferred(action.implementation),
     languageModelKey: state.languageModelKey,
+    languageModel: state.languageModel,
     embeddingModelKey: state.embeddingModelKey,
+    embeddingModel: state.embeddingModel,
     system: action.system,
     next: undefined,
     parent: state,
-    handler: (event) =>
+    handler: (inner) =>
       state.handler({
-        type: "Context",
-        event,
+        event: "Context",
+        inner,
       }),
     messages: [],
     tools: new Set<Tool>(),
