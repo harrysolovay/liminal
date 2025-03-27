@@ -1,5 +1,6 @@
 # TODO
 
+- fix `run` config type inference when passed generator directly
 - aborting/early exit
 - streaming
 - `Type extends Iterable<Generation<T>, T>`

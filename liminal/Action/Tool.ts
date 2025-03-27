@@ -17,13 +17,13 @@ export interface Tool<K extends string = string, P extends JSONObject = JSONObje
   implementation: (params: P) => PromiseOr<Actor | JSONObject | void>
 }
 
-export function Tool<K extends string, P extends JSONObject>(
+export function Tool<K extends string, P extends JSONObject, R extends PromiseOr<JSONObject | void>>(
   key: K,
   description: string,
   params: StandardSchemaV1<JSONObject, P>,
-  implementation: (params: P) => PromiseOr<JSONObject | void>,
+  implementation: (params: P) => R,
 ): Generator<
-  Tool<K, P, Spec<never, never, EnableToolEvent<K> | ToolCallEvent<K, P, never>>>,
+  Tool<K, P, Spec<never, never, EnableToolEvent<K> | ToolCallEvent<K, P, EnterEvent | ExitEvent<Awaited<R>>>>>,
   () => Generator<
     DisableTool<
       K,

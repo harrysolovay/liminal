@@ -3,17 +3,16 @@ import type { ActorSource } from "./common/ActorSource.js"
 import type { ExecConfig } from "./ExecConfig.js"
 import type { Actor } from "./common/Actor.js"
 import type { ActionEvent } from "./Action/ActionEvent.js"
-import type { LanguageModelAdapter } from "./LanguageModelAdapter.js"
-import type { EmbeddingModelAdapter } from "./EmbeddingModelAdapter.js"
 import type { Message } from "./Message.js"
+import type { ReduceEmbedding, ReduceGeneration } from "./StateReducers/StateReducers.js"
 
 export interface ExecState {
   config: ExecConfig
   source: ActorSource
   actor: Actor
-  languageModel: LanguageModelAdapter
+  reduceGeneration: ReduceGeneration
   languageModelKey: string
-  embeddingModel?: EmbeddingModelAdapter | undefined
+  reduceEmbedding?: ReduceEmbedding | undefined
   embeddingModelKey: string
   messages: Array<Message>
   tools: Set<Tool>

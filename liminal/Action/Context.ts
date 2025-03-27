@@ -13,7 +13,7 @@ export function Context<K extends string, Y extends ActionLike, S extends Extrac
   Context<{
     LanguageModel: S["LanguageModel"]
     EmbeddingModel: S["EmbeddingModel"]
-    Event: EnterEvent | ContextEvent<K, S["Event"]> | ExitEvent<R>
+    Event: ContextEvent<K, EnterEvent | S["Event"] | ExitEvent<R>>
   }>,
   Awaited<R>
 >
@@ -24,7 +24,7 @@ export function Context<K extends string, Y extends ActionLike, S extends Extrac
   Context<{
     LanguageModel: S["LanguageModel"]
     EmbeddingModel: S["EmbeddingModel"]
-    Event: EnterEvent | ContextEvent<K, S["Event"]> | ExitEvent<R>
+    Event: ContextEvent<K, EnterEvent | S["Event"] | ExitEvent<R>>
   }>,
   Awaited<R>
 >

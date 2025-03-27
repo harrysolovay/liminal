@@ -1,7 +1,6 @@
 import type { IsExact } from "conditional-type-checks"
 import type { Action, ActionLike } from "./Action/Action.js"
 import type { ActionEvent } from "./Action/ActionEvent.js"
-import type { Actor } from "./common/Actor.js"
 import type { ActorLike } from "./common/ActorLike.js"
 
 export interface Spec<
@@ -20,13 +19,7 @@ export type NeverSpec<
   Event extends ActionEvent = never,
 > = Spec<LanguageModel, EmbeddingModel, Event>
 
-export type ExtractSpec<R> = R extends Actor<infer Y>
-  ? Extract<Y, Action>[""]
-  : {
-      LanguageModel: never
-      EmbeddingModel: never
-      Event: never
-    }
+export type ExtractSpec<Y extends ActionLike> = MergeSpec<Extract<Y, Action>[""]>
 
 type MergeSpec<S extends Spec> = {
   LanguageModel: S["LanguageModel"]
@@ -38,10 +31,12 @@ export declare function assertSpec<Y extends ActionLike, R, E extends Extract<Y,
   _actorLike: ActorLike<Y, R>,
 ): <A extends Spec>(...[passes]: IsExact<E, A> extends true ? [passes?: true] : [passes: false]) => void
 
-export declare function SpecAssertionScope(
-  f: (
-    builder: <Y extends ActionLike, R, E extends MergeSpec<Extract<Y, Action>[""]>>(
-      _actorLike: ActorLike<Y, R>,
-    ) => <A extends Spec>(...[passes]: IsExact<E, A> extends true ? [passes?: true] : [passes: false]) => void,
-  ) => void,
+export declare function AssertionScope(
+  f: (assert: {
+    spec<Y extends ActionLike, R, E extends ExtractSpec<Y>>(
+      actorLike: ActorLike<Y, R>,
+    ): {
+      equals<A extends Spec>(...[passes]: IsExact<E, A> extends true ? [passes?: true] : [passes: false]): void
+    }
+  }) => void,
 ): void

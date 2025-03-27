@@ -20,6 +20,11 @@ import { reduceEmbeddingModel } from "./reduceEmbeddingModel.js"
 import { reduceUserTexts } from "./reduceUserTexts.js"
 import { reduceUserText } from "./reduceUserText.js"
 import type { ActionReducer } from "./ActionReducer.js"
+import type { Embedding } from "../Action/Embedding.js"
+import type { Generation } from "../Action/Generation.js"
+
+export type ReduceGeneration = ActionReducer<[Generation]>
+export type ReduceEmbedding = ActionReducer<[embedding: Embedding]>
 
 export interface StateReducers {
   reduceState: ActionReducer<[]>

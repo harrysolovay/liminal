@@ -3,22 +3,23 @@ import { type } from "arktype"
 import { LM } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
 
-run(
-  function* () {
+run(Root, {
+  models: {
+    language: {
+      default: LM(openai("gpt-4o-mini")),
+      reasoning: LM(openai("o1-mini")),
+    },
+  },
+  handler: console.log,
+})
+
+function Root() {
+  return Context("Root", function* () {
     const classification = yield* classifyQuery("I'd like a refund please")
     const response = yield* useClassification(classification)
     return { classification, response }
-  },
-  {
-    models: {
-      language: {
-        default: LM(openai("gpt-4o-mini")),
-        reasoning: LM(openai("o1-mini")),
-      },
-    },
-    handler: console.log,
-  },
-)
+  })
+}
 
 function classifyQuery(query: string) {
   return Context(
