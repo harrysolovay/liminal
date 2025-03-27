@@ -10,18 +10,22 @@ SpecAssertionScope((assert) => {
     a: string
     b: string
   }
+
   const arrowTool = Tool("Tool", "", null! as StandardSchemaV1<P>, (params) => {
     type _ = [AssertTrue<IsExact<typeof params, P>>]
   })
   assert(arrowTool)<Spec<never, never, EnableToolEvent<"Tool"> | ToolCallEvent<"Tool", P, never>>>()
+
   function* _0() {
     const detach = yield* arrowTool
     assert(detach)<Spec<never, never, DisableToolEvent<"Tool">>>()
   }
+
   const genTool = Tool("Tool", "", null! as StandardSchemaV1<P>, function* (params) {
     type _ = [AssertTrue<IsExact<typeof params, P>>]
     return ""
   })
+
   assert(genTool)<{
     LanguageModel: never
     EmbeddingModel: never

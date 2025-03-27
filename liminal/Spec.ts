@@ -28,13 +28,19 @@ export type ExtractSpec<R> = R extends Actor<infer Y>
       Event: never
     }
 
+type MergeSpec<S extends Spec> = {
+  LanguageModel: S["LanguageModel"]
+  EmbeddingModel: S["EmbeddingModel"]
+  Event: S["Event"]
+}
+
 export declare function assertSpec<Y extends ActionLike, R, E extends Extract<Y, Action>[""]>(
   _actorLike: ActorLike<Y, R>,
 ): <A extends Spec>(...[passes]: IsExact<E, A> extends true ? [passes?: true] : [passes: false]) => void
 
 export declare function SpecAssertionScope(
   f: (
-    builder: <Y extends ActionLike, R, E extends Extract<Y, Action>[""]>(
+    builder: <Y extends ActionLike, R, E extends MergeSpec<Extract<Y, Action>[""]>>(
       _actorLike: ActorLike<Y, R>,
     ) => <A extends Spec>(...[passes]: IsExact<E, A> extends true ? [passes?: true] : [passes: false]) => void,
   ) => void,
