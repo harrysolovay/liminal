@@ -1,10 +1,11 @@
-import { Branch, Generation, Context, run } from "liminal"
+import { Branch, Generation, Context, run, LanguageModel } from "liminal"
 import { type } from "arktype"
 import { LM } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
 import { fileURLToPath } from "node:url"
+import { readFile } from "node:fs/promises"
 
-const code = await Bun.file(fileURLToPath(import.meta.url)).text()
+const code = await readFile(fileURLToPath(import.meta.url), "utf-8")
 
 run(Review(code), {
   models: {
@@ -20,6 +21,7 @@ function Review(code: string) {
     "Parallel",
     "You are a technical lead summarizing multiple code reviews. Review the supplied code.",
     function* () {
+      yield* LanguageModel("default")
       yield code
       const reviews = yield* Branch({ securityReview, performanceReview, maintainabilityReview })
       yield JSON.stringify(Object.values(reviews), null, 2)

@@ -20,7 +20,7 @@ export function* Branch<const B extends Branches>(
             ? {
                 LanguageModel: S["LanguageModel"]
                 EmbeddingModel: S["EmbeddingModel"]
-                Event: EnterEvent | BranchEvent<`${Exclude<K, symbol>}`, S["Event"]> | ExitEvent<R>
+                Event: BranchEvent<`${Exclude<K, symbol>}`, EnterEvent | S["Event"] | ExitEvent<R>>
               }
             : never
           : never

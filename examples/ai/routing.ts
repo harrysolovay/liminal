@@ -15,6 +15,7 @@ run(Root, {
 
 function Root() {
   return Context("Root", function* () {
+    yield* LanguageModel("default")
     const classification = yield* classifyQuery("I'd like a refund please")
     const response = yield* useClassification(classification)
     return { classification, response }

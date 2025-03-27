@@ -1,4 +1,4 @@
-import { Generation, Context, run } from "liminal"
+import { Generation, Context, run, LanguageModel } from "liminal"
 import { type } from "arktype"
 import { LM } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
@@ -17,6 +17,7 @@ function TranslationWithFeedback(targetLanguage: string, text: string) {
     "TranslateWithFeedback",
     "You are an expert literary translator. Translate the supplied text to the specified target language, preserving tone and cultural nuances.",
     function* () {
+      yield* LanguageModel("default")
       yield `Target language: ${targetLanguage}`
       yield `Text:
 

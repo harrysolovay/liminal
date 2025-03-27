@@ -7,7 +7,7 @@ export const reduceLanguageModel: StateReducers["reduceLanguageModel"] = (state,
   })
   return {
     ...state,
-    embeddingModelKey: action.key,
+    languageModelKey: action.key,
     next: undefined,
   }
 }

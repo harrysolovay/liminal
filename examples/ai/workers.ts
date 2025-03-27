@@ -1,4 +1,4 @@
-import { Branch, Context, Generation, run } from "liminal"
+import { Branch, Context, Generation, LanguageModel, run } from "liminal"
 import { type } from "arktype"
 import { LM } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
@@ -14,6 +14,7 @@ run(CodeReviewers, {
 
 function CodeReviewers() {
   return Context("Workers", "You are a senior software architect planning feature implementations.", function* () {
+    yield* LanguageModel("default")
     yield "Analyze this feature request and create an implementation plan:"
     const feat = "Alert administrators via text whenever site traffic exceeds a certain threshold."
     yield feat
