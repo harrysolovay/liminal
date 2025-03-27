@@ -7,13 +7,13 @@ import type { LanguageModelAdapter } from "./LanguageModelAdapter.js"
 import type { EmbeddingModelAdapter } from "./EmbeddingModelAdapter.js"
 import type { Message } from "./Message.js"
 
-export interface ExecState<LanguageModel = any, EmbeddingModel = any> {
+export interface ExecState {
   config: ExecConfig
   source: ActorSource
   actor: Actor
-  languageModel: LanguageModelAdapter<LanguageModel>
+  languageModel: LanguageModelAdapter
   languageModelKey: string
-  embeddingModel?: EmbeddingModelAdapter<EmbeddingModel> | undefined
+  embeddingModel?: EmbeddingModelAdapter | undefined
   embeddingModelKey: string
   messages: Array<Message>
   tools: Set<Tool>

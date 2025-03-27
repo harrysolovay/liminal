@@ -1,7 +1,7 @@
 import type { Generation } from "./Action/Generation.js"
 import type { ActionReducer } from "./StateReducers/ActionReducer.js"
 
-export type ReduceGeneration<LanguageModel> = ActionReducer<[generation: Generation], LanguageModel>
+export type ReduceGeneration<LanguageModel> = ActionReducer<[generation: Generation, languageModel: LanguageModel]>
 
 export interface LanguageModelAdapter<LanguageModel = any> {
   adapter: "Language"

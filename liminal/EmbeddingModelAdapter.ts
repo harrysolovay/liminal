@@ -11,7 +11,7 @@ export function EmbeddingModelAdapter<EmbeddingModel>(
   })
 }
 
-export type ReduceEmbedding<EmbeddingModel> = ActionReducer<[embedding: Embedding], any, EmbeddingModel>
+export type ReduceEmbedding<EmbeddingModel> = ActionReducer<[embedding: Embedding, embeddingModel: EmbeddingModel]>
 
 export interface EmbeddingModelAdapter<EmbeddingModel = any> {
   adapter: "Embedding"

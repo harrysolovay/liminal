@@ -1,10 +1,8 @@
 import { generateObject, generateText, jsonSchema, type LanguageModelV1 } from "ai"
 import { _util, type JSONValue, type ReduceGeneration } from "liminal"
 
-export const reduceGeneration: ReduceGeneration<LanguageModelV1> = async (state, action) => {
+export const reduceGeneration: ReduceGeneration<LanguageModelV1> = async (state, action, model) => {
   const { messages, system, languageModel } = state
-  _util.assert(languageModel)
-  const { model } = languageModel
   if (action.type) {
     const schema = await _util.JSONSchemaMemo(action.type)
     const aiSchema = jsonSchema(schema)

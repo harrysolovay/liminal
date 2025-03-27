@@ -2,7 +2,7 @@ import type { LanguageModelAdapter } from "./LanguageModelAdapter.js"
 import type { EmbeddingModelAdapter } from "./EmbeddingModelAdapter.js"
 import type { Spec } from "./Spec.js"
 
-export interface ExecConfig<S extends Spec> {
+export interface ExecConfig<S extends Spec = Spec> {
   handler?: (event: S["Event"]) => any
   models: {
     language: {

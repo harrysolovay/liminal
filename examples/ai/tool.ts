@@ -34,8 +34,10 @@ function ToolUser() {
           - \`12.7 cm to inch\`
           - \`sin(45 deg) ^ 2\`
         `,
-        type.string.array(),
-        mathjs.evaluate,
+        type({
+          expr: type.string.array(),
+        }),
+        ({ expr }) => mathjs.evaluate(expr),
       )
       return yield* Generation()
     },

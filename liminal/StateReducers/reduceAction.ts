@@ -22,11 +22,11 @@ export function reduceAction(this: StateReducers, state: ExecState, action: Acti
       return this.reduceUserTexts(state, action.text)
     }
     case "Generation": {
-      return state.languageModel.reduceGeneration.call(this, state, action)
+      return state.languageModel.reduceGeneration.call(this, state, action, state.languageModel)
     }
     case "Embedding": {
       assert(state.embeddingModel)
-      return state.embeddingModel.reduceEmbedding.call(this, state, action)
+      return state.embeddingModel.reduceEmbedding.call(this, state, action, state.embeddingModel)
     }
     case "Branch": {
       return this.reduceBranch(state, action)
