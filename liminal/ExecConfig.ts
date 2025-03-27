@@ -1,12 +1,16 @@
-import type { ActionEvent } from "./Action/ActionEvent.js"
 import type { LanguageModelAdapter } from "./LanguageModelAdapter.js"
 import type { EmbeddingModelAdapter } from "./EmbeddingModelAdapter.js"
+import type { Spec } from "./Spec.js"
 
-export interface ExecConfig {
-  handler?: (event: ActionEvent) => any
+export interface ExecConfig<S extends Spec> {
+  handler?: (event: S["Event"]) => any
   models: {
-    language: Record<string, LanguageModelAdapter>
+    language: {
+      default: LanguageModelAdapter
+    } & {
+      [K in S["LanguageModel"]]: LanguageModelAdapter
+    }
     embedding?: Record<string, EmbeddingModelAdapter>
-  }
+  } & ([S["EmbeddingModel"]] extends [true] ? { [K in S["EmbeddingModel"]]: EmbeddingModelAdapter } : {})
   signal?: AbortSignal
 }

@@ -6,8 +6,12 @@ import type { ExecConfig } from "./ExecConfig.js"
 import type { ExecState } from "./ExecState.js"
 import { unwrapDeferred } from "./util/unwrapDeferred.js"
 import { assert } from "./util/assert.js"
+import type { ExtractSpec } from "./Spec.js"
 
-export async function run<Y extends ActionLike, R>(agent: ActorLike<Y, R>, config: ExecConfig): Promise<R> {
+export async function run<Y extends ActionLike, R, S extends ExtractSpec<Y>>(
+  agent: ActorLike<Y, R>,
+  config: ExecConfig<S>,
+): Promise<R> {
   const languageModel = config.models.language.default
   assert(languageModel)
   const state: ExecState = {

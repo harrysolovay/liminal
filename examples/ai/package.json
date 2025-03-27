@@ -1,5 +1,5 @@
 {
-  "name": "liminal-ai-example",
+  "name": "liminal-example-ai",
   "private": true,
   "dependencies": {
     "@ai-sdk/openai": "^1.2.5",

@@ -22,3 +22,4 @@
   - fastify
   - lambda
   - deno deploy
+- vscode extension for code lens / smart labels for different actions

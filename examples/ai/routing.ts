@@ -15,7 +15,6 @@ run(
         default: LM(openai("gpt-4o-mini")),
         reasoning: LM(openai("o1-mini")),
       },
-      embedding: {},
     },
     handler: console.log,
   },

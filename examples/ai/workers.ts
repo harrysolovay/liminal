@@ -9,7 +9,7 @@ run(CodeReviewers, {
       default: LM(openai("gpt-4o-mini")),
     },
   },
-  handler: console.log,
+  handler(event) {},
 })
 
 function CodeReviewers() {

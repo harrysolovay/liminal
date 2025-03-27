@@ -4,7 +4,7 @@
     "noEmit": false,
     "outDir": "dist"
   },
-  "include": [".", "../../liminal/StateReducers/reduceUserText.ts", "../../liminal/StateReducers/reduceUserTexts.ts"],
+  "include": ["."],
   "references": [
     {
       "path": "../../liminal"
