@@ -1,4 +1,4 @@
-import type { MessageEvent, EnterEvent, ExitEvent } from "./event_common.js"
+import type { EnterEvent, ExitEvent } from "./event_common.js"
 import type { BranchEvent, BranchesEvent } from "./Branch.js"
 import type { ContextEvent } from "./Context.js"
 import type { DisableToolEvent } from "./DisableTool.js"
@@ -7,6 +7,10 @@ import type { EmitEvent } from "./Emit.js"
 import type { GenerateEvent } from "./Generation.js"
 import type { ModelEvent } from "./Model.js"
 import type { EnableToolEvent, ToolCallEvent } from "./Tool.js"
+import type { UserMessageEvent } from "./UserMessage.js"
+import type { AssistantMessageEvent } from "./AssistantMessage.js"
+import type { SystemMessageEvent } from "./SystemMessage.js"
+import type { ToolMessageEvent } from "./ToolMessage.js"
 
 export type ActionEvent =
   | EnterEvent
@@ -21,4 +25,7 @@ export type ActionEvent =
   | ModelEvent
   | EnableToolEvent
   | ToolCallEvent
-  | MessageEvent
+  | UserMessageEvent
+  | AssistantMessageEvent
+  | SystemMessageEvent
+  | ToolMessageEvent

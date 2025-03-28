@@ -15,11 +15,13 @@ import { reduceCurrentContext } from "./reduceCurrentContext.js"
 import { reduceState } from "./reduceState.js"
 import { reduceTool } from "./reduceTool.js"
 import { reduceModel } from "./reduceModel.js"
-import { reduceMessages } from "./reduceMessages.js"
 import type { ActionReducer } from "./ActionReducer.js"
 import type { Embedding } from "../Action/Embedding.js"
 import type { Generation } from "../Action/Generation.js"
-import type { Message } from "../Message.js"
+import type { UserMessage } from "../Action/UserMessage.js"
+import type { AssistantMessage } from "../Action/AssistantMessage.js"
+import type { SystemMessage } from "../Action/SystemMessage.js"
+import type { ToolMessage } from "../Action/ToolMessage.js"
 import { reduceMessage } from "./reduceMessage.js"
 
 export type LanguageModelAdapter = ActionReducer<Generation>
@@ -28,8 +30,7 @@ export type EmbeddingModelAdapter = ActionReducer<Embedding>
 export interface StateReducers {
   reduceState: ActionReducer<never>
   reduceAction: ActionReducer<ActionLike>
-  reduceMessage: ActionReducer<string | Message>
-  reduceMessages: ActionReducer<Array<string | Message>>
+  reduceMessage: ActionReducer<UserMessage | AssistantMessage | ToolMessage | SystemMessage>
   reduceModel: ActionReducer<Model>
   reduceEmit: ActionReducer<Emit>
   reduceBranch: ActionReducer<Branch>
@@ -43,7 +44,6 @@ export const StateReducers: StateReducers = {
   reduceState,
   reduceAction,
   reduceMessage,
-  reduceMessages,
   reduceBranch,
   reduceContext,
   reduceEmit,

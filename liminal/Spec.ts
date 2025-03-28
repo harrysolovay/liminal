@@ -7,6 +7,7 @@ export interface Spec {
   Event: ActionEvent
 }
 
+// TODO: string | Array<string | Message>
 export type ExtractSpec<Y extends ActionLike> = MergeSpec<Extract<Y, Action>[""]>
 
 export type MergeSpec<S extends Spec> = {

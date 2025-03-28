@@ -3,7 +3,7 @@ import type { ActorSource } from "./common/ActorSource.js"
 import type { ExecConfig } from "./ExecConfig.js"
 import type { Actor } from "./common/Actor.js"
 import type { ActionEvent } from "./Action/ActionEvent.js"
-import type { Message } from "./Message.js"
+import type { Message } from "./Action/Action.js"
 
 export interface ExecState {
   config: ExecConfig

@@ -1,12 +1,10 @@
 import type { StateReducers } from "./StateReducers.js"
-import { normalizeMessageLike } from "../Message.js"
 
-export const reduceMessage: StateReducers["reduceMessage"] = (state, action) => {
-  const message = normalizeMessageLike(action)
+export const reduceMessage: StateReducers["reduceMessage"] = (state, message) => {
   state.handler({
-    event: "Message",
-    message,
-  })
+    event: message.action,
+    content: message.content,
+  } as never)
   return {
     ...state,
     messages: [...state.messages, message],
