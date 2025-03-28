@@ -5,24 +5,27 @@ export const reduceBranch: StateReducers["reduceBranch"] = async function (state
   const entries = Object.entries(action.branches)
   const result = await Promise.all(
     entries.map(([key, source]) => {
-      return this.reduceState({
-        config: state.config,
-        source,
-        actor: unwrapDeferred(source),
-        languageModelKey: state.languageModelKey,
-        embeddingModelKey: state.embeddingModelKey,
-        system: state.system,
-        next: undefined,
-        parent: state,
-        handler: (inner) =>
-          state.handler({
-            event: "Branch",
-            key,
-            inner,
-          }),
-        messages: [...state.messages],
-        tools: new Set(state.tools),
-      })
+      return this.reduceState(
+        {
+          config: state.config,
+          source,
+          actor: unwrapDeferred(source),
+          languageModelKey: state.languageModelKey,
+          embeddingModelKey: state.embeddingModelKey,
+          system: state.system,
+          next: undefined,
+          parent: state,
+          handler: (inner) =>
+            state.handler({
+              event: "Branch",
+              key,
+              inner,
+            }),
+          messages: [...state.messages],
+          tools: new Set(state.tools),
+        },
+        null!,
+      )
     }),
   )
   const next = Array.isArray(action.branches)

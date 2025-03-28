@@ -2,7 +2,8 @@
   "name": "liminal",
   "private": true,
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./dist/index.js",
+    "./testing": "./dist/testing/index.js"
   },
   "dependencies": {
     "standard-json-schema": "^0.1.1"

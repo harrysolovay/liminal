@@ -1,7 +1,7 @@
 import { Model, type ModelEvent } from "./Model.js"
-import { AssertionScope, type Spec } from "../Spec.js"
 import { Context, type ContextEvent } from "./Context.js"
 import type { EnterEvent, ExitEvent } from "./event_common.js"
+import { AssertionScope } from "../testing/AssertionScope.js"
 
 AssertionScope((assert) => {
   const languageModel = Model("A")

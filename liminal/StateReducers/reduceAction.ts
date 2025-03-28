@@ -10,17 +10,13 @@ export function reduceAction(this: StateReducers, state: ExecState, action: Acti
       next: undefined,
     }
   } else if (typeof action === "string") {
-    return this.reduceUserText(state, action)
+    return this.reduceMessage(state, action)
+  } else if ("role" in action) {
+    return this.reduceMessage(state, action)
   } else if (Array.isArray(action)) {
-    return this.reduceUserTexts(state, action)
+    return this.reduceMessages(state, action)
   }
   switch (action.action) {
-    case "UserMessage": {
-      if (typeof action.text === "string") {
-        return this.reduceUserText(state, action.text)
-      }
-      return this.reduceUserTexts(state, action.text)
-    }
     case "Generation": {
       assert(state.languageModelKey)
       const reduceGeneration = state.config.models.language?.[state.languageModelKey]
@@ -45,8 +41,8 @@ export function reduceAction(this: StateReducers, state: ExecState, action: Acti
     case "Emit": {
       return this.reduceEmit(state, action)
     }
-    case "Messages": {
-      return this.reduceMessages(state, action)
+    case "CurrentContext": {
+      return this.reduceCurrentContext(state, action)
     }
     case "Model": {
       return this.reduceModel(state, action)

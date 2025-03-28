@@ -67,7 +67,7 @@ export function Context<Y extends ActionLike, R = string>(
       messages: [],
       tools: new Set<Tool>(),
     }
-    const { result } = await StateReducers.reduceState(state)
+    const { result } = await StateReducers.reduceState(state, null!)
     return result
   }
 }

@@ -1,11 +1,11 @@
 # TODO
 
-- fix `run` config type inference when passed generator directly
 - aborting/early exit
+- DI
 - streaming
 - `Type extends Iterable<Generation<T>, T>`
-- encodeTypes?: boolean // TODO: encode values as JSONC and include type
-  comments
+- encodeDescriptions?: boolean // TODO: re-encode generated objects as JSONC
+  with schema field descriptions commented above values
 - provider-specific adapters:
   - ollama
   - anthropic

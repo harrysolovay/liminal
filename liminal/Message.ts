@@ -1,3 +1,17 @@
+export function* Message(text: string): Generator<Message, undefined> {
+  return yield normalizeMessageLike(text)
+}
+
+export function normalizeMessageLike(messageLike: string | Message): Message {
+  if (typeof messageLike === "string") {
+    return {
+      role: "user",
+      content: messageLike,
+    }
+  }
+  return messageLike
+}
+
 export type Message =
   | {
       role: "system"
