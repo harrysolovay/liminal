@@ -4,6 +4,12 @@ import { ActionBase } from "./ActionBase.js"
 import type { EnterEvent, EventBase, ExitEvent } from "./event_common.js"
 import type { ActionEvent } from "./ActionEvent.js"
 import type { ExtractSpec, Spec } from "../Spec.js"
+import type { Rune } from "../Rune.js"
+import type { NarrowExecConfig } from "../ExecConfig.js"
+import type { ExecState } from "../ExecState.js"
+import { unwrapDeferred } from "../util/unwrapDeferred.js"
+import type { Tool } from "./Tool.js"
+import { StateReducers } from "../StateReducers/StateReducers.js"
 
 export interface Context<S extends Spec = Spec> extends ActionBase<"Context", S> {
   key: string
@@ -15,7 +21,7 @@ export function Context<K extends string, Y extends ActionLike, S extends Extrac
   key: K,
   system: string,
   implementation: ActorLike<Y, R>,
-): Generator<
+): Rune<
   Context<{
     LanguageModel: S["LanguageModel"]
     EmbeddingModel: S["EmbeddingModel"]
@@ -26,7 +32,7 @@ export function Context<K extends string, Y extends ActionLike, S extends Extrac
 export function Context<K extends string, Y extends ActionLike, S extends ExtractSpec<Y>, R = string>(
   key: K,
   implementation: ActorLike<Y, R>,
-): Generator<
+): Rune<
   Context<{
     LanguageModel: S["LanguageModel"]
     EmbeddingModel: S["EmbeddingModel"]
@@ -34,16 +40,36 @@ export function Context<K extends string, Y extends ActionLike, S extends Extrac
   }>,
   Awaited<R>
 >
-export function* Context<Y extends ActionLike, R = string>(
+export function Context<Y extends ActionLike, R = string>(
   key: string,
   a0: string | ActorLike,
   a1?: ActorLike,
-): Generator<Context, Awaited<R>> {
-  return yield ActionBase("Context", {
-    key,
-    system: typeof a0 === "string" ? a0 : undefined,
-    implementation: typeof a0 === "string" ? a1 : a0,
-  })
+): Rune<Context, Awaited<R>> {
+  return Object.assign(source(), { run })
+
+  function* source(): Generator<Context, Awaited<R>> {
+    return yield ActionBase("Context", {
+      key,
+      system: typeof a0 === "string" ? a0 : undefined,
+      implementation: typeof a0 === "string" ? a1 : a0,
+    })
+  }
+
+  async function run(config: NarrowExecConfig<Y>): Promise<any> {
+    const state: ExecState = {
+      config,
+      source,
+      actor: unwrapDeferred(source),
+      system: undefined,
+      next: undefined,
+      parent: undefined,
+      handler: (event) => config.handler?.(event),
+      messages: [],
+      tools: new Set<Tool>(),
+    }
+    const { result } = await StateReducers.reduceState(state)
+    return result
+  }
 }
 
 export interface ContextEvent<K extends string = string, E extends ActionEvent = ActionEvent>

@@ -15,13 +15,19 @@ AssertionScope((assert) => {
   const arrowTool = Tool("Tool", "", null! as StandardSchemaV1<P>, (params) => {
     type _ = [AssertTrue<IsExact<typeof params, P>>]
   })
-  assert
-    .spec(arrowTool)
-    .equals<Spec<never, never, EnableToolEvent<"Tool"> | ToolCallEvent<"Tool", P, EnterEvent | ExitEvent<void>>>>()
+  assert.spec(arrowTool).equals<{
+    LanguageModel: never
+    EmbeddingModel: never
+    Event: EnableToolEvent<"Tool"> | ToolCallEvent<"Tool", P, EnterEvent | ExitEvent<void>>
+  }>()
 
   function* _0() {
     const detach = yield* arrowTool
-    assert.spec(detach).equals<Spec<never, never, DisableToolEvent<"Tool">>>()
+    assert.spec(detach).equals<{
+      LanguageModel: never
+      EmbeddingModel: never
+      Event: DisableToolEvent<"Tool">
+    }>()
   }
 
   const genTool = Tool("Tool", "", null! as StandardSchemaV1<P>, function* (params) {
@@ -29,9 +35,11 @@ AssertionScope((assert) => {
     return ""
   })
 
-  assert
-    .spec(genTool)
-    .equals<Spec<never, never, EnableToolEvent<"Tool"> | ToolCallEvent<"Tool", P, EnterEvent | ExitEvent<string>>>>()
+  assert.spec(genTool).equals<{
+    LanguageModel: never
+    EmbeddingModel: never
+    Event: EnableToolEvent<"Tool"> | ToolCallEvent<"Tool", P, EnterEvent | ExitEvent<string>>
+  }>()
 
   function* parent() {
     yield* Tool("ParentTool", "", null! as StandardSchemaV1<P>, () => {})
@@ -40,21 +48,18 @@ AssertionScope((assert) => {
     })
   }
 
-  assert
-    .spec(parent)
-    .equals<
-      Spec<
-        never,
-        never,
-        | EnableToolEvent<"ParentTool">
-        | ToolCallEvent<"ParentTool", P, EnterEvent | ExitEvent<void>>
-        | ContextEvent<
-            "Context",
-            | EnterEvent
-            | EnableToolEvent<"Tool">
-            | ExitEvent<void>
-            | ToolCallEvent<"Tool", P, EnterEvent | ExitEvent<void>>
-          >
-      >
-    >()
+  assert.spec(parent).equals<{
+    LanguageModel: never
+    EmbeddingModel: never
+    Event:
+      | EnableToolEvent<"ParentTool">
+      | ToolCallEvent<"ParentTool", P, EnterEvent | ExitEvent<void>>
+      | ContextEvent<
+          "Context",
+          | EnterEvent
+          | EnableToolEvent<"Tool">
+          | ExitEvent<void>
+          | ToolCallEvent<"Tool", P, EnterEvent | ExitEvent<void>>
+        >
+  }>()
 })

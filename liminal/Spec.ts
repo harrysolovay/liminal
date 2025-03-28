@@ -3,21 +3,11 @@ import type { Action, ActionLike } from "./Action/Action.js"
 import type { ActionEvent } from "./Action/ActionEvent.js"
 import type { ActorLike } from "./common/ActorLike.js"
 
-export interface Spec<
-  LanguageModel extends string = string,
-  EmbeddingModel extends string = string,
-  Event extends ActionEvent = ActionEvent,
-> {
-  LanguageModel: LanguageModel
-  EmbeddingModel: EmbeddingModel
-  Event: Event
+export interface Spec {
+  LanguageModel: string
+  EmbeddingModel: string
+  Event: ActionEvent
 }
-
-export type NeverSpec<
-  LanguageModel extends string = never,
-  EmbeddingModel extends string = never,
-  Event extends ActionEvent = never,
-> = Spec<LanguageModel, EmbeddingModel, Event>
 
 export type ExtractSpec<Y extends ActionLike> = MergeSpec<Extract<Y, Action>[""]>
 

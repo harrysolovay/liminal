@@ -5,10 +5,18 @@ import type { EnterEvent, ExitEvent } from "./event_common.js"
 
 AssertionScope((assert) => {
   const languageModel = Model("A")
-  assert.spec(languageModel).equals<Spec<"A", never, ModelEvent<"A", "language">>>()
+  assert.spec(languageModel).equals<{
+    LanguageModel: "A"
+    EmbeddingModel: never
+    Event: ModelEvent<"A", "language">
+  }>()
 
   const embeddingModel = Model("B", "embedding")
-  assert.spec(embeddingModel).equals<Spec<never, "B", ModelEvent<"B", "embedding">>>()
+  assert.spec(embeddingModel).equals<{
+    LanguageModel: never
+    EmbeddingModel: "B"
+    Event: ModelEvent<"B", "embedding">
+  }>()
 
   function* both() {
     yield* languageModel

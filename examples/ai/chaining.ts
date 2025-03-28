@@ -1,9 +1,9 @@
-import { Generation, Context, run, Model } from "liminal"
+import { Generation, Context, Model } from "liminal"
 import { type } from "arktype"
 import { LanguageModelAdapter } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
 
-run(MarketingCopy, {
+MarketingCopy().run({
   models: {
     language: {
       default: LanguageModelAdapter(openai("gpt-4o-mini")),

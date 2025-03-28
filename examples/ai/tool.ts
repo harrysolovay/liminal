@@ -1,10 +1,10 @@
 import * as mathjs from "mathjs"
-import { Context, Generation, Model, Tool, run } from "liminal"
+import { Context, Generation, Model, Tool } from "liminal"
 import { type } from "arktype"
 import { LanguageModelAdapter } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
 
-run(ToolUser, {
+ToolUser().run({
   models: {
     language: {
       default: LanguageModelAdapter(openai("gpt-4o-mini")),

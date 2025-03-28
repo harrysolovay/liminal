@@ -1,4 +1,4 @@
-import { Branch, Generation, Context, run, Model } from "liminal"
+import { Branch, Generation, Context, Model } from "liminal"
 import { type } from "arktype"
 import { LanguageModelAdapter } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
@@ -7,7 +7,7 @@ import { readFile } from "node:fs/promises"
 
 const code = await readFile(fileURLToPath(import.meta.url), "utf-8")
 
-run(Review(code), {
+Review(code).run({
   models: {
     language: {
       default: LanguageModelAdapter(openai("gpt-4o-mini")),

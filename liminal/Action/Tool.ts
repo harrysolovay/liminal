@@ -22,7 +22,11 @@ export function Tool<K extends string, P extends JSONObject, R extends PromiseOr
   params: StandardSchemaV1<JSONObject, P>,
   implementation: (params: P) => R,
 ): Generator<
-  Tool<Spec<never, never, EnableToolEvent<K> | ToolCallEvent<K, P, EnterEvent | ExitEvent<Awaited<R>>>>>,
+  Tool<{
+    LanguageModel: never
+    EmbeddingModel: never
+    Event: EnableToolEvent<K> | ToolCallEvent<K, P, EnterEvent | ExitEvent<Awaited<R>>>
+  }>,
   () => Generator<
     DisableTool<{
       LanguageModel: never
@@ -38,13 +42,13 @@ export function Tool<K extends string, P extends JSONObject, Y extends ActionLik
   params: StandardSchemaV1<JSONObject, P>,
   implementation: (params: P) => Actor<Y, R>,
 ): Generator<
-  Tool<
-    Spec<
-      never,
-      never,
-      EnableToolEvent<K> | ToolCallEvent<K, P, EnterEvent | Extract<Y, Action>[""]["Event"] | ExitEvent<Awaited<R>>>
-    >
-  >,
+  Tool<{
+    LanguageModel: never
+    EmbeddingModel: never
+    Event:
+      | EnableToolEvent<K>
+      | ToolCallEvent<K, P, EnterEvent | Extract<Y, Action>[""]["Event"] | ExitEvent<Awaited<R>>>
+  }>,
   () => Generator<
     DisableTool<{
       LanguageModel: never

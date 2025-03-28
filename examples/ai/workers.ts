@@ -1,15 +1,15 @@
-import { Branch, Context, Generation, Model, run } from "liminal"
+import { Branch, Context, Generation, Model } from "liminal"
 import { type } from "arktype"
 import { LanguageModelAdapter } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
 
-run(CodeReviewers, {
+CodeReviewers().run({
   models: {
     language: {
       default: LanguageModelAdapter(openai("gpt-4o-mini")),
     },
   },
-  handler(event) {},
+  handler: console.log,
 })
 
 function CodeReviewers() {
