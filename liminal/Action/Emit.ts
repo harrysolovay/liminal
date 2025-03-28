@@ -3,6 +3,11 @@ import type { JSONValue } from "../util/JSONValue.js"
 import { ActionBase } from "./ActionBase.js"
 import type { EventBase } from "./event_common.js"
 
+export interface Emit<S extends Spec = Spec> extends ActionBase<"Emit", S> {
+  key: string
+  value: JSONValue
+}
+
 export function* Emit<K extends string, V extends JSONValue>(
   key: K,
   value: V,
@@ -15,11 +20,6 @@ export function* Emit<K extends string, V extends JSONValue>(
   undefined
 > {
   return yield ActionBase("Emit", { key, value })
-}
-
-export interface Emit<S extends Spec = Spec> extends ActionBase<"Emit", S> {
-  key: string
-  value: JSONValue
 }
 
 export interface EmitEvent<K extends string = string, E extends JSONValue = JSONValue> extends EventBase<"Emit"> {

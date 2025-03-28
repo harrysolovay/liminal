@@ -1,7 +1,7 @@
 import { generateObject, generateText, jsonSchema, type LanguageModelV1 } from "ai"
-import { _util, type JSONValue, type ReduceGeneration } from "liminal"
+import { _util, type JSONObject, type LanguageModelAdapter } from "liminal"
 
-export function LM(model: LanguageModelV1): ReduceGeneration {
+export function LanguageModelAdapter(model: LanguageModelV1): LanguageModelAdapter {
   return async (state, action) => {
     const { messages, system } = state
     if (action.type) {
@@ -15,7 +15,7 @@ export function LM(model: LanguageModelV1): ReduceGeneration {
       })
       state.handler({
         event: "Generation",
-        value: object as JSONValue,
+        value: object as JSONObject,
         schema,
       })
       return {

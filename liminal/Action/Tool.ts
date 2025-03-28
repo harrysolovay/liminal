@@ -9,12 +9,11 @@ import type { ActionEvent } from "./ActionEvent.js"
 import type { Spec } from "../Spec.js"
 import type { Action, ActionLike } from "./Action.js"
 
-export interface Tool<K extends string = string, P extends JSONObject = JSONObject, S extends Spec = Spec>
-  extends ActionBase<"Tool", S> {
-  key: K
+export interface Tool<S extends Spec = Spec> extends ActionBase<"Tool", S> {
+  key: string
   description: string
-  params: StandardSchemaV1<JSONObject, P>
-  implementation: (params: P) => PromiseOr<Actor | JSONObject | void>
+  params: StandardSchemaV1<JSONObject, JSONObject>
+  implementation: (params: JSONObject) => PromiseOr<Actor | JSONObject | void>
 }
 
 export function Tool<K extends string, P extends JSONObject, R extends PromiseOr<JSONObject | void>>(
@@ -23,16 +22,13 @@ export function Tool<K extends string, P extends JSONObject, R extends PromiseOr
   params: StandardSchemaV1<JSONObject, P>,
   implementation: (params: P) => R,
 ): Generator<
-  Tool<K, P, Spec<never, never, EnableToolEvent<K> | ToolCallEvent<K, P, EnterEvent | ExitEvent<Awaited<R>>>>>,
+  Tool<Spec<never, never, EnableToolEvent<K> | ToolCallEvent<K, P, EnterEvent | ExitEvent<Awaited<R>>>>>,
   () => Generator<
-    DisableTool<
-      K,
-      {
-        LanguageModel: never
-        EmbeddingModel: never
-        Event: DisableToolEvent<K>
-      }
-    >,
+    DisableTool<{
+      LanguageModel: never
+      EmbeddingModel: never
+      Event: DisableToolEvent<K>
+    }>,
     void
   >
 >
@@ -43,8 +39,6 @@ export function Tool<K extends string, P extends JSONObject, Y extends ActionLik
   implementation: (params: P) => Actor<Y, R>,
 ): Generator<
   Tool<
-    K,
-    P,
     Spec<
       never,
       never,
@@ -52,14 +46,11 @@ export function Tool<K extends string, P extends JSONObject, Y extends ActionLik
     >
   >,
   () => Generator<
-    DisableTool<
-      K,
-      {
-        LanguageModel: never
-        EmbeddingModel: never
-        Event: DisableToolEvent<K>
-      }
-    >,
+    DisableTool<{
+      LanguageModel: never
+      EmbeddingModel: never
+      Event: DisableToolEvent<K>
+    }>,
     void
   >
 >

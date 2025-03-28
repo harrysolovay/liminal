@@ -1,12 +1,12 @@
-import { Branch, Context, Generation, LanguageModel, run } from "liminal"
+import { Branch, Context, Generation, Model, run } from "liminal"
 import { type } from "arktype"
-import { LM } from "liminal-ai"
+import { LanguageModelAdapter } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
 
 run(CodeReviewers, {
   models: {
     language: {
-      default: LM(openai("gpt-4o-mini")),
+      default: LanguageModelAdapter(openai("gpt-4o-mini")),
     },
   },
   handler(event) {},
@@ -14,7 +14,7 @@ run(CodeReviewers, {
 
 function CodeReviewers() {
   return Context("Workers", "You are a senior software architect planning feature implementations.", function* () {
-    yield* LanguageModel("default")
+    yield* Model("default")
     yield "Analyze this feature request and create an implementation plan:"
     const feat = "Alert administrators via text whenever site traffic exceeds a certain threshold."
     yield feat

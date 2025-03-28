@@ -1,2 +1,2 @@
-export * from "./EM.js"
-export * from "./LM.js"
+export * from "./EmbeddingModelAdapter.js"
+export * from "./LanguageModelAdapter.js"

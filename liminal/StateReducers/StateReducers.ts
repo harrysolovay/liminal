@@ -4,8 +4,7 @@ import type { Context } from "../Action/Context.js"
 import type { DisableTool } from "../Action/DisableTool.js"
 import type { Emit } from "../Action/Emit.js"
 import type { Messages } from "../Action/Messages.js"
-import type { LanguageModel } from "../Action/LanguageModel.js"
-import type { EmbeddingModel } from "../Action/EmbeddingModel.js"
+import type { Model } from "../Action/Model.js"
 import type { Tool } from "../Action/Tool.js"
 import { reduceAction } from "./reduceAction.js"
 import { reduceBranch } from "./reduceBranch.js"
@@ -15,24 +14,22 @@ import { reduceEmit } from "./reduceEmit.js"
 import { reduceMessages } from "./reduceMessages.js"
 import { reduceState } from "./reduceState.js"
 import { reduceTool } from "./reduceTool.js"
-import { reduceLanguageModel } from "./reduceLanguageModel.js"
-import { reduceEmbeddingModel } from "./reduceEmbeddingModel.js"
+import { reduceModel } from "./reduceModel.js"
 import { reduceUserTexts } from "./reduceUserTexts.js"
 import { reduceUserText } from "./reduceUserText.js"
 import type { ActionReducer } from "./ActionReducer.js"
 import type { Embedding } from "../Action/Embedding.js"
 import type { Generation } from "../Action/Generation.js"
 
-export type ReduceGeneration = ActionReducer<[Generation]>
-export type ReduceEmbedding = ActionReducer<[embedding: Embedding]>
+export type LanguageModelAdapter = ActionReducer<[Generation]>
+export type EmbeddingModelAdapter = ActionReducer<[embedding: Embedding]>
 
 export interface StateReducers {
   reduceState: ActionReducer<[]>
   reduceAction: ActionReducer<[ActionLike]>
   reduceUserText: ActionReducer<[string]>
   reduceUserTexts: ActionReducer<[Array<string>]>
-  reduceLanguageModel: ActionReducer<[LanguageModel]>
-  reduceEmbeddingModel: ActionReducer<[EmbeddingModel]>
+  reduceModel: ActionReducer<[Model]>
   reduceEmit: ActionReducer<[Emit]>
   reduceBranch: ActionReducer<[Branch]>
   reduceContext: ActionReducer<[Context]>
@@ -50,8 +47,7 @@ export const StateReducers: StateReducers = {
   reduceContext,
   reduceEmit,
   reduceTool,
-  reduceLanguageModel,
-  reduceEmbeddingModel,
+  reduceModel,
   reduceDisableTool,
   reduceMessages,
 }

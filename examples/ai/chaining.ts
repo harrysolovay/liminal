@@ -1,12 +1,12 @@
-import { Generation, Context, run, LanguageModel } from "liminal"
+import { Generation, Context, run, Model } from "liminal"
 import { type } from "arktype"
-import { LM } from "liminal-ai"
+import { LanguageModelAdapter } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
 
 run(MarketingCopy, {
   models: {
     language: {
-      default: LM(openai("gpt-4o-mini")),
+      default: LanguageModelAdapter(openai("gpt-4o-mini")),
     },
   },
   handler: console.log,
@@ -17,7 +17,7 @@ export function MarketingCopy() {
     "MarketingCopy",
     `Write persuasive marketing copy for: ${"Buffy The Vampire Slayer"}. Focus on benefits and emotional appeal.`,
     function* () {
-      yield* LanguageModel("default")
+      yield* Model("default")
       yield "Please generate the first draft."
       let copy = yield* Generation()
       yield `

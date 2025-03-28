@@ -1,7 +1,7 @@
 import { embed, type EmbeddingModel } from "ai"
-import { _util, type ReduceEmbedding } from "liminal"
+import { _util, type EmbeddingModelAdapter } from "liminal"
 
-export function EM(model: EmbeddingModel<any>): ReduceEmbedding {
+export function EmbeddingModelAdapter(model: EmbeddingModel<any>): EmbeddingModelAdapter {
   return async (state, action) => {
     const { embedding } = await embed({
       model,

@@ -1,6 +1,6 @@
 import type { StateReducers } from "./StateReducers.js"
-import { DisableTool } from "../Action/DisableTool.js"
 import { JSONSchemaMemo } from "../util/JSONSchemaMemo.js"
+import { ActionBase } from "../Action/ActionBase.js"
 
 export const reduceTool: StateReducers["reduceTool"] = (state, action) => {
   state.handler({
@@ -12,6 +12,9 @@ export const reduceTool: StateReducers["reduceTool"] = (state, action) => {
   return {
     ...state,
     tools: new Set([...state.tools, action]),
-    next: () => DisableTool(action),
+    next: () =>
+      ActionBase("DisableTool", {
+        tool: action,
+      }),
   }
 }

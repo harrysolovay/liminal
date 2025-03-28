@@ -2,6 +2,10 @@ import type { Spec } from "../Spec.js"
 import { ActionBase } from "./ActionBase.js"
 import type { EventBase } from "./event_common.js"
 
+export interface UserMessage<S extends Spec = Spec> extends ActionBase<"UserMessage", S> {
+  text: string | Array<string>
+}
+
 export function* UserMessage(text: string | Array<string>): Generator<
   UserMessage<{
     LanguageModel: never
@@ -11,10 +15,6 @@ export function* UserMessage(text: string | Array<string>): Generator<
   undefined
 > {
   return yield ActionBase("UserMessage", { text })
-}
-
-export interface UserMessage<S extends Spec = Spec> extends ActionBase<"UserMessage", S> {
-  text: string | Array<string>
 }
 
 export interface UserMessageEvent extends EventBase<"UserMessage"> {

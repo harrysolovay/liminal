@@ -1,21 +1,21 @@
-import { Context, Generation, LanguageModel, run } from "liminal"
+import { Context, Generation, Model, run } from "liminal"
 import { type } from "arktype"
-import { LM } from "liminal-ai"
+import { LanguageModelAdapter } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
 
 run(Root, {
   models: {
     language: {
-      default: LM(openai("gpt-4o-mini")),
-      reasoning: LM(openai("o1-mini")),
+      default: LanguageModelAdapter(openai("gpt-4o-mini")),
+      reasoning: LanguageModelAdapter(openai("o1-mini")),
     },
   },
   handler: console.log,
 })
 
 function Root() {
-  return Context("Root", function* () {
-    yield* LanguageModel("default")
+  return Context("root", function* () {
+    yield* Model("default")
     const classification = yield* classifyQuery("I'd like a refund please")
     const response = yield* useClassification(classification)
     return { classification, response }
@@ -50,7 +50,7 @@ const Classification = type({
 function useClassification(classification: typeof Classification.infer) {
   return Context("UseClassificationAgent", USE_CLASSIFICATION_AGENT_PROMPTS[classification.type], function* () {
     if (classification.complexity === "complex") {
-      yield* LanguageModel("reasoning")
+      yield* Model("reasoning")
     }
     return yield* Generation()
   })

@@ -1,6 +1,6 @@
-import { Branch, Generation, Context, run, LanguageModel } from "liminal"
+import { Branch, Generation, Context, run, Model } from "liminal"
 import { type } from "arktype"
-import { LM } from "liminal-ai"
+import { LanguageModelAdapter } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
 import { fileURLToPath } from "node:url"
 import { readFile } from "node:fs/promises"
@@ -10,7 +10,7 @@ const code = await readFile(fileURLToPath(import.meta.url), "utf-8")
 run(Review(code), {
   models: {
     language: {
-      default: LM(openai("gpt-4o-mini")),
+      default: LanguageModelAdapter(openai("gpt-4o-mini")),
     },
   },
   handler: console.log,
@@ -21,7 +21,7 @@ function Review(code: string) {
     "Parallel",
     "You are a technical lead summarizing multiple code reviews. Review the supplied code.",
     function* () {
-      yield* LanguageModel("default")
+      yield* Model("default")
       yield code
       const reviews = yield* Branch({ securityReview, performanceReview, maintainabilityReview })
       yield JSON.stringify(Object.values(reviews), null, 2)

@@ -48,11 +48,8 @@ export function reduceAction(this: StateReducers, state: ExecState, action: Acti
     case "Messages": {
       return this.reduceMessages(state, action)
     }
-    case "LanguageModel": {
-      return this.reduceLanguageModel(state, action)
-    }
-    case "EmbeddingModel": {
-      return this.reduceEmbeddingModel(state, action)
+    case "Model": {
+      return this.reduceModel(state, action)
     }
     case "Tool": {
       return this.reduceTool(state, action)

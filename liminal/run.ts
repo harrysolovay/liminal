@@ -18,5 +18,6 @@ export async function run<Y extends ActionLike, R>(source: ActorLike<Y, R>, conf
     messages: [],
     tools: new Set<Tool>(),
   }
-  return (await StateReducers.reduceState(state)) as never
+  const { result } = await StateReducers.reduceState(state)
+  return result
 }

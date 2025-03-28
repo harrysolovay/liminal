@@ -5,6 +5,10 @@ import { ActionBase } from "./ActionBase.js"
 import type { ActionEvent } from "./ActionEvent.js"
 import type { EnterEvent, EventBase, ExitEvent } from "./event_common.js"
 
+export interface Branch<S extends Spec = Spec> extends ActionBase<"Branch", S> {
+  branches: Branches
+}
+
 export function* Branch<const B extends Branches>(
   branches: B,
 ): Generator<
@@ -31,10 +35,6 @@ export function* Branch<const B extends Branches>(
   return yield ActionBase("Branch", {
     branches,
   })
-}
-
-export interface Branch<S extends Spec = Spec> extends ActionBase<"Branch", S> {
-  branches: Branches
 }
 
 export type Branches = Array<ActorLike> | Record<string, ActorLike>

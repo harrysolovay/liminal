@@ -34,7 +34,8 @@
       },
       "suspicious": {
         "noExplicitAny": "off",
-        "noConfusingVoidType": "off"
+        "noConfusingVoidType": "off",
+        "noRedeclare": "off"
       },
       "correctness": {
         "useImportExtensions": "error",
