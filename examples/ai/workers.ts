@@ -1,12 +1,12 @@
 import { Branch, Context, Generation, Model } from "liminal"
 import { type } from "arktype"
-import { LanguageModelAdapter } from "liminal-ai"
+import { AILanguageModel } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
 
 CodeReviewers().run({
   models: {
     language: {
-      default: LanguageModelAdapter(openai("gpt-4o-mini")),
+      default: AILanguageModel(openai("gpt-4o-mini")),
     },
   },
   handler: console.log,

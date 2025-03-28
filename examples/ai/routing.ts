@@ -1,13 +1,13 @@
 import { Context, Generation, Model } from "liminal"
 import { type } from "arktype"
-import { LanguageModelAdapter } from "liminal-ai"
+import { AILanguageModel } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
 
 Root().run({
   models: {
     language: {
-      default: LanguageModelAdapter(openai("gpt-4o-mini")),
-      reasoning: LanguageModelAdapter(openai("o1-mini")),
+      default: AILanguageModel(openai("gpt-4o-mini")),
+      reasoning: AILanguageModel(openai("o1-mini")),
     },
   },
   handler: console.log,

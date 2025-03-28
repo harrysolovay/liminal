@@ -1,51 +1,28 @@
-import { Model, type ModelEvent } from "./Model.js"
-import { Context, type ContextEvent } from "./Context.js"
-import type { EnterEvent, ExitEvent } from "./event_common.js"
-import { AssertionScope } from "../testing/AssertionScope.js"
+import { Model } from "./Model.js"
+import { Context } from "./Context.js"
+import { describe, it, expect } from "bun:test"
+import { TestEmbeddingModels } from "../testing/TestEmbeddingModels.js"
+import { TestLanguageModels } from "../testing/TestLanguageModels.js"
+import type { ActionEvent } from "./ActionEvent.js"
 
-AssertionScope((assert) => {
-  const languageModel = Model("A")
-  assert.spec(languageModel).equals<{
-    LanguageModel: "A"
-    EmbeddingModel: never
-    Event: ModelEvent<"A", "language">
-  }>()
-
-  const embeddingModel = Model("B", "embedding")
-  assert.spec(embeddingModel).equals<{
-    LanguageModel: never
-    EmbeddingModel: "B"
-    Event: ModelEvent<"B", "embedding">
-  }>()
-
-  function* both() {
-    yield* languageModel
-    yield* embeddingModel
-  }
-
-  assert.spec(both).equals<{
-    LanguageModel: "A"
-    EmbeddingModel: "B"
-    Event: ModelEvent<"A", "language"> | ModelEvent<"B", "embedding">
-  }>()
-
-  function* parent() {
-    yield* Context("Context", function* () {
-      yield* both()
+describe("Model", () => {
+  it("generates the expected event sequence", async () => {
+    const events: Array<ActionEvent> = []
+    await Context("Root", function* () {
+      yield* Model("default")
+      yield* Model("secondary")
+      yield* Context("child", function* () {
+        yield* Model("child_a")
+        yield* Model("child_b", "embedding")
+      })
+      yield* Model("tertiary", "embedding")
+    }).run({
+      models: {
+        language: TestLanguageModels(),
+        embedding: TestEmbeddingModels(),
+      },
+      handler: (event) => events.push(event),
     })
-    yield* Model("C")
-    yield* Model("D", "embedding")
-  }
-
-  assert.spec(parent).equals<{
-    LanguageModel: "A" | "C"
-    EmbeddingModel: "B" | "D"
-    Event:
-      | ModelEvent<"C", "language">
-      | ModelEvent<"D", "embedding">
-      | ContextEvent<
-          "Context",
-          EnterEvent | ExitEvent<void> | ModelEvent<"A", "language"> | ModelEvent<"B", "embedding">
-        >
-  }>()
+    expect(events).toMatchSnapshot()
+  })
 })

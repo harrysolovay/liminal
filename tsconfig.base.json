@@ -1,31 +1,4 @@
 {
-  "compilerOptions": {
-    "allowJs": false,
-    "composite": true,
-    "declaration": true,
-    "erasableSyntaxOnly": true,
-    "esModuleInterop": true,
-    "isolatedModules": true,
-    "lib": ["ESNext", "DOM", "DOM.iterable"],
-    "module": "ESNext",
-    "moduleDetection": "force",
-    "moduleResolution": "bundler",
-    "noEmit": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "noUncheckedIndexedAccess": true,
-    "noUncheckedSideEffectImports": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "sourceMap": true,
-    "strict": true,
-    "strictBindCallApply": true,
-    "strictFunctionTypes": false,
-    "strictNullChecks": true,
-    "target": "ESNext",
-    "useDefineForClassFields": true,
-    "verbatimModuleSyntax": true
-  },
-  "exclude": ["**/dist", "node_modules"]
+  "extends": "./tsconfig.common",
+  "exclude": ["**/*.test.ts", "**/*.test-type.ts"]
 }

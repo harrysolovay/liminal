@@ -2,7 +2,7 @@ import { Tool, type EnableToolEvent, type ToolCallEvent } from "./Tool.js"
 import type { StandardSchemaV1 } from "@standard-schema/spec"
 import type { IsExact, AssertTrue } from "conditional-type-checks"
 import type { DisableToolEvent } from "./DisableTool.js"
-import { AssertionScope } from "../testing/AssertionScope.js"
+import { AssertionScope } from "../testing/index.js"
 import type { EnterEvent, ExitEvent } from "./event_common.js"
 import { Context, type ContextEvent } from "./Context.js"
 

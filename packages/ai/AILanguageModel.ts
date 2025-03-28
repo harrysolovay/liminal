@@ -1,8 +1,8 @@
 import { generateObject, generateText, jsonSchema, type CoreMessage, type LanguageModelV1 } from "ai"
-import { ActionBase, _util, type ExecState, type JSONObject, type LanguageModelAdapter, type Message } from "liminal"
+import { ActionBase, _util, type JSONObject, type LanguageModelAdapter, type Message } from "liminal"
 
-export function LanguageModelAdapter(model: LanguageModelV1): LanguageModelAdapter {
-  return async (state, action): Promise<ExecState> => {
+export function AILanguageModel(model: LanguageModelV1): LanguageModelAdapter {
+  return async (state, action) => {
     const { messages: liminalMessages, system } = state
     const messages = liminalMessages.map(toCoreMessage)
     if (action.type) {

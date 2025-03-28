@@ -1,2 +1,2 @@
-export * from "./EmbeddingModelAdapter.js"
-export * from "./LanguageModelAdapter.js"
+export * from "./AIEmbeddingModel.js"
+export * from "./AILanguageModel.js"

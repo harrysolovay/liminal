@@ -26,7 +26,9 @@ export type NarrowExecConfig<Y extends ActionLike, S extends ExtractSpec<Y> = Ex
       ([S["EmbeddingModel"]] extends [never]
         ? { embedding?: never }
         : {
-            [K in S["EmbeddingModel"]]: EmbeddingModelAdapter
+            embedding: {
+              [K in S["EmbeddingModel"]]: EmbeddingModelAdapter
+            }
           })
   >
   signal?: AbortSignal

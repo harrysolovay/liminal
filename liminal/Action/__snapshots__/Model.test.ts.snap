@@ -1,0 +1,104 @@
+// Bun Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Model generates the expected event sequence 1`] = `
+[
+  {
+    "event": "Enter",
+  },
+  {
+    "event": "Context",
+    "inner": {
+      "event": "Enter",
+    },
+    "key": "Root",
+  },
+  {
+    "event": "Context",
+    "inner": {
+      "event": "Model",
+      "key": "default",
+      "purpose": "language",
+    },
+    "key": "Root",
+  },
+  {
+    "event": "Context",
+    "inner": {
+      "event": "Model",
+      "key": "secondary",
+      "purpose": "language",
+    },
+    "key": "Root",
+  },
+  {
+    "event": "Context",
+    "inner": {
+      "event": "Context",
+      "inner": {
+        "event": "Enter",
+      },
+      "key": "child",
+    },
+    "key": "Root",
+  },
+  {
+    "event": "Context",
+    "inner": {
+      "event": "Context",
+      "inner": {
+        "event": "Model",
+        "key": "child_a",
+        "purpose": "language",
+      },
+      "key": "child",
+    },
+    "key": "Root",
+  },
+  {
+    "event": "Context",
+    "inner": {
+      "event": "Context",
+      "inner": {
+        "event": "Model",
+        "key": "child_b",
+        "purpose": "embedding",
+      },
+      "key": "child",
+    },
+    "key": "Root",
+  },
+  {
+    "event": "Context",
+    "inner": {
+      "event": "Context",
+      "inner": {
+        "event": "Exit",
+        "result": undefined,
+      },
+      "key": "child",
+    },
+    "key": "Root",
+  },
+  {
+    "event": "Context",
+    "inner": {
+      "event": "Model",
+      "key": "tertiary",
+      "purpose": "embedding",
+    },
+    "key": "Root",
+  },
+  {
+    "event": "Context",
+    "inner": {
+      "event": "Exit",
+      "result": undefined,
+    },
+    "key": "Root",
+  },
+  {
+    "event": "Exit",
+    "result": undefined,
+  },
+]
+`;
