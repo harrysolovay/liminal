@@ -1,14 +1,13 @@
 import type { ActionLike } from "../Action/ActionLike.js"
 import type { ActorLike } from "../Actor/ActorLike.js"
 import { ActionBase } from "../Action/ActionBase.js"
-import type { EventBase } from "../Action/ActionEventBase.js"
-import type { ActionEvent } from "../Action/ActionEvent.js"
 import type { ExtractSpec, Spec } from "../Spec.js"
 import type { ExtractConfig } from "../Config.js"
 import { State } from "../State/State.js"
 import { Events } from "../ActionEventSource.js"
 import { reduceActor } from "../Actor/reduceActor.js"
 import { unwrapDeferred } from "../util/unwrapDeferred.js"
+import type { ContextEvent } from "./ContextEvent.js"
 
 export interface Context<S extends Spec = Spec> extends ActionBase<"Context", S> {
   key: string
@@ -73,24 +72,4 @@ export function Context<Y extends ActionLike, R = string>(
     })
     return reduceActor(state)
   }
-}
-
-export type ContextEvent<K extends string = string, E extends ActionEvent = any, T = any> =
-  | ContextEnterEvent<K>
-  | ContextInnerEvent<K, E>
-  | ContextExitEvent<K, T>
-
-export interface ContextEnterEvent<K extends string> extends EventBase<"ContextEnter"> {
-  context: K
-  system?: string
-}
-
-export interface ContextInnerEvent<K extends string, E extends ActionEvent> extends EventBase<"ContextInner"> {
-  context: K
-  inner: E
-}
-
-export interface ContextExitEvent<K extends string, T> extends EventBase<"ContextExit"> {
-  context: K
-  result: T
 }

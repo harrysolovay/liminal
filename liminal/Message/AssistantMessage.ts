@@ -1,18 +1,9 @@
 import type { Spec } from "../Spec.js"
 import { ActionBase } from "../Action/ActionBase.js"
-import type { EventBase } from "../Action/ActionEventBase.js"
-import type { FilePart, ReasoningPart, RedactedReasoningPart, TextPart, ToolCallPart } from "./content_part.js"
+import type { AssistantContent } from "./AssistantContent.js"
+import type { AssistantMessageEvent } from "./AssistantMessageEvent.js"
 
 export interface AssistantMessage<S extends Spec = Spec> extends ActionBase<"AssistantMessage", S> {
-  content: AssistantContent
-}
-
-export type AssistantContent =
-  | string
-  | Array<TextPart | FilePart | ReasoningPart | RedactedReasoningPart | ToolCallPart>
-
-export interface AssistantMessageEvent extends EventBase<"AssistantMessage"> {
-  // TODO: serialized version – perhaps a `Serialized<T>`
   content: AssistantContent
 }
 

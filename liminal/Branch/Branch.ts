@@ -4,6 +4,7 @@ import type { Key } from "../util/Key.js"
 import { ActionBase } from "../Action/ActionBase.js"
 import type { ActionEvent } from "../Action/ActionEvent.js"
 import type { EventBase } from "../Action/ActionEventBase.js"
+import type { ActionLike } from "../Action/ActionLike.js"
 
 export interface Branch<S extends Spec = Spec> extends ActionBase<"Branch", S> {
   branches: Branches
@@ -16,12 +17,16 @@ export function* Branch<const B extends Branches>(
     | {
         LanguageModel: never
         EmbeddingModel: never
-        Event: BranchesEvent<
-          `${Key<B>}`,
-          {
-            [K in keyof B]: B[K] extends ActorLike<infer Y, infer R> ? Awaited<R> : never
-          }
-        >
+        Event: `${Key<B>}` extends infer K extends string
+          ?
+              | BranchEnterEvent<K>
+              | BranchExitEvent<
+                  K,
+                  {
+                    [K in keyof B]: B[K] extends ActorLike<ActionLike, infer R> ? Awaited<R> : never
+                  }
+                >
+          : never
       }
     | {
         [K in keyof B]: B[K] extends ActorLike<infer Y, infer R>
@@ -29,7 +34,7 @@ export function* Branch<const B extends Branches>(
             ? {
                 LanguageModel: S["LanguageModel"]
                 EmbeddingModel: S["EmbeddingModel"]
-                Event: BranchEvent<`${Exclude<K, symbol>}`, S["Event"], Awaited<R>>
+                Event: BranchArmEvent<`${Exclude<K, symbol>}`, S["Event"], Awaited<R>>
               }
             : never
           : never
@@ -44,32 +49,32 @@ export function* Branch<const B extends Branches>(
 
 export type Branches = Array<ActorLike> | Record<string, ActorLike>
 
-export type BranchesEvent<K extends string = string, R = any> = BranchesEnterEvent<K> | BranchesExitEvent<K, R>
+export type BranchesEvent<K extends string = string, R = any> = BranchEnterEvent<K> | BranchExitEvent<K, R>
 
-export type BranchEvent<K extends string = string, E extends ActionEvent = any, R = any> =
-  | BranchEnterEvent<K>
-  | BranchInnerEvent<K, E>
-  | BranchExitEvent<K, R>
+export type BranchArmEvent<K extends string = string, E extends ActionEvent = any, R = any> =
+  | BranchArmEnterEvent<K>
+  | BranchArmInnerEvent<K, E>
+  | BranchArmExitEvent<K, R>
 
-export interface BranchesEnterEvent<K extends string> extends EventBase<"BranchesEnter"> {
+export interface BranchEnterEvent<K extends string> extends EventBase<"BranchEnter"> {
   branches: Array<K>
 }
 
-export interface BranchEnterEvent<K extends string> extends EventBase<"BranchEnter"> {
+export interface BranchArmEnterEvent<K extends string> extends EventBase<"BranchArmEnter"> {
   branch: K
 }
 
-export interface BranchInnerEvent<K extends string, E extends ActionEvent> extends EventBase<"BranchInner"> {
+export interface BranchArmInnerEvent<K extends string, E extends ActionEvent> extends EventBase<"BranchArmInner"> {
   branch: K
   inner: E
 }
 
-export interface BranchExitEvent<K extends string, R> extends EventBase<"BranchExit"> {
+export interface BranchArmExitEvent<K extends string, R> extends EventBase<"BranchArmExit"> {
   branch: K
   result: R
 }
 
-export interface BranchesExitEvent<K extends string, R> extends EventBase<"BranchesExit"> {
+export interface BranchExitEvent<K extends string, R> extends EventBase<"BranchExit"> {
   branches: Array<K>
   result: R
 }

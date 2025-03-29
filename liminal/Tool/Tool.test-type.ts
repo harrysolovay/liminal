@@ -1,10 +1,13 @@
-import { Tool, type ToolEvent } from "./Tool.js"
+import { Tool } from "./Tool.js"
 import type { StandardSchemaV1 } from "@standard-schema/spec"
 import type { IsExact, AssertTrue } from "conditional-type-checks"
-import type { ToolRemovalEvent } from "../ToolRemoval/ToolRemoval.js"
 import { AssertionScope } from "../testing/AssertionScope.js"
-import { Context, type ContextEvent } from "../Context/Context.js"
-import { Emit, type EmitEvent } from "../Emit/Emit.js"
+import { Context } from "../Context/Context.js"
+import type { ContextEvent } from "../Context/ContextEvent.js"
+import { Emit } from "../Emit/Emit.js"
+import type { EmitEvent } from "../Emit/EmitEvent.js"
+import type { ToolEvent } from "./ToolEvent.js"
+import type { ToolRemovalEvent } from "../ToolRemoval/ToolRemovalEvent.js"
 
 AssertionScope((assert) => {
   type P = {

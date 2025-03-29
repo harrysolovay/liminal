@@ -1,6 +1,7 @@
 # TODO
 
 - aborting/early exit + event
+- branch event cleanup
 - DI
 - streaming
 - tool-calling

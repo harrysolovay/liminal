@@ -1,28 +1,22 @@
-import type { BranchesEvent, BranchEvent } from "../Branch/Branch.js"
-import type { ContextEvent } from "../Context/Context.js"
-import type { EmbeddingEvent } from "../Embedding/Embedding.js"
-import type { EmitEvent } from "../Emit/Emit.js"
-import type { GenerateEvent } from "../Generation/Generation.js"
-import type { AssistantMessageEvent } from "../Message/AssistantMessage.js"
-import type { SystemMessageEvent } from "../Message/SystemMessage.js"
-import type { ToolMessageEvent } from "../Message/ToolMessage.js"
-import type { UserMessageEvent } from "../Message/UserMessage.js"
-import type { ModelEvent } from "../Model/Model.js"
-import type { ToolEvent } from "../Tool/Tool.js"
-import type { ToolRemovalEvent } from "../ToolRemoval/ToolRemoval.js"
+import type { BranchesEvent, BranchArmEvent } from "../Branch/Branch.js"
+import type { ContextEvent } from "../Context/ContextEvent.js"
+import type { EmbeddingEvent } from "../Embedding/EmbeddingEvent.js"
+import type { EmitEvent } from "../Emit/EmitEvent.js"
+import type { GenerationEvent } from "../Generation/GenerationEvent.js"
+import type { MessageEvent } from "../Message/MessageEvent.js"
+import type { ModelEvent } from "../Model/ModelEvent.js"
+import type { ToolEvent } from "../Tool/ToolEvent.js"
+import type { ToolRemovalEvent } from "../ToolRemoval/ToolRemovalEvent.js"
 
 export type ActionEvent =
   | ContextEvent
   | BranchesEvent
-  | BranchEvent
+  | BranchArmEvent
   | BranchesEvent
   | ToolRemovalEvent
   | EmbeddingEvent
   | EmitEvent
-  | GenerateEvent
+  | GenerationEvent
   | ModelEvent
   | ToolEvent
-  | UserMessageEvent
-  | AssistantMessageEvent
-  | SystemMessageEvent
-  | ToolMessageEvent
+  | MessageEvent

@@ -1,13 +1,12 @@
 import type { Spec } from "../Spec.js"
 import { ActionBase } from "../Action/ActionBase.js"
-import type { EventBase } from "../Action/ActionEventBase.js"
+import type { ModelPurpose } from "./ModelPurpose.js"
+import type { ModelEvent } from "./ModelEvent.js"
 
 export interface Model<S extends Spec = Spec> extends ActionBase<"Model", S> {
   key: string
   purpose: ModelPurpose
 }
-
-export type ModelPurpose = "language" | "embedding"
 
 export function* Model<K extends string, P extends "language" | "embedding" = "language">(
   key: K,
@@ -21,10 +20,4 @@ export function* Model<K extends string, P extends "language" | "embedding" = "l
   void
 > {
   return yield ActionBase("Model", { key, purpose })
-}
-
-export interface ModelEvent<K extends string = string, P extends ModelPurpose = ModelPurpose>
-  extends EventBase<"Model"> {
-  key: K
-  purpose: P
 }

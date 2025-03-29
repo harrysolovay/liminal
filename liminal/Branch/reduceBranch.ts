@@ -7,13 +7,13 @@ import { reduceActor } from "../Actor/reduceActor.js"
 export const reduceBranch: ActionReducer<Branch> = async (state, action) => {
   const branchesKeys = Object.keys(action.branches)
   state.events.emit({
-    event: "BranchesEnter",
+    event: "BranchEnter",
     branches: branchesKeys,
   })
   const branchStates = await Promise.all(
     branchesKeys.map(async (key) => {
       state.events.emit({
-        event: "BranchEnter",
+        event: "BranchArmEnter",
         branch: key,
       })
       const source = (action.branches as any)[key] as Value<Branches>
@@ -26,7 +26,7 @@ export const reduceBranch: ActionReducer<Branch> = async (state, action) => {
         actor: unwrapDeferred(source),
         next: undefined,
         events: state.events.child((inner) => ({
-          event: "BranchInner",
+          event: "BranchArmInner",
           branch: key,
           inner,
         })),
@@ -36,19 +36,24 @@ export const reduceBranch: ActionReducer<Branch> = async (state, action) => {
         result: undefined,
       })
       state.events.emit({
-        event: "BranchExit",
+        event: "BranchArmExit",
         branch: key,
         result: childState.result,
       })
       return childState
     }),
   )
-  const next = Array.isArray(action.branches)
+  const result = Array.isArray(action.branches)
     ? branchStates.map((state) => state.result)
     : Object.fromEntries(branchesKeys.map((key, i) => [key, branchStates[i]!.result]))
+  state.events.emit({
+    event: "BranchExit",
+    branches: branchesKeys,
+    result,
+  })
   return {
     ...state,
-    next,
+    next: result,
     children: [...state.children, ...branchStates],
   }
 }
