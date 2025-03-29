@@ -1,15 +1,15 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
-import { ActionBase } from "../Action/ActionBase.js"
-import type { Actor } from "../Actor/Actor.js"
-import type { PromiseOr } from "../util/PromiseOr.js"
-import type { ToolRemoval } from "../ToolRemoval/ToolRemoval.js"
-import type { Spec } from "../Spec.js"
-import type { ActionLike } from "../Action/ActionLike.js"
 import type { Action } from "../Action/Action.js"
+import { ActionBase } from "../Action/ActionBase.js"
+import type { ActionLike } from "../Action/ActionLike.js"
+import type { Actor } from "../Actor/Actor.js"
 import type { JSONObject } from "../JSON/JSONObject.js"
+import type { Spec } from "../Spec.js"
+import type { ToolRemoval } from "../ToolRemoval/ToolRemoval.js"
 import type { ToolRemovalEvent } from "../ToolRemoval/ToolRemovalEvent.js"
-import type { ToolResult } from "./ToolResult.js"
+import type { PromiseOr } from "../util/PromiseOr.js"
 import type { ToolEvent } from "./ToolEvent.js"
+import type { ToolResult } from "./ToolResult.js"
 
 export interface Tool<S extends Spec = Spec> extends ActionBase<"Tool", S> {
   key: string

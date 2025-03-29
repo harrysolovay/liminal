@@ -6,10 +6,10 @@
     "editor.defaultFormatter": "dprint.dprint"
   },
   "[json]": {
-    "editor.defaultFormatter": "biomejs.biome"
+    "editor.defaultFormatter": "dprint.dprint"
   },
   "[jsonc]": {
-    "editor.defaultFormatter": "biomejs.biome"
+    "editor.defaultFormatter": "dprint.dprint"
   },
   "[markdown]": {
     "editor.defaultFormatter": "dprint.dprint"
@@ -18,15 +18,14 @@
     "editor.defaultFormatter": "dprint.dprint"
   },
   "[typescript]": {
-    "editor.defaultFormatter": "biomejs.biome"
+    "editor.defaultFormatter": "dprint.dprint"
   },
   "[typescriptreact]": {
-    "editor.defaultFormatter": "biomejs.biome"
+    "editor.defaultFormatter": "dprint.dprint"
   },
   "[yaml]": {
     "editor.defaultFormatter": "dprint.dprint"
   },
-  "biome.enabled": true,
   "editor.formatOnSave": true,
   "editor.quickSuggestions": {
     "strings": "on"

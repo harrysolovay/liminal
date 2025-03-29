@@ -1,8 +1,8 @@
-import * as mathjs from "mathjs"
-import { Context, Generation, Model, Tool } from "liminal"
-import { type } from "arktype"
-import { AILanguageModel } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
+import { type } from "arktype"
+import { Context, Generation, Model, Tool } from "liminal"
+import { AILanguageModel } from "liminal-ai"
+import * as mathjs from "mathjs"
 
 ToolUser().exec({
   models: {
@@ -20,8 +20,7 @@ function ToolUser() {
       You are solving math problems. Reason step by step. Use the calculator when necessary.
       When you give the final answer, provide an explanation for how you arrived at it.
     `,
-
-    function* () {
+    function*() {
       yield* Model("default")
       yield `
         A taxi driver earns $9461 per 1-hour of work. If he works 12 hours a day and in 1 hour

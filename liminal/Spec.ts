@@ -1,6 +1,6 @@
 import type { Action } from "./Action/Action.js"
-import type { ActionLike } from "./Action/ActionLike.js"
 import type { ActionEvent } from "./Action/ActionEvent.js"
+import type { ActionLike } from "./Action/ActionLike.js"
 
 export interface Spec {
   LanguageModel: string

@@ -1,7 +1,7 @@
-import { Branches, Context, Generation, Model } from "liminal"
-import { type } from "arktype"
-import { AILanguageModel } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
+import { type } from "arktype"
+import { Branches, Context, Generation, Model } from "liminal"
+import { AILanguageModel } from "liminal-ai"
 
 CodeReviewers().exec({
   models: {
@@ -13,7 +13,7 @@ CodeReviewers().exec({
 })
 
 function CodeReviewers() {
-  return Context("Workers", "You are a senior software architect planning feature implementations.", function* () {
+  return Context("Workers", "You are a senior software architect planning feature implementations.", function*() {
     yield* Model("default")
     yield "Analyze this feature request and create an implementation plan:"
     const feat = "Alert administrators via text whenever site traffic exceeds a certain threshold."
@@ -36,7 +36,7 @@ const FileInfo = type({
 })
 
 function Implementor(featureRequest: string, file: typeof FileInfo.infer) {
-  return Context("Implementation", IMPLEMENTATION_PROMPTS[file.changeType], function* () {
+  return Context("Implementation", IMPLEMENTATION_PROMPTS[file.changeType], function*() {
     yield `
       Implement the changes for ${file.filePath} to support:
 

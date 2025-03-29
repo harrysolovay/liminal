@@ -1,14 +1,14 @@
 import { ActionBase } from "../Action/ActionBase.js"
-import { assert } from "../util/assert.js"
 import type { ActionReducer } from "../Action/ActionReducer.js"
 import { reduceBranches } from "../Branches/reduceBranches.js"
 import { reduceContext } from "../Context/reduceContext.js"
 import { reduceCurrentState } from "../CurrentState/reduceCurrentState.js"
-import { reduceToolRemoval } from "../ToolRemoval/reduceToolRemoval.js"
 import { reduceEmit } from "../Emit/reduceEmit.js"
 import { reduceMessage } from "../Message/reduceMessage.js"
 import { reduceModel } from "../Model/reduceModel.js"
 import { reduceTool } from "../Tool/reduceTool.js"
+import { reduceToolRemoval } from "../ToolRemoval/reduceToolRemoval.js"
+import { assert } from "../util/assert.js"
 
 export const reduceAction: ActionReducer = (state, action) => {
   if (!action) {

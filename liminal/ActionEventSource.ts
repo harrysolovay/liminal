@@ -1,5 +1,5 @@
-import type { EventHandler } from "./Config.js"
 import type { ActionEvent } from "./Action/ActionEvent.js"
+import type { EventHandler } from "./Config.js"
 
 export class Events extends Array<ActionEvent> {
   constructor(

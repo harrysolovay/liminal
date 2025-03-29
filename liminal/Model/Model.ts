@@ -1,7 +1,7 @@
-import type { Spec } from "../Spec.js"
 import { ActionBase } from "../Action/ActionBase.js"
-import type { ModelPurpose } from "./ModelPurpose.js"
+import type { Spec } from "../Spec.js"
 import type { ModelEvent } from "./ModelEvent.js"
+import type { ModelPurpose } from "./ModelPurpose.js"
 
 export interface Model<S extends Spec = Spec> extends ActionBase<"Model", S> {
   key: string

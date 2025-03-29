@@ -1,5 +1,5 @@
-import type { Message } from "./Message.js"
 import type { ActionReducer } from "../Action/ActionReducer.js"
+import type { Message } from "./Message.js"
 
 export const reduceMessage: ActionReducer<Message> = (state, message) => {
   state.events.emit({

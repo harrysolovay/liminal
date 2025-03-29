@@ -1,8 +1,8 @@
-import type { Branches, BranchImplementations } from "./Branches.js"
-import { unwrapDeferred } from "../util/unwrapDeferred.js"
-import type { Value } from "../util/Value.js"
 import type { ActionReducer } from "../Action/ActionReducer.js"
 import { reduceActor } from "../Actor/reduceActor.js"
+import { unwrapDeferred } from "../util/unwrapDeferred.js"
+import type { Value } from "../util/Value.js"
+import type { Branches, BranchImplementations } from "./Branches.js"
 
 export const reduceBranches: ActionReducer<Branches> = async (state, action) => {
   const branchesKeys = Object.keys(action.branches)

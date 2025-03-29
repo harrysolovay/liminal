@@ -1,15 +1,15 @@
-import { Model } from "./Model.js"
+import { describe, expect, it } from "bun:test"
 import { Context } from "../Context/Context.js"
-import { describe, it, expect } from "bun:test"
 import { TestEmbeddingModels } from "../testing/TestEmbeddingModels.js"
 import { TestLanguageModels } from "../testing/TestLanguageModels.js"
+import { Model } from "./Model.js"
 
 describe("Model", () => {
   it("generates the expected event sequence", async () => {
-    const context = Context("Root", function* () {
+    const context = Context("Root", function*() {
       yield* Model("default")
       yield* Model("secondary")
-      yield* Context("child", function* () {
+      yield* Context("child", function*() {
         yield* Model("child_a")
         yield* Model("child_b", "embedding")
       })

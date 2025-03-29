@@ -7,6 +7,11 @@ export function AIEmbeddingModel(model: EmbeddingModel<any>): EmbeddingModelAdap
       model,
       value: action.value,
     })
+    state.events.emit({
+      event: "Embedding",
+      value: action.value,
+      embedding,
+    })
     return {
       ...state,
       next: embedding,

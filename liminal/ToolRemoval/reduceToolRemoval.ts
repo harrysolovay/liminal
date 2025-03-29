@@ -1,5 +1,5 @@
-import type { ToolRemoval } from "../ToolRemoval/ToolRemoval.js"
 import type { ActionReducer } from "../Action/ActionReducer.js"
+import type { ToolRemoval } from "../ToolRemoval/ToolRemoval.js"
 
 export const reduceToolRemoval: ActionReducer<ToolRemoval> = (state, action) => {
   state.events.emit({

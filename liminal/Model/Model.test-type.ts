@@ -1,7 +1,7 @@
-import { Model } from "./Model.js"
 import { Context } from "../Context/Context.js"
 import type { ContextEnterEvent, ContextExitEvent, ContextInnerEvent } from "../Context/ContextEvent.js"
 import { AssertionScope } from "../testing/AssertionScope.js"
+import { Model } from "./Model.js"
 import type { ModelEvent } from "./ModelEvent.js"
 
 AssertionScope((assert) => {
@@ -31,7 +31,7 @@ AssertionScope((assert) => {
   }>()
 
   function* parent() {
-    yield* Context("Context", function* () {
+    yield* Context("Context", function*() {
       yield* both()
     })
     yield* Model("C")

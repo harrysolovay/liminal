@@ -1,7 +1,7 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
 import { ActionBase } from "../Action/ActionBase.js"
-import type { Spec } from "../Spec.js"
 import type { JSONObject } from "../JSON/JSONObject.js"
+import type { Spec } from "../Spec.js"
 import type { GenerationEvent } from "./GenerationEvent.js"
 
 export interface Generation<S extends Spec = Spec> extends ActionBase<"Generation", S> {

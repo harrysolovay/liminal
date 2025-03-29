@@ -1,7 +1,7 @@
-import { Generation, Context, Model } from "liminal"
-import { type } from "arktype"
-import { AILanguageModel } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
+import { type } from "arktype"
+import { Context, Generation, Model } from "liminal"
+import { AILanguageModel } from "liminal-ai"
 
 await TranslationWithFeedback("typescript", "I love you!").exec({
   models: {
@@ -15,7 +15,7 @@ function TranslationWithFeedback(targetLanguage: string, text: string) {
   return Context(
     "TranslateWithFeedback",
     "You are an expert literary translator. Translate the supplied text to the specified target language, preserving tone and cultural nuances.",
-    function* () {
+    function*() {
       yield* Model("default")
       yield `Target language: ${targetLanguage}`
       yield `Text:
@@ -49,10 +49,10 @@ function TranslationWithFeedback(targetLanguage: string, text: string) {
           }),
         )
         if (
-          evaluation.qualityScore >= 8 &&
-          evaluation.preservesTone &&
-          evaluation.preservesNuance &&
-          evaluation.culturallyAccurate
+          evaluation.qualityScore >= 8
+          && evaluation.preservesTone
+          && evaluation.preservesNuance
+          && evaluation.culturallyAccurate
         ) {
           break
         }

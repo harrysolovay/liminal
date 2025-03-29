@@ -1,5 +1,5 @@
-import type { Emit } from "./Emit.js"
 import type { ActionReducer } from "../Action/ActionReducer.js"
+import type { Emit } from "./Emit.js"
 
 export const reduceEmit: ActionReducer<Emit> = (state, action) => {
   state.events.emit({

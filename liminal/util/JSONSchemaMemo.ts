@@ -1,5 +1,5 @@
-import { toJSONSchema } from "standard-json-schema"
 import type { StandardSchemaV1 } from "@standard-schema/spec"
+import { toJSONSchema } from "standard-json-schema"
 
 const memo = new WeakMap<StandardSchemaV1, Promise<object>>()
 

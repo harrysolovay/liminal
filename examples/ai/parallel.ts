@@ -1,9 +1,9 @@
-import { Branches, Generation, Context, Model } from "liminal"
-import { type } from "arktype"
-import { AILanguageModel } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
-import { fileURLToPath } from "node:url"
+import { type } from "arktype"
+import { Branches, Context, Generation, Model } from "liminal"
+import { AILanguageModel } from "liminal-ai"
 import { readFile } from "node:fs/promises"
+import { fileURLToPath } from "node:url"
 
 const code = await readFile(fileURLToPath(import.meta.url), "utf-8")
 
@@ -22,7 +22,7 @@ function Review(code: string) {
   return Context(
     "Parallel",
     "You are a technical lead summarizing multiple code reviews. Review the supplied code.",
-    function* () {
+    function*() {
       yield* Model("default")
       yield code
       const reviews = yield* Branches({

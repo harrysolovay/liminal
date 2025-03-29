@@ -1,8 +1,8 @@
-import type { Tool } from "../Tool/Tool.js"
-import type { Config } from "../Config.js"
-import type { Actor } from "../Actor/Actor.js"
-import type { Message } from "../Message/Message.js"
 import type { Events } from "../ActionEventSource.js"
+import type { Actor } from "../Actor/Actor.js"
+import type { Config } from "../Config.js"
+import type { Message } from "../Message/Message.js"
+import type { Tool } from "../Tool/Tool.js"
 
 export interface State<R = any> {
   kind: "Context" | "Branch"

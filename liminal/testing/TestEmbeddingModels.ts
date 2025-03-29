@@ -1,5 +1,5 @@
-import type { Config } from "../Config.js"
 import type { EmbeddingModelAdapter } from "../Adapters.js"
+import type { Config } from "../Config.js"
 
 export interface TestEmbeddingModelConfig {
   getEmbedding: () => Array<number>

@@ -1,5 +1,5 @@
-import { State } from "../State/State.js"
 import { reduceAction } from "../Action/reduceAction.js"
+import { State } from "../State/State.js"
 
 export async function reduceActor(state: State): Promise<State> {
   let current = await state.actor.next()

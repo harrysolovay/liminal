@@ -1,5 +1,5 @@
-import type { Spec } from "../Spec.js"
 import { ActionBase } from "../Action/ActionBase.js"
+import type { Spec } from "../Spec.js"
 import type { AssistantContent } from "./AssistantContent.js"
 import type { AssistantMessageEvent } from "./AssistantMessageEvent.js"
 

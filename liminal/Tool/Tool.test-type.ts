@@ -1,13 +1,13 @@
-import { Tool } from "./Tool.js"
 import type { StandardSchemaV1 } from "@standard-schema/spec"
-import type { IsExact, AssertTrue } from "conditional-type-checks"
-import { AssertionScope } from "../testing/AssertionScope.js"
+import type { AssertTrue, IsExact } from "conditional-type-checks"
 import { Context } from "../Context/Context.js"
 import type { ContextEvent } from "../Context/ContextEvent.js"
 import { Emit } from "../Emit/Emit.js"
 import type { EmitEvent } from "../Emit/EmitEvent.js"
-import type { ToolEvent } from "./ToolEvent.js"
+import { AssertionScope } from "../testing/AssertionScope.js"
 import type { ToolRemovalEvent } from "../ToolRemoval/ToolRemovalEvent.js"
+import { Tool } from "./Tool.js"
+import type { ToolEvent } from "./ToolEvent.js"
 
 AssertionScope((assert) => {
   type P = {
@@ -33,7 +33,7 @@ AssertionScope((assert) => {
     }>()
   }
 
-  const genTool = Tool("Tool", "", null! as StandardSchemaV1<P>, function* (params) {
+  const genTool = Tool("Tool", "", null! as StandardSchemaV1<P>, function*(params) {
     type _ = [AssertTrue<IsExact<typeof params, P>>]
     yield* Emit("Test", {})
     return ""
@@ -47,7 +47,7 @@ AssertionScope((assert) => {
 
   function* parent() {
     yield* Tool("ParentTool", "", null! as StandardSchemaV1<P>, () => {})
-    yield* Context("Context", function* () {
+    yield* Context("Context", function*() {
       yield* arrowTool
     })
   }

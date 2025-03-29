@@ -1,6 +1,6 @@
-import { JSONSchemaMemo } from "../util/JSONSchemaMemo.js"
 import { ActionBase } from "../Action/ActionBase.js"
 import type { ActionReducer } from "../Action/ActionReducer.js"
+import { JSONSchemaMemo } from "../util/JSONSchemaMemo.js"
 import type { Tool } from "./Tool.js"
 
 export const reduceTool: ActionReducer<Tool> = (state, action) => {

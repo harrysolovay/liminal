@@ -1,7 +1,7 @@
-import { Context, Generation, Model } from "liminal"
-import { type } from "arktype"
-import { AILanguageModel } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
+import { type } from "arktype"
+import { Context, Generation, Model } from "liminal"
+import { AILanguageModel } from "liminal-ai"
 
 Root().exec({
   models: {
@@ -14,7 +14,7 @@ Root().exec({
 })
 
 function Root() {
-  return Context("root", function* () {
+  return Context("root", function*() {
     yield* Model("default")
     const classification = yield* classifyQuery("I'd like a refund please")
     const response = yield* useClassification(classification)
@@ -34,7 +34,7 @@ function classifyQuery(query: string) {
       2. Complexity (simple or complex)
       3. Brief reasoning for classification
     `,
-    function* () {
+    function*() {
       yield query
       return yield* Generation(Classification)
     },
@@ -48,7 +48,7 @@ const Classification = type({
 })
 
 function useClassification(classification: typeof Classification.infer) {
-  return Context("UseClassificationAgent", USE_CLASSIFICATION_AGENT_PROMPTS[classification.type], function* () {
+  return Context("UseClassificationAgent", USE_CLASSIFICATION_AGENT_PROMPTS[classification.type], function*() {
     if (classification.complexity === "complex") {
       yield* Model("reasoning")
     }

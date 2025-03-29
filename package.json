@@ -7,7 +7,6 @@
     "example:vite-react-app": "bun run --filter=liminal-example-vite-react-app dev"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
     "@types/bun": "latest",
     "conditional-type-checks": "^1.0.6",
     "typescript": "^5.8.2"
