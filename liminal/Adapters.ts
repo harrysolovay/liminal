@@ -1,6 +1,6 @@
-import type { ActionReducer } from "./reduce/ActionReducer.js"
-import type { Embedding } from "./Action/Embedding.js"
-import type { Generation } from "./Action/Generation.js"
+import type { ActionReducer } from "./Action/ActionReducer.js"
+import type { Embedding } from "./Embedding/Embedding.js"
+import type { Generation } from "./Generation/Generation.js"
 
 export type LanguageModelAdapter = ActionReducer<Generation>
 

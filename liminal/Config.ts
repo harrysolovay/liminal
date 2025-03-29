@@ -2,7 +2,7 @@ import type { EmbeddingModelAdapter, LanguageModelAdapter } from "./Adapters.js"
 import type { ExtractSpec, Spec } from "./Spec.js"
 import type { Expand } from "./util/Expand.js"
 import type { ActionEvent } from "./Action/ActionEvent.js"
-import type { ActionLike } from "./Action/Action.js"
+import type { ActionLike } from "./Action/ActionLike.js"
 
 export type EventHandler = (event: ActionEvent) => any
 

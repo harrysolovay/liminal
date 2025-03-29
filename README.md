@@ -1,15 +1,17 @@
 # Liminal
 
 Liminal is a model-agnostic library for LLM conversation state management. It
-exposes a set of primitives for buffering messages, triggering completions and
-vectorizations, attaching and detaching tools, emitting events to observers, and
-instantiating and branching conversations. Conversation definition types are
-captured to ensure type-safe usage of events within observers. Liminal
-conversations can be executed with any underlying LLM client; for example, see
+exposes a set of primitives for buffering messages, generating text, objects and
+vectors, attaching and detaching tools, emitting events, and instantiating and
+branching conversations. Conversation definition types are inferred to narrow
+even types for observers. Liminal conversations can be executed with any
+underlying LLM client or model; for example, see
 [the Vercel AI SDK reference adapter](./packages/ai/README.md).
 
 ## Resources
 
+- [Documentation &rarr;](https://liminal.land)<br />Usage guide intended for
+  human readers.
 - [llms.txt &rarr;](./llms.txt)<br />Chunks of truth to be fed into LLMs.
 - [Examples &rarr;](https://liminal.land/examples)<br />Examples illustrating
   common use cases.
@@ -33,24 +35,27 @@ Model a conversation as a generator function. Yield user messages and assistant
 `Value`s. Optionally return a result (in this case `ranking`).
 
 ```ts
-import { Exec, Value } from "liminal"
+import { Context, Generation, LanguageModel } from "liminal"
 
-function* Conversation() {
+const ctx = Context("PlantGrowthRanking", function*() {
+  // Describe the requirement of a language model by the key of `"default"`.
+  yield* LanguageModel("default")
+
   // Buffer a user message.
   yield "What are some key factors that affect plant growth?"
 
   // Complete text and add it (as an assistant message) to the buffer.
-  const factors = yield* Value()
+  const factors = yield* Generation()
 
   // Buffer another user message.
   yield "Rank those by order of importance"
 
   // Same as before, but this time with a `ZodType` (could use another Standard Schema type).
-  const ranking = yield* Value(z.string().array())
+  const ranking = yield* Generation(z.string().array())
 
   // Return a result from the conversation.
   return ranking
-}
+})
 ```
 
 Execute `Conversation` with the LLM client library and models of your choosing.
@@ -60,11 +65,11 @@ In this case we use Vercel's AI SDK and specify the `gpt-4o-mini` model.
 // ...
 
 import { openai } from "@ai-sdk/openai"
-import { adapter } from "liminal-ai"
+import { AILanguageModel } from "liminal-ai"
 
-const result = await Exec(adapter).run(Conversation, {
+const { result } = ctx.exec({
   models: {
-    default: openai("gpt-4o-mini"),
+    default: AILanguageModel(openai("gpt-4o-mini")),
   },
 })
 
@@ -76,28 +81,6 @@ result satisfies Array<string>
 Actions are the values yielded from Liminal conversations (generator functions
 or iterables). They tell the executor how to update internal state such as the
 model or tool selections.
-
-- [`string | Array<string>` &rarr;](./docs/actions/TODO.md)<br />append user
-  messages to the message buffer.
-- [`Value` &rarr;](./docs/actions/TODO.md)<br />trigger a completion (optional
-  include a [Standard Schema](https://standardschema.dev/) type to inform
-  structured output shape).
-- [`Context` &rarr;](./docs/actions/TODO.md)<br />Create a container with a
-  specified key, system message and untouched message buffer.
-- [`Branch` &rarr;](./docs/actions/TODO.md)<br />Create isolated duplicates of
-  the current conversation and explore different trajectories.
-- [`Tool | DisableTool` &rarr;](./docs/actions/TODO.md)<br />Enable and disable
-  tools to be used by underlying completions calls.
-- [`Emit` &rarr;](./docs/actions/TODO.md)<br />Emit some data that observers can
-  utilize, perhaps for writing to a database or displaying conversation progress
-  to users.
-- [`Messages` &rarr;](./docs/actions/TODO.md)<br />Get the current list of
-  messages contained within the message buffer.
-- [`Embedding` &rarr;](./docs/actions/TODO.md)<br />Get the vector embedding
-  representation of a value.
-- [`LanguageModel | EmbeddingModel` &rarr;](./docs/actions/TODO.md)<br />Declare
-  the intended use of a model by specifying a key to which the executor
-  ultimately binds a model.
 
 ---
 

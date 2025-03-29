@@ -1,6 +1,6 @@
 import type { IsExact } from "conditional-type-checks"
-import type { ActionLike } from "../Action/Action.js"
-import type { ActorLike } from "../common/ActorLike.js"
+import type { ActionLike } from "../Action/ActionLike.js"
+import type { ActorLike } from "../Actor/ActorLike.js"
 import type { ExtractSpec, Spec } from "../Spec.js"
 
 export declare function AssertionScope(

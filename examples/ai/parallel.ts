@@ -9,7 +9,7 @@ const code = await readFile(fileURLToPath(import.meta.url), "utf-8")
 
 const LMH = type("'lower' | 'medium' | 'high'")
 
-const state = await Review(code).exec({
+await Review(code).exec({
   models: {
     language: {
       default: AILanguageModel(openai("gpt-4o-mini")),
@@ -17,8 +17,6 @@ const state = await Review(code).exec({
   },
   handler: console.log,
 })
-
-console.log(JSON.stringify(state, null, 2))
 
 function Review(code: string) {
   return Context(
