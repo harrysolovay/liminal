@@ -1,6 +1,6 @@
 import { ActionBase } from "../Action/ActionBase.js"
-import type { ExecConfig } from "../ExecConfig.js"
-import type { LanguageModelAdapter } from "../StateReducers/StateReducers.js"
+import type { Config } from "../Config.js"
+import type { LanguageModelAdapter } from "../Adapters.js"
 import { JSONSchemaMemo } from "../util/JSONSchemaMemo.js"
 import type { JSONObject } from "../util/JSONValue.js"
 
@@ -14,7 +14,7 @@ export const defaultTestLanguageModelConfig: TestLanguageModelConfig = {
   getText: () => "",
 }
 
-export function TestLanguageModels<T extends ExecConfig["models"]["language"]>(
+export function TestLanguageModels<T extends Config["models"]["language"]>(
   config: TestLanguageModelConfig = defaultTestLanguageModelConfig,
 ): T {
   const testLanguageModel = TestLanguageModel(config)

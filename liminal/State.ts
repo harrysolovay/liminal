@@ -1,13 +1,13 @@
 import type { Tool } from "./Action/Tool.js"
-import type { ExecConfig } from "./ExecConfig.js"
+import type { Config } from "./Config.js"
 import type { Actor } from "./common/Actor.js"
 import type { Message } from "./Action/Action.js"
 import type { Events } from "./ActionEventSource.js"
 
-export interface ExecState<R = any> {
+export interface State<R = any> {
   kind: "Context" | "Branch"
   key: string
-  config: ExecConfig
+  config: Config
   actor: Actor
   model: {
     language?: string
@@ -19,14 +19,14 @@ export interface ExecState<R = any> {
   next?: any
   events: Events
   result: R
-  children: Array<ExecState>
+  children: Array<State>
 }
 
-export function ExecState<R = any>(execState: ExecState<R>) {
+export function State<R = any>(state: State<R>) {
   return {
-    ...execState,
+    ...state,
     toJSON() {
-      const { kind, system, messages, key, events, children, result } = execState
+      const { kind, system, messages, key, events, children, result } = state
       return { kind, key, system, messages, events, children, result }
     },
   }

@@ -4,11 +4,10 @@ import { ActionBase } from "./ActionBase.js"
 import type { EventBase } from "./EventBase.js"
 import type { ActionEvent } from "./ActionEvent.js"
 import type { ExtractSpec, Spec } from "../Spec.js"
-import type { NarrowExecConfig } from "../ExecConfig.js"
-import { ExecState } from "../ExecState.js"
+import type { ExtractConfig } from "../Config.js"
+import { State } from "../State.js"
 import { Events } from "../ActionEventSource.js"
-import { StateReducers } from "../StateReducers/StateReducers.js"
-import { reduceActor } from "../StateReducers/reduceActor.js"
+import { reduceActor } from "../reduce/reduce.js"
 import { unwrapDeferred } from "../util/unwrapDeferred.js"
 
 export interface Context<S extends Spec = Spec> extends ActionBase<"Context", S> {
@@ -18,7 +17,7 @@ export interface Context<S extends Spec = Spec> extends ActionBase<"Context", S>
 }
 
 export interface ContextGenerator<Y extends ActionLike = ActionLike, T = any> extends IteratorObject<Y, T> {
-  exec(config: NarrowExecConfig<Y>): Promise<ExecState<T>>
+  exec(config: ExtractConfig<Y>): Promise<State<T>>
 }
 
 export function Context<K extends string, Y extends ActionLike, S extends ExtractSpec<Y>, R = string>(
@@ -59,8 +58,8 @@ export function Context<Y extends ActionLike, R = string>(
     })
   }
 
-  function exec(config: NarrowExecConfig<Y>): Promise<ExecState> {
-    const state = ExecState({
+  function exec(config: ExtractConfig<Y>): Promise<State> {
+    const state = State({
       kind: "Context",
       key,
       config,
@@ -72,7 +71,7 @@ export function Context<Y extends ActionLike, R = string>(
       children: [],
       result: undefined,
     })
-    return reduceActor(StateReducers, state)
+    return reduceActor(state)
   }
 }
 

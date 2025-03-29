@@ -1,17 +1,17 @@
+import type { Context } from "../Action/Context.js"
 import { Generation } from "../Action/Generation.js"
 import type { Tool } from "../Action/Tool.js"
-import { ExecState } from "../ExecState.js"
 import { unwrapDeferred } from "../util/unwrapDeferred.js"
-import { reduceActor } from "./reduceActor.js"
-import type { StateReducers } from "./StateReducers.js"
+import type { ActionReducer } from "./ActionReducer.js"
+import { reduceActor } from "./reduce.js"
 
-export const reduceContext: StateReducers["reduceContext"] = async function (state, action) {
+export const reduceContext: ActionReducer<Context> = async (state, action) => {
   state.events.emit({
     event: "ContextEnter",
     context: action.key,
     system: action.system,
   })
-  const contextState = await reduceActor(this, {
+  const contextState = await reduceActor({
     kind: "Context",
     key: action.key,
     config: state.config,

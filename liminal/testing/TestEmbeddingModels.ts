@@ -1,5 +1,5 @@
-import type { ExecConfig } from "../ExecConfig.js"
-import type { EmbeddingModelAdapter } from "../StateReducers/StateReducers.js"
+import type { Config } from "../Config.js"
+import type { EmbeddingModelAdapter } from "../Adapters.js"
 
 export interface TestEmbeddingModelConfig {
   getEmbedding: () => Array<number>
@@ -9,7 +9,7 @@ export const defaultTestingEmbeddingModelConfig: TestEmbeddingModelConfig = {
   getEmbedding: () => [],
 }
 
-export function TestEmbeddingModels<T extends ExecConfig["models"]["embedding"]>(
+export function TestEmbeddingModels<T extends Config["models"]["embedding"]>(
   config: TestEmbeddingModelConfig = defaultTestingEmbeddingModelConfig,
 ): T {
   const testEmbeddingModel = TestEmbeddingModel(config)

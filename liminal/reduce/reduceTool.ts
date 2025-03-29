@@ -1,8 +1,9 @@
-import type { StateReducers } from "./StateReducers.js"
 import { JSONSchemaMemo } from "../util/JSONSchemaMemo.js"
 import { ActionBase } from "../Action/ActionBase.js"
+import type { ActionReducer } from "./ActionReducer.js"
+import type { Tool } from "../Action/Tool.js"
 
-export const reduceTool: StateReducers["reduceTool"] = (state, action) => {
+export const reduceTool: ActionReducer<Tool> = (state, action) => {
   state.events.emit({
     event: "EnableTool",
     key: action.key,

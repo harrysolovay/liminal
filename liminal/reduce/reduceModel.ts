@@ -1,6 +1,7 @@
-import type { StateReducers } from "./StateReducers.js"
+import type { Model } from "../Action/Model.js"
+import type { ActionReducer } from "./ActionReducer.js"
 
-export const reduceModel: StateReducers["reduceModel"] = (state, action) => {
+export const reduceModel: ActionReducer<Model> = (state, action) => {
   state.events.emit({
     event: "Model",
     key: action.key,

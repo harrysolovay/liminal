@@ -4,7 +4,7 @@ import { ActionBase } from "./ActionBase.js"
 import type { Actor } from "../common/Actor.js"
 import type { JSONObject, JSONValue } from "../util/JSONValue.js"
 import type { PromiseOr } from "../util/PromiseOr.js"
-import type { DisableTool, DisableToolEvent } from "./DisableTool.js"
+import type { ToolRemoval, ToolRemovalEvent } from "./DisableTool.js"
 import type { ActionEvent } from "./ActionEvent.js"
 import type { Spec } from "../Spec.js"
 import type { Action, ActionLike } from "./Action.js"
@@ -32,10 +32,10 @@ export function Tool<K extends string, P extends JSONObject, R extends PromiseOr
     Event: ToolEvent<K, P, never, Awaited<R>>
   }>,
   () => Generator<
-    DisableTool<{
+    ToolRemoval<{
       LanguageModel: never
       EmbeddingModel: never
-      Event: DisableToolEvent<K>
+      Event: ToolRemovalEvent<K>
     }>,
     void
   >
@@ -52,10 +52,10 @@ export function Tool<K extends string, P extends JSONObject, Y extends ActionLik
     Event: ToolEvent<K, P, Extract<Y, Action>[""]["Event"], Awaited<R>>
   }>,
   () => Generator<
-    DisableTool<{
+    ToolRemoval<{
       LanguageModel: never
       EmbeddingModel: never
-      Event: DisableToolEvent<K>
+      Event: ToolRemovalEvent<K>
     }>,
     void
   >
@@ -65,7 +65,7 @@ export function* Tool(
   description: string,
   params: StandardSchemaV1<JSONObject, JSONObject>,
   implementation: ToolImplementation,
-): Generator<Tool, () => Generator<DisableTool, void>> {
+): Generator<Tool, () => Generator<ToolRemoval, void>> {
   return yield ActionBase("Tool", {
     key,
     description,

@@ -1,10 +1,10 @@
-import type { ExecEventHandler } from "./ExecConfig.js"
+import type { EventHandler } from "./Config.js"
 import type { ActionEvent } from "./Action/ActionEvent.js"
 
 export class Events extends Array<ActionEvent> {
   constructor(
     readonly f: (inner: ActionEvent) => ActionEvent,
-    readonly handler: ExecEventHandler | undefined,
+    readonly handler: EventHandler | undefined,
   ) {
     super()
   }

@@ -1,10 +1,10 @@
-import type { Branches } from "../Action/Branch.js"
+import type { Branch, Branches } from "../Action/Branch.js"
 import { unwrapDeferred } from "../util/unwrapDeferred.js"
 import type { Value } from "../util/Value.js"
-import { reduceActor } from "./reduceActor.js"
-import type { StateReducers } from "./StateReducers.js"
+import type { ActionReducer } from "./ActionReducer.js"
+import { reduceActor } from "./reduce.js"
 
-export const reduceBranch: StateReducers["reduceBranch"] = async function (state, action) {
+export const reduceBranch: ActionReducer<Branch> = async (state, action) => {
   const branchesKeys = Object.keys(action.branches)
   state.events.emit({
     event: "BranchesEnter",
@@ -17,7 +17,7 @@ export const reduceBranch: StateReducers["reduceBranch"] = async function (state
         branch: key,
       })
       const source = (action.branches as any)[key] as Value<Branches>
-      const childState = await reduceActor(this, {
+      const childState = await reduceActor({
         kind: "Branch",
         key,
         config: state.config,

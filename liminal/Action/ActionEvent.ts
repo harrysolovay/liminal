@@ -1,6 +1,6 @@
 import type { BranchEvent, BranchesEvent } from "./Branch.js"
 import type { ContextEvent } from "./Context.js"
-import type { DisableToolEvent } from "./DisableTool.js"
+import type { ToolRemovalEvent } from "./DisableTool.js"
 import type { EmbeddingEvent } from "./Embedding.js"
 import type { EmitEvent } from "./Emit.js"
 import type { GenerateEvent } from "./Generation.js"
@@ -16,7 +16,7 @@ export type ActionEvent =
   | BranchesEvent
   | BranchEvent
   | BranchesEvent
-  | DisableToolEvent
+  | ToolRemovalEvent
   | EmbeddingEvent
   | EmitEvent
   | GenerateEvent
