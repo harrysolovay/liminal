@@ -1,9 +1,10 @@
 {
   "private": true,
-  "workspaces": ["examples/*", "liminal", "packages/*"],
+  "workspaces": ["examples/*", "liminal", "liminal.land", "packages/*"],
   "scripts": {
     "build": "tsc -b",
     "watch": "tsc -b --watch",
+    "liminal.land": "bun run --filter liminal.land dev",
     "example:vite-react-app": "bun run --filter=liminal-example-vite-react-app dev"
   },
   "devDependencies": {

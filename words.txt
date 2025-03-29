@@ -8,8 +8,12 @@ ollama
 ossp
 pglite
 pgvector
+shikijs
+solovay
 supabase
 tmpfs
 tsdocs
+twoslash
 valibot
+vitepress
 vtype

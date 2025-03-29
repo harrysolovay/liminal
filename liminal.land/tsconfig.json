@@ -1,0 +1,9 @@
+{
+  "extends": "../tsconfig.base",
+  "include": [".vitepress"],
+  "references": [
+    {
+      "path": "../liminal"
+    }
+  ]
+}

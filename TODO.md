@@ -1,5 +1,6 @@
 # TODO
 
+- why?: common message format
 - aborting/early exit + event
 - branch event cleanup
 - DI
@@ -25,4 +26,7 @@
   - fastify
   - lambda
   - deno deploy
-- vscode extension for code lens / smart labels for different actions
+- vscode extension for code lens / smart labels for different actions pins to
+  enable referencing other types. The final description has a preface that
+  describes any pinned types, and then have a common type ID for the given field
+  description.

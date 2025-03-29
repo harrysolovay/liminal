@@ -1,6 +1,7 @@
 {
   "name": "liminal",
   "private": true,
+  "description": "Liminal is a model-agnostic library for conversation state management.",
   "exports": {
     ".": "./dist/index.js",
     "./testing": "./dist/testing/index.js"

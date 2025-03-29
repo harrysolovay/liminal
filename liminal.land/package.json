@@ -1,0 +1,19 @@
+{
+  "name": "liminal.land",
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress",
+    "build": "vitepress build"
+  },
+  "devDependencies": {
+    "@shikijs/vitepress-twoslash": "^1.23.1",
+    "@types/markdown-it-footnote": "^3.0.4",
+    "liminal": "workspace:*",
+    "vitepress": "^1.5.0"
+  },
+  "dependencies": {
+    "dedent": "^1.5.3",
+    "markdown-it-footnote": "^4.0.0",
+    "openai": "^4.76.0"
+  }
+}

@@ -1,4 +1,7 @@
 {
+  "[css]": {
+    "editor.defaultFormatter": "dprint.dprint"
+  },
   "[dockercompose]": {
     "editor.defaultFormatter": "dprint.dprint"
   },

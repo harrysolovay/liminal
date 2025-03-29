@@ -1,11 +1,11 @@
 # Liminal
 
-Liminal is a model-agnostic library for LLM conversation state management. It
+Liminal is a model-agnostic library for conversation state management. It
 exposes a set of primitives for buffering messages, generating text, objects and
 vectors, attaching and detaching tools, emitting events, and instantiating and
 branching conversations. Conversation definition types are inferred to narrow
 even types for observers. Liminal conversations can be executed with any
-underlying LLM client or model; for example, see
+underlying model; for example, see
 [the Vercel AI SDK reference adapter](./packages/ai/README.md).
 
 ## Resources
@@ -18,15 +18,15 @@ underlying LLM client or model; for example, see
 
 ## Benefits
 
-- [Decouple Models From Conversations &rarr;](./docs/why/decoupling_models_from_conversations.md)<br />Ensure
+- [Decouple Models From Conversations &rarr;](./why/decoupling_models_from_conversations.md)<br />Ensure
   conversations can be executed with any provider/model.
-- [Message Buffer Management &rarr;](./docs/why/message_buffer_management.md)<br />Intuitive
+- [Message Buffer Management &rarr;](./why/message_buffer_management.md)<br />Intuitive
   conventions-based approach to managing message buffers.
-- [Observing Execution &rarr;](./docs/why/observing_execution.md)<br />Handle
-  receive key events within the conversation and its descendants.
-- [Static Type Inference &rarr;](./docs/why/static_type_inference.md)<br />TRPC-style
+- [Observing Execution &rarr;](./why/observing_execution.md)<br />Handle receive
+  key events within the conversation and its descendants.
+- [Static Type Inference &rarr;](./why/static_type_inference.md)<br />TRPC-style
   type inference of conversation events.
-- [Eliminating Boilerplate &rarr;](./docs/why/eliminating_boilerplate.md)<br />Avoid
+- [Eliminating Boilerplate &rarr;](./why/eliminating_boilerplate.md)<br />Avoid
   redundancies of requesting completions and embeddings.
 
 ## Overview
