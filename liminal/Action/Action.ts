@@ -1,4 +1,4 @@
-import type { Branch } from "../Branch/Branch.js"
+import type { Branches } from "../Branches/Branches.js"
 import type { Embedding } from "../Embedding/Embedding.js"
 import type { Generation } from "../Generation/Generation.js"
 import type { CurrentState } from "../CurrentState/CurrentState.js"
@@ -13,7 +13,7 @@ export type Action =
   | Context
   | Model
   | Emit
-  | Branch
+  | Branches
   | Generation
   | Embedding
   | Tool

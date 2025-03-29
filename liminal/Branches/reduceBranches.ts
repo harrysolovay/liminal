@@ -1,22 +1,22 @@
-import type { Branch, Branches } from "../Branch/Branch.js"
+import type { Branches, BranchImplementations } from "./Branches.js"
 import { unwrapDeferred } from "../util/unwrapDeferred.js"
 import type { Value } from "../util/Value.js"
 import type { ActionReducer } from "../Action/ActionReducer.js"
 import { reduceActor } from "../Actor/reduceActor.js"
 
-export const reduceBranch: ActionReducer<Branch> = async (state, action) => {
+export const reduceBranches: ActionReducer<Branches> = async (state, action) => {
   const branchesKeys = Object.keys(action.branches)
   state.events.emit({
-    event: "BranchEnter",
+    event: "BranchesEnter",
     branches: branchesKeys,
   })
   const branchStates = await Promise.all(
     branchesKeys.map(async (key) => {
       state.events.emit({
-        event: "BranchArmEnter",
+        event: "BranchEnter",
         branch: key,
       })
-      const source = (action.branches as any)[key] as Value<Branches>
+      const source = (action.branches as any)[key] as Value<BranchImplementations>
       const childState = await reduceActor({
         kind: "Branch",
         key,
@@ -26,7 +26,7 @@ export const reduceBranch: ActionReducer<Branch> = async (state, action) => {
         actor: unwrapDeferred(source),
         next: undefined,
         events: state.events.child((inner) => ({
-          event: "BranchArmInner",
+          event: "BranchInner",
           branch: key,
           inner,
         })),
@@ -36,7 +36,7 @@ export const reduceBranch: ActionReducer<Branch> = async (state, action) => {
         result: undefined,
       })
       state.events.emit({
-        event: "BranchArmExit",
+        event: "BranchExit",
         branch: key,
         result: childState.result,
       })
@@ -47,7 +47,7 @@ export const reduceBranch: ActionReducer<Branch> = async (state, action) => {
     ? branchStates.map((state) => state.result)
     : Object.fromEntries(branchesKeys.map((key, i) => [key, branchStates[i]!.result]))
   state.events.emit({
-    event: "BranchExit",
+    event: "BranchesExit",
     branches: branchesKeys,
     result,
   })

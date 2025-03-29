@@ -1,4 +1,4 @@
-import type { BranchesEvent, BranchArmEvent } from "../Branch/Branch.js"
+import type { BranchesEvent } from "../Branches/BranchesEvent.js"
 import type { ContextEvent } from "../Context/ContextEvent.js"
 import type { EmbeddingEvent } from "../Embedding/EmbeddingEvent.js"
 import type { EmitEvent } from "../Emit/EmitEvent.js"
@@ -11,7 +11,6 @@ import type { ToolRemovalEvent } from "../ToolRemoval/ToolRemovalEvent.js"
 export type ActionEvent =
   | ContextEvent
   | BranchesEvent
-  | BranchArmEvent
   | BranchesEvent
   | ToolRemovalEvent
   | EmbeddingEvent

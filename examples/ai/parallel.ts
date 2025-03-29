@@ -1,4 +1,4 @@
-import { Branch, Generation, Context, Model } from "liminal"
+import { Branches, Generation, Context, Model } from "liminal"
 import { type } from "arktype"
 import { AILanguageModel } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
@@ -25,7 +25,7 @@ function Review(code: string) {
     function* () {
       yield* Model("default")
       yield code
-      const reviews = yield* Branch({
+      const reviews = yield* Branches({
         SecurityReview,
         PerformanceReview,
         MaintainabilityReview,

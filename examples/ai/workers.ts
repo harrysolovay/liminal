@@ -1,4 +1,4 @@
-import { Branch, Context, Generation, Model } from "liminal"
+import { Branches, Context, Generation, Model } from "liminal"
 import { type } from "arktype"
 import { AILanguageModel } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
@@ -24,7 +24,7 @@ function CodeReviewers() {
         estimatedComplexity: "'create' | 'medium' | 'high'",
       }),
     )
-    const fileChanges = yield* Branch(implementationPlan.files.map((file) => Implementor(feat, file)))
+    const fileChanges = yield* Branches(implementationPlan.files.map((file) => Implementor(feat, file)))
     return { fileChanges, implementationPlan }
   })
 }

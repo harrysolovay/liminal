@@ -1,7 +1,7 @@
 import { ActionBase } from "../Action/ActionBase.js"
 import { assert } from "../util/assert.js"
 import type { ActionReducer } from "../Action/ActionReducer.js"
-import { reduceBranch } from "../Branch/reduceBranch.js"
+import { reduceBranches } from "../Branches/reduceBranches.js"
 import { reduceContext } from "../Context/reduceContext.js"
 import { reduceCurrentState } from "../CurrentState/reduceCurrentState.js"
 import { reduceToolRemoval } from "../ToolRemoval/reduceToolRemoval.js"
@@ -43,8 +43,8 @@ export const reduceAction: ActionReducer = (state, action) => {
       assert(reduceEmbedding)
       return reduceEmbedding(state, action)
     }
-    case "Branch": {
-      return reduceBranch(state, action)
+    case "Branches": {
+      return reduceBranches(state, action)
     }
     case "Context": {
       return reduceContext(state, action)
