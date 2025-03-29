@@ -1,7 +1,7 @@
 import type { StateReducers } from "./StateReducers.js"
 
 export const reduceModel: StateReducers["reduceModel"] = (state, action) => {
-  state.handler({
+  state.events.emit({
     event: "Model",
     key: action.key,
     purpose: action.purpose,
@@ -9,12 +9,15 @@ export const reduceModel: StateReducers["reduceModel"] = (state, action) => {
   return {
     ...state,
     next: undefined,
-    ...(action.purpose === "language"
-      ? {
-          languageModelKey: action.key,
-        }
-      : {
-          embeddingModelKey: action.key,
-        }),
+    model: {
+      ...state.model,
+      ...(action.purpose === "language"
+        ? {
+            language: action.key,
+          }
+        : {
+            embedding: action.key,
+          }),
+    },
   }
 }

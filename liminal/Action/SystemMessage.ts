@@ -1,6 +1,6 @@
 import type { Spec } from "../Spec.js"
 import { ActionBase } from "./ActionBase.js"
-import type { EventBase } from "./event_common.js"
+import type { EventBase } from "./EventBase.js"
 
 export interface SystemMessage<S extends Spec = Spec> extends ActionBase<"SystemMessage", S> {
   content: string

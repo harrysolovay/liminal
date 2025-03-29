@@ -1,6 +1,5 @@
 import { Model, type ModelEvent } from "./Model.js"
-import { Context, type ContextEvent } from "./Context.js"
-import type { EnterEvent, ExitEvent } from "./event_common.js"
+import { Context, type ContextEnterEvent, type ContextExitEvent, type ContextInnerEvent } from "./Context.js"
 import { AssertionScope } from "../testing/index.js"
 
 AssertionScope((assert) => {
@@ -43,9 +42,8 @@ AssertionScope((assert) => {
     Event:
       | ModelEvent<"C", "language">
       | ModelEvent<"D", "embedding">
-      | ContextEvent<
-          "Context",
-          EnterEvent | ExitEvent<void> | ModelEvent<"A", "language"> | ModelEvent<"B", "embedding">
-        >
+      | ContextEnterEvent<"Context">
+      | ContextInnerEvent<"Context", ModelEvent<"A", "language"> | ModelEvent<"B", "embedding">>
+      | ContextExitEvent<"Context", void>
   }>()
 })

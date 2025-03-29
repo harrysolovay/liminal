@@ -26,14 +26,14 @@ export function reduceAction(this: StateReducers, state: ExecState, action: Acti
       return this.reduceMessage(state, action)
     }
     case "Generation": {
-      assert(state.languageModelKey)
-      const reduceGeneration = state.config.models.language?.[state.languageModelKey]
+      assert(state.model.language)
+      const reduceGeneration = state.config.models.language?.[state.model.language]
       assert(reduceGeneration)
       return reduceGeneration.call(this, state, action)
     }
     case "Embedding": {
-      assert(state.embeddingModelKey)
-      const reduceEmbedding = state.config.models.embedding?.[state.embeddingModelKey]
+      assert(state.model.embedding)
+      const reduceEmbedding = state.config.models.embedding?.[state.model.embedding]
       assert(reduceEmbedding)
       return reduceEmbedding.call(this, state, action)
     }

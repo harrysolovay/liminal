@@ -12,7 +12,6 @@ import { reduceContext } from "./reduceContext.js"
 import { reduceDisableTool } from "./reduceDisableTool.js"
 import { reduceEmit } from "./reduceEmit.js"
 import { reduceCurrentContext } from "./reduceCurrentContext.js"
-import { reduceState } from "./reduceState.js"
 import { reduceTool } from "./reduceTool.js"
 import { reduceModel } from "./reduceModel.js"
 import type { ActionReducer } from "./ActionReducer.js"
@@ -28,7 +27,6 @@ export type LanguageModelAdapter = ActionReducer<Generation>
 export type EmbeddingModelAdapter = ActionReducer<Embedding>
 
 export interface StateReducers {
-  reduceState: ActionReducer<never>
   reduceAction: ActionReducer<ActionLike>
   reduceMessage: ActionReducer<UserMessage | AssistantMessage | ToolMessage | SystemMessage>
   reduceModel: ActionReducer<Model>
@@ -41,7 +39,6 @@ export interface StateReducers {
 }
 
 export const StateReducers: StateReducers = {
-  reduceState,
   reduceAction,
   reduceMessage,
   reduceBranch,

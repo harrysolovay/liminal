@@ -1,6 +1,6 @@
 import type { Spec } from "../Spec.js"
 import { ActionBase } from "./ActionBase.js"
-import type { EventBase } from "./event_common.js"
+import type { EventBase } from "./EventBase.js"
 import type { FilePart, ReasoningPart, RedactedReasoningPart, TextPart, ToolCallPart } from "./content_part.js"
 
 export interface AssistantMessage<S extends Spec = Spec> extends ActionBase<"AssistantMessage", S> {

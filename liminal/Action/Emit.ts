@@ -1,7 +1,7 @@
 import type { Spec } from "../Spec.js"
 import type { JSONValue } from "../util/JSONValue.js"
 import { ActionBase } from "./ActionBase.js"
-import type { EventBase } from "./event_common.js"
+import type { EventBase } from "./EventBase.js"
 
 export interface Emit<S extends Spec = Spec> extends ActionBase<"Emit", S> {
   key: string

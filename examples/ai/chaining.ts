@@ -3,7 +3,7 @@ import { type } from "arktype"
 import { AILanguageModel } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
 
-MarketingCopy().run({
+await MarketingCopy().exec({
   models: {
     language: {
       default: AILanguageModel(openai("gpt-4o-mini")),

@@ -3,13 +3,12 @@ import { type } from "arktype"
 import { AILanguageModel } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
 
-TranslationWithFeedback("typescript", "I love you!").run({
+await TranslationWithFeedback("typescript", "I love you!").exec({
   models: {
     language: {
       default: AILanguageModel(openai("gpt-4o-mini")),
     },
   },
-  handler: console.log,
 })
 
 function TranslationWithFeedback(targetLanguage: string, text: string) {

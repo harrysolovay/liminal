@@ -4,13 +4,14 @@ import type { Expand } from "./util/Expand.js"
 import type { ActionEvent } from "./Action/ActionEvent.js"
 import type { ActionLike } from "./Action/Action.js"
 
+export type ExecEventHandler = (event: ActionEvent) => any
+
 export interface ExecConfig {
-  handler?: (event: ActionEvent) => any
+  handler?: ExecEventHandler
   models: {
     language?: Record<string, LanguageModelAdapter>
     embedding?: Record<string, EmbeddingModelAdapter>
   }
-  signal?: AbortSignal
 }
 
 export type NarrowExecConfig<Y extends ActionLike, S extends ExtractSpec<Y> = ExtractSpec<Y>> = {
@@ -31,5 +32,4 @@ export type NarrowExecConfig<Y extends ActionLike, S extends ExtractSpec<Y> = Ex
             }
           })
   >
-  signal?: AbortSignal
 }

@@ -1,8 +1,9 @@
 # TODO
 
-- aborting/early exit
+- aborting/early exit + event
 - DI
 - streaming
+- tool-calling
 - `Type extends Iterable<Generation<T>, T>`
 - encodeDescriptions?: boolean // TODO: re-encode generated objects as JSONC
   with schema field descriptions commented above values

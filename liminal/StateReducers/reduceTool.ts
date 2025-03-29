@@ -3,7 +3,7 @@ import { JSONSchemaMemo } from "../util/JSONSchemaMemo.js"
 import { ActionBase } from "../Action/ActionBase.js"
 
 export const reduceTool: StateReducers["reduceTool"] = (state, action) => {
-  state.handler({
+  state.events.emit({
     event: "EnableTool",
     key: action.key,
     description: action.description,

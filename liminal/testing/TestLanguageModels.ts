@@ -33,7 +33,7 @@ export function TestLanguageModel({ getObject, getText }: TestLanguageModelConfi
     if (action.type) {
       const schema = await JSONSchemaMemo(action.type)
       const object = getObject()
-      state.handler({
+      state.events.emit({
         event: "Generation",
         value: object,
         schema,
@@ -50,7 +50,7 @@ export function TestLanguageModel({ getObject, getText }: TestLanguageModelConfi
       }
     }
     const text = getText()
-    state.handler({
+    state.events.emit({
       event: "Generation",
       value: text,
     })

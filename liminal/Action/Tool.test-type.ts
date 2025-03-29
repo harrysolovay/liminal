@@ -1,10 +1,10 @@
-import { Tool, type EnableToolEvent, type ToolCallEvent } from "./Tool.js"
+import { Tool, type ToolEvent } from "./Tool.js"
 import type { StandardSchemaV1 } from "@standard-schema/spec"
 import type { IsExact, AssertTrue } from "conditional-type-checks"
 import type { DisableToolEvent } from "./DisableTool.js"
 import { AssertionScope } from "../testing/index.js"
-import type { EnterEvent, ExitEvent } from "./event_common.js"
 import { Context, type ContextEvent } from "./Context.js"
+import { Emit, type EmitEvent } from "./Emit.js"
 
 AssertionScope((assert) => {
   type P = {
@@ -18,7 +18,7 @@ AssertionScope((assert) => {
   assert.spec(arrowTool).equals<{
     LanguageModel: never
     EmbeddingModel: never
-    Event: EnableToolEvent<"Tool"> | ToolCallEvent<"Tool", P, EnterEvent | ExitEvent<void>>
+    Event: ToolEvent<"Tool", P, never, void>
   }>()
 
   function* _0() {
@@ -32,13 +32,14 @@ AssertionScope((assert) => {
 
   const genTool = Tool("Tool", "", null! as StandardSchemaV1<P>, function* (params) {
     type _ = [AssertTrue<IsExact<typeof params, P>>]
+    yield* Emit("Test", {})
     return ""
   })
 
   assert.spec(genTool).equals<{
     LanguageModel: never
     EmbeddingModel: never
-    Event: EnableToolEvent<"Tool"> | ToolCallEvent<"Tool", P, EnterEvent | ExitEvent<string>>
+    Event: ToolEvent<"Tool", P, EmitEvent<"Test", {}>, string>
   }>()
 
   function* parent() {
@@ -51,15 +52,6 @@ AssertionScope((assert) => {
   assert.spec(parent).equals<{
     LanguageModel: never
     EmbeddingModel: never
-    Event:
-      | EnableToolEvent<"ParentTool">
-      | ToolCallEvent<"ParentTool", P, EnterEvent | ExitEvent<void>>
-      | ContextEvent<
-          "Context",
-          | EnterEvent
-          | EnableToolEvent<"Tool">
-          | ExitEvent<void>
-          | ToolCallEvent<"Tool", P, EnterEvent | ExitEvent<void>>
-        >
+    Event: ToolEvent<"ParentTool", P, never, void> | ContextEvent<"Context", ToolEvent<"Tool", P, never, void>, void>
   }>()
 })

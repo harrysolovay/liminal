@@ -1,3 +1,4 @@
+import type { Message } from "./Action.js"
 import { ActionBase } from "./ActionBase.js"
 
 export interface CurrentContext
@@ -10,6 +11,12 @@ export interface CurrentContext
     }
   > {}
 
-export function* CurrentContext(): Generator<CurrentContext, Array<string>> {
+export interface CurrentContextDetails {
+  system: string | undefined
+  messages: Array<Message>
+  tools: Array<string>
+}
+
+export function* CurrentContext(): Generator<CurrentContext, CurrentContextDetails> {
   return yield ActionBase("CurrentContext", {})
 }

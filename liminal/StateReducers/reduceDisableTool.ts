@@ -1,9 +1,9 @@
 import type { StateReducers } from "./StateReducers.js"
 
 export const reduceDisableTool: StateReducers["reduceDisableTool"] = (state, action) => {
-  state.handler({
+  state.events.emit({
     event: "DisableTool",
-    key: action.tool.key,
+    tool: action.tool.key,
   })
   const tools = new Set([...state.tools])
   tools.delete(action.tool)

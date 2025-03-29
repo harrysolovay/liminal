@@ -26,7 +26,7 @@ export function TestEmbeddingModels<T extends ExecConfig["models"]["embedding"]>
 export function TestEmbeddingModel({ getEmbedding }: TestEmbeddingModelConfig): EmbeddingModelAdapter {
   return async (state, action) => {
     const embedding = getEmbedding()
-    state.handler({
+    state.events.emit({
       event: "Embedding",
       embedding: embedding,
       value: action.value,

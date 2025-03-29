@@ -1,5 +1,5 @@
 import { ActionBase } from "./ActionBase.js"
-import type { EventBase } from "./event_common.js"
+import type { EventBase } from "./EventBase.js"
 import type { Spec } from "../Spec.js"
 
 export interface Embedding<S extends Spec = Spec> extends ActionBase<"Embedding", S> {

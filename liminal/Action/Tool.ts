@@ -1,8 +1,8 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
-import type { EnterEvent, EventBase, ExitEvent } from "./event_common.js"
+import type { EventBase } from "./EventBase.js"
 import { ActionBase } from "./ActionBase.js"
 import type { Actor } from "../common/Actor.js"
-import type { JSONObject } from "../util/JSONValue.js"
+import type { JSONObject, JSONValue } from "../util/JSONValue.js"
 import type { PromiseOr } from "../util/PromiseOr.js"
 import type { DisableTool, DisableToolEvent } from "./DisableTool.js"
 import type { ActionEvent } from "./ActionEvent.js"
@@ -13,10 +13,14 @@ export interface Tool<S extends Spec = Spec> extends ActionBase<"Tool", S> {
   key: string
   description: string
   params: StandardSchemaV1<JSONObject, JSONObject>
-  implementation: (params: JSONObject) => PromiseOr<Actor | JSONObject | void>
+  implementation: ToolImplementation
 }
 
-export function Tool<K extends string, P extends JSONObject, R extends PromiseOr<JSONObject | void>>(
+export type ToolImplementation = (params: JSONObject) => Actor<ActionLike, ToolResult> | PromiseOr<ToolResult>
+
+export type ToolResult = JSONValue | void
+
+export function Tool<K extends string, P extends JSONObject, R extends PromiseOr<ToolResult>>(
   key: K,
   description: string,
   params: StandardSchemaV1<JSONObject, P>,
@@ -25,7 +29,7 @@ export function Tool<K extends string, P extends JSONObject, R extends PromiseOr
   Tool<{
     LanguageModel: never
     EmbeddingModel: never
-    Event: EnableToolEvent<K> | ToolCallEvent<K, P, EnterEvent | ExitEvent<Awaited<R>>>
+    Event: ToolEvent<K, P, never, Awaited<R>>
   }>,
   () => Generator<
     DisableTool<{
@@ -36,7 +40,7 @@ export function Tool<K extends string, P extends JSONObject, R extends PromiseOr
     void
   >
 >
-export function Tool<K extends string, P extends JSONObject, Y extends ActionLike, R>(
+export function Tool<K extends string, P extends JSONObject, Y extends ActionLike, R extends PromiseOr<ToolResult>>(
   key: K,
   description: string,
   params: StandardSchemaV1<JSONObject, P>,
@@ -45,9 +49,7 @@ export function Tool<K extends string, P extends JSONObject, Y extends ActionLik
   Tool<{
     LanguageModel: never
     EmbeddingModel: never
-    Event:
-      | EnableToolEvent<K>
-      | ToolCallEvent<K, P, EnterEvent | Extract<Y, Action>[""]["Event"] | ExitEvent<Awaited<R>>>
+    Event: ToolEvent<K, P, Extract<Y, Action>[""]["Event"], Awaited<R>>
   }>,
   () => Generator<
     DisableTool<{
@@ -62,7 +64,7 @@ export function* Tool(
   key: string,
   description: string,
   params: StandardSchemaV1<JSONObject, JSONObject>,
-  implementation: (params: JSONObject) => any,
+  implementation: ToolImplementation,
 ): Generator<Tool, () => Generator<DisableTool, void>> {
   return yield ActionBase("Tool", {
     key,
@@ -72,18 +74,30 @@ export function* Tool(
   })
 }
 
+export type ToolEvent<
+  K extends string = string,
+  A extends JSONObject = JSONObject,
+  E extends ActionEvent = any,
+  T extends ToolResult = ToolResult,
+> = EnableToolEvent<K> | ToolEnterEvent<K, A> | ToolInnerEvent<K, E> | ToolExitEvent<K, T>
+
 export interface EnableToolEvent<K extends string = string> extends EventBase<"EnableTool"> {
   key: K
   description: string
   schema: object
 }
 
-export interface ToolCallEvent<
-  K extends string = string,
-  P extends JSONObject = JSONObject,
-  E extends ActionEvent = ActionEvent,
-> extends EventBase<"ToolCall"> {
-  key: K
-  args: P
+export interface ToolEnterEvent<K extends string, A extends JSONObject> extends EventBase<"ToolEnter"> {
+  tool: K
+  args: A
+}
+
+export interface ToolInnerEvent<K extends string, E extends ActionEvent> extends EventBase<"ToolInner"> {
+  tool: K
   inner: E
+}
+
+export interface ToolExitEvent<K extends string, T extends ToolResult> extends EventBase<"ToolExit"> {
+  tool: K
+  result: T
 }

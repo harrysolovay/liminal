@@ -1,22 +1,33 @@
 import type { Tool } from "./Action/Tool.js"
-import type { ActorSource } from "./common/ActorSource.js"
 import type { ExecConfig } from "./ExecConfig.js"
 import type { Actor } from "./common/Actor.js"
-import type { ActionEvent } from "./Action/ActionEvent.js"
 import type { Message } from "./Action/Action.js"
+import type { Events } from "./ActionEventSource.js"
 
-export interface ExecState {
+export interface ExecState<R = any> {
+  kind: "Context" | "Branch"
+  key: string
   config: ExecConfig
-  source: ActorSource
   actor: Actor
-  languageModelKey?: string
-  embeddingModelKey?: string
+  model: {
+    language?: string
+    embedding?: string
+  }
   messages: Array<Message>
   tools: Set<Tool>
-  system: string | undefined
-  next: any
-  parent: ExecState | undefined
-  handler: (event: ActionEvent) => unknown
-  result?: any
-  aborted?: boolean
+  system?: string
+  next?: any
+  events: Events
+  result: R
+  children: Array<ExecState>
+}
+
+export function ExecState<R = any>(execState: ExecState<R>) {
+  return {
+    ...execState,
+    toJSON() {
+      const { kind, system, messages, key, events, children, result } = execState
+      return { kind, key, system, messages, events, children, result }
+    },
+  }
 }

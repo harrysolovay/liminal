@@ -3,7 +3,7 @@ import { type } from "arktype"
 import { AILanguageModel } from "liminal-ai"
 import { openai } from "@ai-sdk/openai"
 
-CodeReviewers().run({
+CodeReviewers().exec({
   models: {
     language: {
       default: AILanguageModel(openai("gpt-4o-mini")),

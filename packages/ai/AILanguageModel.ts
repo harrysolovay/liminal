@@ -14,7 +14,7 @@ export function AILanguageModel(model: LanguageModelV1): LanguageModelAdapter {
         messages,
         schema: aiSchema,
       })
-      state.handler({
+      state.events.emit({
         event: "Generation",
         value: object as JSONObject,
         schema,
@@ -22,7 +22,7 @@ export function AILanguageModel(model: LanguageModelV1): LanguageModelAdapter {
       return {
         ...state,
         messages: [
-          ...state.messages,
+          ...liminalMessages,
           ActionBase("AssistantMessage", {
             content: JSON.stringify(object, null, 2),
           }),
@@ -35,7 +35,7 @@ export function AILanguageModel(model: LanguageModelV1): LanguageModelAdapter {
       model,
       messages,
     })
-    state.handler({
+    state.events.emit({
       event: "Generation",
       value: text,
     })
