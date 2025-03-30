@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "vitepress",
     "build": "vitepress build",
-    "link-liminal": "ln -s ../liminal /liminal"
+    "link-liminal": "ln -s ../liminal ./liminal"
   },
   "devDependencies": {
     "@shikijs/vitepress-twoslash": "^1.23.1",
