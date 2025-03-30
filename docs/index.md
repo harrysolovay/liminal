@@ -9,7 +9,7 @@ Liminal is a model-agnostic library for conversation state management.
 ```ts twoslash
 import { z } from "zod"
 // ---cut---
-import { Context, Inference, Model } from "liminal"
+import { Inference, Model } from "liminal"
 
 function* PlantGrowthRanking() {
   // Describe the requirement of a language model by the key of `"default"`.

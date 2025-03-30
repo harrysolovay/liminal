@@ -1,18 +1,18 @@
 import { Context } from "../Context/Context.js"
 import type { ContextEnterEvent, ContextExitEvent, ContextInnerEvent } from "../Context/ContextEvent.js"
-import { ActorLikeAssertions } from "../testing/ActorLikeAssertions.js"
+import { ActorAssertions } from "../testing/ActorAssertions.js"
 import { Model } from "./Model.js"
 import type { ModelEvent } from "./ModelEvent.js"
 
 const languageModel = Model.language("A")
-ActorLikeAssertions(languageModel).assertSpec<{
+ActorAssertions(languageModel).assertSpec<{
   LanguageModel: "A"
   EmbeddingModel: never
   Event: ModelEvent<"A", "language">
 }>()
 
 const embeddingModel = Model.embedding("B")
-ActorLikeAssertions(embeddingModel).assertSpec<{
+ActorAssertions(embeddingModel).assertSpec<{
   LanguageModel: never
   EmbeddingModel: "B"
   Event: ModelEvent<"B", "embedding">
@@ -23,7 +23,7 @@ function* both() {
   yield* embeddingModel
 }
 
-ActorLikeAssertions(both).assertSpec<{
+ActorAssertions(both).assertSpec<{
   LanguageModel: "A"
   EmbeddingModel: "B"
   Event: ModelEvent<"A", "language"> | ModelEvent<"B", "embedding">
@@ -37,7 +37,7 @@ function* parent() {
   yield* Model.embedding("D")
 }
 
-ActorLikeAssertions(parent).assertSpec<{
+ActorAssertions(parent).assertSpec<{
   LanguageModel: "A" | "C"
   EmbeddingModel: "B" | "D"
   Event:

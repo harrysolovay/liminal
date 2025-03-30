@@ -2,7 +2,7 @@ import type { StandardSchemaV1 } from "@standard-schema/spec"
 import { ActionBase } from "../Action/ActionBase.js"
 import type { JSONObject } from "../JSON/JSONObject.js"
 import type { Spec } from "../Spec.js"
-import type { InferenceEvent } from "./GenerationEvent.js"
+import type { InferenceEvent } from "./InferenceEvent.js"
 
 export interface Inference<S extends Spec = Spec> extends ActionBase<"Inference", S> {
   type: StandardSchemaV1 | undefined

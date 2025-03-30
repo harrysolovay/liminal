@@ -1,7 +1,7 @@
 {
   "extends": "../tsconfig.base",
   "include": ["."],
-  "exclude": [".vitepress/cache"],
+  "exclude": ["../.vitepress/cache"],
   "references": [
     {
       "path": "../liminal"

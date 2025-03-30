@@ -1,15 +1,26 @@
 {
   "private": true,
-  "workspaces": ["examples/*", "liminal", "liminal.land", "packages/*"],
+  "workspaces": ["examples/*", "liminal", "packages/*"],
   "scripts": {
     "build": "tsc -b",
     "watch": "tsc -b --watch",
-    "liminal.land": "bun run --filter liminal.land dev",
+    "liminal.land": "vitepress",
     "example:vite-react-app": "bun run --filter=liminal-example-vite-react-app dev"
   },
   "devDependencies": {
+    "@shikijs/vitepress-twoslash": "^1.23.1",
     "@types/bun": "latest",
+    "@types/markdown-it-footnote": "^3.0.4",
+    "arktype": "^2.1.15",
     "conditional-type-checks": "^1.0.6",
-    "typescript": "^5.8.2"
+    "dedent": "^1.5.3",
+    "effect": "^3.14.2",
+    "liminal": "workspace:*",
+    "liminal-ai": "workspace:*",
+    "markdown-it-footnote": "^4.0.0",
+    "typescript": "^5.8.2",
+    "valibot": "^1.0.0",
+    "vitepress": "^1.5.0",
+    "zod": "^3.24.2"
   }
 }

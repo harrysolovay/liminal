@@ -1,7 +1,7 @@
 import type { ActionReducer } from "../Action/ActionReducer.js"
 import { reduceActor } from "../Actor/reduceActor.js"
 import type { Context } from "../Context/Context.js"
-import { Inference } from "../Generation/Generation.js"
+import { Inference } from "../Inference/Inference.js"
 import { Scope } from "../Scope/Scope.js"
 import { unwrapDeferred } from "../util/unwrapDeferred.js"
 

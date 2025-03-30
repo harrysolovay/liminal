@@ -20,10 +20,10 @@ jobs:
         with:
           bun-version: latest
       - uses: actions/configure-pages@v4
-      - run: bun i && bun run --filter liminal.land build
+      - run: bun i && bun liminal.land build
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: liminal.land/.vitepress/dist
+          path: .vitepress/dist
   deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 1

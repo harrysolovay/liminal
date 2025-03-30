@@ -4,7 +4,7 @@ import { Context } from "../Context/Context.js"
 import type { ContextEvent } from "../Context/ContextEvent.js"
 import { Emission } from "../Emission/Emission.js"
 import type { EmissionEvent } from "../Emission/EmitEvent.js"
-import { ActorLikeAssertions } from "../testing/ActorLikeAssertions.js"
+import { ActorAssertions } from "../testing/ActorAssertions.js"
 import type { ToolRemovalEvent } from "../ToolRemoval/ToolRemovalEvent.js"
 import { Tool } from "./Tool.js"
 import type { ToolEvent } from "./ToolEvent.js"
@@ -17,7 +17,7 @@ type P = {
 const arrowTool = Tool("Tool", "", null! as StandardSchemaV1<P>, (params) => {
   type _ = [AssertTrue<IsExact<typeof params, P>>]
 })
-ActorLikeAssertions(arrowTool).assertSpec<{
+ActorAssertions(arrowTool).assertSpec<{
   LanguageModel: never
   EmbeddingModel: never
   Event: ToolEvent<"Tool", P, never, void>
@@ -25,7 +25,7 @@ ActorLikeAssertions(arrowTool).assertSpec<{
 
 function* _0() {
   const detach = yield* arrowTool
-  ActorLikeAssertions(detach).assertSpec<{
+  ActorAssertions(detach).assertSpec<{
     LanguageModel: never
     EmbeddingModel: never
     Event: ToolRemovalEvent<"Tool">
@@ -38,7 +38,7 @@ const genTool = Tool("Tool", "", null! as StandardSchemaV1<P>, function*(params)
   return ""
 })
 
-ActorLikeAssertions(genTool).assertSpec<{
+ActorAssertions(genTool).assertSpec<{
   LanguageModel: never
   EmbeddingModel: never
   Event: ToolEvent<"Tool", P, EmissionEvent<"Test", {}>, string>
@@ -51,7 +51,7 @@ function* parent() {
   })
 }
 
-ActorLikeAssertions(parent).assertSpec<{
+ActorAssertions(parent).assertSpec<{
   LanguageModel: never
   EmbeddingModel: never
   Event: ToolEvent<"ParentTool", P, never, void> | ContextEvent<"Context", ToolEvent<"Tool", P, never, void>, void>

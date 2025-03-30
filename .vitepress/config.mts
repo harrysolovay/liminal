@@ -1,8 +1,8 @@
 import { transformerTwoslash } from "@shikijs/vitepress-twoslash"
 import footnotePlugin from "markdown-it-footnote"
 import { defineConfig, HeadConfig } from "vitepress"
-import packageJson from "../../liminal/package.json" with { type: "json" }
-import { dedent } from "../../liminal/util/dedent.js"
+import packageJson from "../liminal/package.json" with { type: "json" }
+import { dedent } from "../liminal/util/dedent.js"
 
 // cspell:disable
 const GOOGLE_ANALYTICS = dedent`
@@ -16,6 +16,7 @@ const GOOGLE_ANALYTICS = dedent`
 export default defineConfig({
   title: "Liminal",
   description: packageJson.description,
+  ignoreDeadLinks: ["./LICENSE"],
   markdown: {
     codeTransformers: [transformerTwoslash()],
     theme: {
@@ -40,6 +41,32 @@ export default defineConfig({
     ["script", { async: "", src: "https://www.googletagmanager.com/gtag/js?id=G-0VS5ZGHX74" }],
     ["script", {}, GOOGLE_ANALYTICS],
   ],
+  rewrites: (initial) => {
+    if (initial.startsWith("docs/")) {
+      return initial.slice("docs/".length)
+    }
+    return ({
+      "liminal/Scope/Scope.md": "scope/index.md",
+      "liminal/Context/Context.md": "scope/context.md",
+      "liminal/Branches/Branches.md": "scope/branches.md",
+      "liminal/CurrentScope/CurrentScope.md": "scope/current-scope.md",
+      "liminal/Action/Action.md": "action/index.md",
+      "liminal/Model/Model.md": "action/model.md",
+      "liminal/Message/Message.md": "action/message.md",
+      "liminal/Inference/Inference.md": "action/inference.md",
+      "liminal/Embedding/Embedding.md": "action/embedding.md",
+      "liminal/Tool/Tool.md": "action/tool.md",
+      "liminal/ToolRemoval/ToolRemoval.md": "action/tool-removal.md",
+      "liminal/Emission/Emission.md": "action/emission.md",
+      "liminal/testing/ActorAssertions.md": "testing/actor-assertions.md",
+      "liminal/testing/TestLanguageModel.md": "testing/test-language-model.md",
+      "liminal/testing/TestEmbeddingModel.md": "testing/test-embedding-model.md",
+      "packages/ai/README.md": "adapters/ai.md",
+    } as Record<string, string>)[initial] ?? (() => {
+      console.log("UNMAPPED:", initial)
+      return initial
+    })()
+  },
   themeConfig: {
     editLink: {
       pattern: "https://github.com/harrysolovay/liminal/edit/main/docs/:path",
@@ -63,10 +90,9 @@ export default defineConfig({
         text: "Overview",
         link: "/",
         items: [
-          { text: "Getting Started", link: "/getting-started" },
+          { text: "Getting Started", link: "/getting_started" },
           {
             text: "Rationale",
-            collapsed: true,
             base: "/rationale",
             items: [
               { text: "Implicit Message Buffer", link: "/implicit_message_buffer" },
@@ -79,24 +105,27 @@ export default defineConfig({
         ],
       },
       {
-        text: "Scopes",
-        link: "liminal/Scope/Scope",
+        text: "Scope",
+        link: "/",
+        base: "/scope",
         items: [
-          { text: "Context", link: "liminal/Context/Context" },
-          { text: "Branches", link: "liminal/Branches/Branches" },
-          { text: "CurrentScope", link: "liminal/CurrentScope/CurrentScope" },
+          { text: "Context", link: "/context" },
+          { text: "Branches", link: "/branches" },
+          { text: "CurrentScope", link: "/current-scope" },
         ],
       },
       {
-        text: "Actions",
-        base: "/actions",
+        text: "Action",
+        base: "/action",
+        link: "/",
         items: [
-          { text: "Model", link: "liminal/Model/Model" },
-          { text: "Message", link: "liminal/Message/Message" },
-          { text: "Generation", link: "liminal/Generation/Generation" },
-          { text: "Embedding", link: "liminal/Embedding/Embedding" },
-          { text: "Tool", link: "liminal/Tool/Tool" },
-          { text: "Emission", link: "liminal/Emission/Emission" },
+          { text: "Model", link: "/model" },
+          { text: "Message", link: "/message" },
+          { text: "Inference", link: "/inference" },
+          { text: "Embedding", link: "/embedding" },
+          { text: "Tool", link: "/tool" },
+          { text: "ToolRemoval", link: "/tool-removal" },
+          { text: "Emission", link: "/emission" },
         ],
       },
       // {
@@ -127,15 +156,14 @@ export default defineConfig({
         text: "Testing",
         base: "/testing",
         collapsed: false,
-        link: "/",
         items: [
-          { text: "TestEmbeddingModels", link: "/test-embedding-models" },
-          { text: "TestLanguageModels", link: "/test-language-models" },
-          { text: "ActorLikeAssertions", link: "/actor-like-assertions" },
+          { text: "ActorAssertions", link: "/actor-assertions" },
+          { text: "TestLanguageModel", link: "/test-language-model" },
+          { text: "TestEmbeddingModel", link: "/test-embedding-model" },
         ],
       },
     ],
-    footer: { // TODO: get this rendering
+    footer: {
       message:
         `Released under the <a href="https://github.com/harrysolovay/liminal/blob/main/LICENSE">Apache 2.0 License</a>.`,
       copyright: `Copyright © 2024-present <a href="https://x.com/harrysolovay">Harry Solovay</a>`,

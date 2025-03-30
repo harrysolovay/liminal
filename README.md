@@ -12,13 +12,15 @@ underlying model; for example, see
 
 - [Documentation &rarr;](https://liminal.land)<br />Usage guide intended for
   human readers.
-- [llms.txt &rarr;](./llms.txt)<br />Chunks of truth to be fed into LLMs.
+
+<!-- - [llms.txt &rarr;](./llms.txt)<br />Chunks of truth to be fed into LLMs. -->
+
 - [Examples &rarr;](https://liminal.land/examples)<br />Examples illustrating
   common use cases.
 
 ## Benefits
 
-- [Decouple Models From Conversations &rarr;](./why/decoupling_models_from_conversations.md)<br />Ensure
+<!-- - [Decouple Models From Conversations &rarr;](./why/decoupling_models_from_conversations.md)<br />Ensure
   conversations can be executed with any provider/model.
 - [Message Buffer Management &rarr;](./why/message_buffer_management.md)<br />Intuitive
   conventions-based approach to managing message buffers.
@@ -27,7 +29,7 @@ underlying model; for example, see
 - [Static Type Inference &rarr;](./why/static_type_inference.md)<br />TRPC-style
   type inference of conversation events.
 - [Eliminating Boilerplate &rarr;](./why/eliminating_boilerplate.md)<br />Avoid
-  redundancies of requesting completions and embeddings.
+  redundancies of requesting completions and embeddings. -->
 
 ## Overview
 
@@ -35,9 +37,9 @@ Model a conversation as a generator function. Yield user messages and assistant
 `Value`s. Optionally return a result (in this case `ranking`).
 
 ```ts
-import { Context, Generation, Model } from "liminal"
+import { Context, Inference, Model } from "liminal"
 
-const ctx = Context("PlantGrowthRanking", function*() {
+function* PlantGrowthRanking() {
   // Describe the requirement of a language model by the key of `"default"`.
   yield* Model()
 
@@ -45,17 +47,17 @@ const ctx = Context("PlantGrowthRanking", function*() {
   yield "What are some key factors that affect plant growth?"
 
   // Complete text and add it (as an assistant message) to the buffer.
-  const factors = yield* Generation()
+  const factors = yield* Inference()
 
   // Buffer another user message.
   yield "Rank those by order of importance"
 
   // Same as before, but this time with a `ZodType` (could use another Standard Schema type).
-  const ranking = yield* Generation(z.string().array())
+  const ranking = yield* Inference(z.string().array())
 
   // Return a result from the conversation.
   return ranking
-})
+}
 ```
 
 Execute `Conversation` with the LLM client library and models of your choosing.
