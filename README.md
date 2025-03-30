@@ -41,7 +41,7 @@ import { Conversation, Inference, Model } from "liminal"
 
 function* PlantGrowthRanking() {
   // Describe the requirement of a language model by the key of `"default"`.
-  yield* Model()
+  yield* Model.language("default")
 
   // Buffer a user message.
   yield "What are some key factors that affect plant growth?"
