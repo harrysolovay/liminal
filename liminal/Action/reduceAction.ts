@@ -3,7 +3,7 @@ import type { ActionReducer } from "../Action/ActionReducer.js"
 import { reduceBranches } from "../Branches/reduceBranches.js"
 import { reduceContext } from "../Context/reduceContext.js"
 import { reduceCurrentScope } from "../CurrentScope/reduceCurrentScope.js"
-import { reduceEmit } from "../Emit/reduceEmit.js"
+import { reduceEmission } from "../Emission/reduceEmit.js"
 import { reduceMessage } from "../Message/reduceMessage.js"
 import { reduceModel } from "../Model/reduceModel.js"
 import { reduceTool } from "../Tool/reduceTool.js"
@@ -51,8 +51,8 @@ export const reduceAction: ActionReducer = (scope, action) => {
     case "ToolRemoval": {
       return reduceToolRemoval(scope, action)
     }
-    case "Emit": {
-      return reduceEmit(scope, action)
+    case "Emission": {
+      return reduceEmission(scope, action)
     }
     case "CurrentScope": {
       return reduceCurrentScope(scope, action)

@@ -1,7 +1,7 @@
 import type { BranchesEvent } from "../Branches/BranchesEvent.js"
 import type { ContextEvent } from "../Context/ContextEvent.js"
 import type { EmbeddingEvent } from "../Embedding/EmbeddingEvent.js"
-import type { EmitEvent } from "../Emit/EmitEvent.js"
+import type { EmissionEvent } from "../Emission/EmitEvent.js"
 import type { GenerationEvent } from "../Generation/GenerationEvent.js"
 import type { MessageEvent } from "../Message/MessageEvent.js"
 import type { ModelEvent } from "../Model/ModelEvent.js"
@@ -14,7 +14,7 @@ export type ActionEvent =
   | BranchesEvent
   | ToolRemovalEvent
   | EmbeddingEvent
-  | EmitEvent
+  | EmissionEvent
   | GenerationEvent
   | ModelEvent
   | ToolEvent

@@ -1,1 +1,3 @@
-# `liminal-ai`
+# Liminal AI (Vercel) Adapter
+
+TODO

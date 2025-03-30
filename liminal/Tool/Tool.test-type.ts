@@ -2,8 +2,8 @@ import type { StandardSchemaV1 } from "@standard-schema/spec"
 import type { AssertTrue, IsExact } from "conditional-type-checks"
 import { Context } from "../Context/Context.js"
 import type { ContextEvent } from "../Context/ContextEvent.js"
-import { Emit } from "../Emit/Emit.js"
-import type { EmitEvent } from "../Emit/EmitEvent.js"
+import { Emission } from "../Emission/Emission.js"
+import type { EmissionEvent } from "../Emission/EmitEvent.js"
 import { AssertionScope } from "../testing/AssertionScope.js"
 import type { ToolRemovalEvent } from "../ToolRemoval/ToolRemovalEvent.js"
 import { Tool } from "./Tool.js"
@@ -35,14 +35,14 @@ AssertionScope((assert) => {
 
   const genTool = Tool("Tool", "", null! as StandardSchemaV1<P>, function*(params) {
     type _ = [AssertTrue<IsExact<typeof params, P>>]
-    yield* Emit("Test", {})
+    yield* Emission("Test", {})
     return ""
   })
 
   assert.spec(genTool).equals<{
     LanguageModel: never
     EmbeddingModel: never
-    Event: ToolEvent<"Tool", P, EmitEvent<"Test", {}>, string>
+    Event: ToolEvent<"Tool", P, EmissionEvent<"Test", {}>, string>
   }>()
 
   function* parent() {

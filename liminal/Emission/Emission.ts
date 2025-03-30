@@ -1,25 +1,25 @@
 import { ActionBase } from "../Action/ActionBase.js"
 import type { JSONValue } from "../JSON/JSONValue.js"
 import type { Spec } from "../Spec.js"
-import type { EmitEvent } from "./EmitEvent.js"
+import type { EmissionEvent } from "./EmitEvent.js"
 
-export interface Emit<S extends Spec = Spec> extends ActionBase<"Emit", S> {
+export interface Emission<S extends Spec = Spec> extends ActionBase<"Emission", S> {
   key: keyof any
   value: JSONValue
 }
 
-export function* Emit<K extends keyof any, V extends JSONValue>(
+export function* Emission<K extends keyof any, V extends JSONValue>(
   key: K,
   value: V,
 ): Generator<
-  Emit<{
+  Emission<{
     LanguageModel: never
     EmbeddingModel: never
-    Event: EmitEvent<K, V>
+    Event: EmissionEvent<K, V>
   }>,
   undefined
 > {
-  return yield ActionBase("Emit", {
+  return yield ActionBase("Emission", {
     key,
     value,
   })
