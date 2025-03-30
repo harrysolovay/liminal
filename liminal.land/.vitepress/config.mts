@@ -131,7 +131,7 @@ export default defineConfig({
         items: [
           { text: "TestEmbeddingModels", link: "/test-embedding-models" },
           { text: "TestLanguageModels", link: "/test-language-models" },
-          { text: "AssertionScope", link: "/assertion-scope" },
+          { text: "ActorLikeAssertions", link: "/actor-like-assertions" },
         ],
       },
     ],
