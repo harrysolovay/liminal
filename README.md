@@ -31,7 +31,7 @@ Model a conversation as a generator function. Yield model requirements, messages
 and inference actions.
 
 ```ts
-import { Inference, Model } from "liminal"
+import { Conversation, Inference, Model } from "liminal"
 
 function* PlantGrowthRanking() {
   yield* Model.language("default")
