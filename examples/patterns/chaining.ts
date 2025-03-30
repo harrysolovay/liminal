@@ -1,9 +1,9 @@
 import { type } from "arktype"
-import { Conversation, Inference, Model, SystemMessage } from "liminal"
+import { Exec, Inference, Model, SystemMessage } from "liminal"
 import { OllamaLanguageModel } from "liminal-ollama"
 import { Ollama } from "ollama"
 
-Conversation(MarketingCopy())
+Exec(MarketingCopy())
   .models({
     default: OllamaLanguageModel(new Ollama(), "llama3.2:latest"),
   })

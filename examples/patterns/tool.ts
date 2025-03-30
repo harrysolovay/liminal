@@ -1,10 +1,10 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { Conversation, Inference, Model, SystemMessage, Tool } from "liminal"
+import { Exec, Inference, Model, SystemMessage, Tool } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 import * as mathjs from "mathjs"
 
-Conversation(ToolUser())
+Exec(ToolUser())
   .models({
     default: AILanguageModel(openai("gpt-4o-mini")),
   })

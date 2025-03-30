@@ -1,6 +1,6 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { Branches, Conversation, Inference, Model, SystemMessage } from "liminal"
+import { Branches, Exec, Inference, Model, SystemMessage } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 import { readFile } from "node:fs/promises"
 import { fileURLToPath } from "node:url"
@@ -9,7 +9,7 @@ const code = await readFile(fileURLToPath(import.meta.url), "utf-8")
 
 const LMH = type("'lower' | 'medium' | 'high'")
 
-Conversation(Review(code))
+Exec(Review(code))
   .models({
     default: AILanguageModel(openai("gpt-4o-mini")),
   })

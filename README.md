@@ -31,7 +31,7 @@ Model a conversation as a generator function. Yield model requirements, messages
 and inference actions.
 
 ```ts
-import { Conversation, Inference, Model } from "liminal"
+import { Exec, Inference, Model } from "liminal"
 
 function* PlantGrowthRanking() {
   yield* Model.language("default")
@@ -57,7 +57,7 @@ function* PlantGrowthRanking() {
 > Note: `async function* YourFunction() { // ...` is perfectly valid if you need
 > async/await.
 
-## Conversation Execution
+## Execution
 
 To execute the conversation, we must specify the models to associated with
 yielded `Model` action keys.
@@ -68,7 +68,7 @@ yielded `Model` action keys.
 import { openai } from "@ai-sdk/openai"
 import { AILanguageModel } from "liminal-ai"
 
-const { result } = Conversation(PlantGrowthRanging)
+const { result } = Exec(PlantGrowthRanging)
   .models({
     default: AILanguageModel(openai("gpt-4o-mini")),
   })
