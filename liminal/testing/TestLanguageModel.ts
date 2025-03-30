@@ -27,8 +27,7 @@ export function TestLanguageModel(
           value: object,
           schema,
         })
-        return {
-          ...state,
+        return state.spread({
           messages: [
             ...state.messages,
             ActionBase("AssistantMessage", {
@@ -36,14 +35,14 @@ export function TestLanguageModel(
             }),
           ],
           next: object,
-        }
+        })
       }
       const text = getText()
       state.events.emit({
         event: "Generation",
         value: text,
       })
-      return {
+      return state.spread({
         ...state,
         messages: [
           ...state.messages,
@@ -52,7 +51,7 @@ export function TestLanguageModel(
           }),
         ],
         next: text,
-      }
+      })
     },
   }
 }

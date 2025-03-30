@@ -7,6 +7,8 @@ import { fileURLToPath } from "node:url"
 
 const code = await readFile(fileURLToPath(import.meta.url), "utf-8")
 
+const LMH = type("'lower' | 'medium' | 'high'")
+
 Conversation(Review(code))
   .models({
     default: AILanguageModel(openai("gpt-4o-mini")),
@@ -69,5 +71,3 @@ function* MaintainabilityReview() {
     }),
   )
 }
-
-const LMH = type("'lower' | 'medium' | 'high'")

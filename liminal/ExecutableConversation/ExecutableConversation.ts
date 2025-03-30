@@ -17,17 +17,12 @@ export function ExecutableConversation<Y extends ActionLike, R, S extends Extrac
 ): ExecutableConversation<S, R> {
   return {
     reduce: (handler) => {
-      const state = State({
-        kind: "Context",
+      const state = new State(
         models,
-        model: {},
-        actor: unwrapDeferred(actorLike),
-        events: new Events((inner) => inner, handler),
-        messages: [],
-        tools: new Set(),
-        children: [],
-        result: undefined,
-      })
+        undefined,
+        unwrapDeferred(actorLike),
+        new Events((inner) => inner, handler),
+      )
       return reduceActor(state)
     },
   }

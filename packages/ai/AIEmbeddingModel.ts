@@ -14,10 +14,9 @@ export function AIEmbeddingModel(model: EmbeddingModel<any>): EmbeddingModelAdap
         value: action.value,
         embedding,
       })
-      return {
-        ...state,
+      return state.spread({
         next: embedding,
-      }
+      })
     },
   }
 }

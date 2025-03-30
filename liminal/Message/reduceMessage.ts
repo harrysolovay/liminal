@@ -6,9 +6,8 @@ export const reduceMessage: ActionReducer<Message> = (state, message) => {
     event: message.action,
     content: message.content,
   } as never)
-  return {
-    ...state,
+  return state.spread({
     messages: [...state.messages, message],
     next: undefined,
-  }
+  })
 }

@@ -8,9 +8,8 @@ export async function reduceActor(state: State): Promise<State> {
     state = await reduceAction(state, value)
     current = await state.actor.next(state.next)
   }
-  return State({
-    ...state,
-    next: undefined,
-    result: current.value,
-  })
+  // TODO: quadruple-check this behavior
+  state.result = current.value
+  state.next = undefined
+  return state
 }

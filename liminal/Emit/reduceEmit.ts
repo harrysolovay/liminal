@@ -7,8 +7,7 @@ export const reduceEmit: ActionReducer<Emit> = (state, action) => {
     key: action.key,
     value: action.value,
   })
-  return {
-    ...state,
+  return state.spread({
     next: undefined,
-  }
+  })
 }

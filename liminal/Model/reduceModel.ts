@@ -7,8 +7,7 @@ export const reduceModel: ActionReducer<Model> = (state, action) => {
     key: action.key,
     purpose: action.purpose,
   })
-  return {
-    ...state,
+  return state.spread({
     next: undefined,
     model: {
       ...state.model,
@@ -20,5 +19,5 @@ export const reduceModel: ActionReducer<Model> = (state, action) => {
           embedding: action.key,
         }),
     },
-  }
+  })
 }

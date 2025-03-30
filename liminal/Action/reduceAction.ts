@@ -12,10 +12,9 @@ import { assert } from "../util/assert.js"
 
 export const reduceAction: ActionReducer = (state, action) => {
   if (!action) {
-    return {
-      ...state,
+    return state.spread({
       next: undefined,
-    }
+    })
   } else if (typeof action === "string") {
     return reduceMessage(
       state,

@@ -20,8 +20,7 @@ export function AILanguageModel(model: LanguageModelV1): LanguageModelAdapter {
           value: object as JSONObject,
           schema,
         })
-        return {
-          ...state,
+        return state.spread({
           messages: [
             ...liminalMessages,
             ActionBase("AssistantMessage", {
@@ -29,7 +28,7 @@ export function AILanguageModel(model: LanguageModelV1): LanguageModelAdapter {
             }),
           ],
           next: object,
-        }
+        })
       }
       const { text } = await generateText({
         model,
@@ -39,8 +38,7 @@ export function AILanguageModel(model: LanguageModelV1): LanguageModelAdapter {
         event: "Generation",
         value: text,
       })
-      return {
-        ...state,
+      return state.spread({
         messages: [
           ...liminalMessages,
           ActionBase("AssistantMessage", {
@@ -48,7 +46,7 @@ export function AILanguageModel(model: LanguageModelV1): LanguageModelAdapter {
           }),
         ],
         next: text,
-      }
+      })
     },
   }
 }

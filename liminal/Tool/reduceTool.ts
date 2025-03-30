@@ -10,12 +10,11 @@ export const reduceTool: ActionReducer<Tool> = (state, action) => {
     description: action.description,
     schema: JSONSchemaMemo(action.params),
   })
-  return {
-    ...state,
+  return state.spread({
     tools: new Set([...state.tools, action]),
     next: () =>
       ActionBase("DisableTool", {
         tool: action,
       }),
-  }
+  })
 }

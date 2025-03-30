@@ -20,10 +20,9 @@ export function TestEmbeddingModel(
         embedding: embedding,
         value: action.value,
       })
-      return {
-        ...state,
+      return state.spread({
         next: embedding,
-      }
+      })
     },
   }
 }

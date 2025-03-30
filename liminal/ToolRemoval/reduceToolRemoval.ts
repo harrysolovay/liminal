@@ -8,9 +8,8 @@ export const reduceToolRemoval: ActionReducer<ToolRemoval> = (state, action) => 
   })
   const tools = new Set(state.tools)
   tools.delete(action.tool)
-  return {
-    ...state,
+  return state.spread({
     tools,
     next: undefined,
-  }
+  })
 }
