@@ -1,4 +1,4 @@
-# Liminal
+# Liminal <Badge type="warning" text="beta" />
 
 Liminal is a model-agnostic library for conversation state management. It
 exposes a set of primitives for buffering messages, generating text, objects and
@@ -12,11 +12,9 @@ underlying model; for example, see
 
 - [Documentation &rarr;](https://liminal.land)<br />Usage guide intended for
   human readers.
-
-<!-- - [llms.txt &rarr;](./llms.txt)<br />Chunks of truth to be fed into LLMs. -->
-
-- [Examples &rarr;](https://liminal.land/examples)<br />Examples illustrating
-  common use cases.
+- [llms.txt &rarr;](./llms.txt)<br />Chunks of truth to be fed into LLMs.
+- [Examples &rarr;](https://github.com/harrysolovay/liminal/tree/main/examples)<br />Examples
+  illustrating common use cases.
 
 ## Benefits
 
@@ -37,7 +35,7 @@ Model a conversation as a generator function. Yield user messages and assistant
 `Value`s. Optionally return a result (in this case `ranking`).
 
 ```ts
-import { Conversation, Inference, Model } from "liminal"
+import { Inference, Model } from "liminal"
 
 function* PlantGrowthRanking() {
   // Describe the requirement of a language model by the key of `"default"`.
@@ -53,15 +51,18 @@ function* PlantGrowthRanking() {
   yield "Rank those by order of importance"
 
   // Same as before, but this time with a `ZodType` (could use another Standard Schema type).
-  const ranking = yield* Inference(z.string().array())
+  const { ranking } = yield* Inference(z.object({
+    ranked: z.string().array(),
+  }))
 
   // Return a result from the conversation.
   return ranking
 }
 ```
 
-Execute `Conversation` with the LLM client library and models of your choosing.
-In this case we use Vercel's AI SDK and specify the `gpt-4o-mini` model.
+Execute the conversation with the LLM client library and models of your
+choosing. In this case we use Vercel's AI SDK and specify the `gpt-4o-mini`
+model.
 
 ```ts
 // ...

@@ -25,8 +25,8 @@ function* PlantGrowthRanking() {
   yield "Rank those by order of importance"
 
   // Same as before, but this time with a `ZodType` (could use another Standard Schema type).
-  const ranking = yield* Inference(z.object({
-    ranked: z.string().array(),
+  const { ranking } = yield* Inference(z.object({
+    ranking: z.string().array(),
   }))
 
   // Return a result from the conversation.
