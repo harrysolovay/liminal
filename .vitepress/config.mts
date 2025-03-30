@@ -16,6 +16,7 @@ const GOOGLE_ANALYTICS = dedent`
 export default defineConfig({
   title: "Liminal",
   description: packageJson.description,
+  assetsDir: "docs/public",
   ignoreDeadLinks: ["./LICENSE"],
   markdown: {
     codeTransformers: [transformerTwoslash()],
