@@ -1,12 +1,13 @@
 import { describe, expect, it } from "bun:test"
 import { Context } from "../Context/Context.js"
-import { TestEmbeddingModels } from "../testing/TestEmbeddingModels.js"
-import { TestLanguageModels } from "../testing/TestLanguageModels.js"
+import { Conversation } from "../Conversation/Conversation.js"
+import { TestEmbeddingModel } from "../testing/TestEmbeddingModel.js"
+import { TestLanguageModel } from "../testing/TestLanguageModel.js"
 import { Model } from "./Model.js"
 
 describe("Model", () => {
   it("generates the expected event sequence", async () => {
-    const context = Context("Root", function*() {
+    const state = await Conversation(function*() {
       yield* Model("default")
       yield* Model("secondary")
       yield* Context("child", function*() {
@@ -15,12 +16,14 @@ describe("Model", () => {
       })
       yield* Model("tertiary", "embedding")
     })
-    const result = await context.exec({
-      models: {
-        language: TestLanguageModels(),
-        embedding: TestEmbeddingModels(),
-      },
-    })
-    expect(JSON.stringify(result, null, 2)).toMatchSnapshot()
+      .models({
+        default: TestLanguageModel(),
+        secondary: TestLanguageModel(),
+        child_a: TestLanguageModel(),
+        child_b: TestEmbeddingModel(),
+        tertiary: TestEmbeddingModel(),
+      })
+      .reduce()
+    expect(JSON.stringify(state, null, 2)).toMatchSnapshot()
   })
 })

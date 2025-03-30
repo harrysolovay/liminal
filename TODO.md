@@ -1,6 +1,7 @@
 # TODO
 
 - why?: common message format
+- unwrapping nested `ActorLike`s?
 - aborting/early exit + event
 - branch event cleanup
 - DI

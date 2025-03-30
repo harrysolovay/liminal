@@ -8,8 +8,8 @@ export interface Model<S extends Spec = Spec> extends ActionBase<"Model", S> {
   purpose: ModelPurpose
 }
 
-export function* Model<K extends string, P extends "language" | "embedding" = "language">(
-  key: K,
+export function* Model<K extends string = "default", P extends "language" | "embedding" = "language">(
+  key: K = "default" as K,
   purpose: P = "language" as P,
 ): Generator<
   Model<{

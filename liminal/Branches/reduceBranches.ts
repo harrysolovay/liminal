@@ -1,32 +1,31 @@
 import type { ActionReducer } from "../Action/ActionReducer.js"
 import { reduceActor } from "../Actor/reduceActor.js"
 import { unwrapDeferred } from "../util/unwrapDeferred.js"
-import type { Value } from "../util/Value.js"
-import type { Branches, BranchImplementations } from "./Branches.js"
+import type { Branches } from "./Branches.js"
 
 export const reduceBranches: ActionReducer<Branches> = async (state, action) => {
-  const branchesKeys = Object.keys(action.branches)
+  const branchKeys = Reflect.ownKeys(action.branches)
   state.events.emit({
     event: "BranchesEnter",
-    branches: branchesKeys,
+    branches: action.key,
   })
   const branchStates = await Promise.all(
-    branchesKeys.map(async (key) => {
+    branchKeys.map(async (key) => {
       state.events.emit({
         event: "BranchEnter",
+        branches: action.key,
         branch: key,
       })
-      const source = (action.branches as any)[key] as Value<BranchImplementations>
       const childState = await reduceActor({
         kind: "Branch",
         key,
-        config: state.config,
+        models: state.models,
         model: { ...state.model },
-        system: state.system,
-        actor: unwrapDeferred(source),
+        actor: unwrapDeferred(action.branches[key as never]!),
         next: undefined,
         events: state.events.child((inner) => ({
           event: "BranchInner",
+          branches: action.key,
           branch: key,
           inner,
         })),
@@ -37,6 +36,7 @@ export const reduceBranches: ActionReducer<Branches> = async (state, action) => 
       })
       state.events.emit({
         event: "BranchExit",
+        branches: action.key,
         branch: key,
         result: childState.result,
       })
@@ -45,10 +45,10 @@ export const reduceBranches: ActionReducer<Branches> = async (state, action) => 
   )
   const result = Array.isArray(action.branches)
     ? branchStates.map((state) => state.result)
-    : Object.fromEntries(branchesKeys.map((key, i) => [key, branchStates[i]!.result]))
+    : Object.fromEntries(branchKeys.map((key, i) => [key, branchStates[i]!.result]))
   state.events.emit({
     event: "BranchesExit",
-    branches: branchesKeys,
+    branches: action.key,
     result,
   })
   return {

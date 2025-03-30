@@ -1,32 +1,28 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { Branches, Context, Generation, Model } from "liminal"
+import { Branches, Conversation, Generation, Model, SystemMessage } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
-CodeReviewers().exec({
-  models: {
-    language: {
-      default: AILanguageModel(openai("gpt-4o-mini")),
-    },
-  },
-  handler: console.log,
-})
-
-function CodeReviewers() {
-  return Context("Workers", "You are a senior software architect planning feature implementations.", function*() {
-    yield* Model("default")
-    yield "Analyze this feature request and create an implementation plan:"
-    const feat = "Alert administrators via text whenever site traffic exceeds a certain threshold."
-    yield feat
-    const implementationPlan = yield* Generation(
-      type({
-        files: FileInfo.array(),
-        estimatedComplexity: "'create' | 'medium' | 'high'",
-      }),
-    )
-    const fileChanges = yield* Branches(implementationPlan.files.map((file) => Implementor(feat, file)))
-    return { fileChanges, implementationPlan }
+Conversation(CodeReviewers())
+  .models({
+    default: AILanguageModel(openai("gpt-4o-mini")),
   })
+  .reduce(console.log)
+
+function* CodeReviewers() {
+  yield* SystemMessage("You are a senior software architect planning feature implementations.")
+  yield* Model("default")
+  yield "Analyze this feature request and create an implementation plan:"
+  const feat = "Alert administrators via text whenever site traffic exceeds a certain threshold."
+  yield feat
+  const implementationPlan = yield* Generation(
+    type({
+      files: FileInfo.array(),
+      estimatedComplexity: "'create' | 'medium' | 'high'",
+    }),
+  )
+  const fileChanges = yield* Branches("FileChanges", implementationPlan.files.map((file) => Implementor(feat, file)))
+  return { fileChanges, implementationPlan }
 }
 
 const FileInfo = type({
@@ -35,25 +31,24 @@ const FileInfo = type({
   changeType: "'create' | 'modify' | 'delete'",
 })
 
-function Implementor(featureRequest: string, file: typeof FileInfo.infer) {
-  return Context("Implementation", IMPLEMENTATION_PROMPTS[file.changeType], function*() {
-    yield `
-      Implement the changes for ${file.filePath} to support:
+function* Implementor(featureRequest: string, file: typeof FileInfo.infer) {
+  yield* SystemMessage(IMPLEMENTATION_PROMPTS[file.changeType])
+  yield `
+    Implement the changes for ${file.filePath} to support:
 
-      ${file.purpose}
+    ${file.purpose}
 
-      Consider the overall feature context:
+    Consider the overall feature context:
 
-      ${featureRequest}
-    `
-    const implementation = yield* Generation(
-      type({
-        explanation: "string",
-        code: "string",
-      }),
-    )
-    return { file, implementation }
-  })
+    ${featureRequest}
+  `
+  const implementation = yield* Generation(
+    type({
+      explanation: "string",
+      code: "string",
+    }),
+  )
+  return { file, implementation }
 }
 
 const IMPLEMENTATION_PROMPTS = {

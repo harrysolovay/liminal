@@ -33,15 +33,15 @@ export const reduceAction: ActionReducer = (state, action) => {
     }
     case "Generation": {
       assert(state.model.language)
-      const reduceGeneration = state.config.models.language?.[state.model.language]
-      assert(reduceGeneration)
-      return reduceGeneration(state, action)
+      const lm = state.models[state.model.language]
+      assert(lm?.adapter === "Language")
+      return lm.reduceGeneration(state, action)
     }
     case "Embedding": {
       assert(state.model.embedding)
-      const reduceEmbedding = state.config.models.embedding?.[state.model.embedding]
-      assert(reduceEmbedding)
-      return reduceEmbedding(state, action)
+      const em = state.models[state.model.embedding]
+      assert(em?.adapter === "Embedding")
+      return em.reduceEmbedding(state, action)
     }
     case "Branches": {
       return reduceBranches(state, action)

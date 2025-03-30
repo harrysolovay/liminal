@@ -1,13 +1,13 @@
-import type { Events } from "../ActionEventSource.js"
 import type { Actor } from "../Actor/Actor.js"
-import type { Config } from "../Config.js"
+import type { ModelAdapters } from "../Config.js"
+import type { Events } from "../Events.js"
 import type { Message } from "../Message/Message.js"
 import type { Tool } from "../Tool/Tool.js"
 
 export interface State<R = any> {
   kind: "Context" | "Branch"
-  key: string
-  config: Config
+  key?: keyof any
+  models: ModelAdapters
   actor: Actor
   model: {
     language?: string
@@ -15,7 +15,6 @@ export interface State<R = any> {
   }
   messages: Array<Message>
   tools: Set<Tool>
-  system?: string
   next?: any
   events: Events
   result: R
@@ -26,8 +25,8 @@ export function State<R = any>(state: State<R>) {
   return {
     ...state,
     toJSON() {
-      const { kind, system, messages, key, events, children, result } = state
-      return { kind, key, system, messages, events, children, result }
+      const { kind, messages, key, events, children, result } = state
+      return { kind, key, messages, events, children, result }
     },
   }
 }

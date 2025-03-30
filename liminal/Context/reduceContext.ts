@@ -9,15 +9,13 @@ export const reduceContext: ActionReducer<Context> = async (state, action) => {
   state.events.emit({
     event: "ContextEnter",
     context: action.key,
-    system: action.system,
   })
   const contextState = await reduceActor({
     kind: "Context",
     key: action.key,
-    config: state.config,
+    models: state.models,
     actor: action.implementation ? unwrapDeferred(action.implementation) : Generation(),
     model: { ...state.model },
-    system: action.system,
     next: undefined,
     messages: [],
     tools: new Set<Tool>(),

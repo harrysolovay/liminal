@@ -4,11 +4,11 @@ import type { Spec } from "../Spec.js"
 import type { EmitEvent } from "./EmitEvent.js"
 
 export interface Emit<S extends Spec = Spec> extends ActionBase<"Emit", S> {
-  key: string
+  key: keyof any
   value: JSONValue
 }
 
-export function* Emit<K extends string, V extends JSONValue>(
+export function* Emit<K extends keyof any, V extends JSONValue>(
   key: K,
   value: V,
 ): Generator<
@@ -19,5 +19,8 @@ export function* Emit<K extends string, V extends JSONValue>(
   }>,
   undefined
 > {
-  return yield ActionBase("Emit", { key, value })
+  return yield ActionBase("Emit", {
+    key,
+    value,
+  })
 }

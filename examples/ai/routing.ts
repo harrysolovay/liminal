@@ -1,44 +1,32 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { Context, Generation, Model } from "liminal"
+import { Context, Conversation, Generation, Model, SystemMessage } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
-Root().exec({
-  models: {
-    language: {
-      default: AILanguageModel(openai("gpt-4o-mini")),
-      reasoning: AILanguageModel(openai("o1-mini")),
-    },
-  },
-  handler: console.log,
+Conversation(function*() {
+  yield* Model("default")
+  const classification = yield* Context("Classification", classifyQuery("I'd like a refund please"))
+  const response = yield* Context("ClassificationConsumer", useClassification(classification))
+  return { classification, response }
 })
-
-function Root() {
-  return Context("root", function*() {
-    yield* Model("default")
-    const classification = yield* classifyQuery("I'd like a refund please")
-    const response = yield* useClassification(classification)
-    return { classification, response }
+  .models({
+    default: AILanguageModel(openai("gpt-4o-mini")),
+    reasoning: AILanguageModel(openai("o1-mini")),
   })
-}
+  .reduce(console.log)
 
-function classifyQuery(query: string) {
-  return Context(
-    "ClassifyQueryAgent",
-    `
-      Classify this supplied customer query:
+function* classifyQuery(query: string) {
+  yield* SystemMessage(`
+    Classify this supplied customer query:
 
-      Determine:
+    Determine:
 
-      1. Query type (general, refund, or technical)
-      2. Complexity (simple or complex)
-      3. Brief reasoning for classification
-    `,
-    function*() {
-      yield query
-      return yield* Generation(Classification)
-    },
-  )
+    1. Query type (general, refund, or technical)
+    2. Complexity (simple or complex)
+    3. Brief reasoning for classification
+  `)
+  yield query
+  return yield* Generation(Classification)
 }
 
 const Classification = type({
@@ -47,13 +35,12 @@ const Classification = type({
   complexity: "'simple' | 'complex'",
 })
 
-function useClassification(classification: typeof Classification.infer) {
-  return Context("UseClassificationAgent", USE_CLASSIFICATION_AGENT_PROMPTS[classification.type], function*() {
-    if (classification.complexity === "complex") {
-      yield* Model("reasoning")
-    }
-    return yield* Generation()
-  })
+function* useClassification(classification: typeof Classification.infer) {
+  yield* SystemMessage(USE_CLASSIFICATION_AGENT_PROMPTS[classification.type])
+  if (classification.complexity === "complex") {
+    yield* Model("reasoning")
+  }
+  return yield* Generation()
 }
 
 const USE_CLASSIFICATION_AGENT_PROMPTS = {
