@@ -18,6 +18,9 @@
     },
     {
       "path": "./packages/store"
+    },
+    {
+      "path": "./.vitepress"
     }
   ]
 }
