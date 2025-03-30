@@ -37,7 +37,7 @@ Model a conversation as a generator function. Yield user messages and assistant
 `Value`s. Optionally return a result (in this case `ranking`).
 
 ```ts
-import { Context, Inference, Model } from "liminal"
+import { Conversation, Inference, Model } from "liminal"
 
 function* PlantGrowthRanking() {
   // Describe the requirement of a language model by the key of `"default"`.
@@ -69,11 +69,11 @@ In this case we use Vercel's AI SDK and specify the `gpt-4o-mini` model.
 import { openai } from "@ai-sdk/openai"
 import { AILanguageModel } from "liminal-ai"
 
-const { result } = ctx.exec({
-  models: {
+const { result } = Conversation(PlantGrowthRanging)
+  .models({
     default: AILanguageModel(openai("gpt-4o-mini")),
-  },
-})
+  })
+  .reduce()
 
 result satisfies Array<string>
 ```
