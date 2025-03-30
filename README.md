@@ -28,8 +28,7 @@ branching conversations.
 ## Overview
 
 Model a conversation as a generator function. Yield model requirements, messages
-and inference actions. Optionally return final values (in this case
-`ranking satisfies Array<string>`).
+and inference actions.
 
 ```ts
 import { Inference, Model } from "liminal"
@@ -51,7 +50,7 @@ function* PlantGrowthRanking() {
     ranked: z.string().array(),
   }))
 
-  return ranking
+  console.log(ranking)
 }
 ```
 
