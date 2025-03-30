@@ -13,7 +13,7 @@ export const reduceTool: ActionReducer<Tool> = (state, action) => {
   return state.spread({
     tools: new Set([...state.tools, action]),
     next: () =>
-      ActionBase("DisableTool", {
+      ActionBase("ToolRemoval", {
         tool: action,
       }),
   })

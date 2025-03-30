@@ -48,7 +48,7 @@ export const reduceAction: ActionReducer = (state, action) => {
     case "Context": {
       return reduceContext(state, action)
     }
-    case "DisableTool": {
+    case "ToolRemoval": {
       return reduceToolRemoval(state, action)
     }
     case "Emit": {

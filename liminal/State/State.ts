@@ -11,8 +11,8 @@ export class State<R = any> {
     readonly actor: Actor,
     readonly events: Events,
     readonly model: {
-      language?: string
-      embedding?: string
+      language?: keyof any
+      embedding?: keyof any
     } = {},
     readonly messages: Array<Message> = [],
     readonly tools: Set<Tool> = new Set(),

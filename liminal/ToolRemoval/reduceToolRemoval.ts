@@ -3,7 +3,7 @@ import type { ToolRemoval } from "../ToolRemoval/ToolRemoval.js"
 
 export const reduceToolRemoval: ActionReducer<ToolRemoval> = (state, action) => {
   state.events.emit({
-    event: "DisableTool",
+    event: "ToolRemoval",
     tool: action.tool.key,
   })
   const tools = new Set(state.tools)

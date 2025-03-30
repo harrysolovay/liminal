@@ -3,8 +3,8 @@ import type { ActionEvent } from "./Action/ActionEvent.js"
 import type { ActionLike } from "./Action/ActionLike.js"
 
 export interface Spec {
-  LanguageModel: string
-  EmbeddingModel: string
+  LanguageModel: keyof any
+  EmbeddingModel: keyof any
   Event: ActionEvent
 }
 

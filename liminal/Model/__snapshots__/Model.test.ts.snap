@@ -2,9 +2,6 @@
 
 exports[`Model generates the expected event sequence 1`] = `
 "{
-  "kind": "Context",
-  "key": "Root",
-  "messages": [],
   "events": [
     {
       "event": "Model",
@@ -33,21 +30,22 @@ exports[`Model generates the expected event sequence 1`] = `
   "children": [
     {
       "kind": "Context",
-      "key": "child",
-      "messages": [],
-      "events": [
-        {
-          "event": "Model",
-          "key": "child_a",
-          "purpose": "language"
-        },
-        {
-          "event": "Model",
-          "key": "child_b",
-          "purpose": "embedding"
-        }
-      ],
-      "children": []
+      "state": {
+        "key": "child",
+        "events": [
+          {
+            "event": "Model",
+            "key": "child_a",
+            "purpose": "language"
+          },
+          {
+            "event": "Model",
+            "key": "child_b",
+            "purpose": "embedding"
+          }
+        ],
+        "children": []
+      }
     }
   ]
 }"

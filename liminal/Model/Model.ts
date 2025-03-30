@@ -4,11 +4,11 @@ import type { ModelEvent } from "./ModelEvent.js"
 import type { ModelPurpose } from "./ModelPurpose.js"
 
 export interface Model<S extends Spec = Spec> extends ActionBase<"Model", S> {
-  key: string
+  key: keyof any
   purpose: ModelPurpose
 }
 
-export function* Model<K extends string = "default", P extends "language" | "embedding" = "language">(
+export function* Model<K extends keyof any = "default", P extends "language" | "embedding" = "language">(
   key: K = "default" as K,
   purpose: P = "language" as P,
 ): Generator<

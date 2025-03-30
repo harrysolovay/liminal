@@ -12,7 +12,7 @@ import type { ToolEvent } from "./ToolEvent.js"
 import type { ToolResult } from "./ToolResult.js"
 
 export interface Tool<S extends Spec = Spec> extends ActionBase<"Tool", S> {
-  key: string
+  key: keyof any
   description: string
   params: StandardSchemaV1<JSONObject, JSONObject>
   implementation: ToolImplementation
@@ -20,7 +20,7 @@ export interface Tool<S extends Spec = Spec> extends ActionBase<"Tool", S> {
 
 export type ToolImplementation = (params: JSONObject) => Actor<ActionLike, ToolResult> | PromiseOr<ToolResult>
 
-export function Tool<K extends string, P extends JSONObject, R extends PromiseOr<ToolResult>>(
+export function Tool<K extends keyof any, P extends JSONObject, R extends PromiseOr<ToolResult>>(
   key: K,
   description: string,
   params: StandardSchemaV1<JSONObject, P>,
@@ -40,7 +40,7 @@ export function Tool<K extends string, P extends JSONObject, R extends PromiseOr
     void
   >
 >
-export function Tool<K extends string, P extends JSONObject, Y extends ActionLike, R extends PromiseOr<ToolResult>>(
+export function Tool<K extends keyof any, P extends JSONObject, Y extends ActionLike, R extends PromiseOr<ToolResult>>(
   key: K,
   description: string,
   params: StandardSchemaV1<JSONObject, P>,
@@ -61,7 +61,7 @@ export function Tool<K extends string, P extends JSONObject, Y extends ActionLik
   >
 >
 export function* Tool(
-  key: string,
+  key: keyof any,
   description: string,
   params: StandardSchemaV1<JSONObject, JSONObject>,
   implementation: ToolImplementation,

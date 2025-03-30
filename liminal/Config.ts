@@ -5,7 +5,7 @@ import type { Expand } from "./util/Expand.js"
 
 export type EventHandler = (event: ActionEvent) => any
 
-export type ModelAdapters = Record<string, Adapter>
+export type ModelAdapters = Record<keyof any, Adapter>
 
 export type ExtractModelAdapters<S extends Spec> = Expand<
   & ([S["LanguageModel"]] extends [never] ? {}
