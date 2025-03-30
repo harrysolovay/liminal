@@ -95,7 +95,7 @@ export default defineConfig({
             text: "Rationale",
             base: "/rationale",
             items: [
-              { text: "Implicit Message Buffer", link: "/implicit_message_buffer" },
+              { text: "Implicit Message Buffers", link: "/implicit_message_buffers" },
               { text: "Decoupling From Models", link: "/decoupling_from_models" },
               { text: "Type-safe Observability", link: "/type-safe_observability" },
               { text: "Eliminating Boilerplate", link: "/eliminating_boilerplate" },

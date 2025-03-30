@@ -18,21 +18,21 @@ underlying model; for example, see
 
 ## Benefits
 
-<!-- - [Decouple Models From Conversations &rarr;](./why/decoupling_models_from_conversations.md)<br />Ensure
-  conversations can be executed with any provider/model.
-- [Message Buffer Management &rarr;](./why/message_buffer_management.md)<br />Intuitive
+- [Implicit Message Buffers &rarr;](https://liminal.land/rationale/implicit_message_buffers.md)<br />Intuitive
   conventions-based approach to managing message buffers.
-- [Observing Execution &rarr;](./why/observing_execution.md)<br />Handle receive
-  key events within the conversation and its descendants.
-- [Static Type Inference &rarr;](./why/static_type_inference.md)<br />TRPC-style
-  type inference of conversation events.
-- [Eliminating Boilerplate &rarr;](./why/eliminating_boilerplate.md)<br />Avoid
-  redundancies of requesting completions and embeddings. -->
+- [Decoupling From Models &rarr;](https://liminal.land/rationale/decoupling_from_models)<br />Ensure
+  conversations can be executed with any provider/model.
+- [Type-safe Observability &rarr;](https://liminal.land/rationale/type-safe_observability)<br />Observe
+  events from the entire conversation tree; TRPC/Hono-style inference of event
+  types.
+- [Eliminating Boilerplate &rarr;](https://liminal.land/rationale/eliminating_boilerplate.md)<br />Avoid
+  the redundancies of inferencing and embedding.
 
 ## Overview
 
-Model a conversation as a generator function. Yield user messages and assistant
-`Value`s. Optionally return a result (in this case `ranking`).
+Model a conversation as a generator function. Yield model requirements, messages
+and inference actions. Optionally return final values (in this case
+`ranking satisfies Array<string>`).
 
 ```ts
 import { Inference, Model } from "liminal"
@@ -60,9 +60,13 @@ function* PlantGrowthRanking() {
 }
 ```
 
-Execute the conversation with the LLM client library and models of your
-choosing. In this case we use Vercel's AI SDK and specify the `gpt-4o-mini`
-model.
+> Note: `async function* YourFunction() { // ...` is perfectly valid incase you
+> need async/await.
+
+## Conversation Execution
+
+To execute the conversation, we must specify the models to associated with
+yielded `Model` action keys.
 
 ```ts
 // ...
@@ -81,8 +85,8 @@ result satisfies Array<string>
 
 ## Actions
 
-Actions are the values yielded from Liminal conversations (generator functions
-or iterables). They tell the executor how to update internal state such as the
+Actions are the values yielded from Liminal conversations (generators or other
+iterables). They tell the executor how to update internal state such as the
 model or tool selections.
 
 ---
