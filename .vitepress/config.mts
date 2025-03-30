@@ -96,7 +96,7 @@ export default defineConfig({
             base: "/rationale",
             items: [
               { text: "Implicit Message Buffers", link: "/implicit_message_buffers" },
-              { text: "Decoupling From Models", link: "/decoupling_from_models" },
+              { text: "Decoupling Conversations From Models", link: "/decoupling_conversations_from_models" },
               { text: "Type-safe Observability", link: "/type-safe_observability" },
               { text: "Eliminating Boilerplate", link: "/eliminating_boilerplate" },
               // { text: "LLM-first Runtime Types", link: "/llm-first_runtime_types" },

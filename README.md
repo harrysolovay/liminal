@@ -2,11 +2,8 @@
 
 Liminal is a model-agnostic library for conversation state management. It
 exposes a set of primitives for buffering messages, generating text, objects and
-vectors, attaching and detaching tools, emitting events, and instantiating and
-branching conversations. Conversation definition types are inferred to narrow
-even types for observers. Liminal conversations can be executed with any
-underlying model; for example, see
-[the Vercel AI SDK reference adapter](./packages/ai/README.md).
+vectors, attaching and removing tools, emitting events, and instantiating and
+branching conversations.
 
 ## Resources
 
@@ -16,15 +13,15 @@ underlying model; for example, see
 - [Examples &rarr;](https://github.com/harrysolovay/liminal/tree/main/examples)<br />Examples
   illustrating common use cases.
 
-## Benefits
+## Rationale
 
 - [Implicit Message Buffers &rarr;](https://liminal.land/rationale/implicit_message_buffers.md)<br />Intuitive
   conventions-based approach to managing message buffers.
-- [Decoupling From Models &rarr;](https://liminal.land/rationale/decoupling_from_models)<br />Ensure
+- [Decoupling Conversations From Models &rarr;](https://liminal.land/rationale/decoupling_from_models)<br />Ensure
   conversations can be executed with any provider/model.
 - [Type-safe Observability &rarr;](https://liminal.land/rationale/type-safe_observability)<br />Observe
-  events from the entire conversation tree; TRPC/Hono-style inference of event
-  types.
+  events from the entire conversation tree; infer event static types like with
+  TRPC or Hono Client.
 - [Eliminating Boilerplate &rarr;](https://liminal.land/rationale/eliminating_boilerplate.md)<br />Avoid
   the redundancies of inferencing and embedding.
 
@@ -38,24 +35,22 @@ and inference actions. Optionally return final values (in this case
 import { Inference, Model } from "liminal"
 
 function* PlantGrowthRanking() {
-  // Describe the requirement of a language model by the key of `"default"`.
   yield* Model.language("default")
 
-  // Buffer a user message.
+  // User Message
   yield "What are some key factors that affect plant growth?"
 
-  // Complete text and add it (as an assistant message) to the buffer.
+  // Assistant Message
   const factors = yield* Inference()
 
-  // Buffer another user message.
+  // User Message
   yield "Rank those by order of importance"
 
-  // Same as before, but this time with a `ZodType` (could use another Standard Schema type).
+  // Assistant Message (structured output)
   const { ranking } = yield* Inference(z.object({
     ranked: z.string().array(),
   }))
 
-  // Return a result from the conversation.
   return ranking
 }
 ```

@@ -1,4 +1,4 @@
-# Decoupling From Models
+# Decoupling Conversations From Models
 
 ## Eliminating Vendor Lock-in
 
