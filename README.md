@@ -50,12 +50,12 @@ function* PlantGrowthRanking() {
     ranked: z.string().array(),
   }))
 
-  console.log(ranking)
+  return ranking
 }
 ```
 
-> Note: `async function* YourFunction() { // ...` is perfectly valid incase you
-> need async/await.
+> Note: `async function* YourFunction() { // ...` is perfectly valid if you need
+> async/await.
 
 ## Conversation Execution
 
