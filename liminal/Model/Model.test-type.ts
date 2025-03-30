@@ -5,14 +5,14 @@ import { Model } from "./Model.js"
 import type { ModelEvent } from "./ModelEvent.js"
 
 AssertionScope((assert) => {
-  const languageModel = Model("A")
+  const languageModel = Model.language("A")
   assert.spec(languageModel).equals<{
     LanguageModel: "A"
     EmbeddingModel: never
     Event: ModelEvent<"A", "language">
   }>()
 
-  const embeddingModel = Model("B", "embedding")
+  const embeddingModel = Model.embedding("B")
   assert.spec(embeddingModel).equals<{
     LanguageModel: never
     EmbeddingModel: "B"
@@ -34,8 +34,8 @@ AssertionScope((assert) => {
     yield* Context("Context", function*() {
       yield* both()
     })
-    yield* Model("C")
-    yield* Model("D", "embedding")
+    yield* Model.language("C")
+    yield* Model.embedding("D")
   }
 
   assert.spec(parent).equals<{

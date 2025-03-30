@@ -8,13 +8,13 @@ import { Model } from "./Model.js"
 describe("Model", () => {
   it("generates the expected event sequence", async () => {
     const scope = await Conversation(function*() {
-      yield* Model("default")
-      yield* Model("secondary")
+      yield* Model.language("default")
+      yield* Model.language("secondary")
       yield* Context("child", function*() {
-        yield* Model("child_a")
-        yield* Model("child_b", "embedding")
+        yield* Model.language("child_a")
+        yield* Model.embedding("child_b")
       })
-      yield* Model("tertiary", "embedding")
+      yield* Model.embedding("tertiary")
     })
       .models({
         default: TestLanguageModel(),

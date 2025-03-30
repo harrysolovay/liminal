@@ -1,6 +1,6 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { Conversation, Generation, Model, SystemMessage, Tool } from "liminal"
+import { Conversation, Inference, Model, SystemMessage, Tool } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 import * as mathjs from "mathjs"
 
@@ -15,7 +15,7 @@ function* ToolUser() {
     You are solving math problems. Reason step by step. Use the calculator when necessary.
     When you give the final answer, provide an explanation for how you arrived at it.
   `)
-  yield* Model("default")
+  yield* Model.language("default")
   const detach = yield* Tool(
     "MathTool",
     `
@@ -34,7 +34,7 @@ function* ToolUser() {
     A taxi driver earns $9461 per 1-hour of work. If he works 12 hours a day and in 1 hour
     he uses 12 liters of petrol with a price  of $134 for 1 liter. How much money does he earn in one day?
   `
-  const answer = yield* Generation()
+  const answer = yield* Inference()
   yield* detach()
   return answer
 }

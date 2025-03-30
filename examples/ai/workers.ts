@@ -1,6 +1,6 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { Branches, Conversation, Generation, Model, SystemMessage } from "liminal"
+import { Branches, Conversation, Inference, Model, SystemMessage } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
 Conversation(CodeReviewers())
@@ -11,11 +11,11 @@ Conversation(CodeReviewers())
 
 function* CodeReviewers() {
   yield* SystemMessage("You are a senior software architect planning feature implementations.")
-  yield* Model("default")
+  yield* Model.language("default")
   yield "Analyze this feature request and create an implementation plan:"
   const feat = "Alert administrators via text whenever site traffic exceeds a certain threshold."
   yield feat
-  const implementationPlan = yield* Generation(
+  const implementationPlan = yield* Inference(
     type({
       files: FileInfo.array(),
       estimatedComplexity: "'create' | 'medium' | 'high'",
@@ -42,7 +42,7 @@ function* Implementor(featureRequest: string, file: typeof FileInfo.infer) {
 
     ${featureRequest}
   `
-  const implementation = yield* Generation(
+  const implementation = yield* Inference(
     type({
       explanation: "string",
       code: "string",

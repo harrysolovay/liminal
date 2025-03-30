@@ -1,10 +1,10 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { Context, Conversation, Generation, Model, SystemMessage } from "liminal"
+import { Context, Conversation, Inference, Model, SystemMessage } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
 Conversation(function*() {
-  yield* Model("default")
+  yield* Model.language("default")
   const classification = yield* Context("Classification", classifyQuery("I'd like a refund please"))
   const response = yield* Context("ClassificationConsumer", useClassification(classification))
   return { classification, response }
@@ -26,7 +26,7 @@ function* classifyQuery(query: string) {
     3. Brief reasoning for classification
   `)
   yield query
-  return yield* Generation(Classification)
+  return yield* Inference(Classification)
 }
 
 const Classification = type({
@@ -38,9 +38,9 @@ const Classification = type({
 function* useClassification(classification: typeof Classification.infer) {
   yield* SystemMessage(USE_CLASSIFICATION_AGENT_PROMPTS[classification.type])
   if (classification.complexity === "complex") {
-    yield* Model("reasoning")
+    yield* Model.language("reasoning")
   }
-  return yield* Generation()
+  return yield* Inference()
 }
 
 const USE_CLASSIFICATION_AGENT_PROMPTS = {

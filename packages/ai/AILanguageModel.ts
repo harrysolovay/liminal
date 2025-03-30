@@ -4,7 +4,7 @@ import { _util, ActionBase, type JSONObject, type LanguageModelAdapter, type Mes
 export function AILanguageModel(model: LanguageModelV1): LanguageModelAdapter {
   return {
     adapter: "Language",
-    reduceGeneration: async (scope, action) => {
+    reduceInference: async (scope, action) => {
       const { messages: liminalMessages } = scope
       const messages = liminalMessages.map(toCoreMessage)
       if (action.type) {
@@ -16,7 +16,7 @@ export function AILanguageModel(model: LanguageModelV1): LanguageModelAdapter {
           schema: aiSchema,
         })
         scope.events.emit({
-          event: "Generation",
+          event: "Inference",
           value: object as JSONObject,
           schema,
         })
@@ -35,7 +35,7 @@ export function AILanguageModel(model: LanguageModelV1): LanguageModelAdapter {
         messages,
       })
       scope.events.emit({
-        event: "Generation",
+        event: "Inference",
         value: text,
       })
       return scope.spread({

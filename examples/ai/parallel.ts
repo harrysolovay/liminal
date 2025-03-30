@@ -1,6 +1,6 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { Branches, Conversation, Generation, Model, SystemMessage } from "liminal"
+import { Branches, Conversation, Inference, Model, SystemMessage } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 import { readFile } from "node:fs/promises"
 import { fileURLToPath } from "node:url"
@@ -17,7 +17,7 @@ Conversation(Review(code))
 
 function* Review(code: string) {
   yield* SystemMessage("You are a technical lead summarizing multiple code reviews. Review the supplied code.")
-  yield* Model()
+  yield* Model.language("default")
   yield code
   const reviews = yield* Branches("Reviews", {
     SecurityReview,
@@ -26,7 +26,7 @@ function* Review(code: string) {
   })
   yield JSON.stringify(Object.values(reviews), null, 2)
   yield `You are a technical lead summarizing multiple code reviews.`
-  const summary = yield* Generation()
+  const summary = yield* Inference()
   return { reviews, summary }
 }
 
@@ -34,7 +34,7 @@ function* SecurityReview() {
   yield* SystemMessage(
     "You are an expert in code security. Focus on identifying security vulnerabilities, injection risks, and authentication issues.",
   )
-  return yield* Generation(
+  return yield* Inference(
     type({
       type: "'security'",
       vulnerabilities: "string[]",
@@ -48,7 +48,7 @@ function* PerformanceReview() {
   yield* SystemMessage(
     "You are an expert in code performance. Focus on identifying performance bottlenecks, memory leaks, and optimization opportunities.",
   )
-  return yield* Generation(
+  return yield* Inference(
     type({
       type: "'performance'",
       issues: "string[]",
@@ -62,7 +62,7 @@ function* MaintainabilityReview() {
   yield* SystemMessage(
     "You are an expert in code quality. Focus on code structure, readability, and adherence to best practices.",
   )
-  return yield* Generation(
+  return yield* Inference(
     type({
       type: "'maintainability'",
       concerns: "string[]",

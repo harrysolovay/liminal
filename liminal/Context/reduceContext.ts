@@ -1,7 +1,7 @@
 import type { ActionReducer } from "../Action/ActionReducer.js"
 import { reduceActor } from "../Actor/reduceActor.js"
 import type { Context } from "../Context/Context.js"
-import { Generation } from "../Generation/Generation.js"
+import { Inference } from "../Generation/Generation.js"
 import { Scope } from "../Scope/Scope.js"
 import { unwrapDeferred } from "../util/unwrapDeferred.js"
 
@@ -16,9 +16,9 @@ export const reduceContext: ActionReducer<Context> = async (scope, action) => {
       action.key,
       action.implementation
         ? "~standard" in action.implementation
-          ? Generation(action.implementation)
+          ? Inference(action.implementation)
           : unwrapDeferred(action.implementation)
-        : Generation(),
+        : Inference(),
       scope.events.child((inner) => ({
         event: "ContextInner",
         context: action.key,

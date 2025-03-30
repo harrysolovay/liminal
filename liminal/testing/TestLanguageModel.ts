@@ -18,12 +18,12 @@ export function TestLanguageModel(
 ): LanguageModelAdapter {
   return {
     adapter: "Language",
-    reduceGeneration: async (scope, action) => {
+    reduceInference: async (scope, action) => {
       if (action.type) {
         const schema = await JSONSchemaMemo(action.type)
         const object = getObject()
         scope.events.emit({
-          event: "Generation",
+          event: "Inference",
           value: object,
           schema,
         })
@@ -39,7 +39,7 @@ export function TestLanguageModel(
       }
       const text = getText()
       scope.events.emit({
-        event: "Generation",
+        event: "Inference",
         value: text,
       })
       return scope.spread({

@@ -1,6 +1,6 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { Conversation, Generation, Model, SystemMessage } from "liminal"
+import { Conversation, Inference, Model, SystemMessage } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
 Conversation(TranslationWithFeedback("typescript", "I love you!"))
@@ -13,13 +13,13 @@ function* TranslationWithFeedback(targetLanguage: string, text: string) {
   yield* SystemMessage(
     "You are an expert literary translator. Translate the supplied text to the specified target language, preserving tone and cultural nuances.",
   )
-  yield* Model("default")
+  yield* Model.language("default")
   yield `Target language: ${targetLanguage}`
   yield `Text:
 
     ${text}
   `
-  let currentTranslation = yield* Generation()
+  let currentTranslation = yield* Inference()
   let iterations = 0
   const MAX_ITERATIONS = 3
   while (iterations < MAX_ITERATIONS) {
@@ -35,7 +35,7 @@ function* TranslationWithFeedback(targetLanguage: string, text: string) {
       3. Preservation of nuance
       4. Cultural accuracy
     `
-    const evaluation = yield* Generation(
+    const evaluation = yield* Inference(
       type({
         qualityScore: "1 <= number.integer <= 10",
         preservesTone: "boolean",
@@ -62,7 +62,7 @@ function* TranslationWithFeedback(targetLanguage: string, text: string) {
       Original: ${text}
       Current Translation: ${currentTranslation}
     `
-    const improvedTranslation = yield* Generation()
+    const improvedTranslation = yield* Inference()
     currentTranslation = improvedTranslation
     iterations++
   }

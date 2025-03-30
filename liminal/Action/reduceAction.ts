@@ -30,11 +30,11 @@ export const reduceAction: ActionReducer = (scope, action) => {
     case "UserMessage": {
       return reduceMessage(scope, action)
     }
-    case "Generation": {
+    case "Inference": {
       assert(scope.model.language)
       const lm = scope.models[scope.model.language]
       assert(lm?.adapter === "Language")
-      return lm.reduceGeneration(scope, action)
+      return lm.reduceInference(scope, action)
     }
     case "Embedding": {
       assert(scope.model.embedding)

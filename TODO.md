@@ -8,7 +8,7 @@
 - DI
 - streaming
 - tool-calling
-- `Type extends Iterable<Generation<T>, T>`
+- `Type extends Iterable<Inference<T>, T>`
 - encodeDescriptions?: boolean // TODO: re-encode generated objects as JSONC
   with schema field descriptions commented above values
 - provider-specific adapters:

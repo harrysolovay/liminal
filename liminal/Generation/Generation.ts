@@ -2,30 +2,30 @@ import type { StandardSchemaV1 } from "@standard-schema/spec"
 import { ActionBase } from "../Action/ActionBase.js"
 import type { JSONObject } from "../JSON/JSONObject.js"
 import type { Spec } from "../Spec.js"
-import type { GenerationEvent } from "./GenerationEvent.js"
+import type { InferenceEvent } from "./GenerationEvent.js"
 
-export interface Generation<S extends Spec = Spec> extends ActionBase<"Generation", S> {
+export interface Inference<S extends Spec = Spec> extends ActionBase<"Inference", S> {
   type: StandardSchemaV1 | undefined
 }
 
-export function Generation(): Generator<
-  Generation<{
+export function Inference(): Generator<
+  Inference<{
     LanguageModel: never
     EmbeddingModel: never
-    Event: GenerationEvent<string>
+    Event: InferenceEvent<string>
   }>,
   string
 >
-export function Generation<O extends JSONObject>(
+export function Inference<O extends JSONObject>(
   type: StandardSchemaV1<JSONObject, O>,
 ): Generator<
-  Generation<{
+  Inference<{
     LanguageModel: never
     EmbeddingModel: never
-    Event: GenerationEvent<O>
+    Event: InferenceEvent<O>
   }>,
   O
 >
-export function* Generation(type?: StandardSchemaV1): Generator<Generation, unknown> {
-  return yield ActionBase("Generation", { type })
+export function* Inference(type?: StandardSchemaV1): Generator<Inference, unknown> {
+  return yield ActionBase("Inference", { type })
 }

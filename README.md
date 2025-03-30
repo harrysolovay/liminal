@@ -35,11 +35,11 @@ Model a conversation as a generator function. Yield user messages and assistant
 `Value`s. Optionally return a result (in this case `ranking`).
 
 ```ts
-import { Context, Generation, LanguageModel } from "liminal"
+import { Context, Generation, Model } from "liminal"
 
 const ctx = Context("PlantGrowthRanking", function*() {
   // Describe the requirement of a language model by the key of `"default"`.
-  yield* LanguageModel("default")
+  yield* Model()
 
   // Buffer a user message.
   yield "What are some key factors that affect plant growth?"

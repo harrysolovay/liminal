@@ -3,21 +3,37 @@ import type { Spec } from "../Spec.js"
 import type { ModelEvent } from "./ModelEvent.js"
 import type { ModelPurpose } from "./ModelPurpose.js"
 
-export interface Model<S extends Spec = Spec> extends ActionBase<"Model", S> {
-  key: keyof any
-  purpose: ModelPurpose
-}
+export class Model<S extends Spec = Spec> implements ActionBase<"Model", S> {
+  static *language<K extends keyof any>(key: K): Generator<
+    Model<{
+      LanguageModel: K
+      EmbeddingModel: never
+      Event: ModelEvent<K, "language">
+    }>,
+    void
+  > {
+    return yield ActionBase("Model", {
+      key,
+      purpose: "language",
+    })
+  }
 
-export function* Model<K extends keyof any = "default", P extends "language" | "embedding" = "language">(
-  key: K = "default" as K,
-  purpose: P = "language" as P,
-): Generator<
-  Model<{
-    LanguageModel: P extends "language" ? K : never
-    EmbeddingModel: P extends "embedding" ? K : never
-    Event: ModelEvent<K, P>
-  }>,
-  void
-> {
-  return yield ActionBase("Model", { key, purpose })
+  static *embedding<K extends keyof any>(key: K): Generator<
+    Model<{
+      LanguageModel: never
+      EmbeddingModel: K
+      Event: ModelEvent<K, "embedding">
+    }>,
+    void
+  > {
+    return yield ActionBase("Model", {
+      key,
+      purpose: "embedding",
+    })
+  }
+
+  declare "": S
+  declare action: "Model"
+  declare key: keyof any
+  declare purpose: ModelPurpose
 }

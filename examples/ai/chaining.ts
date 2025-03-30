@@ -1,6 +1,6 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { Conversation, Generation, Model, SystemMessage } from "liminal"
+import { Conversation, Inference, Model, SystemMessage } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
 Conversation(MarketingCopy())
@@ -13,9 +13,9 @@ function* MarketingCopy() {
   yield* SystemMessage(
     `Write persuasive marketing copy for: ${"Buffy The Vampire Slayer"}. Focus on benefits and emotional appeal.`,
   )
-  yield* Model("default")
+  yield* Model.language("default")
   yield "Please generate the first draft."
-  let copy = yield* Generation()
+  let copy = yield* Inference()
   yield `
     Now evaluate this marketing copy for:
 
@@ -25,7 +25,7 @@ function* MarketingCopy() {
 
     Copy to evaluate: ${copy}
   `
-  const qualityMetrics = yield* Generation(
+  const qualityMetrics = yield* Inference(
     type({
       hasCallToAction: "boolean",
       emotionalAppeal: "number.integer",
@@ -42,7 +42,7 @@ function* MarketingCopy() {
 
       Original copy: ${copy}
     `
-    copy = yield* Generation()
+    copy = yield* Inference()
   }
   return { copy, qualityMetrics }
 }
