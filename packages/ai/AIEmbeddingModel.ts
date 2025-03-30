@@ -4,17 +4,17 @@ import { _util, type EmbeddingModelAdapter } from "liminal"
 export function AIEmbeddingModel(model: EmbeddingModel<any>): EmbeddingModelAdapter {
   return {
     adapter: "Embedding",
-    reduceEmbedding: async (state, action) => {
+    reduceEmbedding: async (scope, action) => {
       const { embedding } = await embed({
         model,
         value: action.value,
       })
-      state.events.emit({
+      scope.events.emit({
         event: "Embedding",
         value: action.value,
         embedding,
       })
-      return state.spread({
+      return scope.spread({
         next: embedding,
       })
     },

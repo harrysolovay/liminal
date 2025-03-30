@@ -2,41 +2,41 @@ import type { ActionReducer } from "../Action/ActionReducer.js"
 import { reduceActor } from "../Actor/reduceActor.js"
 import type { Context } from "../Context/Context.js"
 import { Generation } from "../Generation/Generation.js"
-import { State } from "../State/State.js"
+import { Scope } from "../Scope/Scope.js"
 import { unwrapDeferred } from "../util/unwrapDeferred.js"
 
-export const reduceContext: ActionReducer<Context> = async (state, action) => {
-  state.events.emit({
+export const reduceContext: ActionReducer<Context> = async (scope, action) => {
+  scope.events.emit({
     event: "ContextEnter",
     context: action.key,
   })
-  const contextState = await reduceActor(
-    new State(
-      state.models,
+  const contextScope = await reduceActor(
+    new Scope(
+      scope.models,
       action.key,
       action.implementation
         ? "~standard" in action.implementation
           ? Generation(action.implementation)
           : unwrapDeferred(action.implementation)
         : Generation(),
-      state.events.child((inner) => ({
+      scope.events.child((inner) => ({
         event: "ContextInner",
         context: action.key,
         inner,
       })),
-      { ...state.model },
+      { ...scope.model },
     ),
   )
-  state.events.emit({
+  scope.events.emit({
     event: "ContextExit",
     context: action.key,
-    result: contextState.result,
+    result: contextScope.result,
   })
-  return state.spread({
-    next: contextState.result,
-    children: [...state.children, {
+  return scope.spread({
+    next: contextScope.result,
+    children: [...scope.children, {
       kind: "Context",
-      state: contextState,
+      scope: contextScope,
     }],
   })
 }

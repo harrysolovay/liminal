@@ -1,15 +1,15 @@
 import { reduceAction } from "../Action/reduceAction.js"
-import { State } from "../State/State.js"
+import { Scope } from "../Scope/Scope.js"
 
-export async function reduceActor(state: State): Promise<State> {
-  let current = await state.actor.next()
+export async function reduceActor(scope: Scope): Promise<Scope> {
+  let current = await scope.actor.next()
   while (!current.done) {
     const { value } = current
-    state = await reduceAction(state, value)
-    current = await state.actor.next(state.next)
+    scope = await reduceAction(scope, value)
+    current = await scope.actor.next(scope.next)
   }
-  // TODO: quadruple-check this behavior
-  state.result = current.value
-  state.next = undefined
-  return state
+  return scope.spread({
+    result: current.value,
+    next: undefined,
+  })
 }

@@ -1,61 +1,61 @@
 import type { ActionReducer } from "../Action/ActionReducer.js"
 import { reduceActor } from "../Actor/reduceActor.js"
-import { State } from "../State/State.js"
+import { Scope } from "../Scope/Scope.js"
 import { unwrapDeferred } from "../util/unwrapDeferred.js"
 import type { Branches } from "./Branches.js"
 
-export const reduceBranches: ActionReducer<Branches> = async (state, action) => {
+export const reduceBranches: ActionReducer<Branches> = async (scope, action) => {
   const branchKeys = Reflect.ownKeys(action.branches)
-  state.events.emit({
+  scope.events.emit({
     event: "BranchesEnter",
     branches: action.key,
   })
-  const branchStates = await Promise.all(
+  const branchScopes = await Promise.all(
     branchKeys.map(async (key) => {
-      state.events.emit({
+      scope.events.emit({
         event: "BranchEnter",
         branches: action.key,
         branch: key,
       })
-      const branchState = await reduceActor(
-        new State(
-          state.models,
+      const branchScope = await reduceActor(
+        new Scope(
+          scope.models,
           key,
           unwrapDeferred(action.branches[key as never]!),
-          state.events.child((inner) => ({
+          scope.events.child((inner) => ({
             event: "BranchInner",
             branches: action.key,
             branch: key,
             inner,
           })),
-          state.model,
-          [...state.messages],
-          new Set(state.tools),
+          scope.model,
+          [...scope.messages],
+          new Set(scope.tools),
         ),
       )
-      state.events.emit({
+      scope.events.emit({
         event: "BranchExit",
         branches: action.key,
         branch: key,
-        result: branchState.result,
+        result: branchScope.result,
       })
-      return [key, branchState] as const
+      return [key, branchScope] as const
     }),
   )
   const result = Array.isArray(action.branches)
-    ? branchStates.map(([_0, state]) => state.result)
-    : Object.fromEntries(branchStates.map(([key, value]) => [key, value.result]))
-  state.events.emit({
+    ? branchScopes.map(([_0, scope]) => scope.result)
+    : Object.fromEntries(branchScopes.map(([key, value]) => [key, value.result]))
+  scope.events.emit({
     event: "BranchesExit",
     branches: action.key,
     result,
   })
-  return state.spread({
+  return scope.spread({
     next: result,
-    children: [...state.children, {
+    children: [...scope.children, {
       kind: "Branches",
       key: action.key,
-      states: Object.fromEntries(branchStates),
+      scopes: Object.fromEntries(branchScopes),
     }],
   })
 }

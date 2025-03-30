@@ -1,6 +1,6 @@
 import type { Branches } from "../Branches/Branches.js"
 import type { Context } from "../Context/Context.js"
-import type { CurrentState } from "../CurrentState/CurrentState.js"
+import type { CurrentScope } from "../CurrentScope/CurrentScope.js"
 import type { Embedding } from "../Embedding/Embedding.js"
 import type { Emit } from "../Emit/Emit.js"
 import type { Generation } from "../Generation/Generation.js"
@@ -18,5 +18,5 @@ export type Action =
   | Embedding
   | Tool
   | ToolRemoval
-  | CurrentState
+  | CurrentScope
   | Message

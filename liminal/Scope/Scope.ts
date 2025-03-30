@@ -4,7 +4,7 @@ import type { Events } from "../Events.js"
 import type { Message } from "../Message/Message.js"
 import type { Tool } from "../Tool/Tool.js"
 
-export class State<R = any> {
+export class Scope<R = any> {
   constructor(
     readonly models: ModelAdapters,
     readonly key: keyof any | undefined,
@@ -17,8 +17,8 @@ export class State<R = any> {
     readonly messages: Array<Message> = [],
     readonly tools: Set<Tool> = new Set(),
     public next: any = undefined,
-    public result: R = undefined!, // TODO: cleanup
-    public children: Array<ChildState> = [],
+    public result: R = undefined!,
+    public children: Array<ChildScopeContainer> = [],
   ) {}
 
   toJSON() {
@@ -32,8 +32,8 @@ export class State<R = any> {
     }
   }
 
-  spread = (fields?: Partial<State<R>>): State<R> => {
-    return new State(
+  spread = (fields?: Partial<Scope<R>>): Scope<R> => {
+    return new Scope(
       fields?.models ?? this.models,
       fields?.key ?? this.key,
       fields?.actor ?? this.actor,
@@ -48,11 +48,11 @@ export class State<R = any> {
   }
 }
 
-export type ChildState = {
+export type ChildScopeContainer = {
   kind: "Context"
-  state: State
+  scope: Scope
 } | {
   kind: "Branches"
   key: keyof any
-  states: Record<keyof any, State>
+  scopes: Record<keyof any, Scope>
 }

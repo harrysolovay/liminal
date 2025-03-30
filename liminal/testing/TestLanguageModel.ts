@@ -18,18 +18,18 @@ export function TestLanguageModel(
 ): LanguageModelAdapter {
   return {
     adapter: "Language",
-    reduceGeneration: async (state, action) => {
+    reduceGeneration: async (scope, action) => {
       if (action.type) {
         const schema = await JSONSchemaMemo(action.type)
         const object = getObject()
-        state.events.emit({
+        scope.events.emit({
           event: "Generation",
           value: object,
           schema,
         })
-        return state.spread({
+        return scope.spread({
           messages: [
-            ...state.messages,
+            ...scope.messages,
             ActionBase("AssistantMessage", {
               content: JSON.stringify(object, null, 2),
             }),
@@ -38,14 +38,14 @@ export function TestLanguageModel(
         })
       }
       const text = getText()
-      state.events.emit({
+      scope.events.emit({
         event: "Generation",
         value: text,
       })
-      return state.spread({
-        ...state,
+      return scope.spread({
+        ...scope,
         messages: [
-          ...state.messages,
+          ...scope.messages,
           ActionBase("AssistantMessage", {
             content: text,
           }),

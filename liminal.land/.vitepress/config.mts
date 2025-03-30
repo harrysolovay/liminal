@@ -68,8 +68,8 @@ export default defineConfig({
         ],
       },
       {
-        text: "Actions",
-        base: "/actions",
+        text: "Action",
+        base: "/action",
         link: "/",
         items: [
           {
@@ -86,7 +86,7 @@ export default defineConfig({
           { text: "Tool", link: "/Tool" },
           { text: "Embedding", link: "/embedding" },
           { text: "Emit", link: "/emit" },
-          { text: "CurrentState", link: "/current-state" },
+          { text: "CurrentScope", link: "/current-scope" },
         ],
       },
       {

@@ -13,14 +13,14 @@ export function TestEmbeddingModel(
 ): EmbeddingModelAdapter {
   return {
     adapter: "Embedding",
-    reduceEmbedding: async (state, action) => {
+    reduceEmbedding: async (scope, action) => {
       const embedding = getEmbedding()
-      state.events.emit({
+      scope.events.emit({
         event: "Embedding",
         embedding: embedding,
         value: action.value,
       })
-      return state.spread({
+      return scope.spread({
         next: embedding,
       })
     },

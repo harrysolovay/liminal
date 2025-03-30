@@ -7,7 +7,7 @@ import { Model } from "./Model.js"
 
 describe("Model", () => {
   it("generates the expected event sequence", async () => {
-    const state = await Conversation(function*() {
+    const scope = await Conversation(function*() {
       yield* Model("default")
       yield* Model("secondary")
       yield* Context("child", function*() {
@@ -24,6 +24,6 @@ describe("Model", () => {
         tertiary: TestEmbeddingModel(),
       })
       .reduce()
-    expect(JSON.stringify(state, null, 2)).toMatchSnapshot()
+    expect(JSON.stringify(scope, null, 2)).toMatchSnapshot()
   })
 })

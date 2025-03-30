@@ -4,8 +4,8 @@ import { _util, ActionBase, type JSONObject, type LanguageModelAdapter, type Mes
 export function AILanguageModel(model: LanguageModelV1): LanguageModelAdapter {
   return {
     adapter: "Language",
-    reduceGeneration: async (state, action) => {
-      const { messages: liminalMessages } = state
+    reduceGeneration: async (scope, action) => {
+      const { messages: liminalMessages } = scope
       const messages = liminalMessages.map(toCoreMessage)
       if (action.type) {
         const schema = await _util.JSONSchemaMemo(action.type)
@@ -15,12 +15,12 @@ export function AILanguageModel(model: LanguageModelV1): LanguageModelAdapter {
           messages,
           schema: aiSchema,
         })
-        state.events.emit({
+        scope.events.emit({
           event: "Generation",
           value: object as JSONObject,
           schema,
         })
-        return state.spread({
+        return scope.spread({
           messages: [
             ...liminalMessages,
             ActionBase("AssistantMessage", {
@@ -34,11 +34,11 @@ export function AILanguageModel(model: LanguageModelV1): LanguageModelAdapter {
         model,
         messages,
       })
-      state.events.emit({
+      scope.events.emit({
         event: "Generation",
         value: text,
       })
-      return state.spread({
+      return scope.spread({
         messages: [
           ...liminalMessages,
           ActionBase("AssistantMessage", {

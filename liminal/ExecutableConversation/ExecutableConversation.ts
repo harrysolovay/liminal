@@ -3,12 +3,12 @@ import type { ActorLike } from "../Actor/ActorLike.js"
 import { reduceActor } from "../Actor/reduceActor.js"
 import type { ExtractModelAdapters } from "../Config.js"
 import { Events } from "../Events.js"
+import { Scope } from "../Scope/Scope.js"
 import type { ExtractSpec, Spec } from "../Spec.js"
-import { State } from "../State/State.js"
 import { unwrapDeferred } from "../util/unwrapDeferred.js"
 
 export interface ExecutableConversation<S extends Spec, T> {
-  reduce: (handler?: (event: S["Event"]) => any) => Promise<State<T>>
+  reduce: (handler?: (event: S["Event"]) => any) => Promise<Scope<T>>
 }
 
 export function ExecutableConversation<Y extends ActionLike, R, S extends ExtractSpec<Y>>(
@@ -16,14 +16,14 @@ export function ExecutableConversation<Y extends ActionLike, R, S extends Extrac
   models: ExtractModelAdapters<S>,
 ): ExecutableConversation<S, R> {
   return {
-    reduce: (handler) => {
-      const state = new State(
-        models,
-        undefined,
-        unwrapDeferred(actorLike),
-        new Events((inner) => inner, handler),
-      )
-      return reduceActor(state)
-    },
+    reduce: (handler) =>
+      reduceActor(
+        new Scope(
+          models,
+          undefined,
+          unwrapDeferred(actorLike),
+          new Events((inner) => inner, handler),
+        ),
+      ),
   }
 }
