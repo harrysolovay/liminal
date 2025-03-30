@@ -1,5 +1,0 @@
-# `TypeVisitor`
-
-TODO
-
-## hooks

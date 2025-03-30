@@ -1,2 +1,6 @@
+.DS_Store
 .env
-.liminal
+dist
+liminal.land/.vitepress/cache
+node_modules
+tsconfig.tsbuildinfo

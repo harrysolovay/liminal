@@ -1,0 +1,12 @@
+name: liminal-example-database
+services:
+  crosshatch_db:
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_DB: db
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+    ports: [54321:5432]
+    volumes: ["./migrations_dev:/docker-entrypoint-initdb.d"]
+    tmpfs: ["/var/lib/postgresql/data", "/tmp"]
+    command: ["-c", "listen_addresses=*", "-c", "wal_level=logical"]

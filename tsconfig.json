@@ -1,4 +1,26 @@
 {
   "files": [],
-  "references": [{ "path": "./docs" }]
+  "references": [
+    {
+      "path": "./liminal"
+    },
+    {
+      "path": "./examples/ai"
+    },
+    {
+      "path": "./examples/mocking"
+    },
+    {
+      "path": "./examples/vite-react-app"
+    },
+    {
+      "path": "./packages/ai"
+    },
+    {
+      "path": "./packages/store"
+    },
+    {
+      "path": "./.vitepress"
+    }
+  ]
 }

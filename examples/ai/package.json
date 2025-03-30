@@ -1,0 +1,12 @@
+{
+  "name": "liminal-example-ai",
+  "private": true,
+  "dependencies": {
+    "@ai-sdk/openai": "^1.2.5",
+    "ai": "^4.1.61",
+    "arktype": "^2.1.9",
+    "liminal": "workspace:*",
+    "liminal-ai": "workspace:*",
+    "mathjs": "^14.3.1"
+  }
+}
