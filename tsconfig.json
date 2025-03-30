@@ -5,7 +5,7 @@
       "path": "./liminal"
     },
     {
-      "path": "./examples/ai"
+      "path": "./examples/patterns"
     },
     {
       "path": "./examples/mocking"
@@ -15,6 +15,9 @@
     },
     {
       "path": "./packages/ai"
+    },
+    {
+      "path": "./packages/ollama"
     },
     {
       "path": "./packages/store"

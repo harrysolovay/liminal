@@ -1,11 +1,11 @@
-import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
 import { Conversation, Inference, Model, SystemMessage } from "liminal"
-import { AILanguageModel } from "liminal-ai"
+import { OllamaLanguageModel } from "liminal-ollama"
+import { Ollama } from "ollama"
 
 Conversation(MarketingCopy())
   .models({
-    default: AILanguageModel(openai("gpt-4o-mini")),
+    default: OllamaLanguageModel(new Ollama(), "llama3.2:latest"),
   })
   .reduce(console.log)
 

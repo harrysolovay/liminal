@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.base",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": ["."],
+  "references": [
+    {
+      "path": "../../liminal"
+    },
+    {
+      "path": "../../packages/ai"
+    },
+    {
+      "path": "../../packages/ollama"
+    }
+  ]
+}
