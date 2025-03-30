@@ -1,4 +1,4 @@
-name: liminal
+name: liminal-example-database
 services:
   crosshatch_db:
     image: pgvector/pgvector:pg17
