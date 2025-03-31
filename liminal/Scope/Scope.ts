@@ -55,4 +55,8 @@ export type ChildScopeContainer = {
   kind: "Branches"
   key: keyof any
   scopes: Record<keyof any, Scope>
+} | {
+  kind: "Tool"
+  key: keyof any
+  scopes: Record<keyof any, Scope>
 }

@@ -7,14 +7,14 @@ import { Scope } from "../Scope/Scope.js"
 import type { ExtractSpec, Spec } from "../Spec.js"
 import { unwrapDeferred } from "../util/unwrapDeferred.js"
 
-export interface Applied<S extends Spec, T> {
+export interface ExecApplied<S extends Spec, T> {
   reduce: (handler?: (event: S["Event"]) => any) => Promise<Scope<T>>
 }
 
-export function Applied<Y extends ActionLike, R, S extends ExtractSpec<Y>>(
+export function ExecApplied<Y extends ActionLike, R, S extends ExtractSpec<Y>>(
   actorLike: ActorLike<Y, R>,
   models: ExtractModelAdapters<S>,
-): Applied<S, R> {
+): ExecApplied<S, R> {
   return {
     reduce: (handler) =>
       reduceActor(

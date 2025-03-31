@@ -47,7 +47,7 @@ function* PlantGrowthRanking() {
 
   // Assistant Message (structured output)
   const { ranking } = yield* Inference(z.object({
-    ranked: z.string().array(),
+    ranking: z.string().array(),
   }))
 
   return ranking

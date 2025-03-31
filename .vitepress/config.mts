@@ -63,6 +63,7 @@ export default defineConfig({
       "liminal/testing/TestLanguageModel.md": "testing/test-language-model.md",
       "liminal/testing/TestEmbeddingModel.md": "testing/test-embedding-model.md",
       "packages/ai/README.md": "adapters/ai.md",
+      "packages/ollama/README.md": "adapters/ollama.md",
     } as Record<string, string>)[initial] ?? (() => {
       console.log("UNMAPPED:", initial)
       return initial
@@ -151,6 +152,7 @@ export default defineConfig({
         link: "/",
         items: [
           { text: "AI SDK (Vercel)", link: "/ai" },
+          { text: "Ollama", link: "/ollama" },
         ],
       },
       {

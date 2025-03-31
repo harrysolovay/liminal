@@ -1,5 +1,13 @@
-import { type CoreMessage, generateObject, generateText, jsonSchema, type LanguageModelV1 } from "ai"
-import { _util, ActionBase, type JSONObject, type LanguageModelAdapter, type Message } from "liminal"
+import { type CoreMessage, generateObject, generateText, jsonSchema, type LanguageModelV1, tool } from "ai"
+import {
+  _util,
+  ActionBase,
+  type JSONObject,
+  type LanguageModelAdapter,
+  type Message,
+  reduceActor,
+  Scope,
+} from "liminal"
 
 export function AILanguageModel(model: LanguageModelV1): LanguageModelAdapter {
   return {
@@ -30,9 +38,52 @@ export function AILanguageModel(model: LanguageModelV1): LanguageModelAdapter {
           next: object,
         })
       }
+      const tools = await Promise.all(
+        scope.tools.values().map(async (tool_) => {
+          const schema = await _util.JSONSchemaMemo(tool_.params)
+          return [
+            tool_.key,
+            tool({
+              description: tool_.description,
+              parameters: jsonSchema(schema),
+              execute: async (params) => {
+                scope.events.emit({
+                  event: "ToolEnter",
+                  tool: tool_.key,
+                  args: params as JSONObject,
+                })
+                let result = await tool_.implementation(params as never)
+                if (_util.isIteratorLike(result)) {
+                  const toolScope = await reduceActor(
+                    new Scope(
+                      scope.models,
+                      undefined,
+                      result as never,
+                      scope.events.child((event) => ({
+                        event: "ToolInner",
+                        tool: tool_.key,
+                        inner: event,
+                      })),
+                      { ...scope.model },
+                    ),
+                  )
+                  result = toolScope.result
+                }
+                scope.events.emit({
+                  event: "ToolExit",
+                  tool: tool_.key,
+                  result: result as JSONObject,
+                })
+                return result
+              },
+            }),
+          ]
+        }),
+      ).then(Object.fromEntries)
       const { text } = await generateText({
         model,
         messages,
+        tools,
       })
       scope.events.emit({
         event: "Inference",

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test"
 import { Context } from "../Context/Context.js"
-import { Exec } from "../Conversation/Conversation.js"
+import { Exec } from "../Exec/Exec.js"
 import { TestEmbeddingModel } from "../testing/TestEmbeddingModel.js"
 import { TestLanguageModel } from "../testing/TestLanguageModel.js"
 import { Model } from "./Model.js"
