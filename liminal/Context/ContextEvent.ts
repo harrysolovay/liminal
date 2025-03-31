@@ -1,21 +1,22 @@
 import type { ActionEvent } from "../Action/ActionEvent.js"
-import type { EventBase } from "../Action/ActionEventBase.js"
+import type { ActionEventBase } from "../Action/ActionEventBase.js"
 
-export type ContextEvent<K extends keyof any = keyof any, E extends ActionEvent = any, T = any> =
-  | ContextEnterEvent<K>
-  | ContextInnerEvent<K, E>
-  | ContextExitEvent<K, T>
+export type ContextEvent = ContextEnteredEvent | ContextInnerEvent | ContextExitedEvent
 
-export interface ContextEnterEvent<K extends keyof any> extends EventBase<"ContextEnter"> {
+export interface ContextEnteredEvent<K extends keyof any = keyof any> extends ActionEventBase<"context_entered"> {
   context: K
 }
 
-export interface ContextInnerEvent<K extends keyof any, E extends ActionEvent> extends EventBase<"ContextInner"> {
+export interface ContextInnerEvent<K extends keyof any = keyof any, E extends ActionEvent = any>
+  extends ActionEventBase<"context_inner">
+{
   context: K
   inner: E
 }
 
-export interface ContextExitEvent<K extends keyof any, T> extends EventBase<"ContextExit"> {
+export interface ContextExitedEvent<K extends keyof any = keyof any, T = any>
+  extends ActionEventBase<"context_exited">
+{
   context: K
   result: T
 }

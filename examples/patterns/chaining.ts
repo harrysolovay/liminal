@@ -1,5 +1,5 @@
 import { type } from "arktype"
-import { Exec, Inference, Model, SystemMessage } from "liminal"
+import { DeclareModel, Exec, Infer, System } from "liminal"
 import { OllamaLanguageModel } from "liminal-ollama"
 import { Ollama } from "ollama"
 
@@ -7,15 +7,13 @@ Exec(MarketingCopy())
   .models({
     default: OllamaLanguageModel(new Ollama(), "llama3.2:latest"),
   })
-  .reduce(console.log)
+  .exec(console.log)
 
 function* MarketingCopy() {
-  yield* SystemMessage(
-    `Write persuasive marketing copy for: ${"Buffy The Vampire Slayer"}. Focus on benefits and emotional appeal.`,
-  )
-  yield* Model.language("default")
+  yield* System`Write persuasive marketing copy for: ${"Buffy The Vampire Slayer"}. Focus on benefits and emotional appeal.`
+  yield* DeclareModel.language("default")
   yield "Please generate the first draft."
-  let copy = yield* Inference()
+  let copy = yield* Infer()
   yield `
     Now evaluate this marketing copy for:
 
@@ -25,7 +23,7 @@ function* MarketingCopy() {
 
     Copy to evaluate: ${copy}
   `
-  const qualityMetrics = yield* Inference(
+  const qualityMetrics = yield* Infer(
     type({
       hasCallToAction: "boolean",
       emotionalAppeal: "number.integer",
@@ -42,7 +40,7 @@ function* MarketingCopy() {
 
       Original copy: ${copy}
     `
-    copy = yield* Inference()
+    copy = yield* Infer()
   }
   return { copy, qualityMetrics }
 }

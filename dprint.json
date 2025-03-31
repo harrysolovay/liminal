@@ -15,7 +15,6 @@
     "quoteProps": "asNeeded",
     "semiColons": "asi"
   },
-  "excludes": ["**/dist", "node_modules"],
   "plugins": [
     "https://plugins.dprint.dev/g-plane/markup_fmt-v0.19.0.wasm",
     "https://plugins.dprint.dev/g-plane/pretty_yaml-v0.5.0.wasm",

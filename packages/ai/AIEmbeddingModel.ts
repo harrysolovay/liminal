@@ -3,14 +3,14 @@ import { _util, type EmbeddingModelAdapter } from "liminal"
 
 export function AIEmbeddingModel(model: EmbeddingModel<any>): EmbeddingModelAdapter {
   return {
-    adapter: "Embedding",
+    type: "Embedding",
     reduceEmbedding: async (scope, action) => {
       const { embedding } = await embed({
         model,
         value: action.value,
       })
       scope.events.emit({
-        event: "Embedding",
+        type: "embedded",
         value: action.value,
         embedding,
       })

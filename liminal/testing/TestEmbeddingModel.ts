@@ -12,11 +12,11 @@ export function TestEmbeddingModel(
   { getEmbedding }: TestEmbeddingModelConfig = defaultTestingEmbeddingModelConfig,
 ): EmbeddingModelAdapter {
   return {
-    adapter: "Embedding",
+    type: "Embedding",
     reduceEmbedding: async (scope, action) => {
       const embedding = getEmbedding()
       scope.events.emit({
-        event: "Embedding",
+        type: "embedded",
         embedding: embedding,
         value: action.value,
       })
