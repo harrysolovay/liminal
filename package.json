@@ -3,7 +3,6 @@
   "workspaces": ["examples/*", "liminal", "packages/*"],
   "scripts": {
     "build": "tsc -b",
-    "watch": "tsc -b --watch",
     "liminal.land": "vitepress",
     "example:vite-react-app": "bun run --filter=liminal-example-vite-react-app dev"
   },
@@ -11,6 +10,7 @@
     "@shikijs/vitepress-twoslash": "^1.23.1",
     "@types/bun": "latest",
     "@types/markdown-it-footnote": "^3.0.4",
+    "alchemy": "^0.2.3",
     "arktype": "^2.1.15",
     "conditional-type-checks": "^1.0.6",
     "dedent": "^1.5.3",

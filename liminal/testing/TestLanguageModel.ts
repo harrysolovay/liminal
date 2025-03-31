@@ -1,7 +1,6 @@
 import { ActionBase } from "../Action/ActionBase.ts"
 import type { LanguageModelAdapter } from "../Adapters.ts"
 import type { JSONObject } from "../JSON/JSONObject.ts"
-import { JSONSchemaMemo } from "../util/JSONSchemaMemo.ts"
 
 export interface TestLanguageModelConfig {
   getObject: () => JSONObject

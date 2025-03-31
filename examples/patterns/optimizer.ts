@@ -58,8 +58,7 @@ function* TranslationWithFeedback(targetLanguage: string, text: string) {
       Original: ${text}
       Current Translation: ${currentTranslation}
     `
-    const improvedTranslation = yield* Infer()
-    currentTranslation = improvedTranslation
+    currentTranslation = yield* Infer()
     iterations++
   }
   return {
