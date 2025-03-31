@@ -1,6 +1,6 @@
 .DS_Store
 .env
+.vitepress/cache
 dist
-liminal.land/.vitepress/cache
 node_modules
 tsconfig.tsbuildinfo
