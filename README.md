@@ -2,11 +2,8 @@
 
 Liminal is a model-agnostic library for conversation state management. It
 exposes a set of primitives for buffering messages, generating text, objects and
-vectors, attaching and detaching tools, emitting events, and instantiating and
-branching conversations. Conversation definition types are inferred to narrow
-even types for observers. Liminal conversations can be executed with any
-underlying model; for example, see
-[the Vercel AI SDK reference adapter](./packages/ai/README.md).
+vectors, attaching and removing tools, emitting events, and instantiating and
+branching conversations.
 
 ## Resources
 
@@ -16,53 +13,54 @@ underlying model; for example, see
 - [Examples &rarr;](https://github.com/harrysolovay/liminal/tree/main/examples)<br />Examples
   illustrating common use cases.
 
-## Benefits
+## Rationale
 
-<!-- - [Decouple Models From Conversations &rarr;](./why/decoupling_models_from_conversations.md)<br />Ensure
-  conversations can be executed with any provider/model.
-- [Message Buffer Management &rarr;](./why/message_buffer_management.md)<br />Intuitive
+- [Implicit Message Buffers &rarr;](https://liminal.land/rationale/implicit_message_buffers.md)<br />Intuitive
   conventions-based approach to managing message buffers.
-- [Observing Execution &rarr;](./why/observing_execution.md)<br />Handle receive
-  key events within the conversation and its descendants.
-- [Static Type Inference &rarr;](./why/static_type_inference.md)<br />TRPC-style
-  type inference of conversation events.
-- [Eliminating Boilerplate &rarr;](./why/eliminating_boilerplate.md)<br />Avoid
-  redundancies of requesting completions and embeddings. -->
+- [Decoupling Conversations From Models &rarr;](https://liminal.land/rationale/decoupling_from_models)<br />Ensure
+  conversations can be executed with any provider/model.
+- [Type-safe Observability &rarr;](https://liminal.land/rationale/type-safe_observability)<br />Observe
+  events from the entire conversation tree; infer event static types like with
+  TRPC or Hono Client.
+- [Eliminating Boilerplate &rarr;](https://liminal.land/rationale/eliminating_boilerplate.md)<br />Avoid
+  the redundancies of inferencing and embedding.
 
 ## Overview
 
-Model a conversation as a generator function. Yield user messages and assistant
-`Value`s. Optionally return a result (in this case `ranking`).
+Model a conversation as a generator function. Yield model requirements, messages
+and inference actions.
 
 ```ts
-import { Inference, Model } from "liminal"
+import { Exec, Inference, Model } from "liminal"
 
 function* PlantGrowthRanking() {
-  // Describe the requirement of a language model by the key of `"default"`.
   yield* Model.language("default")
 
-  // Buffer a user message.
+  // User Message
   yield "What are some key factors that affect plant growth?"
 
-  // Complete text and add it (as an assistant message) to the buffer.
+  // Assistant Message
   const factors = yield* Inference()
 
-  // Buffer another user message.
+  // User Message
   yield "Rank those by order of importance"
 
-  // Same as before, but this time with a `ZodType` (could use another Standard Schema type).
+  // Assistant Message (structured output)
   const { ranking } = yield* Inference(z.object({
-    ranked: z.string().array(),
+    ranking: z.string().array(),
   }))
 
-  // Return a result from the conversation.
   return ranking
 }
 ```
 
-Execute the conversation with the LLM client library and models of your
-choosing. In this case we use Vercel's AI SDK and specify the `gpt-4o-mini`
-model.
+> Note: `async function* YourFunction() { // ...` is perfectly valid if you need
+> async/await.
+
+## Execution
+
+To execute the conversation, we must specify the models to associated with
+yielded `Model` action keys.
 
 ```ts
 // ...
@@ -70,7 +68,7 @@ model.
 import { openai } from "@ai-sdk/openai"
 import { AILanguageModel } from "liminal-ai"
 
-const { result } = Conversation(PlantGrowthRanging)
+const { result } = Exec(PlantGrowthRanging)
   .models({
     default: AILanguageModel(openai("gpt-4o-mini")),
   })
@@ -81,8 +79,8 @@ result satisfies Array<string>
 
 ## Actions
 
-Actions are the values yielded from Liminal conversations (generator functions
-or iterables). They tell the executor how to update internal state such as the
+Actions are the values yielded from Liminal conversations (generators or other
+iterables). They tell the executor how to update internal state such as the
 model or tool selections.
 
 ---

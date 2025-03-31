@@ -10,24 +10,11 @@
         "conditional-type-checks": "^1.0.6",
         "dedent": "^1.5.3",
         "effect": "^3.14.2",
-        "liminal": "workspace:*",
-        "liminal-ai": "workspace:*",
         "markdown-it-footnote": "^4.0.0",
         "typescript": "^5.8.2",
         "valibot": "^1.0.0",
         "vitepress": "^1.5.0",
         "zod": "^3.24.2",
-      },
-    },
-    "examples/ai": {
-      "name": "liminal-example-ai",
-      "dependencies": {
-        "@ai-sdk/openai": "^1.2.5",
-        "ai": "^4.1.61",
-        "arktype": "^2.1.9",
-        "liminal": "workspace:*",
-        "liminal-ai": "workspace:*",
-        "mathjs": "^14.3.1",
       },
     },
     "examples/mocking": {
@@ -39,6 +26,19 @@
         "liminal": "workspace:*",
         "liminal-ai": "workspace:*",
         "mathjs": "^14.3.1",
+      },
+    },
+    "examples/patterns": {
+      "name": "liminal-example-patterns",
+      "dependencies": {
+        "@ai-sdk/openai": "^1.2.5",
+        "ai": "^4.1.61",
+        "arktype": "^2.1.9",
+        "liminal": "workspace:*",
+        "liminal-ai": "workspace:*",
+        "liminal-ollama": "workspace:*",
+        "mathjs": "^14.3.1",
+        "ollama": "^0.5.14",
       },
     },
     "examples/vite-react-app": {
@@ -77,6 +77,13 @@
       "peerDependencies": {
         "ai": "^4.1.61",
         "liminal": "workspace:*",
+      },
+    },
+    "packages/ollama": {
+      "name": "liminal-ollama",
+      "peerDependencies": {
+        "liminal": "workspace:*",
+        "ollama": "^0.5.14",
       },
     },
     "packages/store": {
@@ -605,11 +612,13 @@
 
     "liminal-ai": ["liminal-ai@workspace:packages/ai"],
 
-    "liminal-example-ai": ["liminal-example-ai@workspace:examples/ai"],
-
     "liminal-example-mocking": ["liminal-example-mocking@workspace:examples/mocking"],
 
+    "liminal-example-patterns": ["liminal-example-patterns@workspace:examples/patterns"],
+
     "liminal-example-vite-react-app": ["liminal-example-vite-react-app@workspace:examples/vite-react-app"],
+
+    "liminal-ollama": ["liminal-ollama@workspace:packages/ollama"],
 
     "liminal-store": ["liminal-store@workspace:packages/store"],
 
@@ -708,6 +717,8 @@
     "nanoid": ["nanoid@3.3.11", "", { "bin": { "nanoid": "bin/nanoid.cjs" } }, "sha512-N8SpfPUnUp1bK+PMYW8qSWdl9U+wwNWI4QKxOYDy9JAro3WMX7p2OeVRF9v+347pnakNevPmiHhNmZ2HbFA76w=="],
 
     "natural-compare": ["natural-compare@1.4.0", "", {}, "sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw=="],
+
+    "ollama": ["ollama@0.5.14", "", { "dependencies": { "whatwg-fetch": "^3.6.20" } }, "sha512-pvOuEYa2WkkAumxzJP0RdEYHkbZ64AYyyUszXVX7ruLvk5L+EiO2G71da2GqEQ4IAk4j6eLoUbGk5arzFT1wJA=="],
 
     "oniguruma-to-es": ["oniguruma-to-es@2.3.0", "", { "dependencies": { "emoji-regex-xs": "^1.0.0", "regex": "^5.1.1", "regex-recursion": "^5.1.1" } }, "sha512-bwALDxriqfKGfUufKGGepCzu9x7nJQuoRoAFp4AnwehhC2crqrDIAP/uN2qdlsAvSMpeRC3+Yzhqc7hLmle5+g=="],
 
@@ -840,6 +851,8 @@
     "vue": ["vue@3.5.13", "", { "dependencies": { "@vue/compiler-dom": "3.5.13", "@vue/compiler-sfc": "3.5.13", "@vue/runtime-dom": "3.5.13", "@vue/server-renderer": "3.5.13", "@vue/shared": "3.5.13" }, "peerDependencies": { "typescript": "*" }, "optionalPeers": ["typescript"] }, "sha512-wmeiSMxkZCSc+PM2w2VRsOYAZC8GdipNFRTsLSfodVqI9mbejKeXEGr8SckuLnrQPGe3oJN5c3K0vpoU9q/wCQ=="],
 
     "vue-resize": ["vue-resize@2.0.0-alpha.1", "", { "peerDependencies": { "vue": "^3.0.0" } }, "sha512-7+iqOueLU7uc9NrMfrzbG8hwMqchfVfSzpVlCMeJQe4pyibqyoifDNbKTZvwxZKDvGkB+PdFeKvnGZMoEb8esg=="],
+
+    "whatwg-fetch": ["whatwg-fetch@3.6.20", "", {}, "sha512-EqhiFU6daOA8kpjOWTL0olhVOF3i7OrFzSYiGsEMB8GcXS+RrzauAERX65xMeNWVqxA6HXH2m69Z9LaKKdisfg=="],
 
     "which": ["which@2.0.2", "", { "dependencies": { "isexe": "^2.0.0" }, "bin": { "node-which": "./bin/node-which" } }, "sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA=="],
 

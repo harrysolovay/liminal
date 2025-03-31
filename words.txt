@@ -2,6 +2,7 @@ arktype
 bunx
 cspotcode
 fuzzystrmatch
+inferencing
 initdb
 llms
 ollama

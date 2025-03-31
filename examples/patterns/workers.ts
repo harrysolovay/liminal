@@ -1,9 +1,9 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { Branches, Conversation, Inference, Model, SystemMessage } from "liminal"
+import { Branches, Exec, Inference, Model, SystemMessage } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
-Conversation(CodeReviewers())
+Exec(CodeReviewers())
   .models({
     default: AILanguageModel(openai("gpt-4o-mini")),
   })

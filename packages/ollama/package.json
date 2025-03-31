@@ -1,0 +1,11 @@
+{
+  "name": "liminal-ollama",
+  "private": true,
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "peerDependencies": {
+    "liminal": "workspace:*",
+    "ollama": "^0.5.14"
+  }
+}

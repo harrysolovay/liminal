@@ -2,12 +2,12 @@
 
 ```ts twoslash
 import { describe, expect, it } from "bun:test"
-import { Conversation, Model } from "liminal"
+import { Exec, Model } from "liminal"
 import { TestLanguageModel } from "liminal/testing"
 
 describe("Liminal Test", () => {
   it("scope snapshot matches", async () => {
-    const scope = await Conversation(function*() {
+    const scope = await Exec(function*() {
       yield* Model.language("default")
       // ...
     })

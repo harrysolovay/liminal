@@ -1,9 +1,9 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { Context, Conversation, Inference, Model, SystemMessage } from "liminal"
+import { Context, Exec, Inference, Model, SystemMessage } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
-Conversation(function*() {
+Exec(function*() {
   yield* Model.language("default")
   const classification = yield* Context("Classification", classifyQuery("I'd like a refund please"))
   const response = yield* Context("ClassificationConsumer", useClassification(classification))

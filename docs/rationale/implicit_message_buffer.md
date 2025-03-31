@@ -1,1 +1,0 @@
-# Implicit Message Buffer

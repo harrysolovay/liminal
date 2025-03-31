@@ -16,6 +16,7 @@ const GOOGLE_ANALYTICS = dedent`
 export default defineConfig({
   title: "Liminal",
   description: packageJson.description,
+  assetsDir: "docs/public",
   ignoreDeadLinks: ["./LICENSE"],
   markdown: {
     codeTransformers: [transformerTwoslash()],
@@ -62,6 +63,7 @@ export default defineConfig({
       "liminal/testing/TestLanguageModel.md": "testing/test-language-model.md",
       "liminal/testing/TestEmbeddingModel.md": "testing/test-embedding-model.md",
       "packages/ai/README.md": "adapters/ai.md",
+      "packages/ollama/README.md": "adapters/ollama.md",
     } as Record<string, string>)[initial] ?? (() => {
       console.log("UNMAPPED:", initial)
       return initial
@@ -95,8 +97,8 @@ export default defineConfig({
             text: "Rationale",
             base: "/rationale",
             items: [
-              { text: "Implicit Message Buffer", link: "/implicit_message_buffer" },
-              { text: "Decoupling From Models", link: "/decoupling_from_models" },
+              { text: "Implicit Message Buffers", link: "/implicit_message_buffers" },
+              { text: "Decoupling Conversations From Models", link: "/decoupling_conversations_from_models" },
               { text: "Type-safe Observability", link: "/type-safe_observability" },
               { text: "Eliminating Boilerplate", link: "/eliminating_boilerplate" },
               // { text: "LLM-first Runtime Types", link: "/llm-first_runtime_types" },
@@ -150,6 +152,7 @@ export default defineConfig({
         link: "/",
         items: [
           { text: "AI SDK (Vercel)", link: "/ai" },
+          { text: "Ollama", link: "/ollama" },
         ],
       },
       {
