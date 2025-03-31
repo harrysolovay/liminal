@@ -1,16 +1,16 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { Branches, Exec, Inference, Model, SystemMessage } from "liminal"
+import { Branches, Exec, Inference, Model, System } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
 Exec(CodeReviewers())
   .models({
     default: AILanguageModel(openai("gpt-4o-mini")),
   })
-  .reduce(console.log)
+  .exec(console.log)
 
 function* CodeReviewers() {
-  yield* SystemMessage("You are a senior software architect planning feature implementations.")
+  yield* System`You are a senior software architect planning feature implementations.`
   yield* Model.language("default")
   yield "Analyze this feature request and create an implementation plan:"
   const feat = "Alert administrators via text whenever site traffic exceeds a certain threshold."
@@ -32,7 +32,7 @@ const FileInfo = type({
 })
 
 function* Implementor(featureRequest: string, file: typeof FileInfo.infer) {
-  yield* SystemMessage(IMPLEMENTATION_PROMPTS[file.changeType])
+  yield* System(IMPLEMENTATION_PROMPTS[file.changeType])
   yield `
     Implement the changes for ${file.filePath} to support:
 

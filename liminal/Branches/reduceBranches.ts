@@ -7,13 +7,13 @@ import type { Branches } from "./Branches.js"
 export const reduceBranches: ActionReducer<Branches> = async (scope, action) => {
   const branchKeys = Reflect.ownKeys(action.branches)
   scope.events.emit({
-    event: "BranchesEnter",
+    type: "BranchesEnter",
     branches: action.key,
   })
   const branchScopes = await Promise.all(
     branchKeys.map(async (key) => {
       scope.events.emit({
-        event: "BranchEnter",
+        type: "BranchEnter",
         branches: action.key,
         branch: key,
       })
@@ -23,7 +23,7 @@ export const reduceBranches: ActionReducer<Branches> = async (scope, action) => 
           key,
           unwrapDeferred(action.branches[key as never]!),
           scope.events.child((inner) => ({
-            event: "BranchInner",
+            type: "BranchInner",
             branches: action.key,
             branch: key,
             inner,
@@ -34,7 +34,7 @@ export const reduceBranches: ActionReducer<Branches> = async (scope, action) => 
         ),
       )
       scope.events.emit({
-        event: "BranchExit",
+        type: "BranchExit",
         branches: action.key,
         branch: key,
         result: branchScope.result,
@@ -46,14 +46,14 @@ export const reduceBranches: ActionReducer<Branches> = async (scope, action) => 
     ? branchScopes.map(([_0, scope]) => scope.result)
     : Object.fromEntries(branchScopes.map(([key, value]) => [key, value.result]))
   scope.events.emit({
-    event: "BranchesExit",
+    type: "BranchesExit",
     branches: action.key,
     result,
   })
   return scope.spread({
     next: result,
     children: [...scope.children, {
-      kind: "Branches",
+      type: "Branches",
       key: action.key,
       scopes: Object.fromEntries(branchScopes),
     }],

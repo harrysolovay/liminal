@@ -1,6 +1,6 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { Branches, Exec, Inference, Model, SystemMessage } from "liminal"
+import { Branches, Exec, Inference, Model, System } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 import { readFile } from "node:fs/promises"
 import { fileURLToPath } from "node:url"
@@ -13,10 +13,10 @@ Exec(Review(code))
   .models({
     default: AILanguageModel(openai("gpt-4o-mini")),
   })
-  .reduce(console.log)
+  .exec(console.log)
 
 function* Review(code: string) {
-  yield* SystemMessage("You are a technical lead summarizing multiple code reviews. Review the supplied code.")
+  yield* System`You are a technical lead summarizing multiple code reviews. Review the supplied code.`
   yield* Model.language("default")
   yield code
   const reviews = yield* Branches("Reviews", {
@@ -31,9 +31,7 @@ function* Review(code: string) {
 }
 
 function* SecurityReview() {
-  yield* SystemMessage(
-    "You are an expert in code security. Focus on identifying security vulnerabilities, injection risks, and authentication issues.",
-  )
+  yield* System`You are an expert in code security. Focus on identifying security vulnerabilities, injection risks, and authentication issues.`
   return yield* Inference(
     type({
       type: "'security'",
@@ -45,9 +43,7 @@ function* SecurityReview() {
 }
 
 function* PerformanceReview() {
-  yield* SystemMessage(
-    "You are an expert in code performance. Focus on identifying performance bottlenecks, memory leaks, and optimization opportunities.",
-  )
+  yield* System`You are an expert in code performance. Focus on identifying performance bottlenecks, memory leaks, and optimization opportunities.`
   return yield* Inference(
     type({
       type: "'performance'",
@@ -59,7 +55,7 @@ function* PerformanceReview() {
 }
 
 function* MaintainabilityReview() {
-  yield* SystemMessage(
+  yield* System(
     "You are an expert in code quality. Focus on code structure, readability, and adherence to best practices.",
   )
   return yield* Inference(

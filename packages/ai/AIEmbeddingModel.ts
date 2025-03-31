@@ -10,7 +10,7 @@ export function AIEmbeddingModel(model: EmbeddingModel<any>): EmbeddingModelAdap
         value: action.value,
       })
       scope.events.emit({
-        event: "Embedding",
+        type: "Embedding",
         value: action.value,
         embedding,
       })

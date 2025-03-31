@@ -3,7 +3,7 @@ import type { Emission } from "./Emission.js"
 
 export const reduceEmission: ActionReducer<Emission> = (scope, action) => {
   scope.events.emit({
-    event: "Emission",
+    type: "Emission",
     key: action.key,
     value: action.value,
   })

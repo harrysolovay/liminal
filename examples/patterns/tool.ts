@@ -1,20 +1,27 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { Exec, Inference, Model, SystemMessage, Tool } from "liminal"
+import { Exec, Inference, Model, System, Tool } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 import * as mathjs from "mathjs"
+
+// ToolDetached
+// event.type
 
 Exec(ToolUser())
   .models({
     default: AILanguageModel(openai("gpt-4o-mini")),
   })
-  .reduce(console.log)
+  .exec((event) => {
+    if (event.type === "ToolRemoval") {
+      event.tool
+    }
+  })
 
 function* ToolUser() {
-  yield* SystemMessage(`
+  yield* System`
     You are solving math problems. Reason step by step. Use the calculator when necessary.
     When you give the final answer, provide an explanation for how you arrived at it.
-  `)
+  `
   yield* Model.language("default")
   const detach = yield* Tool(
     "MathTool",

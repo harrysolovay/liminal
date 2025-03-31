@@ -3,7 +3,7 @@ import type { Model } from "../Model/Model.js"
 
 export const reduceModel: ActionReducer<Model> = (scope, action) => {
   scope.events.emit({
-    event: "Model",
+    type: "Model",
     key: action.key,
     purpose: action.purpose,
   })

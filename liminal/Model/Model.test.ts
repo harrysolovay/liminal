@@ -23,7 +23,7 @@ describe("Model", () => {
         child_b: TestEmbeddingModel(),
         tertiary: TestEmbeddingModel(),
       })
-      .reduce()
+      .exec()
     expect(JSON.stringify(scope, null, 2)).toMatchSnapshot()
   })
 })

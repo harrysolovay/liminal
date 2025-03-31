@@ -5,7 +5,7 @@ import type { Tool } from "./Tool.js"
 
 export const reduceTool: ActionReducer<Tool> = (scope, action) => {
   scope.events.emit({
-    event: "EnableTool",
+    type: "EnableTool",
     key: action.key,
     description: action.description,
     schema: JSONSchemaMemo(action.params),

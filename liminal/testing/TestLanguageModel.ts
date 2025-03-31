@@ -23,7 +23,7 @@ export function TestLanguageModel(
         const schema = await JSONSchemaMemo(action.type)
         const object = getObject()
         scope.events.emit({
-          event: "Inference",
+          type: "Inference",
           value: object,
           schema,
         })
@@ -39,7 +39,7 @@ export function TestLanguageModel(
       }
       const text = getText()
       scope.events.emit({
-        event: "Inference",
+        type: "Inference",
         value: text,
       })
       return scope.spread({

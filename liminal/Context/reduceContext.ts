@@ -7,7 +7,7 @@ import { unwrapDeferred } from "../util/unwrapDeferred.js"
 
 export const reduceContext: ActionReducer<Context> = async (scope, action) => {
   scope.events.emit({
-    event: "ContextEnter",
+    type: "ContextEnter",
     context: action.key,
   })
   const contextScope = await reduceActor(
@@ -20,7 +20,7 @@ export const reduceContext: ActionReducer<Context> = async (scope, action) => {
           : unwrapDeferred(action.implementation)
         : Inference(),
       scope.events.child((inner) => ({
-        event: "ContextInner",
+        type: "ContextInner",
         context: action.key,
         inner,
       })),
@@ -28,14 +28,14 @@ export const reduceContext: ActionReducer<Context> = async (scope, action) => {
     ),
   )
   scope.events.emit({
-    event: "ContextExit",
+    type: "ContextExit",
     context: action.key,
     result: contextScope.result,
   })
   return scope.spread({
     next: contextScope.result,
     children: [...scope.children, {
-      kind: "Context",
+      type: "Context",
       scope: contextScope,
     }],
   })

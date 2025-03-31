@@ -17,7 +17,7 @@ export function OllamaLanguageModel(ollama: Ollama, model: string): LanguageMode
         const { content, tool_calls /* TODO */ } = message
         const object: JSONObject = JSON.parse(content)
         scope.events.emit({
-          event: "Inference",
+          type: "Inference",
           value: object as JSONObject,
           schema,
         })
@@ -36,7 +36,7 @@ export function OllamaLanguageModel(ollama: Ollama, model: string): LanguageMode
         messages,
       })
       scope.events.emit({
-        event: "Inference",
+        type: "Inference",
         value: content,
       })
       return scope.spread({

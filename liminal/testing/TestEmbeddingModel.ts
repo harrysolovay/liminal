@@ -16,7 +16,7 @@ export function TestEmbeddingModel(
     reduceEmbedding: async (scope, action) => {
       const embedding = getEmbedding()
       scope.events.emit({
-        event: "Embedding",
+        type: "Embedding",
         embedding: embedding,
         value: action.value,
       })

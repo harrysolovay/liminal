@@ -1,18 +1,16 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { Exec, Inference, Model, SystemMessage } from "liminal"
+import { Exec, Inference, Model, System } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
 Exec(TranslationWithFeedback("typescript", "I love you!"))
   .models({
     default: AILanguageModel(openai("gpt-4o-mini")),
   })
-  .reduce(console.log)
+  .exec(console.log)
 
 function* TranslationWithFeedback(targetLanguage: string, text: string) {
-  yield* SystemMessage(
-    "You are an expert literary translator. Translate the supplied text to the specified target language, preserving tone and cultural nuances.",
-  )
+  yield* System`You are an expert literary translator. Translate the supplied text to the specified target language, preserving tone and cultural nuances.`
   yield* Model.language("default")
   yield `Target language: ${targetLanguage}`
   yield `Text:

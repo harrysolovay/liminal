@@ -48,15 +48,12 @@ export class Scope<R = any> {
   }
 }
 
+// TODO: how to capture tool scope?
 export type ChildScopeContainer = {
-  kind: "Context"
+  type: "Context"
   scope: Scope
 } | {
-  kind: "Branches"
-  key: keyof any
-  scopes: Record<keyof any, Scope>
-} | {
-  kind: "Tool"
+  type: "Branches"
   key: keyof any
   scopes: Record<keyof any, Scope>
 }

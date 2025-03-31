@@ -24,7 +24,7 @@ export function AILanguageModel(model: LanguageModelV1): LanguageModelAdapter {
           schema: aiSchema,
         })
         scope.events.emit({
-          event: "Inference",
+          type: "Inference",
           value: object as JSONObject,
           schema,
         })
@@ -48,7 +48,7 @@ export function AILanguageModel(model: LanguageModelV1): LanguageModelAdapter {
               parameters: jsonSchema(schema),
               execute: async (params) => {
                 scope.events.emit({
-                  event: "ToolEnter",
+                  type: "ToolEnter",
                   tool: tool_.key,
                   args: params as JSONObject,
                 })
@@ -60,7 +60,7 @@ export function AILanguageModel(model: LanguageModelV1): LanguageModelAdapter {
                       undefined,
                       result as never,
                       scope.events.child((event) => ({
-                        event: "ToolInner",
+                        type: "ToolInner",
                         tool: tool_.key,
                         inner: event,
                       })),
@@ -70,7 +70,7 @@ export function AILanguageModel(model: LanguageModelV1): LanguageModelAdapter {
                   result = toolScope.result
                 }
                 scope.events.emit({
-                  event: "ToolExit",
+                  type: "ToolExit",
                   tool: tool_.key,
                   result: result as JSONObject,
                 })
@@ -86,7 +86,7 @@ export function AILanguageModel(model: LanguageModelV1): LanguageModelAdapter {
         tools,
       })
       scope.events.emit({
-        event: "Inference",
+        type: "Inference",
         value: text,
       })
       return scope.spread({

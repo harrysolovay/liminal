@@ -11,7 +11,7 @@ export function OllamaEmbeddingModel(ollama: Ollama, model: string): EmbeddingMo
       })
       const embedding = embeddings[0]! // TODO
       scope.events.emit({
-        event: "Embedding",
+        type: "Embedding",
         value: action.value,
         embedding,
       })

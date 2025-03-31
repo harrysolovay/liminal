@@ -1,3 +1,3 @@
-export interface EventBase<K extends string> {
-  event: K
+export interface ActionEventBase<K extends string> {
+  type: K
 }

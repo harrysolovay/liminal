@@ -1,5 +1,6 @@
 import { ActionBase } from "../Action/ActionBase.js"
 import type { Spec } from "../Spec.js"
+import { isTemplateStringsArray } from "../util/isTemplateStringsArray.js"
 import type { AssistantContent } from "./AssistantContent.js"
 import type { AssistantMessageEvent } from "./AssistantMessageEvent.js"
 
@@ -7,7 +8,9 @@ export interface AssistantMessage<S extends Spec = Spec> extends ActionBase<"Ass
   content: AssistantContent
 }
 
-export function* AssistantMessage(content: AssistantContent): Generator<
+export function* Assistant(
+  ...[raw, ...substitutions]: [content: AssistantContent] | [raw: TemplateStringsArray, ...substitutions: Array<string>]
+): Generator<
   AssistantMessage<{
     LanguageModel: never
     EmbeddingModel: never
@@ -15,5 +18,7 @@ export function* AssistantMessage(content: AssistantContent): Generator<
   }>,
   void
 > {
-  return yield ActionBase("AssistantMessage", { content })
+  return yield ActionBase("AssistantMessage", {
+    content: isTemplateStringsArray(raw) ? String.raw(raw, ...substitutions) : raw,
+  })
 }
