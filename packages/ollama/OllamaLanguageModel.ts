@@ -18,7 +18,6 @@ export function OllamaLanguageModel(ollama: Ollama, model: string): LanguageMode
         scope.events.emit({
           type: "inferred",
           value: object as JSONObject,
-          schema,
         })
         const content = JSON.stringify(object, null, 2)
         scope.events.emit({

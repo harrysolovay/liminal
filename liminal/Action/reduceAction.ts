@@ -9,7 +9,7 @@ import { reduceFork } from "../Fork/reduceFork.ts"
 import { reduceMessage } from "../Message/reduceMessage.ts"
 import { assert } from "../util/assert.ts"
 
-export const reduceAction: ActionReducer = (scope, action) => {
+export const reduceAction: ActionReducer = async (scope, action) => {
   if (!action) {
     return scope.spread({
       next: undefined,
@@ -33,7 +33,7 @@ export const reduceAction: ActionReducer = (scope, action) => {
       assert(scope.model.language)
       const lm = scope.models[scope.model.language]
       assert(lm?.type === "Language")
-      return lm.reduceInference(scope, action)
+      return await lm.reduceInference(scope, action)
     }
     case "embed": {
       assert(scope.model.embedding)
