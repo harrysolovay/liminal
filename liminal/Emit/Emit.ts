@@ -1,7 +1,7 @@
-import { ActionBase } from "../Action/ActionBase.js"
-import type { JSONValue } from "../JSON/JSONValue.js"
-import type { Spec } from "../Spec.js"
-import type { EmittedEvent } from "./EmitEvent.js"
+import { ActionBase } from "../Action/ActionBase.ts"
+import type { JSONValue } from "../JSON/JSONValue.ts"
+import type { Spec } from "../Spec.ts"
+import type { EmittedEvent } from "./EmitEvent.ts"
 
 export interface Emit<S extends Spec = Spec> extends ActionBase<"emit", S> {
   key: keyof any

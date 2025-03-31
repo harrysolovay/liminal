@@ -1,2 +1,2 @@
-export * from "./OllamaEmbeddingModel.js"
-export * from "./OllamaLanguageModel.js"
+export * from "./OllamaEmbeddingModel.ts"
+export * from "./OllamaLanguageModel.ts"

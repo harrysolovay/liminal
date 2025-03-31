@@ -11,7 +11,7 @@
     "@electric-sql/pglite": "^0.2.17",
     "@electric-sql/pglite-react": "^0.2.17",
     "liminal-ai": "workspace:*",
-    "liminal-store": "workspace:*",
+    "liminal-drizzle": "workspace:*",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

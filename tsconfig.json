@@ -8,9 +8,6 @@
       "path": "./examples/patterns"
     },
     {
-      "path": "./examples/mocking"
-    },
-    {
       "path": "./examples/vite-react-app"
     },
     {
@@ -20,7 +17,7 @@
       "path": "./packages/ollama"
     },
     {
-      "path": "./packages/store"
+      "path": "./packages/drizzle"
     },
     {
       "path": "./.vitepress"

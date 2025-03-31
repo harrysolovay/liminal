@@ -1,21 +1,21 @@
-import type { ContextEvent } from "../Context/ContextEvent.js"
-import type { ModelDeclaredEvent } from "../DeclareModel/DeclareModelEvent.js"
-import type { ToolDisabledEvent } from "../DisableTool/DisableToolEvent.js"
-import type { EmbeddedEvent } from "../Embed/EmbedEvent.js"
-import type { EmittedEvent } from "../Emit/EmitEvent.js"
+import type { AssistantMessagedEvent } from "../AssistantMessage/AssistantMessageEvent.ts"
+import type { ContextEvent } from "../Context/ContextEvent.ts"
+import type { ModelDeclaredEvent } from "../DeclareModel/DeclareModelEvent.ts"
+import type { ToolDisabledEvent } from "../DisableTool/DisableToolEvent.ts"
+import type { EmbeddedEvent } from "../Embed/EmbedEvent.ts"
+import type { EmittedEvent } from "../Emit/EmitEvent.ts"
 import type {
   ToolEnabledEvent,
   ToolEnteredEvent,
   ToolExitedEvent,
   ToolInnerEvent,
-} from "../EnableTool/EnableToolEvent.js"
-import type { ExecEnteredEvent, ExecExitedEvent } from "../Exec/ExecEvent.js"
-import type { ForkEvent } from "../Fork/ForkEvent.js"
-import type { InferredEvent } from "../Infer/InferEvent.js"
-import type { AssistantMessagedEvent } from "../Message/AssistantMessageEvent.js"
-import type { SystemMessagedEvent } from "../Message/SystemMessageEvent.js"
-import type { ToolMessagedEvent } from "../Message/ToolMessageEvent.js"
-import type { UserMessagedEvent } from "../Message/UserMessageEvent.js"
+} from "../EnableTool/EnableToolEvent.ts"
+import type { ExecEnteredEvent, ExecExitedEvent } from "../Exec/ExecEvent.ts"
+import type { ForkEvent } from "../Fork/ForkEvent.ts"
+import type { InferredEvent } from "../Infer/InferEvent.ts"
+import type { SystemMessagedEvent } from "../SystemMessage/SystemMessageEvent.ts"
+import type { ToolMessagedEvent } from "../ToolMessage/ToolMessageEvent.ts"
+import type { UserMessagedEvent } from "../UserMessage/UserMessageEvent.ts"
 
 export type ActionEvent =
   | ExecEnteredEvent

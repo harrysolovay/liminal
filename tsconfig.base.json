@@ -17,6 +17,8 @@
     "noUncheckedIndexedAccess": true,
     "noUncheckedSideEffectImports": true,
     "resolveJsonModule": true,
+    "rewriteRelativeImportExtensions": true,
+    "allowImportingTsExtensions": true,
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,

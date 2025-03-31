@@ -1,4 +1,4 @@
-import type { Spec } from "../Spec.js"
+import type { Spec } from "../Spec.ts"
 
 export interface ActionBase<K extends string = string, S extends Spec = Spec> {
   "": S

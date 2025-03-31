@@ -1,9 +1,9 @@
 import { describe, expect, it } from "bun:test"
-import { Context } from "../Context/Context.js"
-import { Exec } from "../Exec/Exec.js"
-import { TestEmbeddingModel } from "../testing/TestEmbeddingModel.js"
-import { TestLanguageModel } from "../testing/TestLanguageModel.js"
-import { DeclareModel } from "./DeclareModel.js"
+import { Context } from "../Context/Context.ts"
+import { Exec } from "../Exec/Exec.ts"
+import { TestEmbeddingModel } from "../testing/TestEmbeddingModel.ts"
+import { TestLanguageModel } from "../testing/TestLanguageModel.ts"
+import { DeclareModel } from "./DeclareModel.ts"
 
 describe("Model", () => {
   it("generates the expected event sequence", async () => {

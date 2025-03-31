@@ -1,12 +1,12 @@
-import type { Context } from "../Context/Context.js"
-import type { DeclareModel } from "../DeclareModel/DeclareModel.js"
-import type { DisableTool } from "../DisableTool/DisableTool.js"
-import type { Embed } from "../Embed/Embed.js"
-import type { Emit } from "../Emit/Emit.js"
-import type { EnableTool } from "../EnableTool/EnableTool.js"
-import type { Fork } from "../Fork/Fork.js"
-import type { Infer } from "../Infer/Infer.js"
-import type { Message } from "../Message/Message.js"
+import type { Context } from "../Context/Context.ts"
+import type { DeclareModel } from "../DeclareModel/DeclareModel.ts"
+import type { DisableTool } from "../DisableTool/DisableTool.ts"
+import type { Embed } from "../Embed/Embed.ts"
+import type { Emit } from "../Emit/Emit.ts"
+import type { EnableTool } from "../EnableTool/EnableTool.ts"
+import type { Fork } from "../Fork/Fork.ts"
+import type { Infer } from "../Infer/Infer.ts"
+import type { Message } from "../Message/Message.ts"
 
 export type Action =
   | Context

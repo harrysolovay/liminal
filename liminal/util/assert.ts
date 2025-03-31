@@ -1,4 +1,4 @@
-import { LiminalAssertionError } from "../LiminalAssertionError.js"
+import { LiminalAssertionError } from "../LiminalAssertionError.ts"
 
 export function assert(expr: unknown, msg = ""): asserts expr {
   if (!expr) {

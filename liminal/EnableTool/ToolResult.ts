@@ -1,3 +1,3 @@
-import type { JSONValue } from "../JSON/JSONValue.js"
+import type { JSONValue } from "../JSON/JSONValue.ts"
 
 export type ToolResult = JSONValue | void

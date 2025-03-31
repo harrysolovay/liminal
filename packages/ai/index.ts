@@ -1,2 +1,2 @@
-export * from "./AIEmbeddingModel.js"
-export * from "./AILanguageModel.js"
+export * from "./AIEmbeddingModel.ts"
+export * from "./AILanguageModel.ts"

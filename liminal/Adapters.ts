@@ -1,6 +1,6 @@
-import type { ActionReducer } from "./Action/ActionReducer.js"
-import type { Embed } from "./Embed/Embed.js"
-import type { Infer } from "./Infer/Infer.js"
+import type { ActionReducer } from "./Action/ActionReducer.ts"
+import type { Embed } from "./Embed/Embed.ts"
+import type { Infer } from "./Infer/Infer.ts"
 
 export type Adapter = LanguageModelAdapter | EmbeddingModelAdapter
 

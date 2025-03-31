@@ -1,6 +1,6 @@
-import type { Action } from "./Action/Action.js"
-import type { ActionEvent } from "./Action/ActionEvent.js"
-import type { ActionLike } from "./Action/ActionLike.js"
+import type { Action } from "./Action/Action.ts"
+import type { ActionEvent } from "./Action/ActionEvent.ts"
+import type { ActionLike } from "./Action/ActionLike.ts"
 
 export interface Spec {
   LanguageModel: keyof any

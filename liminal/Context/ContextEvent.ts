@@ -1,5 +1,5 @@
-import type { ActionEvent } from "../Action/ActionEvent.js"
-import type { ActionEventBase } from "../Action/ActionEventBase.js"
+import type { ActionEvent } from "../Action/ActionEvent.ts"
+import type { ActionEventBase } from "../Action/ActionEventBase.ts"
 
 export type ContextEvent = ContextEnteredEvent | ContextInnerEvent | ContextExitedEvent
 

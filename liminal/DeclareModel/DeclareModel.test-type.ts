@@ -1,8 +1,8 @@
-import { Context } from "../Context/Context.js"
-import type { ContextEnteredEvent, ContextExitedEvent, ContextInnerEvent } from "../Context/ContextEvent.js"
-import { ActorAssertions } from "../testing/ActorAssertions.js"
-import { DeclareModel } from "./DeclareModel.js"
-import type { ModelDeclaredEvent } from "./DeclareModelEvent.js"
+import { Context } from "../Context/Context.ts"
+import type { ContextEnteredEvent, ContextExitedEvent, ContextInnerEvent } from "../Context/ContextEvent.ts"
+import { ActorAssertions } from "../testing/ActorAssertions.ts"
+import { DeclareModel } from "./DeclareModel.ts"
+import type { ModelDeclaredEvent } from "./DeclareModelEvent.ts"
 
 const languageModel = DeclareModel.language("A")
 ActorAssertions(languageModel).assertSpec<{

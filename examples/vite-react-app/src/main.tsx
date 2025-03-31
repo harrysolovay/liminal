@@ -1,28 +1,25 @@
-import { PGlite } from "@electric-sql/pglite"
-import { live } from "@electric-sql/pglite/live"
+import type { PGlite, PGliteInterfaceExtensions } from "@electric-sql/pglite"
+import { makePGliteProvider } from "@electric-sql/pglite-react"
+import { PGliteWorker } from "@electric-sql/pglite/worker"
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
-import { App } from "./App.js"
-import {} from "liminal-store"
-import { PGliteProvider } from "@electric-sql/pglite-react"
-import { auto_explain } from "@electric-sql/pglite/contrib/auto_explain"
-import { fuzzystrmatch } from "@electric-sql/pglite/contrib/fuzzystrmatch"
-import { uuid_ossp } from "@electric-sql/pglite/contrib/uuid_ossp"
-import { vector } from "@electric-sql/pglite/vector"
+import { App } from "./App.tsx"
+import type { extensions } from "./pglite_worker.ts"
 
-const db = await PGlite.create({
-  extensions: {
-    auto_explain,
-    fuzzystrmatch,
-    live,
-    uuid_ossp,
-    vector,
-  },
-})
+const pg = new PGliteWorker(
+  new Worker(new URL("./pglite_worker.js", import.meta.url), {
+    type: "module",
+  }),
+)
+
+export const { PGliteProvider, usePGlite } = makePGliteProvider<
+  & PGlite
+  & PGliteInterfaceExtensions<typeof extensions>
+>()
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <PGliteProvider {...{ db }}>
+    <PGliteProvider db={pg as never}>
       <App />
     </PGliteProvider>
   </StrictMode>,

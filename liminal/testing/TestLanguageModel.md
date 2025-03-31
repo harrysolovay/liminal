@@ -2,19 +2,19 @@
 
 ```ts twoslash
 import { describe, expect, it } from "bun:test"
-import { Exec, Model } from "liminal"
+import { DeclareModel, Exec } from "liminal"
 import { TestLanguageModel } from "liminal/testing"
 
 describe("Liminal Test", () => {
   it("scope snapshot matches", async () => {
     const scope = await Exec(function*() {
-      yield* Model.language("default")
+      yield* DeclareModel.language("default")
       // ...
     })
       .models({
         default: TestLanguageModel(),
       })
-      .reduce()
+      .exec()
 
     expect(JSON.stringify(scope, null, 2)).toMatchSnapshot()
   })

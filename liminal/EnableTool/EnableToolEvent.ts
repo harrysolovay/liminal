@@ -1,7 +1,7 @@
-import type { ActionEvent } from "../Action/ActionEvent.js"
-import type { ActionEventBase } from "../Action/ActionEventBase.js"
-import type { JSONObject } from "../JSON/JSONObject.js"
-import type { ToolResult } from "./ToolResult.js"
+import type { ActionEvent } from "../Action/ActionEvent.ts"
+import type { ActionEventBase } from "../Action/ActionEventBase.ts"
+import type { JSONObject } from "../JSON/JSONObject.ts"
+import type { ToolResult } from "./ToolResult.ts"
 
 export interface ToolEnabledEvent<K extends keyof any = keyof any> extends ActionEventBase<"tool_enabled"> {
   key: K

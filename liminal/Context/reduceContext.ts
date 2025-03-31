@@ -1,8 +1,8 @@
-import type { ActionReducer } from "../Action/ActionReducer.js"
-import { reduceActor } from "../Actor/reduceActor.js"
-import type { Context } from "../Context/Context.js"
-import { Scope } from "../Scope/Scope.js"
-import { unwrapDeferred } from "../util/unwrapDeferred.js"
+import type { ActionReducer } from "../Action/ActionReducer.ts"
+import { reduceActor } from "../Actor/reduceActor.ts"
+import type { Context } from "../Context/Context.ts"
+import { Scope } from "../Scope/Scope.ts"
+import { unwrapDeferred } from "../util/unwrapDeferred.ts"
 
 export const reduceContext: ActionReducer<Context> = async (scope, action) => {
   scope.events.emit({
