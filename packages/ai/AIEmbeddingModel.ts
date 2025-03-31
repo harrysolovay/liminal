@@ -5,6 +5,10 @@ export function AIEmbeddingModel(model: EmbeddingModel<any>): EmbeddingModelAdap
   return {
     type: "Embedding",
     reduceEmbedding: async (scope, action) => {
+      scope.events.emit({
+        type: "embedding_requested",
+        value: action.value,
+      })
       const { embedding } = await embed({
         model,
         value: action.value,

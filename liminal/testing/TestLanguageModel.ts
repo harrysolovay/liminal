@@ -20,12 +20,10 @@ export function TestLanguageModel(
     type: "Language",
     reduceInference: async (scope, action) => {
       if (action.type) {
-        const schema = await JSONSchemaMemo(action.type)
         const object = getObject()
         scope.events.emit({
           type: "inferred",
           value: object,
-          schema,
         })
         return scope.spread({
           messages: [

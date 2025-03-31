@@ -5,6 +5,10 @@ export function OllamaEmbeddingModel(ollama: Ollama, model: string): EmbeddingMo
   return {
     type: "Embedding",
     reduceEmbedding: async (scope, action) => {
+      scope.events.emit({
+        type: "embedding_requested",
+        value: action.value,
+      })
       const { embeddings } = await ollama.embed({
         model,
         input: action.value,
