@@ -1,8 +1,8 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
-import { ActionBase } from "../Action/ActionBase.js"
-import type { JSONObject } from "../JSON/JSONObject.js"
-import type { Spec } from "../Spec.js"
-import type { InferredEvent } from "./InferEvent.js"
+import { ActionBase } from "../Action/ActionBase.ts"
+import type { JSONObject } from "../JSON/JSONObject.ts"
+import type { Spec } from "../Spec.ts"
+import type { InferredEvent } from "./InferEvent.ts"
 
 export interface Infer<S extends Spec = Spec> extends ActionBase<"infer", S> {
   type: StandardSchemaV1 | undefined

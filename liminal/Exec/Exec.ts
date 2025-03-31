@@ -1,12 +1,12 @@
-import type { ActionLike } from "../Action/ActionLike.js"
-import type { ActorLike } from "../Actor/ActorLike.js"
-import { reduceActor } from "../Actor/reduceActor.js"
-import type { ExtractModelAdapters } from "../Config.js"
-import { Events } from "../Events.js"
-import { Scope } from "../Scope/Scope.js"
-import type { ExtractSpec, Spec } from "../Spec.js"
-import { unwrapDeferred } from "../util/unwrapDeferred.js"
-import type { ExecEnteredEvent, ExecExitedEvent } from "./ExecEvent.js"
+import type { ActionLike } from "../Action/ActionLike.ts"
+import type { ActorLike } from "../Actor/ActorLike.ts"
+import { reduceActor } from "../Actor/reduceActor.ts"
+import { Events } from "../Events.ts"
+import type { ExtractModelAdapters } from "../ModelAdapters.ts"
+import { Scope } from "../Scope/Scope.ts"
+import type { ExtractSpec, Spec } from "../Spec.ts"
+import { unwrapDeferred } from "../util/unwrapDeferred.ts"
+import type { ExecEnteredEvent, ExecExitedEvent } from "./ExecEvent.ts"
 
 export interface Exec<S extends Spec, T> {
   exec: (handler?: (event: ExecEnteredEvent | S["Event"] | ExecExitedEvent<T>) => any) => Promise<Scope<T>>

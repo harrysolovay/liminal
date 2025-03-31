@@ -1,5 +1,5 @@
-import type { ActionReducer } from "../Action/ActionReducer.js"
-import type { DisableTool } from "./DisableTool.js"
+import type { ActionReducer } from "../Action/ActionReducer.ts"
+import type { DisableTool } from "./DisableTool.ts"
 
 export const reduceDisableTool: ActionReducer<DisableTool> = (scope, action) => {
   scope.events.emit({

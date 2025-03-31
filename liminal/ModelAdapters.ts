@@ -1,9 +1,6 @@
-import type { ActionEvent } from "./Action/ActionEvent.js"
-import type { Adapter, EmbeddingModelAdapter, LanguageModelAdapter } from "./Adapters.js"
-import type { Spec } from "./Spec.js"
-import type { Expand } from "./util/Expand.js"
-
-export type EventHandler = (event: ActionEvent) => any
+import type { Adapter, EmbeddingModelAdapter, LanguageModelAdapter } from "./Adapters.ts"
+import type { Spec } from "./Spec.ts"
+import type { Expand } from "./util/Expand.ts"
 
 export type ModelAdapters = Record<keyof any, Adapter>
 

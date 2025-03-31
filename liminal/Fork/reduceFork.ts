@@ -1,8 +1,8 @@
-import type { ActionReducer } from "../Action/ActionReducer.js"
-import { reduceActor } from "../Actor/reduceActor.js"
-import { Scope } from "../Scope/Scope.js"
-import { unwrapDeferred } from "../util/unwrapDeferred.js"
-import type { Fork } from "./Fork.js"
+import type { ActionReducer } from "../Action/ActionReducer.ts"
+import { reduceActor } from "../Actor/reduceActor.ts"
+import { Scope } from "../Scope/Scope.ts"
+import { unwrapDeferred } from "../util/unwrapDeferred.ts"
+import type { Fork } from "./Fork.ts"
 
 export const reduceFork: ActionReducer<Fork> = async (scope, action) => {
   const branchKeys = Reflect.ownKeys(action.arms)

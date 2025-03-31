@@ -1,7 +1,7 @@
-import { ActionBase } from "../Action/ActionBase.js"
-import type { Spec } from "../Spec.js"
-import type { ModelDeclaredEvent } from "./DeclareModelEvent.js"
-import type { ModelPurpose } from "./ModelPurpose.js"
+import { ActionBase } from "../Action/ActionBase.ts"
+import type { Spec } from "../Spec.ts"
+import type { ModelDeclaredEvent } from "./DeclareModelEvent.ts"
+import type { ModelPurpose } from "./ModelPurpose.ts"
 
 export class DeclareModel<S extends Spec = Spec> implements ActionBase<"declare_model", S> {
   static *language<K extends keyof any>(key: K): Generator<

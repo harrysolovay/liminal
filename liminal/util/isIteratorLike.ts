@@ -1,5 +1,5 @@
-import { isAsyncIterator } from "./isAsyncIterator.js"
-import { isIterator } from "./isIterator.js"
+import { isAsyncIterator } from "./isAsyncIterator.ts"
+import { isIterator } from "./isIterator.ts"
 
 export function isIteratorLike(
   value: unknown,

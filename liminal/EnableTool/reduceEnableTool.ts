@@ -1,7 +1,7 @@
-import { ActionBase } from "../Action/ActionBase.js"
-import type { ActionReducer } from "../Action/ActionReducer.js"
-import { JSONSchemaMemo } from "../util/JSONSchemaMemo.js"
-import type { EnableTool } from "./EnableTool.js"
+import { ActionBase } from "../Action/ActionBase.ts"
+import type { ActionReducer } from "../Action/ActionReducer.ts"
+import { JSONSchemaMemo } from "../util/JSONSchemaMemo.ts"
+import type { EnableTool } from "./EnableTool.ts"
 
 export const reduceEnableTool: ActionReducer<EnableTool> = (scope, action) => {
   scope.events.emit({

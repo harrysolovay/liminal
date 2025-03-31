@@ -1,8 +1,8 @@
-import { ActionBase } from "../Action/ActionBase.js"
-import type { Spec } from "../Spec.js"
-import { isTemplateStringsArray } from "../util/isTemplateStringsArray.js"
-import type { AssistantContent } from "./AssistantContent.js"
-import type { AssistantMessagedEvent } from "./AssistantMessageEvent.js"
+import { ActionBase } from "../Action/ActionBase.ts"
+import type { Spec } from "../Spec.ts"
+import { isTemplateStringsArray } from "../util/isTemplateStringsArray.ts"
+import type { AssistantContent } from "./AssistantContent.ts"
+import type { AssistantMessagedEvent } from "./AssistantMessageEvent.ts"
 
 export interface AssistantMessage<S extends Spec = Spec> extends ActionBase<"assistant_message", S> {
   content: AssistantContent

@@ -1,4 +1,4 @@
-import type { EmbeddingModelAdapter } from "../Adapters.js"
+import type { EmbeddingModelAdapter } from "../Adapters.ts"
 
 export interface TestEmbeddingModelConfig {
   getEmbedding: () => Array<number>

@@ -1,13 +1,13 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
 import type { AssertTrue, IsExact } from "conditional-type-checks"
-import { Context } from "../Context/Context.js"
-import type { ContextEnteredEvent, ContextExitedEvent, ContextInnerEvent } from "../Context/ContextEvent.js"
-import type { ToolDisabledEvent } from "../DisableTool/DisableToolEvent.js"
-import { Emit } from "../Emit/Emit.js"
-import type { EmittedEvent } from "../Emit/EmitEvent.js"
-import { ActorAssertions } from "../testing/ActorAssertions.js"
-import { EnableTool } from "./EnableTool.js"
-import type { ToolEnabledEvent, ToolEnteredEvent, ToolExitedEvent, ToolInnerEvent } from "./EnableToolEvent.js"
+import { Context } from "../Context/Context.ts"
+import type { ContextEnteredEvent, ContextExitedEvent, ContextInnerEvent } from "../Context/ContextEvent.ts"
+import type { ToolDisabledEvent } from "../DisableTool/DisableToolEvent.ts"
+import { Emit } from "../Emit/Emit.ts"
+import type { EmittedEvent } from "../Emit/EmitEvent.ts"
+import { ActorAssertions } from "../testing/ActorAssertions.ts"
+import { EnableTool } from "./EnableTool.ts"
+import type { ToolEnabledEvent, ToolEnteredEvent, ToolExitedEvent, ToolInnerEvent } from "./EnableToolEvent.ts"
 
 type P = {
   a: string

@@ -1,13 +1,13 @@
-import { ActionBase } from "../Action/ActionBase.js"
-import type { ActorLike } from "../Actor/ActorLike.js"
-import type { ExtractSpec, Spec } from "../Spec.js"
+import { ActionBase } from "../Action/ActionBase.ts"
+import type { ActorLike } from "../Actor/ActorLike.ts"
+import type { ExtractSpec, Spec } from "../Spec.ts"
 import type {
   ForkArmEnteredEvent,
   ForkArmExitedEvent,
   ForkArmInnerEvent,
   ForkEnteredEvent,
   ForkExitedEvent,
-} from "./ForkEvent.js"
+} from "./ForkEvent.ts"
 
 export interface Fork<S extends Spec = Spec> extends ActionBase<"fork", S> {
   key: keyof any

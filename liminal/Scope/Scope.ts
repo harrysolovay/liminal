@@ -1,8 +1,8 @@
-import type { Actor } from "../Actor/Actor.js"
-import type { ModelAdapters } from "../Config.js"
-import type { EnableTool } from "../EnableTool/EnableTool.js"
-import type { Events } from "../Events.js"
-import type { Message } from "../Message/Message.js"
+import type { Actor } from "../Actor/Actor.ts"
+import type { EnableTool } from "../EnableTool/EnableTool.ts"
+import type { Events } from "../Events.ts"
+import type { Message } from "../Message/Message.ts"
+import type { ModelAdapters } from "../ModelAdapters.ts"
 
 export class Scope<R = any> {
   constructor(

@@ -10,6 +10,12 @@
     "standard-json-schema": "^0.1.1"
   },
   "peerDependencies": {
-    "@standard-schema/spec": "^1.0.0"
+    "@standard-schema/spec": "^1.0.0",
+    "conditional-type-checks": "^1.0.6"
+  },
+  "peerDependenciesMeta": {
+    "conditional-type-checks": {
+      "optional": true
+    }
   }
 }

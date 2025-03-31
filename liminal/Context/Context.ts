@@ -1,8 +1,8 @@
-import { ActionBase } from "../Action/ActionBase.js"
-import type { ActionLike } from "../Action/ActionLike.js"
-import type { ActorLike } from "../Actor/ActorLike.js"
-import type { ExtractSpec, Spec } from "../Spec.js"
-import type { ContextEnteredEvent, ContextExitedEvent, ContextInnerEvent } from "./ContextEvent.js"
+import { ActionBase } from "../Action/ActionBase.ts"
+import type { ActionLike } from "../Action/ActionLike.ts"
+import type { ActorLike } from "../Actor/ActorLike.ts"
+import type { ExtractSpec, Spec } from "../Spec.ts"
+import type { ContextEnteredEvent, ContextExitedEvent, ContextInnerEvent } from "./ContextEvent.ts"
 
 export interface Context<S extends Spec = Spec> extends ActionBase<"context", S> {
   key: keyof any

@@ -1,13 +1,13 @@
-import { ActionBase } from "../Action/ActionBase.js"
-import type { ActionReducer } from "../Action/ActionReducer.js"
-import { reduceContext } from "../Context/reduceContext.js"
-import { reduceDeclareModel } from "../DeclareModel/reduceDeclareModel.js"
-import { reduceDisableTool } from "../DisableTool/reduceDisableTool.js"
-import { reduceEmit } from "../Emit/reduceEmit.js"
-import { reduceEnableTool } from "../EnableTool/reduceEnableTool.js"
-import { reduceFork } from "../Fork/reduceFork.js"
-import { reduceMessage } from "../Message/reduceMessage.js"
-import { assert } from "../util/assert.js"
+import { ActionBase } from "../Action/ActionBase.ts"
+import type { ActionReducer } from "../Action/ActionReducer.ts"
+import { reduceContext } from "../Context/reduceContext.ts"
+import { reduceDeclareModel } from "../DeclareModel/reduceDeclareModel.ts"
+import { reduceDisableTool } from "../DisableTool/reduceDisableTool.ts"
+import { reduceEmit } from "../Emit/reduceEmit.ts"
+import { reduceEnableTool } from "../EnableTool/reduceEnableTool.ts"
+import { reduceFork } from "../Fork/reduceFork.ts"
+import { reduceMessage } from "../Message/reduceMessage.ts"
+import { assert } from "../util/assert.ts"
 
 export const reduceAction: ActionReducer = (scope, action) => {
   if (!action) {

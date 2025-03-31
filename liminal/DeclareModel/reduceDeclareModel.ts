@@ -1,5 +1,5 @@
-import type { ActionReducer } from "../Action/ActionReducer.js"
-import type { DeclareModel } from "./DeclareModel.js"
+import type { ActionReducer } from "../Action/ActionReducer.ts"
+import type { DeclareModel } from "./DeclareModel.ts"
 
 export const reduceDeclareModel: ActionReducer<DeclareModel> = (scope, action) => {
   scope.events.emit({

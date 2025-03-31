@@ -1,5 +1,5 @@
-import { reduceAction } from "../Action/reduceAction.js"
-import { Scope } from "../Scope/Scope.js"
+import { reduceAction } from "../Action/reduceAction.ts"
+import { Scope } from "../Scope/Scope.ts"
 
 export async function reduceActor(scope: Scope): Promise<Scope> {
   let current = await scope.actor.next()

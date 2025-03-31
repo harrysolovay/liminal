@@ -1,5 +1,5 @@
-import type { ActionReducer } from "../Action/ActionReducer.js"
-import type { Message } from "./Message.js"
+import type { ActionReducer } from "../Action/ActionReducer.ts"
+import type { Message } from "./Message.ts"
 
 export const reduceMessage: ActionReducer<Message> = (scope, message) => {
   scope.events.emit({

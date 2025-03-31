@@ -1,7 +1,7 @@
-import { ActionBase } from "../Action/ActionBase.js"
-import type { Spec } from "../Spec.js"
-import { isTemplateStringsArray } from "../util/isTemplateStringsArray.js"
-import type { SystemMessagedEvent } from "./SystemMessageEvent.js"
+import { ActionBase } from "../Action/ActionBase.ts"
+import type { Spec } from "../Spec.ts"
+import { isTemplateStringsArray } from "../util/isTemplateStringsArray.ts"
+import type { SystemMessagedEvent } from "./SystemMessageEvent.ts"
 
 export interface SystemMessage<S extends Spec = Spec> extends ActionBase<"system_message", S> {
   content: string

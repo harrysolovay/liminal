@@ -1,7 +1,7 @@
-import { ActionBase } from "../Action/ActionBase.js"
-import type { Spec } from "../Spec.js"
-import type { ToolContentPart } from "./ToolContentPart.js"
-import type { ToolMessagedEvent } from "./ToolMessageEvent.js"
+import { ActionBase } from "../Action/ActionBase.ts"
+import type { Spec } from "../Spec.ts"
+import type { ToolContentPart } from "./ToolContentPart.ts"
+import type { ToolMessagedEvent } from "./ToolMessageEvent.ts"
 
 export interface ToolMessage<S extends Spec = Spec> extends ActionBase<"tool_message", S> {
   content: Array<ToolContentPart>

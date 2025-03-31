@@ -2,7 +2,7 @@ import { transformerTwoslash } from "@shikijs/vitepress-twoslash"
 import footnotePlugin from "markdown-it-footnote"
 import { defineConfig, HeadConfig } from "vitepress"
 import packageJson from "../liminal/package.json" with { type: "json" }
-import { dedent } from "../liminal/util/dedent.js"
+import { dedent } from "../liminal/util/dedent.ts"
 
 // cspell:disable
 const GOOGLE_ANALYTICS = dedent`
