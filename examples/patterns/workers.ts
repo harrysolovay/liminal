@@ -1,6 +1,6 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { Branches, Exec, Inference, Model, System } from "liminal"
+import { DeclareModel, Exec, Fork, Infer, System } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
 Exec(CodeReviewers())
@@ -11,17 +11,15 @@ Exec(CodeReviewers())
 
 function* CodeReviewers() {
   yield* System`You are a senior software architect planning feature implementations.`
-  yield* Model.language("default")
+  yield* DeclareModel.language("default")
   yield "Analyze this feature request and create an implementation plan:"
   const feat = "Alert administrators via text whenever site traffic exceeds a certain threshold."
   yield feat
-  const implementationPlan = yield* Inference(
-    type({
-      files: FileInfo.array(),
-      estimatedComplexity: "'create' | 'medium' | 'high'",
-    }),
-  )
-  const fileChanges = yield* Branches("FileChanges", implementationPlan.files.map((file) => Implementor(feat, file)))
+  const implementationPlan = yield* Infer(type({
+    files: FileInfo.array(),
+    estimatedComplexity: "'create' | 'medium' | 'high'",
+  }))
+  const fileChanges = yield* Fork("FileChanges", implementationPlan.files.map((file) => Implementor(feat, file)))
   return { fileChanges, implementationPlan }
 }
 
@@ -42,12 +40,10 @@ function* Implementor(featureRequest: string, file: typeof FileInfo.infer) {
 
     ${featureRequest}
   `
-  const implementation = yield* Inference(
-    type({
-      explanation: "string",
-      code: "string",
-    }),
-  )
+  const implementation = yield* Infer(type({
+    explanation: "string",
+    code: "string",
+  }))
   return { file, implementation }
 }
 

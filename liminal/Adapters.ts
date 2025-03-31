@@ -1,15 +1,15 @@
 import type { ActionReducer } from "./Action/ActionReducer.js"
-import type { Embedding } from "./Embedding/Embedding.js"
-import type { Inference } from "./Inference/Inference.js"
+import type { Embed } from "./Embed/Embed.js"
+import type { Infer } from "./Infer/Infer.js"
 
 export type Adapter = LanguageModelAdapter | EmbeddingModelAdapter
 
 export interface LanguageModelAdapter {
-  adapter: "Language"
-  reduceInference: ActionReducer<Inference>
+  type: "Language"
+  reduceInference: ActionReducer<Infer>
 }
 
 export interface EmbeddingModelAdapter {
-  adapter: "Embedding"
-  reduceEmbedding: ActionReducer<Embedding>
+  type: "Embedding"
+  reduceEmbedding: ActionReducer<Embed>
 }

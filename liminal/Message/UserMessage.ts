@@ -2,9 +2,9 @@ import { ActionBase } from "../Action/ActionBase.js"
 import type { Spec } from "../Spec.js"
 import { isTemplateStringsArray } from "../util/isTemplateStringsArray.js"
 import type { UserContent } from "./UserContent.js"
-import type { UserMessageEvent } from "./UserMessageEvent.js"
+import type { UserMessagedEvent } from "./UserMessageEvent.js"
 
-export interface UserMessage<S extends Spec = Spec> extends ActionBase<"UserMessage", S> {
+export interface UserMessage<S extends Spec = Spec> extends ActionBase<"user_message", S> {
   content: UserContent
 }
 
@@ -14,11 +14,11 @@ export function* User(
   UserMessage<{
     LanguageModel: never
     EmbeddingModel: never
-    Event: UserMessageEvent
+    Event: UserMessagedEvent
   }>,
   void
 > {
-  return yield ActionBase("UserMessage", {
+  return yield ActionBase("user_message", {
     content: isTemplateStringsArray(raw) ? String.raw(raw, ...substitutions) : raw,
   })
 }

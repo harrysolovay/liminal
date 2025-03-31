@@ -3,7 +3,7 @@ import type { Message as OllamaMessage, Ollama } from "ollama"
 
 export function OllamaLanguageModel(ollama: Ollama, model: string): LanguageModelAdapter {
   return {
-    adapter: "Language",
+    type: "Language",
     reduceInference: async (scope, action) => {
       const { messages: liminalMessages } = scope
       const messages = liminalMessages.map(toOllamaMessage)
@@ -14,19 +14,21 @@ export function OllamaLanguageModel(ollama: Ollama, model: string): LanguageMode
           messages,
           format: schema,
         })
-        const { content, tool_calls /* TODO */ } = message
-        const object: JSONObject = JSON.parse(content)
+        const object: JSONObject = JSON.parse(message.content)
         scope.events.emit({
-          type: "Inference",
+          type: "inferred",
           value: object as JSONObject,
           schema,
+        })
+        const content = JSON.stringify(object, null, 2)
+        scope.events.emit({
+          type: "assistant_messaged",
+          content,
         })
         return scope.spread({
           messages: [
             ...liminalMessages,
-            ActionBase("AssistantMessage", {
-              content: JSON.stringify(object, null, 2),
-            }),
+            ActionBase("assistant_message", { content }),
           ],
           next: object,
         })
@@ -36,13 +38,17 @@ export function OllamaLanguageModel(ollama: Ollama, model: string): LanguageMode
         messages,
       })
       scope.events.emit({
-        type: "Inference",
+        type: "inferred",
         value: content,
+      })
+      scope.events.emit({
+        type: "assistant_messaged",
+        content,
       })
       return scope.spread({
         messages: [
           ...liminalMessages,
-          ActionBase("AssistantMessage", { content }),
+          ActionBase("assistant_message", { content }),
         ],
         next: content,
       })
@@ -52,25 +58,25 @@ export function OllamaLanguageModel(ollama: Ollama, model: string): LanguageMode
 
 function toOllamaMessage(message: Message): OllamaMessage {
   switch (message.action) {
-    case "AssistantMessage": {
+    case "assistant_message": {
       return {
         role: "assistant",
         content: JSON.stringify(message.content),
       }
     }
-    case "SystemMessage": {
+    case "system_message": {
       return {
         role: "system",
         content: message.content,
       }
     }
-    case "ToolMessage": {
+    case "tool_message": {
       return {
         role: "tool",
         content: JSON.stringify(message.content),
       }
     }
-    case "UserMessage": {
+    case "user_message": {
       return {
         role: "user",
         content: JSON.stringify(message.content),

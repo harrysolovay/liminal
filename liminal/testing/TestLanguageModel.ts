@@ -17,20 +17,20 @@ export function TestLanguageModel(
   { getObject, getText }: TestLanguageModelConfig = defaultTestLanguageModelConfig,
 ): LanguageModelAdapter {
   return {
-    adapter: "Language",
+    type: "Language",
     reduceInference: async (scope, action) => {
       if (action.type) {
         const schema = await JSONSchemaMemo(action.type)
         const object = getObject()
         scope.events.emit({
-          type: "Inference",
+          type: "inferred",
           value: object,
           schema,
         })
         return scope.spread({
           messages: [
             ...scope.messages,
-            ActionBase("AssistantMessage", {
+            ActionBase("assistant_message", {
               content: JSON.stringify(object, null, 2),
             }),
           ],
@@ -39,14 +39,14 @@ export function TestLanguageModel(
       }
       const text = getText()
       scope.events.emit({
-        type: "Inference",
+        type: "inferred",
         value: text,
       })
       return scope.spread({
         ...scope,
         messages: [
           ...scope.messages,
-          ActionBase("AssistantMessage", {
+          ActionBase("assistant_message", {
             content: text,
           }),
         ],

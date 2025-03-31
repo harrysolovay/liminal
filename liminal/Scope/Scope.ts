@@ -1,8 +1,8 @@
 import type { Actor } from "../Actor/Actor.js"
 import type { ModelAdapters } from "../Config.js"
+import type { EnableTool } from "../EnableTool/EnableTool.js"
 import type { Events } from "../Events.js"
 import type { Message } from "../Message/Message.js"
-import type { Tool } from "../Tool/Tool.js"
 
 export class Scope<R = any> {
   constructor(
@@ -15,7 +15,7 @@ export class Scope<R = any> {
       embedding?: keyof any
     } = {},
     readonly messages: Array<Message> = [],
-    readonly tools: Set<Tool> = new Set(),
+    readonly tools: Set<EnableTool> = new Set(),
     public next: any = undefined,
     public result: R = undefined!,
     public children: Array<ChildScopeContainer> = [],
@@ -50,10 +50,10 @@ export class Scope<R = any> {
 
 // TODO: how to capture tool scope?
 export type ChildScopeContainer = {
-  type: "Context"
+  type: "context"
   scope: Scope
 } | {
-  type: "Branches"
+  type: "fork"
   key: keyof any
   scopes: Record<keyof any, Scope>
 }

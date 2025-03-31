@@ -1,6 +1,6 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { Exec, Inference, Model, System } from "liminal"
+import { DeclareModel, Exec, Infer, System } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
 Exec(TranslationWithFeedback("typescript", "I love you!"))
@@ -11,13 +11,13 @@ Exec(TranslationWithFeedback("typescript", "I love you!"))
 
 function* TranslationWithFeedback(targetLanguage: string, text: string) {
   yield* System`You are an expert literary translator. Translate the supplied text to the specified target language, preserving tone and cultural nuances.`
-  yield* Model.language("default")
+  yield* DeclareModel.language("default")
   yield `Target language: ${targetLanguage}`
   yield `Text:
 
     ${text}
   `
-  let currentTranslation = yield* Inference()
+  let currentTranslation = yield* Infer()
   let iterations = 0
   const MAX_ITERATIONS = 3
   while (iterations < MAX_ITERATIONS) {
@@ -33,16 +33,14 @@ function* TranslationWithFeedback(targetLanguage: string, text: string) {
       3. Preservation of nuance
       4. Cultural accuracy
     `
-    const evaluation = yield* Inference(
-      type({
-        qualityScore: "1 <= number.integer <= 10",
-        preservesTone: "boolean",
-        preservesNuance: "boolean",
-        culturallyAccurate: "boolean",
-        specificIssues: "string[]",
-        improvementSuggestions: "string[]",
-      }),
-    )
+    const evaluation = yield* Infer(type({
+      qualityScore: "1 <= number.integer <= 10",
+      preservesTone: "boolean",
+      preservesNuance: "boolean",
+      culturallyAccurate: "boolean",
+      specificIssues: "string[]",
+      improvementSuggestions: "string[]",
+    }))
     if (
       evaluation.qualityScore >= 8
       && evaluation.preservesTone
@@ -60,7 +58,7 @@ function* TranslationWithFeedback(targetLanguage: string, text: string) {
       Original: ${text}
       Current Translation: ${currentTranslation}
     `
-    const improvedTranslation = yield* Inference()
+    const improvedTranslation = yield* Infer()
     currentTranslation = improvedTranslation
     iterations++
   }

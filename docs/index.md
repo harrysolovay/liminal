@@ -9,22 +9,22 @@ Liminal is a model-agnostic library for conversation state management.
 ```ts twoslash
 import { z } from "zod"
 // ---cut---
-import { Exec, Inference, Model } from "liminal"
+import { DeclareModel, Exec, Infer } from "liminal"
 
 function* PlantGrowthRanking() {
-  yield* Model.language("default")
+  yield* DeclareModel.language("default")
 
   // User Message
   yield "What are some key factors that affect plant growth?"
 
   // Assistant Message
-  const factors = yield* Inference()
+  const factors = yield* Infer()
 
   // User Message
   yield "Rank those by order of importance"
 
   // Assistant Message (structured output)
-  const { ranking } = yield* Inference(z.object({
+  const { ranking } = yield* Infer(z.object({
     ranking: z.string().array(),
   }))
 

@@ -3,7 +3,7 @@ import { Ollama } from "ollama"
 
 export function OllamaEmbeddingModel(ollama: Ollama, model: string): EmbeddingModelAdapter {
   return {
-    adapter: "Embedding",
+    type: "Embedding",
     reduceEmbedding: async (scope, action) => {
       const { embeddings } = await ollama.embed({
         model,
@@ -11,7 +11,7 @@ export function OllamaEmbeddingModel(ollama: Ollama, model: string): EmbeddingMo
       })
       const embedding = embeddings[0]! // TODO
       scope.events.emit({
-        type: "Embedding",
+        type: "embedded",
         value: action.value,
         embedding,
       })

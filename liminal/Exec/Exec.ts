@@ -6,10 +6,10 @@ import { Events } from "../Events.js"
 import { Scope } from "../Scope/Scope.js"
 import type { ExtractSpec, Spec } from "../Spec.js"
 import { unwrapDeferred } from "../util/unwrapDeferred.js"
-import type { RootEvent } from "./ExecEvent.js"
+import type { ExecEnteredEvent, ExecExitedEvent } from "./ExecEvent.js"
 
 export interface Exec<S extends Spec, T> {
-  exec: (handler?: (event: RootEvent<T> | S["Event"]) => any) => Promise<Scope<T>>
+  exec: (handler?: (event: ExecEnteredEvent | S["Event"] | ExecExitedEvent<T>) => any) => Promise<Scope<T>>
 }
 
 export interface ExecBuilder<S extends Spec, R> {
@@ -29,11 +29,11 @@ export function Exec<Y extends ActionLike, T, S extends ExtractSpec<Y>>(
           new Events((inner) => inner, handler),
         )
         scope.events.emit({
-          type: "RootEnter",
+          type: "exec_entered",
         })
         scope = await reduceActor(scope)
         scope.events.emit({
-          type: "RootExit",
+          type: "exec_exited",
           result: scope.result,
         })
         return scope

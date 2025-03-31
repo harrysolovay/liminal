@@ -11,7 +11,7 @@ import {
 
 export function AILanguageModel(model: LanguageModelV1): LanguageModelAdapter {
   return {
-    adapter: "Language",
+    type: "Language",
     reduceInference: async (scope, action) => {
       const { messages: liminalMessages } = scope
       const messages = liminalMessages.map(toCoreMessage)
@@ -24,16 +24,19 @@ export function AILanguageModel(model: LanguageModelV1): LanguageModelAdapter {
           schema: aiSchema,
         })
         scope.events.emit({
-          type: "Inference",
+          type: "inferred",
           value: object as JSONObject,
           schema,
+        })
+        const content = JSON.stringify(object, null, 2)
+        scope.events.emit({
+          type: "assistant_messaged",
+          content,
         })
         return scope.spread({
           messages: [
             ...liminalMessages,
-            ActionBase("AssistantMessage", {
-              content: JSON.stringify(object, null, 2),
-            }),
+            ActionBase("assistant_message", { content }),
           ],
           next: object,
         })
@@ -48,7 +51,7 @@ export function AILanguageModel(model: LanguageModelV1): LanguageModelAdapter {
               parameters: jsonSchema(schema),
               execute: async (params) => {
                 scope.events.emit({
-                  type: "ToolEnter",
+                  type: "tool_entered",
                   tool: tool_.key,
                   args: params as JSONObject,
                 })
@@ -60,7 +63,7 @@ export function AILanguageModel(model: LanguageModelV1): LanguageModelAdapter {
                       undefined,
                       result as never,
                       scope.events.child((event) => ({
-                        type: "ToolInner",
+                        type: "tool_inner",
                         tool: tool_.key,
                         inner: event,
                       })),
@@ -70,7 +73,7 @@ export function AILanguageModel(model: LanguageModelV1): LanguageModelAdapter {
                   result = toolScope.result
                 }
                 scope.events.emit({
-                  type: "ToolExit",
+                  type: "tool_exited",
                   tool: tool_.key,
                   result: result as JSONObject,
                 })
@@ -86,13 +89,17 @@ export function AILanguageModel(model: LanguageModelV1): LanguageModelAdapter {
         tools,
       })
       scope.events.emit({
-        type: "Inference",
+        type: "inferred",
         value: text,
+      })
+      scope.events.emit({
+        type: "assistant_messaged",
+        content: text,
       })
       return scope.spread({
         messages: [
           ...liminalMessages,
-          ActionBase("AssistantMessage", {
+          ActionBase("assistant_message", {
             content: text,
           }),
         ],
@@ -104,25 +111,25 @@ export function AILanguageModel(model: LanguageModelV1): LanguageModelAdapter {
 
 function toCoreMessage(message: Message): CoreMessage {
   switch (message.action) {
-    case "AssistantMessage": {
+    case "assistant_message": {
       return {
         role: "assistant",
         content: message.content,
       }
     }
-    case "SystemMessage": {
+    case "system_message": {
       return {
         role: "system",
         content: message.content,
       }
     }
-    case "ToolMessage": {
+    case "tool_message": {
       return {
         role: "tool",
         content: message.content,
       }
     }
-    case "UserMessage": {
+    case "user_message": {
       return {
         role: "user",
         content: message.content,

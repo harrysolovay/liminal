@@ -1,0 +1,15 @@
+import type { ActionReducer } from "../Action/ActionReducer.js"
+import type { DisableTool } from "./DisableTool.js"
+
+export const reduceDisableTool: ActionReducer<DisableTool> = (scope, action) => {
+  scope.events.emit({
+    type: "tool_disabled",
+    tool: action.tool.key,
+  })
+  const tools = new Set(scope.tools)
+  tools.delete(action.tool)
+  return scope.spread({
+    tools,
+    next: undefined,
+  })
+}

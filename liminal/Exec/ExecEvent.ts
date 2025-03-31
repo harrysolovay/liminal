@@ -1,9 +1,7 @@
 import type { ActionEventBase } from "../Action/ActionEventBase.js"
 
-export type RootEvent<T = any> = RootEnterEvent | RootExitEvent<T>
+export interface ExecEnteredEvent extends ActionEventBase<"exec_entered"> {}
 
-export interface RootEnterEvent extends ActionEventBase<"RootEnter"> {}
-
-export interface RootExitEvent<T = any> extends ActionEventBase<"RootExit"> {
+export interface ExecExitedEvent<T = any> extends ActionEventBase<"exec_exited"> {
   result: T
 }

@@ -1,6 +1,6 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { Context, Exec, Inference, Model, System } from "liminal"
+import { Context, DeclareModel, Exec, Infer, System } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
 Exec(Main)
@@ -11,7 +11,7 @@ Exec(Main)
   .exec(console.log)
 
 function* Main() {
-  yield* Model.language("default")
+  yield* DeclareModel.language("default")
   const classification = yield* Context("Classification", classifyQuery("I'd like a refund please"))
   const response = yield* Context("ClassificationConsumer", useClassification(classification))
   return { classification, response }
@@ -28,7 +28,7 @@ function* classifyQuery(query: string) {
     3. Brief reasoning for classification
   `
   yield query
-  return yield* Inference(Classification)
+  return yield* Infer(Classification)
 }
 
 const Classification = type({
@@ -40,9 +40,9 @@ const Classification = type({
 function* useClassification(classification: typeof Classification.infer) {
   yield* System(USE_CLASSIFICATION_AGENT_PROMPTS[classification.type])
   if (classification.complexity === "complex") {
-    yield* Model.language("reasoning")
+    yield* DeclareModel.language("reasoning")
   }
-  return yield* Inference()
+  return yield* Infer()
 }
 
 const USE_CLASSIFICATION_AGENT_PROMPTS = {

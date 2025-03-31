@@ -1,23 +1,37 @@
-import type { BranchesEvent } from "../Branches/BranchesEvent.js"
 import type { ContextEvent } from "../Context/ContextEvent.js"
-import type { EmbeddingEvent } from "../Embedding/EmbeddingEvent.js"
-import type { EmissionEvent } from "../Emission/EmitEvent.js"
-import type { RootEvent } from "../Exec/ExecEvent.js"
-import type { InferenceEvent } from "../Inference/InferenceEvent.js"
-import type { MessageEvent } from "../Message/MessageEvent.js"
-import type { ModelEvent } from "../Model/ModelEvent.js"
-import type { ToolEvent } from "../Tool/ToolEvent.js"
-import type { ToolRemovalEvent } from "../ToolRemoval/ToolRemovalEvent.js"
+import type { ModelDeclaredEvent } from "../DeclareModel/DeclareModelEvent.js"
+import type { ToolDisabledEvent } from "../DisableTool/DisableToolEvent.js"
+import type { EmbeddedEvent } from "../Embed/EmbedEvent.js"
+import type { EmittedEvent } from "../Emit/EmitEvent.js"
+import type {
+  ToolEnabledEvent,
+  ToolEnteredEvent,
+  ToolExitedEvent,
+  ToolInnerEvent,
+} from "../EnableTool/EnableToolEvent.js"
+import type { ExecEnteredEvent, ExecExitedEvent } from "../Exec/ExecEvent.js"
+import type { ForkEvent } from "../Fork/ForkEvent.js"
+import type { InferredEvent } from "../Infer/InferEvent.js"
+import type { AssistantMessagedEvent } from "../Message/AssistantMessageEvent.js"
+import type { SystemMessagedEvent } from "../Message/SystemMessageEvent.js"
+import type { ToolMessagedEvent } from "../Message/ToolMessageEvent.js"
+import type { UserMessagedEvent } from "../Message/UserMessageEvent.js"
 
 export type ActionEvent =
-  | RootEvent
+  | ExecEnteredEvent
+  | ExecExitedEvent
   | ContextEvent
-  | BranchesEvent
-  | BranchesEvent
-  | ToolRemovalEvent
-  | EmbeddingEvent
-  | EmissionEvent
-  | InferenceEvent
-  | ModelEvent
-  | ToolEvent
-  | MessageEvent
+  | ForkEvent
+  | ToolEnabledEvent
+  | ToolEnteredEvent
+  | ToolInnerEvent
+  | ToolExitedEvent
+  | ToolDisabledEvent
+  | EmbeddedEvent
+  | EmittedEvent
+  | InferredEvent
+  | ModelDeclaredEvent
+  | SystemMessagedEvent
+  | UserMessagedEvent
+  | AssistantMessagedEvent
+  | ToolMessagedEvent
