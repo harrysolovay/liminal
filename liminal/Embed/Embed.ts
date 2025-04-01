@@ -6,7 +6,7 @@ export interface Embed<S extends Spec = Spec> extends ActionBase<"embed", S> {
   value: string
 }
 
-export function* Embed(value: string): Generator<
+export function* embed(value: string): Generator<
   Embed<{
     LanguageModel: never
     EmbeddingModel: never

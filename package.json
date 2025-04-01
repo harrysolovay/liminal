@@ -3,7 +3,6 @@
   "workspaces": ["examples/*", "liminal", "packages/*"],
   "scripts": {
     "build": "tsc -b",
-    "watch": "tsc -b --watch",
     "liminal.land": "vitepress",
     "example:vite-react-app": "bun run --filter=liminal-example-vite-react-app dev"
   },

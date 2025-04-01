@@ -7,7 +7,7 @@ export interface ToolMessage<S extends Spec = Spec> extends ActionBase<"tool_mes
   content: Array<ToolContentPart>
 }
 
-export function* ToolMessage(content: Array<ToolContentPart>): Generator<
+export function* toolMessage(content: Array<ToolContentPart>): Generator<
   ToolMessage<{
     LanguageModel: never
     EmbeddingModel: never

@@ -1,4 +1,5 @@
 export * from "./assert.ts"
+export * from "./dedent.ts"
 export * from "./DeferredOr.ts"
 export * from "./isAsyncIterator.ts"
 export * from "./isIterator.ts"

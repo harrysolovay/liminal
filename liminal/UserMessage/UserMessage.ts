@@ -8,7 +8,7 @@ export interface UserMessage<S extends Spec = Spec> extends ActionBase<"user_mes
   content: UserContent
 }
 
-export function* User(
+export function* user(
   ...[raw, ...substitutions]: [content: UserContent] | [raw: TemplateStringsArray, ...substitutions: Array<string>]
 ): Generator<
   UserMessage<{

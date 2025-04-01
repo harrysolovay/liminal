@@ -16,7 +16,7 @@ export interface Fork<S extends Spec = Spec> extends ActionBase<"fork", S> {
 
 export type ForkArms = Array<ActorLike> | Record<keyof any, ActorLike>
 
-export function Fork<K extends keyof any, const B extends Array<ActorLike>>(
+export function fork<K extends keyof any, const B extends Array<ActorLike>>(
   key: K,
   arms: B,
 ): Generator<
@@ -41,7 +41,7 @@ export function Fork<K extends keyof any, const B extends Array<ActorLike>>(
   >,
   ForkResult<B>
 >
-export function Fork<K extends keyof any, B extends Record<keyof any, ActorLike>>(
+export function fork<K extends keyof any, B extends Record<keyof any, ActorLike>>(
   key: K,
   branches: B,
 ): Generator<
@@ -66,7 +66,7 @@ export function Fork<K extends keyof any, B extends Record<keyof any, ActorLike>
   >,
   ForkResult<B>
 >
-export function* Fork<B extends ForkArms>(
+export function* fork<B extends ForkArms>(
   key: keyof any,
   branches: B,
 ): Generator<Fork, ForkResult<B>> {

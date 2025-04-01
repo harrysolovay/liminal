@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test"
-import { Context } from "../Context/Context.ts"
+import { context } from "../Context/Context.ts"
 import { Exec } from "../Exec/Exec.ts"
 import { TestEmbeddingModel } from "../testing/TestEmbeddingModel.ts"
 import { TestLanguageModel } from "../testing/TestLanguageModel.ts"
@@ -10,7 +10,7 @@ describe("Model", () => {
     const scope = await Exec(function*() {
       yield* DeclareModel.language("default")
       yield* DeclareModel.language("secondary")
-      yield* Context("child", function*() {
+      yield* context("child", function*() {
         yield* DeclareModel.language("child_a")
         yield* DeclareModel.embedding("child_b")
       })

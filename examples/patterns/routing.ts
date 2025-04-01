@@ -1,6 +1,6 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { Context, DeclareModel, Exec, Infer, System } from "liminal"
+import { context, DeclareModel, Exec, infer, system } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
 Exec(Main)
@@ -12,13 +12,13 @@ Exec(Main)
 
 function* Main() {
   yield* DeclareModel.language("default")
-  const classification = yield* Context("Classification", classifyQuery("I'd like a refund please"))
-  const response = yield* Context("ClassificationConsumer", useClassification(classification))
+  const classification = yield* context("Classification", classifyQuery("I'd like a refund please"))
+  const response = yield* context("ClassificationConsumer", useClassification(classification))
   return { classification, response }
 }
 
 function* classifyQuery(query: string) {
-  yield* System`
+  yield* system`
     Classify this supplied customer query:
 
     Determine:
@@ -28,7 +28,7 @@ function* classifyQuery(query: string) {
     3. Brief reasoning for classification
   `
   yield query
-  return yield* Infer(Classification)
+  return yield* infer(Classification)
 }
 
 const Classification = type({
@@ -38,11 +38,11 @@ const Classification = type({
 })
 
 function* useClassification(classification: typeof Classification.infer) {
-  yield* System(USE_CLASSIFICATION_AGENT_PROMPTS[classification.type])
+  yield* system(USE_CLASSIFICATION_AGENT_PROMPTS[classification.type])
   if (classification.complexity === "complex") {
     yield* DeclareModel.language("reasoning")
   }
-  return yield* Infer()
+  return yield* infer()
 }
 
 const USE_CLASSIFICATION_AGENT_PROMPTS = {

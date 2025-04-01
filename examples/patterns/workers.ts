@@ -1,25 +1,24 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { DeclareModel, Exec, Fork, Infer, System } from "liminal"
+import { DeclareModel, Exec, fork, infer, system } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
-Exec(CodeReviewers())
+Exec(CodeReviewers("Alert administrators via text whenever site traffic exceeds a certain threshold."))
   .models({
     default: AILanguageModel(openai("gpt-4o-mini")),
   })
   .exec(console.log)
 
-function* CodeReviewers() {
-  yield* System`You are a senior software architect planning feature implementations.`
+function* CodeReviewers(feat: string) {
+  yield* system`You are a senior software architect planning feature implementations.`
   yield* DeclareModel.language("default")
   yield "Analyze this feature request and create an implementation plan:"
-  const feat = "Alert administrators via text whenever site traffic exceeds a certain threshold."
   yield feat
-  const implementationPlan = yield* Infer(type({
+  const implementationPlan = yield* infer(type({
     files: FileInfo.array(),
     estimatedComplexity: "'create' | 'medium' | 'high'",
   }))
-  const fileChanges = yield* Fork("FileChanges", implementationPlan.files.map((file) => Implementor(feat, file)))
+  const fileChanges = yield* fork("FileChanges", implementationPlan.files.map((file) => Implementor(feat, file)))
   return { fileChanges, implementationPlan }
 }
 
@@ -30,7 +29,7 @@ const FileInfo = type({
 })
 
 function* Implementor(featureRequest: string, file: typeof FileInfo.infer) {
-  yield* System(IMPLEMENTATION_PROMPTS[file.changeType])
+  yield* system(IMPLEMENTATION_PROMPTS[file.changeType])
   yield `
     Implement the changes for ${file.filePath} to support:
 
@@ -40,7 +39,7 @@ function* Implementor(featureRequest: string, file: typeof FileInfo.infer) {
 
     ${featureRequest}
   `
-  const implementation = yield* Infer(type({
+  const implementation = yield* infer(type({
     explanation: "string",
     code: "string",
   }))

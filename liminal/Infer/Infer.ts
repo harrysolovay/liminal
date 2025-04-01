@@ -8,7 +8,7 @@ export interface Infer<S extends Spec = Spec> extends ActionBase<"infer", S> {
   type: StandardSchemaV1 | undefined
 }
 
-export function Infer(): Generator<
+export function infer(): Generator<
   Infer<{
     LanguageModel: never
     EmbeddingModel: never
@@ -16,7 +16,7 @@ export function Infer(): Generator<
   }>,
   string
 >
-export function Infer<O extends JSONObject>(
+export function infer<O extends JSONObject>(
   type: StandardSchemaV1<JSONObject, O>,
 ): Generator<
   Infer<{
@@ -26,6 +26,6 @@ export function Infer<O extends JSONObject>(
   }>,
   O
 >
-export function* Infer(type?: StandardSchemaV1): Generator<Infer, unknown> {
+export function* infer(type?: StandardSchemaV1): Generator<Infer, unknown> {
   return yield ActionBase("infer", { type })
 }
