@@ -1,6 +1,6 @@
 {
   "private": true,
-  "workspaces": ["examples/*", "liminal", "packages/*"],
+  "workspaces": ["common", "examples/*", "liminal", "packages/*"],
   "scripts": {
     "build": "tsc -b",
     "liminal.land": "vitepress",
@@ -8,8 +8,9 @@
   },
   "devDependencies": {
     "@shikijs/vitepress-twoslash": "^1.23.1",
-    "@types/bun": "latest",
+    "@types/bun": "^1.2.8",
     "@types/markdown-it-footnote": "^3.0.4",
+    "@types/node": "^22.13.16",
     "arktype": "^2.1.15",
     "conditional-type-checks": "^1.0.6",
     "dedent": "^1.5.3",

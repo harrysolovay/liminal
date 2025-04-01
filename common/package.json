@@ -1,0 +1,10 @@
+{
+  "name": "liminal-common",
+  "private": true,
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "dependencies": {
+    "arktype": "^2.1.9"
+  }
+}

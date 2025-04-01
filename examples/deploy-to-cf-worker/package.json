@@ -6,11 +6,11 @@
     "ai": "^4.1.61",
     "arktype": "^2.1.9",
     "liminal": "workspace:*",
-    "liminal-ai": "workspace:*"
+    "liminal-ai": "workspace:*",
+    "liminal-common": "workspace:*"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250327.0",
-    "alchemy": "^0.2.5",
-    "liminal-alchemy": "workspace:*"
+    "alchemy": "^0.2.5"
   }
 }

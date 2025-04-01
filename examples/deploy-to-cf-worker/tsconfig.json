@@ -1,11 +1,19 @@
 {
-  "files": [],
+  "extends": "../../tsconfig.base",
+  "compilerOptions": {
+    "lib": ["ES2021", "ESNext.Disposable"],
+    "types": ["../../node_modules/@cloudflare/workers-types"]
+  },
+  "include": ["."],
   "references": [
     {
-      "path": "./worker"
+      "path": "../../common"
     },
     {
-      "path": "./tsconfig.control.json"
+      "path": "../../liminal"
+    },
+    {
+      "path": "../../packages/ai"
     }
   ]
 }
