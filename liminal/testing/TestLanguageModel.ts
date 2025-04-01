@@ -1,6 +1,6 @@
-import { assistant } from "../AssistantMessage/Assistant.ts"
+import { assistant } from "../AssistantMessage/AssistantMessage.ts"
 import type { JSONObject } from "../JSON/JSONObject.ts"
-import type { InferenceActor } from "../SetLanguageModel/SetLanguageModel.ts"
+import type { RunInfer } from "../SetLanguageModel/SetLanguageModel.ts"
 
 export interface TestLanguageModelConfig {
   getObject: () => JSONObject
@@ -15,8 +15,8 @@ export const defaultTestLanguageModelConfig: TestLanguageModelConfig = {
 export function TestLanguageModel({
   getObject,
   getText,
-}: TestLanguageModelConfig = defaultTestLanguageModelConfig): InferenceActor {
-  return async function*(_scope, action) {
+}: TestLanguageModelConfig = defaultTestLanguageModelConfig): RunInfer {
+  return async function*(action) {
     if (action.type) {
       const object = getObject()
       yield* assistant(JSON.stringify(object))

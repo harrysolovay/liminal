@@ -4,7 +4,7 @@ import { Scope } from "../Scope/Scope.ts"
 import { unwrapDeferred } from "../util/unwrapDeferred.ts"
 import type { Fork } from "./Fork.ts"
 
-export const reduceFork: ActionReducer<Fork> = async (scope, action) => {
+export const reduceFork: ActionReducer<Fork> = async (action, scope) => {
   const armKeys = Array.isArray(action.arms)
     ? Array.from({ length: action.arms.length }, (_0, i) => i)
     : Reflect.ownKeys(action.arms)
@@ -21,7 +21,9 @@ export const reduceFork: ActionReducer<Fork> = async (scope, action) => {
       })
       const actor = unwrapDeferred(action.arms[key as never]!)
       const armScope = await reduceActor(
+        actor,
         new Scope(
+          scope.args,
           key,
           scope.events.child((inner) => ({
             type: "fork_arm_inner",
@@ -34,7 +36,6 @@ export const reduceFork: ActionReducer<Fork> = async (scope, action) => {
           [...scope.messages],
           new Set(scope.tools),
         ),
-        actor,
       )
       scope.events.emit({
         type: "fork_arm_exited",

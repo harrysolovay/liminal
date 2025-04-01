@@ -1,24 +1,8 @@
 import { type CoreMessage, generateObject, generateText, jsonSchema, type LanguageModelV1, tool } from "ai"
-import {
-  _util,
-  assistant,
-  type AssistantMessage,
-  type AssistantMessagedEvent,
-  type InferenceActor,
-  type JSONObject,
-  type Message,
-  reduceActor,
-  Scope,
-} from "liminal"
+import { _util, assistant, type JSONObject, type Message, reduceActor, type RunInfer, Scope } from "liminal"
 
-export function AILanguageModel(model: LanguageModelV1): InferenceActor<
-  AssistantMessage<{
-    LanguageModel: never
-    EmbeddingModel: never
-    Event: AssistantMessagedEvent
-  }>
-> {
-  return async function*(scope, action) {
+export function AILanguageModel(model: LanguageModelV1): RunInfer {
+  return async function*(action, scope) {
     const { messages: liminalMessages } = scope
     const messages = liminalMessages.map(toCoreMessage)
     if (action.type) {
@@ -52,6 +36,7 @@ export function AILanguageModel(model: LanguageModelV1): InferenceActor<
                 const actor = result as never
                 const toolScope = await reduceActor(
                   new Scope(
+                    scope.args,
                     undefined,
                     scope.events.child((event) => ({
                       type: "tool_inner",

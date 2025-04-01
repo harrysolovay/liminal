@@ -13,15 +13,16 @@ export interface Exec<S extends Spec, T> {
 
 export function Exec<Y extends ActionLike, T, S extends ExtractSpec<Y>>(
   actorLike: ActorLike<Y, T>,
+  args: Record<keyof any, any>, // TODO: typed
 ): Exec<S, T> {
   return {
     exec: async (handler) => {
       const actor = unwrapDeferred(actorLike)
-      let scope = new Scope(undefined, new Events((inner) => inner, handler))
+      let scope = new Scope(args, undefined, new Events((inner) => inner, handler))
       scope.events.emit({
         type: "exec_entered",
       })
-      scope = await reduceActor(scope, actor)
+      scope = await reduceActor(actor, scope)
       scope.events.emit({
         type: "exec_exited",
         result: scope.result,

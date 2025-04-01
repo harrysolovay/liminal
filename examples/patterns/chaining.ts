@@ -1,13 +1,17 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { Exec, infer, setLanguageModel, system } from "liminal"
+import { declareLanguageModel, Exec, infer, system } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
-Exec(MarketingCopy()).exec(console.log)
+Exec(MarketingCopy(), {
+  default: AILanguageModel(openai("gpt-4o-mini")),
+}).exec(
+  console.log,
+)
 
 function* MarketingCopy() {
   yield* system`Write persuasive marketing copy for: Buffy The Vampire Slayer. Focus on benefits and emotional appeal.`
-  yield* setLanguageModel("default", AILanguageModel(openai("gpt-4o-mini")))
+  yield* declareLanguageModel("default")
   yield "Please generate the first draft."
   let copy = yield* infer()
   yield `

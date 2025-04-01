@@ -1,3 +1,4 @@
+import type { Arg } from "../Arg/Arg.ts"
 import type { Context } from "../Context/Context.ts"
 import type { DisableTool } from "../DisableTool/DisableTool.ts"
 import type { Embed } from "../Embed/Embed.ts"
@@ -11,6 +12,7 @@ import type { SetLanguageModel } from "../SetLanguageModel/SetLanguageModel.ts"
 
 export type Action =
   | Context
+  | Arg
   | SetEmbeddingModel
   | SetLanguageModel
   | Emit

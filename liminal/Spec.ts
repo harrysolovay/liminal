@@ -3,8 +3,7 @@ import type { ActionEvent } from "./Action/ActionEvent.ts"
 import type { ActionLike } from "./Action/ActionLike.ts"
 
 export interface Spec {
-  LanguageModel: keyof any
-  EmbeddingModel: keyof any
+  Field: Record<keyof any, any>
   Event: ActionEvent
 }
 
@@ -12,7 +11,6 @@ export interface Spec {
 export type ExtractSpec<Y extends ActionLike> = MergeSpec<Extract<Y, Action>[""]>
 
 export type MergeSpec<S extends Spec> = {
-  LanguageModel: S["LanguageModel"]
-  EmbeddingModel: S["EmbeddingModel"]
+  Field: S["Field"]
   Event: S["Event"]
 }

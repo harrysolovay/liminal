@@ -22,14 +22,12 @@ export function fork<K extends keyof any, const B extends Array<ActorLike>>(
 ): Generator<
   Fork<
     | {
-      LanguageModel: never
-      EmbeddingModel: never
+      Field: never
       Event: ForkEnteredEvent<K> | ForkExitedEvent<K, ForkResult<B>>
     }
     | {
       [L in keyof B]: B[L] extends ActorLike<infer Y, infer R> ? ExtractSpec<Y> extends infer S extends Spec ? {
-            LanguageModel: S["LanguageModel"]
-            EmbeddingModel: S["EmbeddingModel"]
+            Field: never
             Event:
               | ForkArmEnteredEvent<K, L>
               | ForkArmInnerEvent<K, L, S["Event"]>
@@ -47,14 +45,12 @@ export function fork<K extends keyof any, B extends Record<keyof any, ActorLike>
 ): Generator<
   Fork<
     | {
-      LanguageModel: never
-      EmbeddingModel: never
+      Field: never
       Event: ForkEnteredEvent<K> | ForkExitedEvent<K, ForkResult<B>>
     }
     | {
       [L in keyof B]: B[L] extends ActorLike<infer Y, infer R> ? ExtractSpec<Y> extends infer S extends Spec ? {
-            LanguageModel: S["LanguageModel"]
-            EmbeddingModel: S["EmbeddingModel"]
+            Field: never
             Event:
               | ForkArmEnteredEvent<K, L>
               | ForkArmInnerEvent<K, L, S["Event"]>

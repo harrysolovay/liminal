@@ -1,7 +1,7 @@
 import type { ActionReducer } from "../Action/ActionReducer.ts"
 import type { DisableTool } from "./DisableTool.ts"
 
-export const reduceDisableTool: ActionReducer<DisableTool> = (scope, action) => {
+export const reduceDisableTool: ActionReducer<DisableTool> = (action, scope) => {
   scope.events.emit({
     type: "tool_disabled",
     tool: action.tool.key,

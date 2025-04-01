@@ -18,8 +18,7 @@ const arrowTool = enableTool("Tool", "", null! as StandardSchemaV1<P>, (params) 
   type _ = [AssertTrue<IsExact<typeof params, P>>]
 })
 ActorAssertions(arrowTool).assertSpec<{
-  LanguageModel: never
-  EmbeddingModel: never
+  Field: never
   Event:
     | ToolEnabledEvent<"Tool">
     | ToolEnteredEvent<"Tool", P>
@@ -30,8 +29,7 @@ ActorAssertions(arrowTool).assertSpec<{
 function* _0() {
   const detach = yield* arrowTool
   ActorAssertions(detach).assertSpec<{
-    LanguageModel: never
-    EmbeddingModel: never
+    Field: never
     Event: ToolDisabledEvent<"Tool">
   }>()
 }
@@ -43,8 +41,7 @@ const genTool = enableTool("Tool", "", null! as StandardSchemaV1<P>, function*(p
 })
 
 ActorAssertions(genTool).assertSpec<{
-  LanguageModel: never
-  EmbeddingModel: never
+  Field: never
   Event:
     | ToolEnabledEvent<"Tool">
     | ToolEnteredEvent<"Tool", P>
@@ -60,8 +57,7 @@ function* parent() {
 }
 
 ActorAssertions(parent).assertSpec<{
-  LanguageModel: never
-  EmbeddingModel: never
+  Field: never
   Event:
     | ToolEnabledEvent<"ParentTool">
     | ToolEnteredEvent<"ParentTool", P>

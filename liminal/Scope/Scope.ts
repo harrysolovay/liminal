@@ -1,16 +1,16 @@
-import type { Actor } from "../Actor/Actor.ts"
 import type { EnableTool } from "../EnableTool/EnableTool.ts"
 import type { Events } from "../Events.ts"
 import type { Message } from "../Message/Message.ts"
-import type { EmbedActor } from "../SetEmbeddingModel/SetEmbeddingModel.ts"
-import type { InferenceActor } from "../SetLanguageModel/SetLanguageModel.ts"
+import type { RunEmbed } from "../SetEmbeddingModel/SetEmbeddingModel.ts"
+import type { RunInfer } from "../SetLanguageModel/SetLanguageModel.ts"
 
 export class Scope<R = any> {
   constructor(
+    readonly args: Record<keyof any, any>,
     readonly key: keyof any | undefined,
     readonly events: Events,
-    public infer: InferenceActor | undefined = undefined,
-    public embed: EmbedActor | undefined = undefined,
+    public infer: RunInfer | undefined = undefined,
+    public embed: RunEmbed | undefined = undefined,
     readonly messages: Array<Message> = [],
     readonly tools: Set<EnableTool> = new Set(),
     public next: any = undefined,
@@ -31,6 +31,7 @@ export class Scope<R = any> {
 
   spread = (fields?: Partial<Scope<R>>): Scope<R> => {
     return new Scope(
+      fields?.args ?? this.args,
       fields?.key ?? this.key,
       fields?.events ?? this.events,
       fields?.infer ?? this.infer,

@@ -27,14 +27,12 @@ export function enableTool<K extends keyof any, P extends JSONObject, R extends 
   implementation: (params: P) => R,
 ): Generator<
   EnableTool<{
-    LanguageModel: never
-    EmbeddingModel: never
+    Field: never
     Event: ToolEnabledEvent<K> | ToolEnteredEvent<K, P> | ToolInnerEvent<K, never> | ToolExitedEvent<K, Awaited<R>>
   }>,
   () => Generator<
     DisableTool<{
-      LanguageModel: never
-      EmbeddingModel: never
+      Field: never
       Event: ToolDisabledEvent<K>
     }>,
     void
@@ -52,8 +50,7 @@ export function enableTool<
   implementation: (params: P) => Actor<Y, R>,
 ): Generator<
   EnableTool<{
-    LanguageModel: never
-    EmbeddingModel: never
+    Field: never
     Event:
       | ToolEnabledEvent<K>
       | ToolEnteredEvent<K, P>
@@ -62,8 +59,7 @@ export function enableTool<
   }>,
   () => Generator<
     DisableTool<{
-      LanguageModel: never
-      EmbeddingModel: never
+      Field: never
       Event: ToolDisabledEvent<K>
     }>,
     void

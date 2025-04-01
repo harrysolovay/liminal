@@ -8,8 +8,7 @@ export interface Embed<S extends Spec = Spec> extends ActionBase<"embed", S> {
 
 export function* embed(value: string): Generator<
   Embed<{
-    LanguageModel: never
-    EmbeddingModel: never
+    Field: never
     Event: EmbeddedEvent | EmbeddingRequestedEvent
   }>,
   Array<number>

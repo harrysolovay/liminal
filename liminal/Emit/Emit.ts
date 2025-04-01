@@ -10,8 +10,7 @@ export interface Emit<S extends Spec = Spec> extends ActionBase<"emit", S> {
 
 export function* emit<K extends keyof any, V extends JSONValue>(key: K, value: V): Generator<
   Emit<{
-    LanguageModel: never
-    EmbeddingModel: never
+    Field: never
     Event: EmittedEvent<K, V>
   }>,
   undefined

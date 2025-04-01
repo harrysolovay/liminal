@@ -1,4 +1,4 @@
-import type { EmbedActor } from "../SetEmbeddingModel/SetEmbeddingModel"
+import type { RunEmbed } from "../SetEmbeddingModel/SetEmbeddingModel"
 
 export interface TestEmbeddingModelConfig {
   getEmbedding: () => Array<number>
@@ -10,8 +10,6 @@ export const defaultTestingEmbeddingModelConfig: TestEmbeddingModelConfig = {
 
 export function TestEmbeddingModel({
   getEmbedding,
-}: TestEmbeddingModelConfig = defaultTestingEmbeddingModelConfig): EmbedActor {
-  return function*() {
-    return getEmbedding()
-  }
+}: TestEmbeddingModelConfig = defaultTestingEmbeddingModelConfig): RunEmbed {
+  return async () => getEmbedding()
 }

@@ -11,8 +11,7 @@ export function* system(
   ...[raw, ...substitutions]: [content: string] | [raw: TemplateStringsArray, ...substitutions: Array<string>]
 ): Generator<
   SystemMessage<{
-    LanguageModel: never
-    EmbeddingModel: never
+    Field: never
     Event: SystemMessagedEvent
   }>,
   void

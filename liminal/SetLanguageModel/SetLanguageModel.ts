@@ -1,34 +1,31 @@
 import { ActionBase } from "../Action/ActionBase.ts"
-import type { ActionLike } from "../Action/ActionLike.ts"
 import type { Actor } from "../Actor/Actor.ts"
+import type { AssistantMessage } from "../AssistantMessage/AssistantMessage.ts"
 import type { Infer } from "../Infer/Infer.ts"
 import type { Scope } from "../Scope/Scope.ts"
 import type { Spec } from "../Spec.ts"
+import type { ToolMessage } from "../ToolMessage/ToolMessage.ts"
 import type { LanguageModelSetEvent } from "./SetLanguageModelEvent.ts"
 
 export interface SetLanguageModel<S extends Spec = Spec> extends ActionBase<"set_language_model", S> {
   key: keyof any
-  infer: InferenceActor
+  runInfer: RunInfer
 }
 
-export type InferenceActor<Y extends ActionLike = ActionLike> = (
-  scope: Scope,
-  action: Infer,
-) => Actor<Y, any>
+export type RunInfer = (action: Infer, scope: Scope) => Actor<AssistantMessage | ToolMessage, any>
 
-export function* setLanguageModel<K extends keyof any, Y extends ActionLike>(
+export function* setLanguageModel<K extends keyof any>(
   key: K,
-  infer: InferenceActor<Y>,
+  runInfer: RunInfer,
 ): Generator<
   SetLanguageModel<{
-    LanguageModel: K
-    EmbeddingModel: never
+    Field: never
     Event: LanguageModelSetEvent<K>
   }>,
   void
 > {
   return yield ActionBase("set_language_model", {
     key,
-    infer,
+    runInfer,
   })
 }
