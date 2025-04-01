@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250327.0",
-    "alchemy": "^0.2.5",
-    "liminal-alchemy": "workspace:*"
+    "@types/node": "^22.13.16",
+    "alchemy": "^0.2.5"
   }
 }

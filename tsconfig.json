@@ -8,6 +8,9 @@
       "path": "./examples/deploy-to-cf-worker"
     },
     {
+      "path": "./examples/deploy-to-cf-worker/worker"
+    },
+    {
       "path": "./examples/patterns"
     },
     {

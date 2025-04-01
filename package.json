@@ -8,7 +8,6 @@
   },
   "devDependencies": {
     "@shikijs/vitepress-twoslash": "^1.23.1",
-    "@types/bun": "latest",
     "@types/markdown-it-footnote": "^3.0.4",
     "arktype": "^2.1.15",
     "conditional-type-checks": "^1.0.6",

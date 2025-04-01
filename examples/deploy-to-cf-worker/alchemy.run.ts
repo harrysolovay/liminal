@@ -13,8 +13,8 @@ export const worker = await Worker("liminal-exec-worker", {
   name: "liminal-exec",
   url: true,
   entrypoint: fileURLToPath(import.meta.resolve("./worker/worker.ts")),
-  env: {
-    OPENAI_API_KEY: env.OPENAI_API_KEY,
+  bindings: {
+    OPENAI_API_KEY: alchemy.secret(env.OPENAI_API_KEY),
   },
   bundle: {
     external: ["@valibot/to-json-schema"],

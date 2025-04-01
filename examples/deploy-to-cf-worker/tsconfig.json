@@ -1,11 +1,10 @@
 {
-  "files": [],
+  "extends": "../../tsconfig.base",
+  "include": ["../../env.ts", "."],
+  "exclude": ["worker"],
   "references": [
     {
-      "path": "./worker"
-    },
-    {
-      "path": "./tsconfig.control.json"
+      "path": "../../liminal"
     }
   ]
 }
