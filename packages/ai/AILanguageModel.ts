@@ -22,6 +22,7 @@ export function AILanguageModel(model: LanguageModelV1): LanguageModelAdapter {
           model,
           messages,
           schema: aiSchema,
+          mode: "json",
         })
         scope.events.emit({
           type: "inferred",

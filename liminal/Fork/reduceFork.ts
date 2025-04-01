@@ -5,19 +5,21 @@ import { unwrapDeferred } from "../util/unwrapDeferred.ts"
 import type { Fork } from "./Fork.ts"
 
 export const reduceFork: ActionReducer<Fork> = async (scope, action) => {
-  const branchKeys = Reflect.ownKeys(action.arms)
+  const armKeys = Array.isArray(action.arms)
+    ? Array.from({ length: action.arms.length }, (_0, i) => i)
+    : Reflect.ownKeys(action.arms)
   scope.events.emit({
     type: "fork_entered",
     fork: action.key,
   })
-  const branchScopes = await Promise.all(
-    branchKeys.map(async (key) => {
+  const armScopes = await Promise.all(
+    armKeys.map(async (key) => {
       scope.events.emit({
         type: "fork_arm_entered",
         fork: action.key,
         arm: key,
       })
-      const branchScope = await reduceActor(
+      const armScope = await reduceActor(
         new Scope(
           scope.models,
           key,
@@ -37,14 +39,14 @@ export const reduceFork: ActionReducer<Fork> = async (scope, action) => {
         type: "fork_arm_exited",
         fork: action.key,
         arm: key,
-        result: branchScope.result,
+        result: armScope.result,
       })
-      return [key, branchScope] as const
+      return [key, armScope] as const
     }),
   )
   const result = Array.isArray(action.arms)
-    ? branchScopes.map(([_0, scope]) => scope.result)
-    : Object.fromEntries(branchScopes.map(([key, value]) => [key, value.result]))
+    ? armScopes.map(([_0, scope]) => scope.result)
+    : Object.fromEntries(armScopes.map(([key, value]) => [key, value.result]))
   scope.events.emit({
     type: "fork_exited",
     fork: action.key,
@@ -55,7 +57,7 @@ export const reduceFork: ActionReducer<Fork> = async (scope, action) => {
     children: [...scope.children, {
       type: "fork",
       key: action.key,
-      scopes: Object.fromEntries(branchScopes),
+      scopes: Object.fromEntries(armScopes),
     }],
   })
 }
