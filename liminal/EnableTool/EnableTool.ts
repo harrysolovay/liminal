@@ -50,7 +50,7 @@ export function enableTool<
   implementation: (params: P) => Actor<Y, R>,
 ): Generator<
   EnableTool<{
-    Field: never
+    Field: Extract<Y, Action>[""]["Field"]
     Event:
       | ToolEnabledEvent<K>
       | ToolEnteredEvent<K, P>

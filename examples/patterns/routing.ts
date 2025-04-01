@@ -1,14 +1,12 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { context, declareLanguageModel, Exec, infer, system } from "liminal"
+import { context, declareLanguageModel, Exec, infer, system, user } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
 Exec(Main, {
   default: AILanguageModel(openai("gpt-4o-mini")),
   reasoning: AILanguageModel(openai("o1-mini")),
-}).exec(
-  console.log,
-)
+}).exec(console.log)
 
 function* Main() {
   yield* declareLanguageModel("default")
@@ -27,7 +25,7 @@ function* classifyQuery(query: string) {
     2. Complexity (simple or complex)
     3. Brief reasoning for classification
   `
-  yield query
+  yield* user(query)
   return yield* infer(Classification)
 }
 

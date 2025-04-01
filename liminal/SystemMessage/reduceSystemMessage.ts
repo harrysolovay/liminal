@@ -1,12 +1,11 @@
 import type { ActionReducer } from "../Action/ActionReducer.ts"
-import type { Message } from "./Message.ts"
+import type { SystemMessage } from "./SystemMessage.ts"
 
-export const reduceMessage: ActionReducer<Message> = (action, scope) => {
-  // TODO: fix this
+export const reduceSystemMessage: ActionReducer<SystemMessage> = (action, scope) => {
   scope.events.emit({
-    type: action.action,
+    type: "system_messaged",
     content: action.content,
-  } as never)
+  })
   return scope.spread({
     messages: [...scope.messages, action],
     next: undefined,

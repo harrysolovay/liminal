@@ -17,6 +17,7 @@ type P = {
 const arrowTool = enableTool("Tool", "", null! as StandardSchemaV1<P>, (params) => {
   type _ = [AssertTrue<IsExact<typeof params, P>>]
 })
+
 ActorAssertions(arrowTool).assertSpec<{
   Field: never
   Event:

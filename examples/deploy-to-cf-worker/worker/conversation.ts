@@ -1,11 +1,11 @@
 import { type } from "arktype"
-import { context, declareLanguageModel, fork, infer, setLanguageModel } from "liminal"
+import { context, declareLanguageModel, fork, infer, setLanguageModel, user } from "liminal"
 
 export function* Refine(input: string) {
   yield* declareLanguageModel("default")
-  yield input
+  yield* user(input)
   yield* infer()
-  yield* "Rewrite it in whatever way you think best."
+  yield* user`Rewrite it in whatever way you think best.`
   const variants = yield* fork("variants", {
     *a() {
       yield* declareLanguageModel("a")
@@ -22,7 +22,7 @@ export function* Refine(input: string) {
   })
   const best = yield* context("selection", function*() {
     yield* declareLanguageModel("select")
-    yield `
+    yield* user`
       Out of the following variants, which is your favorite?:
 
       ${JSON.stringify(variants)}

@@ -1,6 +1,6 @@
 import type { EnableTool } from "../EnableTool/EnableTool.ts"
 import type { Events } from "../Events.ts"
-import type { Message } from "../Message/Message.ts"
+import type { Message } from "../Message.ts"
 import type { RunEmbed } from "../SetEmbeddingModel/SetEmbeddingModel.ts"
 import type { RunInfer } from "../SetLanguageModel/SetLanguageModel.ts"
 

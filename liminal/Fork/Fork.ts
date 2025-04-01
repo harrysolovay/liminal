@@ -27,7 +27,7 @@ export function fork<K extends keyof any, const B extends Array<ActorLike>>(
     }
     | {
       [L in keyof B]: B[L] extends ActorLike<infer Y, infer R> ? ExtractSpec<Y> extends infer S extends Spec ? {
-            Field: never
+            Field: S["Field"]
             Event:
               | ForkArmEnteredEvent<K, L>
               | ForkArmInnerEvent<K, L, S["Event"]>
@@ -41,7 +41,7 @@ export function fork<K extends keyof any, const B extends Array<ActorLike>>(
 >
 export function fork<K extends keyof any, B extends Record<keyof any, ActorLike>>(
   key: K,
-  branches: B,
+  arms: B,
 ): Generator<
   Fork<
     | {
@@ -50,7 +50,7 @@ export function fork<K extends keyof any, B extends Record<keyof any, ActorLike>
     }
     | {
       [L in keyof B]: B[L] extends ActorLike<infer Y, infer R> ? ExtractSpec<Y> extends infer S extends Spec ? {
-            Field: never
+            Field: S["Field"]
             Event:
               | ForkArmEnteredEvent<K, L>
               | ForkArmInnerEvent<K, L, S["Event"]>
@@ -64,11 +64,11 @@ export function fork<K extends keyof any, B extends Record<keyof any, ActorLike>
 >
 export function* fork<B extends ForkArms>(
   key: keyof any,
-  branches: B,
+  arms: B,
 ): Generator<Fork, ForkResult<B>> {
   return yield ActionBase("fork", {
     key,
-    arms: branches,
+    arms,
   })
 }
 
