@@ -7,6 +7,7 @@ import { reduceEmbed } from "../Embed/reduceEmbed.ts"
 import { reduceEmit } from "../Emit/reduceEmit.ts"
 import { reduceEnableTool } from "../EnableTool/reduceEnableTool.ts"
 import { reduceFork } from "../Fork/reduceFork.ts"
+import { reduceGetScope } from "../GetScope/reduceGetScope.ts"
 import { reduceInfer } from "../Infer/reduceInfer.ts"
 import { reduceSetEmbeddingModel } from "../SetEmbeddingModel/reduceSetEmbeddingModel.ts"
 import { reduceSetLanguageModel } from "../SetLanguageModel/reduceSetLanguageModel.ts"
@@ -17,6 +18,12 @@ import { reduceUserMessage } from "../UserMessage/reduceUserMessage.ts"
 export const reduceAction: ActionReducer = async (action, scope) => {
   if (!action) {
     return scope.spread({
+      next: undefined,
+    })
+  }
+  if (Array.isArray(action)) {
+    return scope.spread({
+      messages: [...scope.messages, ...action],
       next: undefined,
     })
   }
@@ -62,6 +69,9 @@ export const reduceAction: ActionReducer = async (action, scope) => {
     }
     case "arg": {
       return reduceArg(action, scope)
+    }
+    case "get_scope": {
+      return reduceGetScope(action, scope)
     }
   }
 }
