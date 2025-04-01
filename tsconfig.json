@@ -5,10 +5,10 @@
       "path": "./liminal"
     },
     {
-      "path": "./examples/deploy-to-cf-worker"
+      "path": "./common"
     },
     {
-      "path": "./examples/deploy-to-cf-worker/worker"
+      "path": "./examples/deploy-to-cf-worker"
     },
     {
       "path": "./examples/patterns"
