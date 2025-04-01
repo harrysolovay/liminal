@@ -13,7 +13,7 @@ export const reduceEnableTool: ActionReducer<EnableTool> = (scope, action) => {
   return scope.spread({
     tools: new Set([...scope.tools, action]),
     next: () =>
-      ActionBase("ToolRemoval", {
+      ActionBase("DisableTool", {
         tool: action,
       }),
   })
