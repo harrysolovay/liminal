@@ -1,12 +1,12 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
 import type { AssertTrue, IsExact } from "conditional-type-checks"
-import { Context } from "../Context/Context.ts"
+import { context } from "../Context/Context.ts"
 import type { ContextEnteredEvent, ContextExitedEvent, ContextInnerEvent } from "../Context/ContextEvent.ts"
 import type { ToolDisabledEvent } from "../DisableTool/DisableToolEvent.ts"
-import { Emit } from "../Emit/Emit.ts"
+import { emit } from "../Emit/Emit.ts"
 import type { EmittedEvent } from "../Emit/EmitEvent.ts"
 import { ActorAssertions } from "../testing/ActorAssertions.ts"
-import { EnableTool } from "./EnableTool.ts"
+import { enableTool } from "./EnableTool.ts"
 import type { ToolEnabledEvent, ToolEnteredEvent, ToolExitedEvent, ToolInnerEvent } from "./EnableToolEvent.ts"
 
 type P = {
@@ -14,7 +14,7 @@ type P = {
   b: string
 }
 
-const arrowTool = EnableTool("Tool", "", null! as StandardSchemaV1<P>, (params) => {
+const arrowTool = enableTool("Tool", "", null! as StandardSchemaV1<P>, (params) => {
   type _ = [AssertTrue<IsExact<typeof params, P>>]
 })
 ActorAssertions(arrowTool).assertSpec<{
@@ -36,9 +36,9 @@ function* _0() {
   }>()
 }
 
-const genTool = EnableTool("Tool", "", null! as StandardSchemaV1<P>, function*(params) {
+const genTool = enableTool("Tool", "", null! as StandardSchemaV1<P>, function*(params) {
   type _ = [AssertTrue<IsExact<typeof params, P>>]
-  yield* Emit("Test", {})
+  yield* emit("Test", {})
   return ""
 })
 
@@ -53,8 +53,8 @@ ActorAssertions(genTool).assertSpec<{
 }>()
 
 function* parent() {
-  yield* EnableTool("ParentTool", "", null! as StandardSchemaV1<P>, () => {})
-  yield* Context("Context", function*() {
+  yield* enableTool("ParentTool", "", null! as StandardSchemaV1<P>, () => {})
+  yield* context("Context", function*() {
     yield* arrowTool
   })
 }

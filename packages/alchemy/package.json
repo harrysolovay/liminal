@@ -1,0 +1,11 @@
+{
+  "name": "liminal-alchemy",
+  "private": true,
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "peerDependencies": {
+    "alchemy": "^0.2.3",
+    "liminal": "workspace:*"
+  }
+}

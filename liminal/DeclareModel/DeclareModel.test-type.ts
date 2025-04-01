@@ -1,4 +1,4 @@
-import { Context } from "../Context/Context.ts"
+import { context } from "../Context/Context.ts"
 import type { ContextEnteredEvent, ContextExitedEvent, ContextInnerEvent } from "../Context/ContextEvent.ts"
 import { ActorAssertions } from "../testing/ActorAssertions.ts"
 import { DeclareModel } from "./DeclareModel.ts"
@@ -30,7 +30,7 @@ ActorAssertions(both).assertSpec<{
 }>()
 
 function* parent() {
-  yield* Context("Context", function*() {
+  yield* context("Context", function*() {
     yield* both()
   })
   yield* DeclareModel.language("C")

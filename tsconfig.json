@@ -5,6 +5,9 @@
       "path": "./liminal"
     },
     {
+      "path": "./examples/deploy-to-cf-worker"
+    },
+    {
       "path": "./examples/patterns"
     },
     {
@@ -12,6 +15,9 @@
     },
     {
       "path": "./packages/ai"
+    },
+    {
+      "path": "./packages/alchemy"
     },
     {
       "path": "./packages/ollama"

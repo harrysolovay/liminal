@@ -1,21 +1,14 @@
 import alchemy from "alchemy"
-import { Document } from "alchemy/docs"
-import "alchemy/fs"
-import { join } from "node:path"
-import { argv, cwd } from "node:process"
+import { argv } from "node:process"
+import { LiminalExec } from "./packages/alchemy/index.ts"
 
-await using _ = alchemy("github:liminal", {
+const app = alchemy("github:liminal", {
   phase: argv.includes("--destroy") ? "destroy" : "up",
-  quiet: argv.includes("--verbose") ? false : true,
+  quiet: argv.includes("--verbose"),
 })
 
-await Document("improved_readme", {
-  path: join(cwd(), "alchemy_test", "test.md"),
-  prompt: await alchemy`
-    You are a technical writer writing API documentation for Liminal.
-
-    See ${alchemy.file("./README.md")} to understand the overview of Liminal.
-
-    Then, write concise, clear, and comprehensive documentation for the following action.
-  `,
+await LiminalExec("documentation", {
+  main: "",
 })
+
+await app.finalize()

@@ -6,7 +6,6 @@
         "@shikijs/vitepress-twoslash": "^1.23.1",
         "@types/bun": "latest",
         "@types/markdown-it-footnote": "^3.0.4",
-        "alchemy": "^0.2.3",
         "arktype": "^2.1.15",
         "conditional-type-checks": "^1.0.6",
         "dedent": "^1.5.3",
@@ -16,6 +15,21 @@
         "valibot": "^1.0.0",
         "vitepress": "^1.5.0",
         "zod": "^3.24.2",
+      },
+    },
+    "examples/deploy-to-cf-worker": {
+      "name": "liminal-example-deploy-to-cf-worker",
+      "dependencies": {
+        "@ai-sdk/openai": "^1.2.5",
+        "ai": "^4.1.61",
+        "arktype": "^2.1.9",
+        "liminal": "workspace:*",
+        "liminal-ai": "workspace:*",
+      },
+      "devDependencies": {
+        "@cloudflare/workers-types": "^4.20250327.0",
+        "alchemy": "^0.2.5",
+        "liminal-alchemy": "workspace:*",
       },
     },
     "examples/patterns": {
@@ -70,6 +84,13 @@
       "name": "liminal-ai",
       "peerDependencies": {
         "ai": "^4.1.61",
+        "liminal": "workspace:*",
+      },
+    },
+    "packages/alchemy": {
+      "name": "liminal-alchemy",
+      "peerDependencies": {
+        "alchemy": "^0.2.3",
         "liminal": "workspace:*",
       },
     },
@@ -246,6 +267,8 @@
     "@babel/runtime": ["@babel/runtime@7.27.0", "", { "dependencies": { "regenerator-runtime": "^0.14.0" } }, "sha512-VtPOkrdPHZsKc/clNqyi9WUA8TINkZ4cGk63UUE3u4pmB2k+ZMQRDuIOagv8UVd6j7k0T3+RRIb7beKTebNbcw=="],
 
     "@babel/types": ["@babel/types@7.27.0", "", { "dependencies": { "@babel/helper-string-parser": "^7.25.9", "@babel/helper-validator-identifier": "^7.25.9" } }, "sha512-H45s8fVLYjbhFH62dIJ3WtmJ6RSPt/3DRO0ZcT2SUiYiQyz3BLVb9ADEnLl91m74aQPS3AzzeajZHYOalWe3bg=="],
+
+    "@cloudflare/workers-types": ["@cloudflare/workers-types@4.20250327.0", "", {}, "sha512-rkoGnSY/GgBLCuhjZMIC3mt0jjqqvL17uOK92OI4eivmE+pMFOAchowDxIWOzDyYe5vwNCakbCeIM/FrSmwGJA=="],
 
     "@docsearch/css": ["@docsearch/css@3.8.2", "", {}, "sha512-y05ayQFyUmCXze79+56v/4HpycYF3uFqB78pLPrSV5ZKAlDuIAAJNhaRi8tTdRNXh05yxX/TyNnzD6LwSM89vQ=="],
 
@@ -905,7 +928,11 @@
 
     "liminal-ai": ["liminal-ai@workspace:packages/ai"],
 
+    "liminal-alchemy": ["liminal-alchemy@workspace:packages/alchemy"],
+
     "liminal-drizzle": ["liminal-drizzle@workspace:packages/drizzle"],
+
+    "liminal-example-deploy-to-cf-worker": ["liminal-example-deploy-to-cf-worker@workspace:examples/deploy-to-cf-worker"],
 
     "liminal-example-patterns": ["liminal-example-patterns@workspace:examples/patterns"],
 
@@ -1264,6 +1291,8 @@
     "glob/minimatch": ["minimatch@9.0.5", "", { "dependencies": { "brace-expansion": "^2.0.1" } }, "sha512-G6T0ZX48xgozx7587koeX9Ys2NYy6Gmv//P89sEte9V9whIapMNF4idKxnW2QtCcLiTWlb/wfCabAtAFWhhBow=="],
 
     "jsondiffpatch/chalk": ["chalk@5.4.1", "", {}, "sha512-zgVZuo2WcZgfUEmsn6eO3kINexW8RAE4maiQ8QNs8CtpPCSyMiYsULR3HQYkm3w8FIA3SberyMJMSldGsW+U3w=="],
+
+    "liminal-example-deploy-to-cf-worker/alchemy": ["alchemy@0.2.5", "", { "peerDependencies": { "@ai-sdk/openai": "^1.1.9", "@ai-sdk/openai-compatible": "^0.2.2", "@aws-sdk/client-dynamodb": "^3.0.0", "@aws-sdk/client-iam": "^3.0.0", "@aws-sdk/client-lambda": "^3.0.0", "@aws-sdk/client-s3": "^3.0.0", "@aws-sdk/client-sagemaker": "^3.0.0", "@aws-sdk/client-ses": "^3.0.0", "@aws-sdk/client-sesv2": "^3.0.0", "@aws-sdk/client-sqs": "^3.0.0", "@aws-sdk/client-sts": "^3.0.0", "@octokit/rest": "^21.1.1", "ai": "^4.0.0", "arktype": "^2.0.0", "diff": "^7.0.0", "esbuild": "^0.25.1", "glob": "^10.0.0", "hono": "^4.0.0", "jszip": "^3.0.0", "libsodium-wrappers": "^0.7.15", "prettier": "^3.0.0", "stripe": "^17.0.0", "turndown": "^7.0.0", "yaml": "^2.0.0", "zod": "^3.0.0" } }, "sha512-EeMfBgQbiBu1Gw5w3/yG0EFj5vWn89G2ABoTf+Yt106lsFczCeeosNFGfxMX+gSv50of9dAzUvxW+Yc5J5031Q=="],
 
     "mdast-util-find-and-replace/escape-string-regexp": ["escape-string-regexp@5.0.0", "", {}, "sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw=="],
 

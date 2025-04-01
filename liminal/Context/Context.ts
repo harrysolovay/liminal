@@ -9,7 +9,7 @@ export interface Context<S extends Spec = Spec> extends ActionBase<"context", S>
   implementation: ActorLike
 }
 
-export function* Context<K extends keyof any, Y extends ActionLike, S extends ExtractSpec<Y>, T = string>(
+export function* context<K extends keyof any, Y extends ActionLike, S extends ExtractSpec<Y>, T = string>(
   key: K,
   implementation: ActorLike<Y, T>,
 ): Generator<

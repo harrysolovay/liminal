@@ -8,7 +8,7 @@ export interface AssistantMessage<S extends Spec = Spec> extends ActionBase<"ass
   content: AssistantContent
 }
 
-export function* Assistant(
+export function* assistant(
   ...[raw, ...substitutions]: [content: AssistantContent] | [raw: TemplateStringsArray, ...substitutions: Array<string>]
 ): Generator<
   AssistantMessage<{

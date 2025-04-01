@@ -7,7 +7,7 @@ export interface SystemMessage<S extends Spec = Spec> extends ActionBase<"system
   content: string
 }
 
-export function* System(
+export function* system(
   ...[raw, ...substitutions]: [content: string] | [raw: TemplateStringsArray, ...substitutions: Array<string>]
 ): Generator<
   SystemMessage<{

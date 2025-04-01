@@ -20,7 +20,7 @@ export interface EnableTool<S extends Spec = Spec> extends ActionBase<"enable_to
 
 export type ToolImplementation = (params: JSONObject) => Actor<ActionLike, ToolResult> | PromiseOr<ToolResult>
 
-export function EnableTool<K extends keyof any, P extends JSONObject, R extends PromiseOr<ToolResult>>(
+export function enableTool<K extends keyof any, P extends JSONObject, R extends PromiseOr<ToolResult>>(
   key: K,
   description: string,
   params: StandardSchemaV1<JSONObject, P>,
@@ -40,7 +40,7 @@ export function EnableTool<K extends keyof any, P extends JSONObject, R extends 
     void
   >
 >
-export function EnableTool<
+export function enableTool<
   K extends keyof any,
   P extends JSONObject,
   Y extends ActionLike,
@@ -69,7 +69,7 @@ export function EnableTool<
     void
   >
 >
-export function* EnableTool(
+export function* enableTool(
   key: keyof any,
   description: string,
   params: StandardSchemaV1<JSONObject, JSONObject>,
