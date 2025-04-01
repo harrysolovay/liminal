@@ -14,8 +14,7 @@ export function* context<K extends keyof any, Y extends ActionLike, S extends Ex
   implementation: ActorLike<Y, T>,
 ): Generator<
   Context<{
-    LanguageModel: S["LanguageModel"]
-    EmbeddingModel: S["EmbeddingModel"]
+    Field: S["Field"]
     Event: ContextEnteredEvent<K> | ContextInnerEvent<K, S["Event"]> | ContextExitedEvent<K, T>
   }>,
   T

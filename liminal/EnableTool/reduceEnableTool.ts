@@ -3,7 +3,7 @@ import type { ActionReducer } from "../Action/ActionReducer.ts"
 import { JSONSchemaMemo } from "../util/JSONSchemaMemo.ts"
 import type { EnableTool } from "./EnableTool.ts"
 
-export const reduceEnableTool: ActionReducer<EnableTool> = (scope, action) => {
+export const reduceEnableTool: ActionReducer<EnableTool> = (action, scope) => {
   scope.events.emit({
     type: "tool_enabled",
     key: action.key,

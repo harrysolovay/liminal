@@ -1,19 +1,17 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { DeclareModel, Exec, infer, system } from "liminal"
+import { declareLanguageModel, Exec, infer, system, user } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
-Exec(TranslationWithFeedback("typescript", "I love you!"))
-  .models({
-    default: AILanguageModel(openai("gpt-4o-mini")),
-  })
-  .exec(console.log)
+Exec(TranslationWithFeedback("typescript", "I love you!"), {
+  default: AILanguageModel(openai("gpt-4o-mini")),
+}).exec(console.log)
 
 function* TranslationWithFeedback(targetLanguage: string, text: string) {
+  yield* declareLanguageModel("default")
   yield* system`You are an expert literary translator. Translate the supplied text to the specified target language, preserving tone and cultural nuances.`
-  yield* DeclareModel.language("default")
-  yield `Target language: ${targetLanguage}`
-  yield `Text:
+  yield* user`Target language: ${targetLanguage}`
+  yield* user`Text:
 
     ${text}
   `
@@ -21,7 +19,7 @@ function* TranslationWithFeedback(targetLanguage: string, text: string) {
   let iterations = 0
   const MAX_ITERATIONS = 3
   while (iterations < MAX_ITERATIONS) {
-    yield `
+    yield* user`
       Evaluate this translation:
 
       Original: ${text}
@@ -49,7 +47,7 @@ function* TranslationWithFeedback(targetLanguage: string, text: string) {
     ) {
       break
     }
-    yield `
+    yield* user`
       Improve this translation based on the following feedback:
 
       ${evaluation.specificIssues.join("\n")}

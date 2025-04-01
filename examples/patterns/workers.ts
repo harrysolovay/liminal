@@ -1,19 +1,17 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { DeclareModel, Exec, fork, infer, system } from "liminal"
+import { declareLanguageModel, Exec, fork, infer, system, user } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
-Exec(CodeReviewers("Alert administrators via text whenever site traffic exceeds a certain threshold."))
-  .models({
-    default: AILanguageModel(openai("gpt-4o-mini")),
-  })
-  .exec(console.log)
+Exec(CodeReviewers("Alert administrators via text whenever site traffic exceeds a certain threshold."), {
+  default: AILanguageModel(openai("gpt-4o-mini")),
+}).exec(console.log)
 
 function* CodeReviewers(feat: string) {
   yield* system`You are a senior software architect planning feature implementations.`
-  yield* DeclareModel.language("default")
-  yield "Analyze this feature request and create an implementation plan:"
-  yield feat
+  yield* declareLanguageModel("default")
+  yield* user`Analyze this feature request and create an implementation plan:`
+  yield* user(feat)
   const implementationPlan = yield* infer(type({
     files: FileInfo.array(),
     estimatedComplexity: "'create' | 'medium' | 'high'",
@@ -30,7 +28,7 @@ const FileInfo = type({
 
 function* Implementor(featureRequest: string, file: typeof FileInfo.infer) {
   yield* system(IMPLEMENTATION_PROMPTS[file.changeType])
-  yield `
+  yield* user`
     Implement the changes for ${file.filePath} to support:
 
     ${file.purpose}

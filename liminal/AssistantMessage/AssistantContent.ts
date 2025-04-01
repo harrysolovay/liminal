@@ -1,4 +1,4 @@
-import type { FilePart, ReasoningPart, RedactedReasoningPart, TextPart, ToolCallPart } from "../Message/content_part.ts"
+import type { FilePart, ReasoningPart, RedactedReasoningPart, TextPart, ToolCallPart } from "../content_part.ts"
 
 export type AssistantContent =
   | string

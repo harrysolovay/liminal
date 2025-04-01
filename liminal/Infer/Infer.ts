@@ -10,8 +10,7 @@ export interface Infer<S extends Spec = Spec> extends ActionBase<"infer", S> {
 
 export function infer(): Generator<
   Infer<{
-    LanguageModel: never
-    EmbeddingModel: never
+    Field: never
     Event: InferenceRequestedEvent | InferredEvent<string>
   }>,
   string
@@ -20,8 +19,7 @@ export function infer<O extends JSONObject>(
   type: StandardSchemaV1<JSONObject, O>,
 ): Generator<
   Infer<{
-    LanguageModel: never
-    EmbeddingModel: never
+    Field: never
     Event: InferenceRequestedEvent | InferredEvent<O>
   }>,
   O

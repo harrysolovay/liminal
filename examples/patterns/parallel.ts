@@ -1,6 +1,6 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { DeclareModel, Exec, fork, infer, system } from "liminal"
+import { declareLanguageModel, Exec, fork, infer, system, user } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 import { readFile } from "node:fs/promises"
 import { fileURLToPath } from "node:url"
@@ -9,23 +9,21 @@ const code = await readFile(fileURLToPath(import.meta.url), "utf-8")
 
 const LMH = type("'lower' | 'medium' | 'high'")
 
-Exec(Review(code))
-  .models({
-    default: AILanguageModel(openai("gpt-4o-mini")),
-  })
-  .exec(console.log)
+Exec(Review(code), {
+  default: AILanguageModel(openai("gpt-4o-mini")),
+}).exec(console.log)
 
 function* Review(code: string) {
+  yield* declareLanguageModel("default")
   yield* system`You are a technical lead summarizing multiple code reviews. Review the supplied code.`
-  yield* DeclareModel.language("default")
-  yield code
+  yield* user(code)
   const reviews = yield* fork("Reviews", {
     SecurityReview,
     PerformanceReview,
     MaintainabilityReview,
   })
-  yield JSON.stringify(Object.values(reviews), null, 2)
-  yield `You are a technical lead summarizing multiple code reviews.`
+  yield* user(JSON.stringify(Object.values(reviews), null, 2))
+  yield* user`You are a technical lead summarizing multiple code reviews.`
   const summary = yield* infer()
   return { reviews, summary }
 }

@@ -12,8 +12,7 @@ export function* user(
   ...[raw, ...substitutions]: [content: UserContent] | [raw: TemplateStringsArray, ...substitutions: Array<string>]
 ): Generator<
   UserMessage<{
-    LanguageModel: never
-    EmbeddingModel: never
+    Field: never
     Event: UserMessagedEvent
   }>,
   void

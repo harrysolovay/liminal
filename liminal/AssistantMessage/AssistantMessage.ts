@@ -12,8 +12,7 @@ export function* assistant(
   ...[raw, ...substitutions]: [content: AssistantContent] | [raw: TemplateStringsArray, ...substitutions: Array<string>]
 ): Generator<
   AssistantMessage<{
-    LanguageModel: never
-    EmbeddingModel: never
+    Field: never
     Event: AssistantMessagedEvent
   }>,
   void

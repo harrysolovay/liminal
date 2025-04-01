@@ -1,63 +1,67 @@
-import { ActionBase } from "../Action/ActionBase.ts"
 import type { ActionReducer } from "../Action/ActionReducer.ts"
+import { reduceArg } from "../Arg/reduceArg.ts"
+import { reduceAssistantMessage } from "../AssistantMessage/reduceAssistantMessage.ts"
 import { reduceContext } from "../Context/reduceContext.ts"
-import { reduceDeclareModel } from "../DeclareModel/reduceDeclareModel.ts"
 import { reduceDisableTool } from "../DisableTool/reduceDisableTool.ts"
+import { reduceEmbed } from "../Embed/reduceEmbed.ts"
 import { reduceEmit } from "../Emit/reduceEmit.ts"
 import { reduceEnableTool } from "../EnableTool/reduceEnableTool.ts"
 import { reduceFork } from "../Fork/reduceFork.ts"
-import { reduceMessage } from "../Message/reduceMessage.ts"
-import { assert } from "../util/assert.ts"
+import { reduceInfer } from "../Infer/reduceInfer.ts"
+import { reduceSetEmbeddingModel } from "../SetEmbeddingModel/reduceSetEmbeddingModel.ts"
+import { reduceSetLanguageModel } from "../SetLanguageModel/reduceSetLanguageModel.ts"
+import { reduceSystemMessage } from "../SystemMessage/reduceSystemMessage.ts"
+import { reduceToolMessage } from "../ToolMessage/reduceToolMessage.ts"
+import { reduceUserMessage } from "../UserMessage/reduceUserMessage.ts"
 
-export const reduceAction: ActionReducer = async (scope, action) => {
+export const reduceAction: ActionReducer = async (action, scope) => {
   if (!action) {
     return scope.spread({
       next: undefined,
     })
-  } else if (typeof action === "string") {
-    return reduceMessage(
-      scope,
-      ActionBase("user_message", {
-        content: action,
-      }),
-    )
   }
   switch (action.action) {
-    case "assistant_message":
-    case "system_message":
-    case "tool_message":
+    case "assistant_message": {
+      return reduceAssistantMessage(action, scope)
+    }
+    case "system_message": {
+      return reduceSystemMessage(action, scope)
+    }
+    case "tool_message": {
+      return reduceToolMessage(action, scope)
+    }
     case "user_message": {
-      return reduceMessage(scope, action)
+      return reduceUserMessage(action, scope)
     }
     case "infer": {
-      assert(scope.model.language)
-      const lm = scope.models[scope.model.language]
-      assert(lm?.type === "Language")
-      return await lm.reduceInference(scope, action)
+      return reduceInfer(action, scope)
     }
     case "embed": {
-      assert(scope.model.embedding)
-      const em = scope.models[scope.model.embedding]
-      assert(em?.type === "Embedding")
-      return em.reduceEmbedding(scope, action)
+      return reduceEmbed(action, scope)
     }
     case "fork": {
-      return reduceFork(scope, action)
+      return reduceFork(action, scope)
     }
     case "context": {
-      return reduceContext(scope, action)
+      return reduceContext(action, scope)
     }
     case "enable_tool": {
-      return reduceEnableTool(scope, action)
+      return reduceEnableTool(action, scope)
     }
     case "disable_tool": {
-      return reduceDisableTool(scope, action)
+      return reduceDisableTool(action, scope)
     }
     case "emit": {
-      return reduceEmit(scope, action)
+      return reduceEmit(action, scope)
     }
-    case "declare_model": {
-      return reduceDeclareModel(scope, action)
+    case "set_language_model": {
+      return reduceSetLanguageModel(action, scope)
+    }
+    case "set_embedding_model": {
+      return reduceSetEmbeddingModel(action, scope)
+    }
+    case "arg": {
+      return reduceArg(action, scope)
     }
   }
 }
