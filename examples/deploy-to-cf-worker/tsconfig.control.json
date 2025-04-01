@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.base",
-  "include": ["../../env.ts", "alchemy.config.ts", "main.ts"],
+  "include": ["../../env.ts", "alchemy.run.ts", "main.ts"],
   "references": [
     {
       "path": "../../liminal"

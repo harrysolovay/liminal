@@ -1,6 +1,6 @@
 import { type } from "arktype"
 import { _util } from "liminal"
-import { worker } from "./alchemy.config.ts"
+import { worker } from "./alchemy.run.ts"
 
 const INPUT = _util.dedent`
   I'm testing usage of Alchemy to deploy a Liminal-executing function to CloudFlare.

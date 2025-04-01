@@ -1,6 +1,5 @@
 import alchemy from "alchemy"
 import { Worker } from "alchemy/cloudflare"
-import { resolve } from "node:path"
 import { argv } from "node:process"
 import { fileURLToPath } from "node:url"
 import { env } from "../../env.ts"
