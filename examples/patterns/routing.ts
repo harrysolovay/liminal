@@ -1,17 +1,12 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { context, DeclareModel, Exec, infer, system } from "liminal"
+import { context, Exec, infer, setLanguageModel, system } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
-Exec(Main)
-  .models({
-    default: AILanguageModel(openai("gpt-4o-mini")),
-    reasoning: AILanguageModel(openai("o1-mini")),
-  })
-  .exec(console.log)
+Exec(Main).exec(console.log)
 
 function* Main() {
-  yield* DeclareModel.language("default")
+  yield* setLanguageModel("default", AILanguageModel(openai("gpt-4o-mini")))
   const classification = yield* context("Classification", classifyQuery("I'd like a refund please"))
   const response = yield* context("ClassificationConsumer", useClassification(classification))
   return { classification, response }
@@ -40,7 +35,7 @@ const Classification = type({
 function* useClassification(classification: typeof Classification.infer) {
   yield* system(USE_CLASSIFICATION_AGENT_PROMPTS[classification.type])
   if (classification.complexity === "complex") {
-    yield* DeclareModel.language("reasoning")
+    yield* setLanguageModel("reasoning", AILanguageModel(openai("o1-mini")))
   }
   return yield* infer()
 }

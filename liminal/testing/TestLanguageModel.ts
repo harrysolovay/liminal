@@ -1,6 +1,6 @@
-import { ActionBase } from "../Action/ActionBase.ts"
-import type { LanguageModelAdapter } from "../Adapters.ts"
+import { assistant } from "../AssistantMessage/Assistant.ts"
 import type { JSONObject } from "../JSON/JSONObject.ts"
+import type { InferenceActor } from "../SetLanguageModel/SetLanguageModel.ts"
 
 export interface TestLanguageModelConfig {
   getObject: () => JSONObject
@@ -12,43 +12,18 @@ export const defaultTestLanguageModelConfig: TestLanguageModelConfig = {
   getText: () => "",
 }
 
-export function TestLanguageModel(
-  { getObject, getText }: TestLanguageModelConfig = defaultTestLanguageModelConfig,
-): LanguageModelAdapter {
-  return {
-    type: "Language",
-    reduceInference: async (scope, action) => {
-      if (action.type) {
-        const object = getObject()
-        scope.events.emit({
-          type: "inferred",
-          value: object,
-        })
-        return scope.spread({
-          messages: [
-            ...scope.messages,
-            ActionBase("assistant_message", {
-              content: JSON.stringify(object, null, 2),
-            }),
-          ],
-          next: object,
-        })
-      }
-      const text = getText()
-      scope.events.emit({
-        type: "inferred",
-        value: text,
-      })
-      return scope.spread({
-        ...scope,
-        messages: [
-          ...scope.messages,
-          ActionBase("assistant_message", {
-            content: text,
-          }),
-        ],
-        next: text,
-      })
-    },
+export function TestLanguageModel({
+  getObject,
+  getText,
+}: TestLanguageModelConfig = defaultTestLanguageModelConfig): InferenceActor {
+  return async function*(_scope, action) {
+    if (action.type) {
+      const object = getObject()
+      yield* assistant(JSON.stringify(object))
+      return object
+    }
+    const text = getText()
+    yield* assistant(text)
+    return text
   }
 }

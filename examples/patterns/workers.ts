@@ -1,17 +1,15 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { DeclareModel, Exec, fork, infer, system } from "liminal"
+import { Exec, fork, infer, setLanguageModel, system } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
-Exec(CodeReviewers("Alert administrators via text whenever site traffic exceeds a certain threshold."))
-  .models({
-    default: AILanguageModel(openai("gpt-4o-mini")),
-  })
-  .exec(console.log)
+Exec(CodeReviewers("Alert administrators via text whenever site traffic exceeds a certain threshold.")).exec(
+  console.log,
+)
 
 function* CodeReviewers(feat: string) {
   yield* system`You are a senior software architect planning feature implementations.`
-  yield* DeclareModel.language("default")
+  yield* setLanguageModel("default", AILanguageModel(openai("gpt-4o-mini")))
   yield "Analyze this feature request and create an implementation plan:"
   yield feat
   const implementationPlan = yield* infer(type({

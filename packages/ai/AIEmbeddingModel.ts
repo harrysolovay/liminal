@@ -1,26 +1,23 @@
 import { embed, type EmbeddingModel } from "ai"
-import { _util, type EmbeddingModelAdapter } from "liminal"
+import { _util, type EmbedActor } from "liminal"
 
-export function AIEmbeddingModel(model: EmbeddingModel<any>): EmbeddingModelAdapter {
-  return {
-    type: "Embedding",
-    reduceEmbedding: async (scope, action) => {
-      scope.events.emit({
-        type: "embedding_requested",
-        value: action.value,
-      })
-      const { embedding } = await embed({
-        model,
-        value: action.value,
-      })
-      scope.events.emit({
-        type: "embedded",
-        value: action.value,
-        embedding,
-      })
-      return scope.spread({
-        next: embedding,
-      })
-    },
+// scope.events.emit({
+//   type: "embedding_requested",
+//   value: action.value,
+// })
+
+export function AIEmbeddingModel(model: EmbeddingModel<any>): EmbedActor<never> {
+  return async function*(_scope, action) {
+    const { embedding } = await embed({
+      model,
+      value: action.value,
+    })
+    return embedding
   }
 }
+
+// scope.events.emit({
+//   type: "embedded",
+//   value: action.value,
+//   embedding,
+// })

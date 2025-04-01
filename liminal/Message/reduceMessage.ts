@@ -3,7 +3,7 @@ import type { Message } from "./Message.ts"
 
 export const reduceMessage: ActionReducer<Message> = (scope, message) => {
   scope.events.emit({
-    event: message.action,
+    type: message.action,
     content: message.content,
   } as never)
   return scope.spread({

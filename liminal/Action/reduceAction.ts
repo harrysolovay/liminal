@@ -1,12 +1,14 @@
 import { ActionBase } from "../Action/ActionBase.ts"
 import type { ActionReducer } from "../Action/ActionReducer.ts"
+import { reduceActor } from "../Actor/reduceActor.ts"
 import { reduceContext } from "../Context/reduceContext.ts"
-import { reduceDeclareModel } from "../DeclareModel/reduceDeclareModel.ts"
 import { reduceDisableTool } from "../DisableTool/reduceDisableTool.ts"
 import { reduceEmit } from "../Emit/reduceEmit.ts"
 import { reduceEnableTool } from "../EnableTool/reduceEnableTool.ts"
 import { reduceFork } from "../Fork/reduceFork.ts"
 import { reduceMessage } from "../Message/reduceMessage.ts"
+import { reduceSetEmbeddingModel } from "../SetEmbeddingModel/reduceSetEmbeddingModel.ts"
+import { reduceSetLanguageModel } from "../SetLanguageModel/reduceSetLanguageModel.ts"
 import { assert } from "../util/assert.ts"
 
 export const reduceAction: ActionReducer = async (scope, action) => {
@@ -30,16 +32,34 @@ export const reduceAction: ActionReducer = async (scope, action) => {
       return reduceMessage(scope, action)
     }
     case "infer": {
-      assert(scope.model.language)
-      const lm = scope.models[scope.model.language]
-      assert(lm?.type === "Language")
-      return await lm.reduceInference(scope, action)
+      assert(scope.infer)
+      scope.events.emit({
+        type: "inference_requested",
+      })
+      scope = await reduceActor(scope, scope.infer(scope, action))
+      scope.events.emit({
+        type: "inferred",
+        value: scope.result,
+      })
+      return scope.spread({
+        next: scope.result,
+      })
     }
     case "embed": {
-      assert(scope.model.embedding)
-      const em = scope.models[scope.model.embedding]
-      assert(em?.type === "Embedding")
-      return em.reduceEmbedding(scope, action)
+      assert(scope.embed)
+      scope.events.emit({
+        type: "embedding_requested",
+        value: action.value,
+      })
+      scope = await reduceActor(scope, scope.embed(scope, action))
+      scope.events.emit({
+        type: "embedded",
+        value: action.value,
+        embedding: scope.result,
+      })
+      return scope.spread({
+        next: scope.result,
+      })
     }
     case "fork": {
       return reduceFork(scope, action)
@@ -56,8 +76,11 @@ export const reduceAction: ActionReducer = async (scope, action) => {
     case "emit": {
       return reduceEmit(scope, action)
     }
-    case "declare_model": {
-      return reduceDeclareModel(scope, action)
+    case "set_language_model": {
+      return reduceSetLanguageModel(scope, action)
+    }
+    case "set_embedding_model": {
+      return reduceSetEmbeddingModel(scope, action)
     }
   }
 }

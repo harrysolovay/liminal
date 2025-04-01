@@ -9,18 +9,19 @@ export const reduceContext: ActionReducer<Context> = async (scope, action) => {
     type: "context_entered",
     context: action.key,
   })
+  const actor = unwrapDeferred(action.implementation)
   const contextScope = await reduceActor(
     new Scope(
-      scope.models,
       action.key,
-      unwrapDeferred(action.implementation),
       scope.events.child((inner) => ({
         type: "context_inner",
         context: action.key,
         inner,
       })),
-      { ...scope.model },
+      scope.infer,
+      scope.embed,
     ),
+    actor,
   )
   scope.events.emit({
     type: "context_exited",

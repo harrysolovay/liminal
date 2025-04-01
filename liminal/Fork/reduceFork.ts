@@ -19,21 +19,22 @@ export const reduceFork: ActionReducer<Fork> = async (scope, action) => {
         fork: action.key,
         arm: key,
       })
+      const actor = unwrapDeferred(action.arms[key as never]!)
       const armScope = await reduceActor(
         new Scope(
-          scope.models,
           key,
-          unwrapDeferred(action.arms[key as never]!),
           scope.events.child((inner) => ({
             type: "fork_arm_inner",
             fork: action.key,
             arm: key,
             event: inner,
           })),
-          scope.model,
+          scope.infer,
+          scope.embed,
           [...scope.messages],
           new Set(scope.tools),
         ),
+        actor,
       )
       scope.events.emit({
         type: "fork_arm_exited",

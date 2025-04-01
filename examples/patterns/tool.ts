@@ -1,21 +1,17 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { DeclareModel, enableTool, Exec, infer, system } from "liminal"
+import { enableTool, Exec, infer, setLanguageModel, system } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 import * as mathjs from "mathjs"
 
-Exec(ToolUser())
-  .models({
-    default: AILanguageModel(openai("gpt-4o-mini")),
-  })
-  .exec(console.log)
+Exec(ToolUser()).exec(console.log)
 
 function* ToolUser() {
+  yield* setLanguageModel("default", AILanguageModel(openai("gpt-4o-mini")))
   yield* system`
     You are solving math problems. Reason step by step. Use the calculator when necessary.
     When you give the final answer, provide an explanation for how you arrived at it.
   `
-  yield* DeclareModel.language("default")
   const detach = yield* enableTool(
     "MathTool",
     `

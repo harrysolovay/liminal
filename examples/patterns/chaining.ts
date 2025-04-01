@@ -1,17 +1,13 @@
+import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { DeclareModel, Exec, infer, system } from "liminal"
-import { OllamaLanguageModel } from "liminal-ollama"
-import { Ollama } from "ollama"
+import { Exec, infer, setLanguageModel, system } from "liminal"
+import { AILanguageModel } from "liminal-ai"
 
-Exec(MarketingCopy())
-  .models({
-    default: OllamaLanguageModel(new Ollama(), "llama3.2:latest"),
-  })
-  .exec(console.log)
+Exec(MarketingCopy()).exec(console.log)
 
 function* MarketingCopy() {
-  yield* system`Write persuasive marketing copy for: ${"Buffy The Vampire Slayer"}. Focus on benefits and emotional appeal.`
-  yield* DeclareModel.language("default")
+  yield* system`Write persuasive marketing copy for: Buffy The Vampire Slayer. Focus on benefits and emotional appeal.`
+  yield* setLanguageModel("default", AILanguageModel(openai("gpt-4o-mini")))
   yield "Please generate the first draft."
   let copy = yield* infer()
   yield `

@@ -22,6 +22,8 @@ branching conversations.
 - [Type-safe Observability &rarr;](https://liminal.land/rationale/type-safe_observability)<br />Observe
   events from the entire conversation tree; infer event static types like with
   TRPC or Hono Client.
+- [Step Comparison &rarr;](https://liminal.land/rationale/eliminating_boilerplate.md)<br />Stepped
+  execution of the same conversation with different models.
 - [Eliminating Boilerplate &rarr;](https://liminal.land/rationale/eliminating_boilerplate.md)<br />Avoid
   the redundancies of inferencing and embedding.
 
