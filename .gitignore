@@ -1,7 +1,6 @@
 .DS_Store
 .alchemy
 .env
-.vitepress/cache
 dist
 node_modules
 *.tsbuildinfo
