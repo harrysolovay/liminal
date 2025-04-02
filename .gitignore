@@ -4,3 +4,4 @@
 dist
 node_modules
 *.tsbuildinfo
+liminal.land/.vitepress/cache
