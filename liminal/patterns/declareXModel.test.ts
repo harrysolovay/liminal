@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test"
-import { context } from "../Context/Context.ts"
+import { context } from "../actions/Context.ts"
 import { exec } from "../exec.ts"
 import { TestEmbeddingModel } from "../testing/TestEmbeddingModel/TestEmbeddingModel.ts"
 import { TestLanguageModel } from "../testing/TestLanguageModel/TestLanguageModel.ts"

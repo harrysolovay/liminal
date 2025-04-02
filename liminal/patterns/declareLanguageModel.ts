@@ -1,6 +1,6 @@
-import { type Arg, arg } from "../Arg/Arg.ts"
-import { type RunInfer, type SetLanguageModel, setLanguageModel } from "../SetLanguageModel/SetLanguageModel.ts"
-import type { LanguageModelSetEvent } from "../SetLanguageModel/SetLanguageModelEvent.ts"
+import { type Arg, arg } from "../actions/Arg.ts"
+import { type RunInfer, type SetLanguageModel, setLanguageModel } from "../actions/SetLanguageModel.ts"
+import type { LanguageModelSetEvent } from "../actions/SetLanguageModel.ts"
 
 export function* declareLanguageModel<K extends keyof any>(key: K): Generator<
   | Arg<{

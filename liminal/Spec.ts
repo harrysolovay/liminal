@@ -1,7 +1,7 @@
-import type { Action } from "./Action/Action.ts"
-import type { ActionEvent } from "./Action/ActionEvent.ts"
-import type { ActionLike } from "./Action/ActionLike.ts"
-import type { Message } from "./messages/Message.ts"
+import type { Action } from "./Action.ts"
+import type { ActionEvent } from "./ActionEvent.ts"
+import type { Message } from "./actions/Message.ts"
+import type { ActionLike } from "./Actor/ActionLike.ts"
 
 export interface Spec {
   Field: Record<keyof any, any>

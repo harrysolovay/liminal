@@ -1,9 +1,9 @@
-import type { ActionEventBase, EnteredEvent, ExitedEvent } from "./Action/ActionEventBase.ts"
-import type { ActionLike } from "./Action/ActionLike.ts"
+import { ActionEvents } from "./ActionEvents.ts"
+import type { EnteredEvent, ExitedEvent } from "./actions/actions_base.ts"
+import type { ActionLike } from "./Actor/ActionLike.ts"
 import type { ActorLike } from "./Actor/ActorLike.ts"
-import { reduceActor } from "./Actor/reduceActor.ts"
-import { Events } from "./Events.ts"
-import { Scope } from "./Scope/Scope.ts"
+import { reduce } from "./Actor/reduce.ts"
+import { Scope } from "./Scope.ts"
 import type { ExtractSpec, Spec } from "./Spec.ts"
 import type { U2I } from "./util/U2I.ts"
 import { unwrapDeferred } from "./util/unwrapDeferred.ts"
@@ -18,12 +18,12 @@ export async function exec<Y extends ActionLike, T, S extends ExtractSpec<Y>>(
   config: ExecConfig<T, S>,
 ): Promise<Scope<any>> {
   const actor = unwrapDeferred(actorLike)
-  const events = new Events((inner) => inner, config.handler)
+  const events = new ActionEvents((inner) => inner, config.handler)
   events.emit({
     type: "entered",
   })
   let scope = new Scope(config.bind as never, undefined, events)
-  scope = await reduceActor(actor, scope)
+  scope = await reduce(actor, scope)
   events.emit({
     type: "exited",
     result: scope.result,

@@ -1,5 +1,5 @@
 import type { IsExact } from "conditional-type-checks"
-import type { ActionLike } from "../../Action/ActionLike.ts"
+import type { ActionLike } from "../../Actor/ActionLike.ts"
 import type { ActorLike } from "../../Actor/ActorLike.ts"
 import type { ExtractSpec, Spec } from "../../Spec.ts"
 
