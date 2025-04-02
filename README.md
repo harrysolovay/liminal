@@ -6,16 +6,15 @@
 Liminal is a model-agnostic library for conversation state management. It
 exposes a set of primitives for buffering messages, generating text, objects and
 vectors, attaching and removing tools, emitting events, and instantiating and
-branching conversations.
+forking conversations.
 
-## Resources
+<!-- ## Resources
 
 - [Documentation &rarr;](https://liminal.land)<br />Usage guide intended for
   human readers.
+- [llms.txt &rarr;](./llms.txt)<br />Chunks of truth to be fed into LLMs.
 - [Examples &rarr;](https://github.com/harrysolovay/liminal/tree/main/examples)<br />Examples
-  illustrating common use cases.
-
-  <!-- - [llms.txt &rarr;](./llms.txt)<br />Chunks of truth to be fed into LLMs. -->
+  illustrating common use cases. -->
 
 ## Rationale
 
