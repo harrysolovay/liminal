@@ -23,10 +23,8 @@ function* ToolUser() {
       - \`12.7 cm to inch\`
       - \`sin(45 deg) ^ 2\`
     `,
-    type({
-      expr: type.string.array(),
-    }),
-    ({ expr }) => mathjs.evaluate(expr),
+    type.string.array(),
+    (expr) => mathjs.evaluate(expr),
   )
   yield* user`
     A taxi driver earns $9461 per 1-hour of work. If he works 12 hours a day and in 1 hour

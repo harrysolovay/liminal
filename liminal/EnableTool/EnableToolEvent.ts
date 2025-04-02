@@ -1,6 +1,6 @@
 import type { ActionEvent } from "../Action/ActionEvent.ts"
 import type { ActionEventBase } from "../Action/ActionEventBase.ts"
-import type { JSONObject } from "../JSON/JSONObject.ts"
+import type { JSONValue } from "../util/JSONValue.ts"
 import type { ToolResult } from "./ToolResult.ts"
 
 export interface ToolEnabledEvent<K extends keyof any = keyof any> extends ActionEventBase<"tool_enabled"> {
@@ -9,7 +9,7 @@ export interface ToolEnabledEvent<K extends keyof any = keyof any> extends Actio
   schema: object
 }
 
-export interface ToolEnteredEvent<K extends keyof any = keyof any, A extends JSONObject = JSONObject>
+export interface ToolEnteredEvent<K extends keyof any = keyof any, A extends JSONValue = JSONValue>
   extends ActionEventBase<"tool_entered">
 {
   tool: K

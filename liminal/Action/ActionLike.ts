@@ -1,4 +1,4 @@
-import type { Message } from "../Message.ts"
+import type { Message } from "../messages/Message.ts"
 import type { Falsy } from "../util/Falsy.ts"
 import type { Action } from "./Action.ts"
 

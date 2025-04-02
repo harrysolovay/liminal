@@ -5,7 +5,7 @@ import type { ContextEnteredEvent, ContextExitedEvent, ContextInnerEvent } from 
 import type { ToolDisabledEvent } from "../DisableTool/DisableToolEvent.ts"
 import { emit } from "../Emit/Emit.ts"
 import type { EmittedEvent } from "../Emit/EmitEvent.ts"
-import { ActorAssertions } from "../testing/ActorAssertions.ts"
+import { ActorAssertions } from "../testing/ActorAssertions/ActorAssertions.ts"
 import { enableTool } from "./EnableTool.ts"
 import type { ToolEnabledEvent, ToolEnteredEvent, ToolExitedEvent, ToolInnerEvent } from "./EnableToolEvent.ts"
 

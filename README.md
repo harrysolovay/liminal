@@ -29,26 +29,27 @@ branching conversations.
 
 ## Overview
 
-Model a conversation as a generator function. Yield model requirements, messages
-and inference actions.
+Model a conversation as a generator function. Yield actions such as declaring
+the model, appending messages to the underlying message buffer and triggering
+inference.
 
 ```ts
-import { DeclareModel, Exec, Infer } from "liminal"
+import { declareLanguageModel, infer, run, user } from "liminal"
 
-function* PlantGrowthRanking() {
-  yield* DeclareModel.language("default")
+function* Conversation() {
+  yield* declareLanguageModel("default")
 
   // User Message
-  yield "What are some key factors that affect plant growth?"
+  yield user`What are some key factors that affect plant growth?`
 
   // Assistant Message
-  const factors = yield* Infer()
+  const factors = yield* infer()
 
   // User Message
-  yield "Rank those by order of importance"
+  yield user`Rank those by order of importance`
 
   // Assistant Message (structured output)
-  const { ranking } = yield* Infer(z.object({
+  const { ranking } = yield* infer(z.object({
     ranking: z.string().array(),
   }))
 
@@ -56,13 +57,16 @@ function* PlantGrowthRanking() {
 }
 ```
 
-> Note: `async function* YourFunction() { // ...` is perfectly valid if you need
+> Note: `async function* Conversation() { // ...` is perfectly valid if you need
 > async/await.
 
 ## Execution
 
-To execute the conversation, we must specify the models to associated with
-yielded `Model` action keys.
+When executing the conversation, we bind the model implementation to the key
+with which we declared the model.
+
+In this example, we use a Vercel AI SDK `LanguageModelV1` (produced by the
+`openai` factory).
 
 ```ts
 // ...
@@ -70,11 +74,12 @@ yielded `Model` action keys.
 import { openai } from "@ai-sdk/openai"
 import { AILanguageModel } from "liminal-ai"
 
-const { result } = Exec(PlantGrowthRanging)
-  .models({
+const { result } = exec(Conversation, {
+  bind: {
     default: AILanguageModel(openai("gpt-4o-mini")),
-  })
-  .exec()
+  },
+  handler: (event) => console.log(event),
+})
 
 result satisfies Array<string>
 ```

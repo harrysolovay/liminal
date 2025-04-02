@@ -1,19 +1,32 @@
 import { type CoreMessage, generateObject, generateText, jsonSchema, type LanguageModelV1, tool } from "ai"
-import { _util, assistant, type JSONObject, type Message, reduceActor, type RunInfer, Scope } from "liminal"
+import { _util, assistant, type JSONValue, type Message, reduceActor, type RunInfer, Scope } from "liminal"
 
 export function AILanguageModel(model: LanguageModelV1): RunInfer {
   return async function*(action, scope) {
     const { messages: liminalMessages } = scope
     const messages = liminalMessages.map(toCoreMessage)
     if (action.type) {
-      const schema = await _util.JSONSchemaMemo(action.type)
+      let schema = await _util.JSONSchemaMemo(action.type)
+      const isRoot = "type" in schema && schema.type === "object"
+      if (!isRoot) {
+        schema = {
+          type: "object",
+          fields: {
+            value: schema,
+          },
+          required: ["value"],
+        }
+      }
       const aiSchema = jsonSchema(schema)
-      const { object } = await generateObject({
+      let { object } = await generateObject({
         model,
         messages,
         schema: aiSchema,
         mode: "json",
       })
+      if (!isRoot) {
+        object = (object as { value: object }).value
+      }
       yield* assistant(JSON.stringify(object, null, 2))
       return object
     }
@@ -29,7 +42,7 @@ export function AILanguageModel(model: LanguageModelV1): RunInfer {
               scope.events.emit({
                 type: "tool_entered",
                 tool: tool_.key,
-                args: params as JSONObject,
+                args: params as JSONValue,
               })
               let result = await tool_.implementation(params as never)
               if (_util.isIteratorLike(result)) {
@@ -53,7 +66,7 @@ export function AILanguageModel(model: LanguageModelV1): RunInfer {
               scope.events.emit({
                 type: "tool_exited",
                 tool: tool_.key,
-                result: result as JSONObject,
+                result: result as JSONValue,
               })
               return result
             },

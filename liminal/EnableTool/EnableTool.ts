@@ -5,8 +5,8 @@ import type { ActionLike } from "../Action/ActionLike.ts"
 import type { Actor } from "../Actor/Actor.ts"
 import type { DisableTool } from "../DisableTool/DisableTool.ts"
 import type { ToolDisabledEvent } from "../DisableTool/DisableToolEvent.ts"
-import type { JSONObject } from "../JSON/JSONObject.ts"
 import type { Spec } from "../Spec.ts"
+import type { JSONValue } from "../util/JSONValue.ts"
 import type { PromiseOr } from "../util/PromiseOr.ts"
 import type { ToolEnabledEvent, ToolEnteredEvent, ToolExitedEvent, ToolInnerEvent } from "./EnableToolEvent.ts"
 import type { ToolResult } from "./ToolResult.ts"
@@ -14,16 +14,16 @@ import type { ToolResult } from "./ToolResult.ts"
 export interface EnableTool<S extends Spec = Spec> extends ActionBase<"enable_tool", S> {
   key: keyof any
   description: string
-  params: StandardSchemaV1<JSONObject, JSONObject>
+  params: StandardSchemaV1<JSONValue, JSONValue>
   implementation: ToolImplementation
 }
 
-export type ToolImplementation = (params: JSONObject) => Actor<ActionLike, ToolResult> | PromiseOr<ToolResult>
+export type ToolImplementation = (params: JSONValue) => Actor<ActionLike, ToolResult> | PromiseOr<ToolResult>
 
-export function enableTool<K extends keyof any, P extends JSONObject, R extends PromiseOr<ToolResult>>(
+export function enableTool<K extends keyof any, P extends JSONValue, R extends PromiseOr<ToolResult>>(
   key: K,
   description: string,
-  params: StandardSchemaV1<JSONObject, P>,
+  params: StandardSchemaV1<JSONValue, P>,
   implementation: (params: P) => R,
 ): Generator<
   EnableTool<{
@@ -40,13 +40,13 @@ export function enableTool<K extends keyof any, P extends JSONObject, R extends 
 >
 export function enableTool<
   K extends keyof any,
-  P extends JSONObject,
+  P extends JSONValue,
   Y extends ActionLike,
   R extends PromiseOr<ToolResult>,
 >(
   key: K,
   description: string,
-  params: StandardSchemaV1<JSONObject, P>,
+  params: StandardSchemaV1<JSONValue, P>,
   implementation: (params: P) => Actor<Y, R>,
 ): Generator<
   EnableTool<{
@@ -68,7 +68,7 @@ export function enableTool<
 export function* enableTool(
   key: keyof any,
   description: string,
-  params: StandardSchemaV1<JSONObject, JSONObject>,
+  params: StandardSchemaV1<JSONValue, JSONValue>,
   implementation: ToolImplementation,
 ): Generator<EnableTool, () => Generator<DisableTool, void>> {
   return yield ActionBase("enable_tool", {

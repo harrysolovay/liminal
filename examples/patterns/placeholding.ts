@@ -7,7 +7,7 @@ const departure = Symbol()
 
 apply(PlanTrip, {
   default: AILanguageModel(openai("gpt-4o-mini")),
-  [departure]: "New York City",
+  // [departure]: "New York City",
 }).exec(console.log)
 
 function* PlanTrip() {
@@ -16,9 +16,7 @@ function* PlanTrip() {
     I want to plan a weekend trip leaving from ${departure}. I don't know where to go.
     Suggest some follow-up questions that will help you narrow down the possible destination.
   `
-  const { questions } = yield* infer(type({
-    questions: type.string.array(),
-  }))
+  const questions = yield* infer(type.string.array())
   yield* user`Here are my answers to those questions:`
   for (const question of questions) {
     yield* user`

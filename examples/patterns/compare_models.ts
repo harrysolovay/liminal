@@ -38,10 +38,7 @@ export function* Refine(input: string) {
 
       ${JSON.stringify(variants)}
     `
-    const { favorite } = yield* infer(type({
-      favorite: "'a' | 'b' | 'c'",
-    }))
-    return favorite
+    return yield* infer(type("'a' | 'b' | 'c'"))
   })
   return variants[best]
 }
