@@ -8,7 +8,6 @@ import type { ExtractSpec, Spec } from "./Spec.ts"
 import type { FromEntries } from "./util/FromEntries.ts"
 import { unwrapDeferred } from "./util/unwrapDeferred.ts"
 
-// type G = typeof y extends ActorLike<infer Y> ? FromEntries<ExtractSpec<Y>["Entry"]> : never
 export interface ExecConfig<T = any, S extends Spec = Spec> {
   bind: FromEntries<S["Entry"]>
   handler?: (event: EnteredEvent | S["Event"] | ExitedEvent<T>) => any
