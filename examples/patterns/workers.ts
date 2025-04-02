@@ -1,11 +1,14 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { apply, declareLanguageModel, fork, infer, system, user } from "liminal"
+import { declareLanguageModel, exec, fork, infer, system, user } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
-apply(CodeReviewers("Alert administrators via text whenever site traffic exceeds a certain threshold."), {
-  default: AILanguageModel(openai("gpt-4o-mini")),
-}).exec(console.log)
+exec(CodeReviewers("Alert administrators via text whenever site traffic exceeds a certain threshold."), {
+  bind: {
+    default: AILanguageModel(openai("gpt-4o-mini")),
+  },
+  handler: console.log,
+})
 
 function* CodeReviewers(feat: string) {
   yield* system`You are a senior software architect planning feature implementations.`

@@ -1,16 +1,18 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { context, declareLanguageModel, fork, infer, user } from "liminal"
-import { apply } from "liminal"
+import { context, declareLanguageModel, exec, fork, infer, user } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
-apply(Refine("Write a rap about type-level programming in TypeScript"), {
-  default: AILanguageModel(openai("gpt-4o")),
-  a: AILanguageModel(openai("gpt-4o-mini")),
-  b: AILanguageModel(openai("o1-mini")),
-  c: AILanguageModel(openai("gpt-3.5-turbo-instruct")),
-  select: AILanguageModel(openai("gpt-3.5-turbo")),
-}).exec(console.log)
+exec(Refine("Write a rap about type-level programming in TypeScript"), {
+  bind: {
+    default: AILanguageModel(openai("gpt-4o")),
+    a: AILanguageModel(openai("gpt-4o-mini")),
+    b: AILanguageModel(openai("o1-mini")),
+    c: AILanguageModel(openai("gpt-3.5-turbo-instruct")),
+    select: AILanguageModel(openai("gpt-3.5-turbo")),
+  },
+  handler: console.log,
+})
 
 export function* Refine(input: string) {
   yield* declareLanguageModel("default")

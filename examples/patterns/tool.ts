@@ -1,12 +1,15 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { apply, declareLanguageModel, enableTool, infer, system, user } from "liminal"
+import { declareLanguageModel, enableTool, exec, infer, system, user } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 import * as mathjs from "mathjs"
 
-apply(ToolUser(), {
-  default: AILanguageModel(openai("gpt-4o-mini")),
-}).exec(console.log)
+exec(ToolUser(), {
+  bind: {
+    default: AILanguageModel(openai("gpt-4o-mini")),
+  },
+  handler: console.log,
+})
 
 function* ToolUser() {
   yield* declareLanguageModel("default")

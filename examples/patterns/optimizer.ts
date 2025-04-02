@@ -1,11 +1,14 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { apply, declareLanguageModel, infer, system, user } from "liminal"
+import { declareLanguageModel, exec, infer, system, user } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
-apply(TranslationWithFeedback("typescript", "I love you!"), {
-  default: AILanguageModel(openai("gpt-4o-mini")),
-}).exec(console.log)
+exec(TranslationWithFeedback("typescript", "I love you!"), {
+  bind: {
+    default: AILanguageModel(openai("gpt-4o-mini")),
+  },
+  handler: console.log,
+})
 
 function* TranslationWithFeedback(targetLanguage: string, text: string) {
   yield* declareLanguageModel("default")

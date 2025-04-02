@@ -5,28 +5,27 @@ import { Scope } from "../Scope/Scope.ts"
 import { unwrapDeferred } from "../util/unwrapDeferred.ts"
 
 export const reduceContext: ActionReducer<Context> = async (action, scope) => {
-  scope.events.emit({
-    type: "context_entered",
-    context: action.key,
-  })
   const actor = unwrapDeferred(action.implementation)
+  const events = scope.events.child((event) => ({
+    type: "context",
+    context: action.key,
+    event,
+  }))
+  events.emit({
+    type: "entered",
+  })
   const contextScope = await reduceActor(
     actor,
     new Scope(
       scope.args,
       action.key,
-      scope.events.child((inner) => ({
-        type: "context_inner",
-        context: action.key,
-        inner,
-      })),
+      events,
       scope.infer,
       scope.embed,
     ),
   )
-  scope.events.emit({
-    type: "context_exited",
-    context: action.key,
+  events.emit({
+    type: "exited",
     result: contextScope.result,
   })
   return scope.spread({

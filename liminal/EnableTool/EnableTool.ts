@@ -1,6 +1,7 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
 import type { Action } from "../Action/Action.ts"
 import { ActionBase } from "../Action/ActionBase.ts"
+import type { EnteredEvent, ExitedEvent } from "../Action/ActionEventBase.ts"
 import type { ActionLike } from "../Action/ActionLike.ts"
 import type { Actor } from "../Actor/Actor.ts"
 import type { DisableTool } from "../DisableTool/DisableTool.ts"
@@ -8,7 +9,7 @@ import type { ToolDisabledEvent } from "../DisableTool/DisableToolEvent.ts"
 import type { Spec } from "../Spec.ts"
 import type { JSONValue } from "../util/JSONValue.ts"
 import type { PromiseOr } from "../util/PromiseOr.ts"
-import type { ToolEnabledEvent, ToolEnteredEvent, ToolExitedEvent, ToolInnerEvent } from "./EnableToolEvent.ts"
+import type { ToolCalledEvent, ToolEnabledEvent, ToolEvent } from "./EnableToolEvent.ts"
 import type { ToolResult } from "./ToolResult.ts"
 
 export interface EnableTool<S extends Spec = Spec> extends ActionBase<"enable_tool", S> {
@@ -20,15 +21,15 @@ export interface EnableTool<S extends Spec = Spec> extends ActionBase<"enable_to
 
 export type ToolImplementation = (params: JSONValue) => Actor<ActionLike, ToolResult> | PromiseOr<ToolResult>
 
-export function enableTool<K extends keyof any, P extends JSONValue, R extends PromiseOr<ToolResult>>(
+export function enableTool<K extends keyof any, A extends JSONValue, R extends PromiseOr<ToolResult>>(
   key: K,
   description: string,
-  params: StandardSchemaV1<JSONValue, P>,
-  implementation: (params: P) => R,
+  params: StandardSchemaV1<JSONValue, A>,
+  implementation: (params: A) => R,
 ): Generator<
   EnableTool<{
     Field: never
-    Event: ToolEnabledEvent<K> | ToolEnteredEvent<K, P> | ToolInnerEvent<K, never> | ToolExitedEvent<K, Awaited<R>>
+    Event: ToolEnabledEvent<K> | ToolEvent<K, ToolCalledEvent<A> | EnteredEvent | ExitedEvent<Awaited<R>>>
   }>,
   () => Generator<
     DisableTool<{
@@ -40,22 +41,20 @@ export function enableTool<K extends keyof any, P extends JSONValue, R extends P
 >
 export function enableTool<
   K extends keyof any,
-  P extends JSONValue,
+  A extends JSONValue,
   Y extends ActionLike,
   R extends PromiseOr<ToolResult>,
 >(
   key: K,
   description: string,
-  params: StandardSchemaV1<JSONValue, P>,
-  implementation: (params: P) => Actor<Y, R>,
+  params: StandardSchemaV1<JSONValue, A>,
+  implementation: (params: A) => Actor<Y, R>,
 ): Generator<
   EnableTool<{
     Field: Extract<Y, Action>[""]["Field"]
     Event:
       | ToolEnabledEvent<K>
-      | ToolEnteredEvent<K, P>
-      | ToolInnerEvent<K, Extract<Y, Action>[""]["Event"]>
-      | ToolExitedEvent<K, Awaited<R>>
+      | ToolEvent<K, ToolCalledEvent<A> | EnteredEvent | Extract<Y, Action>[""]["Event"] | ExitedEvent<Awaited<R>>>
   }>,
   () => Generator<
     DisableTool<{

@@ -1,14 +1,17 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { apply, declareLanguageModel, infer, user } from "liminal"
+import { declareLanguageModel, exec, infer, user } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
 const departure = Symbol()
 
-apply(PlanTrip, {
-  default: AILanguageModel(openai("gpt-4o-mini")),
-  // [departure]: "New York City",
-}).exec(console.log)
+exec(PlanTrip, {
+  bind: {
+    default: AILanguageModel(openai("gpt-4o-mini")),
+    // [departure]: "New York City",
+  },
+  handler: console.log,
+})
 
 function* PlanTrip() {
   yield* declareLanguageModel("default")

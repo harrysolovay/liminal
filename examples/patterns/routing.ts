@@ -1,12 +1,15 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { apply, context, declareLanguageModel, infer, system, user } from "liminal"
+import { context, declareLanguageModel, exec, infer, system, user } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
-apply(Main, {
-  default: AILanguageModel(openai("gpt-4o-mini")),
-  reasoning: AILanguageModel(openai("o1-mini")),
-}).exec(console.log)
+exec(Main, {
+  bind: {
+    default: AILanguageModel(openai("gpt-4o-mini")),
+    reasoning: AILanguageModel(openai("o1-mini")),
+  },
+  handler: console.log,
+})
 
 function* Main() {
   yield* declareLanguageModel("default")
