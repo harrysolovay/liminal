@@ -7,7 +7,7 @@ export interface Arg<S extends Spec = Spec> extends ActionBase<"arg", S> {
 
 export function arg<K extends keyof any>(key: K): <T>() => Generator<
   Arg<{
-    Field: { [_ in K]: T }
+    Entry: [K, T]
     Event: never
   }>,
   T

@@ -28,12 +28,12 @@ export function enableTool<K extends keyof any, A extends JSONValue, R extends P
   implementation: (params: A) => R,
 ): Generator<
   EnableTool<{
-    Field: never
+    Entry: never
     Event: ToolEnabledEvent<K> | ToolEvent<K, ToolCalledEvent<A> | EnteredEvent | ExitedEvent<Awaited<R>>>
   }>,
   () => Generator<
     DisableTool<{
-      Field: never
+      Entry: never
       Event: ToolDisabledEvent<K>
     }>,
     void
@@ -51,14 +51,14 @@ export function enableTool<
   implementation: (params: A) => Actor<Y, R>,
 ): Generator<
   EnableTool<{
-    Field: Extract<Y, Action>[""]["Field"]
+    Entry: Extract<Y, Action>[""]["Entry"]
     Event:
       | ToolEnabledEvent<K>
       | ToolEvent<K, ToolCalledEvent<A> | EnteredEvent | Extract<Y, Action>[""]["Event"] | ExitedEvent<Awaited<R>>>
   }>,
   () => Generator<
     DisableTool<{
-      Field: never
+      Entry: never
       Event: ToolDisabledEvent<K>
     }>,
     void

@@ -4,11 +4,11 @@ import type { LanguageModelSetEvent } from "../actions/SetLanguageModel.ts"
 
 export function* declareLanguageModel<K extends keyof any>(key: K): Generator<
   | Arg<{
-    Field: { [_ in K]: RunInfer }
+    Entry: [K, RunInfer]
     Event: never
   }>
   | SetLanguageModel<{
-    Field: never
+    Entry: never
     Event: LanguageModelSetEvent<K>
   }>,
   void

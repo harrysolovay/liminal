@@ -1,9 +1,9 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { declareLanguageModel, exec, fork, infer, system, user } from "liminal"
+import * as L from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
-exec(CodeReviewers("Alert administrators via text whenever site traffic exceeds a certain threshold."), {
+L.exec(CodeReviewers("Alert administrators via text whenever site traffic exceeds a certain threshold."), {
   bind: {
     default: AILanguageModel(openai("gpt-4o-mini")),
   },
@@ -11,15 +11,15 @@ exec(CodeReviewers("Alert administrators via text whenever site traffic exceeds 
 })
 
 function* CodeReviewers(feat: string) {
-  yield* system`You are a senior software architect planning feature implementations.`
-  yield* declareLanguageModel("default")
-  yield* user`Analyze this feature request and create an implementation plan:`
-  yield* user(feat)
-  const implementationPlan = yield* infer(type({
+  yield* L.system`You are a senior software architect planning feature implementations.`
+  yield* L.declareLanguageModel("default")
+  yield* L.user`Analyze this feature request and create an implementation plan:`
+  yield* L.user(feat)
+  const implementationPlan = yield* L.infer(type({
     files: FileInfo.array(),
     estimatedComplexity: "'create' | 'medium' | 'high'",
   }))
-  const fileChanges = yield* fork("FileChanges", implementationPlan.files.map((file) => Implementor(feat, file)))
+  const fileChanges = yield* L.fork("FileChanges", implementationPlan.files.map((file) => Implementor(feat, file)))
   return { fileChanges, implementationPlan }
 }
 
@@ -30,8 +30,8 @@ const FileInfo = type({
 })
 
 function* Implementor(featureRequest: string, file: typeof FileInfo.infer) {
-  yield* system(IMPLEMENTATION_PROMPTS[file.changeType])
-  yield* user`
+  yield* L.system(IMPLEMENTATION_PROMPTS[file.changeType])
+  yield* L.user`
     Implement the changes for ${file.filePath} to support:
 
     ${file.purpose}
@@ -40,7 +40,7 @@ function* Implementor(featureRequest: string, file: typeof FileInfo.infer) {
 
     ${featureRequest}
   `
-  const implementation = yield* infer(type({
+  const implementation = yield* L.infer(type({
     explanation: "string",
     code: "string",
   }))

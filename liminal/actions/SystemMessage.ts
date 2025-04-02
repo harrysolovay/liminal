@@ -10,7 +10,7 @@ export function* system(
   ...[raw, ...substitutions]: [content: string] | [raw: TemplateStringsArray, ...substitutions: Array<string>]
 ): Generator<
   SystemMessage<{
-    Field: never
+    Entry: never
     Event: SystemMessagedEvent
   }>,
   void

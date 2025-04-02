@@ -13,7 +13,7 @@ export type RunEmbed = (action: Embed, scope: Scope) => Promise<Array<number>>
 
 export function* setEmbeddingModel<K extends keyof any>(key: K, runEmbed: RunEmbed): Generator<
   SetEmbeddingModel<{
-    Field: never
+    Entry: never
     Event: EmbeddingModelSetEvent<K>
   }>,
   void

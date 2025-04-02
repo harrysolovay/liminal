@@ -3,6 +3,7 @@ export interface TextPart {
   text: string
 }
 
+// TODO: URL?
 export type DataContent = string | Uint8Array | ArrayBuffer | Buffer
 
 export interface FilePart {
@@ -46,12 +47,6 @@ export interface ToolCallPart {
 
 export interface ImagePart {
   type: "image"
-  /**
-   * Image data. Can either be:
-   * - data: a base64-encoded string, a Uint8Array, an ArrayBuffer, or a Buffer
-   * - URL: a URL that points to the image
-   */
   image: DataContent | URL
-  /** Optional mime type of the image. */
   mimeType?: string
 }

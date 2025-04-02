@@ -11,7 +11,7 @@ export interface Infer<S extends Spec = Spec> extends ActionBase<"infer", S> {
 
 export function infer(): Generator<
   Infer<{
-    Field: never
+    Entry: never
     Event: InferenceRequestedEvent | InferredEvent<string>
   }>,
   string
@@ -20,7 +20,7 @@ export function infer<O extends JSONValue>(
   type: StandardSchemaV1<JSONValue, O>,
 ): Generator<
   Infer<{
-    Field: never
+    Entry: never
     Event: InferenceRequestedEvent | InferredEvent<O>
   }>,
   O

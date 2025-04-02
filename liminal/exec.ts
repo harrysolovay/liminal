@@ -5,18 +5,19 @@ import type { ActorLike } from "./Actor/ActorLike.ts"
 import { reduce } from "./Actor/reduce.ts"
 import { Scope } from "./Scope.ts"
 import type { ExtractSpec, Spec } from "./Spec.ts"
-import type { U2I } from "./util/U2I.ts"
+import type { FromEntries } from "./util/FromEntries.ts"
 import { unwrapDeferred } from "./util/unwrapDeferred.ts"
 
+// type G = typeof y extends ActorLike<infer Y> ? FromEntries<ExtractSpec<Y>["Entry"]> : never
 export interface ExecConfig<T = any, S extends Spec = Spec> {
-  bind: U2I<S["Field"]>
+  bind: FromEntries<S["Entry"]>
   handler?: (event: EnteredEvent | S["Event"] | ExitedEvent<T>) => any
 }
 
-export async function exec<Y extends ActionLike, T, S extends ExtractSpec<Y>>(
+export async function exec<Y extends ActionLike, T>(
   actorLike: ActorLike<Y, T>,
-  config: ExecConfig<T, S>,
-): Promise<Scope<any>> {
+  config: ExecConfig<T, ExtractSpec<Y>>,
+): Promise<Scope<T>> {
   const actor = unwrapDeferred(actorLike)
   const events = new ActionEvents((inner) => inner, config.handler)
   events.emit({

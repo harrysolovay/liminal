@@ -1,9 +1,9 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { context, declareLanguageModel, exec, infer, system, user } from "liminal"
+import * as L from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
-exec(Main, {
+L.exec(Main, {
   bind: {
     default: AILanguageModel(openai("gpt-4o-mini")),
     reasoning: AILanguageModel(openai("o1-mini")),
@@ -12,14 +12,14 @@ exec(Main, {
 })
 
 function* Main() {
-  yield* declareLanguageModel("default")
-  const classification = yield* context("Classification", classifyQuery("I'd like a refund please"))
-  const response = yield* context("ClassificationConsumer", useClassification(classification))
+  yield* L.declareLanguageModel("default")
+  const classification = yield* L.context("Classification", classifyQuery("I'd like a refund please"))
+  const response = yield* L.context("ClassificationConsumer", useClassification(classification))
   return { classification, response }
 }
 
 function* classifyQuery(query: string) {
-  yield* system`
+  yield* L.system`
     Classify this supplied customer query:
 
     Determine:
@@ -28,8 +28,8 @@ function* classifyQuery(query: string) {
     2. Complexity (simple or complex)
     3. Brief reasoning for classification
   `
-  yield* user(query)
-  return yield* infer(Classification)
+  yield* L.user(query)
+  return yield* L.infer(Classification)
 }
 
 const Classification = type({
@@ -39,11 +39,11 @@ const Classification = type({
 })
 
 function* useClassification(classification: typeof Classification.infer) {
-  yield* system(USE_CLASSIFICATION_AGENT_PROMPTS[classification.type])
+  yield* L.system(USE_CLASSIFICATION_AGENT_PROMPTS[classification.type])
   if (classification.complexity === "complex") {
-    yield* declareLanguageModel("reasoning")
+    yield* L.declareLanguageModel("reasoning")
   }
-  return yield* infer()
+  return yield* L.infer()
 }
 
 const USE_CLASSIFICATION_AGENT_PROMPTS = {

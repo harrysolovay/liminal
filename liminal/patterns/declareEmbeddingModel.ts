@@ -4,11 +4,11 @@ import type { EmbeddingModelSetEvent } from "../actions/SetEmbeddingModel.ts"
 
 export function* declareEmbeddingModel<K extends keyof any>(key: K): Generator<
   | Arg<{
-    Field: { [_ in K]: RunEmbed }
+    Entry: [K, RunEmbed]
     Event: never
   }>
   | SetEmbeddingModel<{
-    Field: never
+    Entry: never
     Event: EmbeddingModelSetEvent<K>
   }>,
   void

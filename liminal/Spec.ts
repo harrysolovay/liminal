@@ -4,7 +4,7 @@ import type { Message } from "./actions/Message.ts"
 import type { ActionLike } from "./Actor/ActionLike.ts"
 
 export interface Spec {
-  Field: Record<keyof any, any>
+  Entry: [keyof any, any]
   Event: ActionEvent
 }
 
@@ -16,6 +16,6 @@ export type ExtractSpec<Y extends ActionLike> = MergeSpec<
 >
 
 export type MergeSpec<S extends Spec> = {
-  Field: S["Field"]
+  Entry: S["Entry"]
   Event: S["Event"]
 }

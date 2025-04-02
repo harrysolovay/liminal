@@ -11,17 +11,13 @@ import { declareLanguageModel } from "./declareLanguageModel.ts"
 
 const languageModel = declareLanguageModel("A")
 ActorAssertions(languageModel).assertSpec<{
-  Field: {
-    A: RunInfer
-  }
+  Entry: ["A", RunInfer]
   Event: LanguageModelSetEvent<"A">
 }>()
 
 const embeddingModel = declareEmbeddingModel("B")
 ActorAssertions(embeddingModel).assertSpec<{
-  Field: {
-    B: RunEmbed
-  }
+  Entry: ["B", RunEmbed]
   Event: EmbeddingModelSetEvent<"B">
 }>()
 
@@ -31,11 +27,7 @@ function* both() {
 }
 
 ActorAssertions(both).assertSpec<{
-  Field: {
-    A: RunInfer
-  } | {
-    B: RunEmbed
-  }
+  Entry: ["A", RunInfer] | ["B", RunEmbed]
   Event: LanguageModelSetEvent<"A"> | EmbeddingModelSetEvent<"B">
 }>()
 
@@ -48,15 +40,11 @@ function* parent() {
 }
 
 ActorAssertions(parent).assertSpec<{
-  Field: {
-    A: RunInfer
-  } | {
-    B: RunEmbed
-  } | {
-    C: RunInfer
-  } | {
-    D: RunEmbed
-  }
+  Entry:
+    | ["A", RunInfer]
+    | ["B", RunEmbed]
+    | ["C", RunInfer]
+    | ["D", RunEmbed]
   Event:
     | LanguageModelSetEvent<"C">
     | EmbeddingModelSetEvent<"D">
