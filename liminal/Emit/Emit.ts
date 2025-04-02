@@ -1,6 +1,6 @@
 import { ActionBase } from "../Action/ActionBase.ts"
-import type { JSONValue } from "../JSON/JSONValue.ts"
 import type { Spec } from "../Spec.ts"
+import type { JSONValue } from "../util/JSONValue.ts"
 import type { EmittedEvent } from "./EmitEvent.ts"
 
 export interface Emit<S extends Spec = Spec> extends ActionBase<"emit", S> {

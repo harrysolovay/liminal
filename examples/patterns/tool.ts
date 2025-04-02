@@ -1,12 +1,15 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { declareLanguageModel, enableTool, Exec, infer, system, user } from "liminal"
+import { declareLanguageModel, enableTool, exec, infer, system, user } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 import * as mathjs from "mathjs"
 
-Exec(ToolUser(), {
-  default: AILanguageModel(openai("gpt-4o-mini")),
-}).exec(console.log)
+exec(ToolUser(), {
+  bind: {
+    default: AILanguageModel(openai("gpt-4o-mini")),
+  },
+  handler: console.log,
+})
 
 function* ToolUser() {
   yield* declareLanguageModel("default")
@@ -23,10 +26,8 @@ function* ToolUser() {
       - \`12.7 cm to inch\`
       - \`sin(45 deg) ^ 2\`
     `,
-    type({
-      expr: type.string.array(),
-    }),
-    ({ expr }) => mathjs.evaluate(expr),
+    type.string.array(),
+    (expr) => mathjs.evaluate(expr),
   )
   yield* user`
     A taxi driver earns $9461 per 1-hour of work. If he works 12 hours a day and in 1 hour

@@ -1,5 +1,4 @@
 // import { _util, ActionBase, type JSONObject, type LanguageModelAdapter, type Message } from "liminal"
-// import type { Message as OllamaMessage, Ollama } from "ollama"
 
 // export function OllamaLanguageModel(ollama: Ollama, model: string): LanguageModelAdapter {
 //   return {

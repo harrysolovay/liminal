@@ -1,5 +1,5 @@
 import { type } from "arktype"
-import { context, declareLanguageModel, fork, infer, setLanguageModel, user } from "liminal"
+import { context, declareLanguageModel, fork, infer, user } from "liminal"
 
 export function* Refine(input: string) {
   yield* declareLanguageModel("default")
@@ -27,10 +27,7 @@ export function* Refine(input: string) {
 
       ${JSON.stringify(variants)}
     `
-    const { favorite } = yield* infer(type({
-      favorite: "'a' | 'b' | 'c'",
-    }))
-    return favorite
+    return yield* infer(type("'a' | 'b' | 'c'"))
   })
   return variants[best]
 }

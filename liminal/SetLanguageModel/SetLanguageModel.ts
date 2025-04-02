@@ -1,10 +1,10 @@
 import { ActionBase } from "../Action/ActionBase.ts"
 import type { Actor } from "../Actor/Actor.ts"
-import type { AssistantMessage } from "../AssistantMessage/AssistantMessage.ts"
 import type { Infer } from "../Infer/Infer.ts"
+import type { AssistantMessage } from "../messages/AssistantMessage/AssistantMessage.ts"
+import type { ToolMessage } from "../messages/ToolMessage/ToolMessage.ts"
 import type { Scope } from "../Scope/Scope.ts"
 import type { Spec } from "../Spec.ts"
-import type { ToolMessage } from "../ToolMessage/ToolMessage.ts"
 import type { LanguageModelSetEvent } from "./SetLanguageModelEvent.ts"
 
 export interface SetLanguageModel<S extends Spec = Spec> extends ActionBase<"set_language_model", S> {

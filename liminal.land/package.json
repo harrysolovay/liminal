@@ -1,0 +1,19 @@
+{
+  "name": "liminal.land",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "vitepress": "vitepress"
+  },
+  "devDependencies": {
+    "@shikijs/vitepress-twoslash": "^1.23.1",
+    "@types/markdown-it-footnote": "^3.0.4",
+    "arktype": "^2.1.15",
+    "effect": "^3.14.2",
+    "liminal": "workspace:*",
+    "markdown-it-footnote": "^4.0.0",
+    "valibot": "^1.0.0",
+    "vitepress": "^1.5.0",
+    "zod": "^3.24.2"
+  }
+}

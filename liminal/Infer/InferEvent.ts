@@ -1,10 +1,8 @@
 import type { ActionEventBase } from "../Action/ActionEventBase.ts"
-import type { JSONObject } from "../JSON/JSONObject.ts"
+import type { JSONValue } from "../util/JSONValue.ts"
 
 export interface InferenceRequestedEvent extends ActionEventBase<"inference_requested"> {}
 
-export interface InferredEvent<V extends string | JSONObject = string | JSONObject>
-  extends ActionEventBase<"inferred">
-{
+export interface InferredEvent<V extends JSONValue = JSONValue> extends ActionEventBase<"inferred"> {
   value: V
 }

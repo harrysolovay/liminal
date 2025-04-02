@@ -5,6 +5,7 @@ fuzzystrmatch
 inferencing
 initdb
 llms
+multimodel
 ollama
 ossp
 pglite
@@ -18,3 +19,4 @@ twoslash
 valibot
 vitepress
 vtype
+yieldable

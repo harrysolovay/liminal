@@ -1,7 +1,7 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
 import { ActionBase } from "../Action/ActionBase.ts"
-import type { JSONObject } from "../JSON/JSONObject.ts"
 import type { Spec } from "../Spec.ts"
+import type { JSONValue } from "../util/JSONValue.ts"
 import type { InferenceRequestedEvent, InferredEvent } from "./InferEvent.ts"
 
 export interface Infer<S extends Spec = Spec> extends ActionBase<"infer", S> {
@@ -15,8 +15,8 @@ export function infer(): Generator<
   }>,
   string
 >
-export function infer<O extends JSONObject>(
-  type: StandardSchemaV1<JSONObject, O>,
+export function infer<O extends JSONValue>(
+  type: StandardSchemaV1<JSONValue, O>,
 ): Generator<
   Infer<{
     Field: never

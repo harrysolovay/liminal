@@ -1,22 +1,29 @@
 import type { ActionReducer } from "../Action/ActionReducer.ts"
 import { reduceArg } from "../Arg/reduceArg.ts"
-import { reduceAssistantMessage } from "../AssistantMessage/reduceAssistantMessage.ts"
 import { reduceContext } from "../Context/reduceContext.ts"
 import { reduceDisableTool } from "../DisableTool/reduceDisableTool.ts"
 import { reduceEmbed } from "../Embed/reduceEmbed.ts"
 import { reduceEmit } from "../Emit/reduceEmit.ts"
 import { reduceEnableTool } from "../EnableTool/reduceEnableTool.ts"
 import { reduceFork } from "../Fork/reduceFork.ts"
+import { reduceGetScope } from "../GetScope/reduceGetScope.ts"
 import { reduceInfer } from "../Infer/reduceInfer.ts"
+import { reduceAssistantMessage } from "../messages/AssistantMessage/reduceAssistantMessage.ts"
+import { reduceSystemMessage } from "../messages/SystemMessage/reduceSystemMessage.ts"
+import { reduceToolMessage } from "../messages/ToolMessage/reduceToolMessage.ts"
+import { reduceUserMessage } from "../messages/UserMessage/reduceUserMessage.ts"
 import { reduceSetEmbeddingModel } from "../SetEmbeddingModel/reduceSetEmbeddingModel.ts"
 import { reduceSetLanguageModel } from "../SetLanguageModel/reduceSetLanguageModel.ts"
-import { reduceSystemMessage } from "../SystemMessage/reduceSystemMessage.ts"
-import { reduceToolMessage } from "../ToolMessage/reduceToolMessage.ts"
-import { reduceUserMessage } from "../UserMessage/reduceUserMessage.ts"
 
 export const reduceAction: ActionReducer = async (action, scope) => {
   if (!action) {
     return scope.spread({
+      next: undefined,
+    })
+  }
+  if (Array.isArray(action)) {
+    return scope.spread({
+      messages: [...scope.messages, ...action],
       next: undefined,
     })
   }
@@ -62,6 +69,9 @@ export const reduceAction: ActionReducer = async (action, scope) => {
     }
     case "arg": {
       return reduceArg(action, scope)
+    }
+    case "get_scope": {
+      return reduceGetScope(action, scope)
     }
   }
 }

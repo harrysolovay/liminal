@@ -8,16 +8,23 @@ export const reduceFork: ActionReducer<Fork> = async (action, scope) => {
   const armKeys = Array.isArray(action.arms)
     ? Array.from({ length: action.arms.length }, (_0, i) => i)
     : Reflect.ownKeys(action.arms)
-  scope.events.emit({
-    type: "fork_entered",
+  const events = scope.events.child((event) => ({
+    type: "fork",
     fork: action.key,
+    event,
+  }))
+  events.emit({
+    type: "entered",
   })
   const armScopes = await Promise.all(
     armKeys.map(async (key) => {
-      scope.events.emit({
-        type: "fork_arm_entered",
-        fork: action.key,
+      const armEvents = events.child((event) => ({
+        type: "fork_arm",
         arm: key,
+        event,
+      }))
+      armEvents.emit({
+        type: "entered",
       })
       const actor = unwrapDeferred(action.arms[key as never]!)
       const armScope = await reduceActor(
@@ -25,22 +32,15 @@ export const reduceFork: ActionReducer<Fork> = async (action, scope) => {
         new Scope(
           scope.args,
           key,
-          scope.events.child((inner) => ({
-            type: "fork_arm_inner",
-            fork: action.key,
-            arm: key,
-            event: inner,
-          })),
+          armEvents,
           scope.infer,
           scope.embed,
           [...scope.messages],
           new Set(scope.tools),
         ),
       )
-      scope.events.emit({
-        type: "fork_arm_exited",
-        fork: action.key,
-        arm: key,
+      armEvents.emit({
+        type: "exited",
         result: armScope.result,
       })
       return [key, armScope] as const
@@ -49,9 +49,8 @@ export const reduceFork: ActionReducer<Fork> = async (action, scope) => {
   const result = Array.isArray(action.arms)
     ? armScopes.map(([_0, scope]) => scope.result)
     : Object.fromEntries(armScopes.map(([key, value]) => [key, value.result]))
-  scope.events.emit({
-    type: "fork_exited",
-    fork: action.key,
+  events.emit({
+    type: "exited",
     result,
   })
   return scope.spread({
