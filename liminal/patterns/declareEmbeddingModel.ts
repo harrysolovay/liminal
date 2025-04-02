@@ -1,6 +1,6 @@
-import { type Arg, arg } from "../Arg/Arg.ts"
-import { type RunEmbed, type SetEmbeddingModel, setEmbeddingModel } from "../SetEmbeddingModel/SetEmbeddingModel.ts"
-import type { EmbeddingModelSetEvent } from "../SetEmbeddingModel/SetEmbeddingModelEvent.ts"
+import { type Arg, arg } from "../actions/Arg.ts"
+import { type RunEmbed, type SetEmbeddingModel, setEmbeddingModel } from "../actions/SetEmbeddingModel.ts"
+import type { EmbeddingModelSetEvent } from "../actions/SetEmbeddingModel.ts"
 
 export function* declareEmbeddingModel<K extends keyof any>(key: K): Generator<
   | Arg<{

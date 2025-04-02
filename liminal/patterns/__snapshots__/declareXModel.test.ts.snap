@@ -1,0 +1,51 @@
+// Bun Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Model generates the expected event sequence 1`] = `
+"{
+  "events": [
+    {
+      "type": "entered"
+    },
+    {
+      "type": "language_model_set",
+      "key": "default"
+    },
+    {
+      "type": "language_model_set",
+      "key": "secondary"
+    },
+    {
+      "type": "embedding_model_set",
+      "key": "tertiary"
+    },
+    {
+      "type": "exited"
+    }
+  ],
+  "children": [
+    {
+      "type": "context",
+      "scope": {
+        "key": "child",
+        "events": [
+          {
+            "type": "entered"
+          },
+          {
+            "type": "language_model_set",
+            "key": "child_a"
+          },
+          {
+            "type": "embedding_model_set",
+            "key": "child_b"
+          },
+          {
+            "type": "exited"
+          }
+        ],
+        "children": []
+      }
+    }
+  ]
+}"
+`;
