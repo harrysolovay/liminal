@@ -1,4 +1,5 @@
 // TODO: should the name indicate the additional piece of functionality (unescaping backticks)?
+// modified from denoland/std: https://github.com/denoland/std/blob/1db0c55a646699476a12e3053c00ba385c51e974/text/unstable_dedent.ts
 export function dedent(input: TemplateStringsArray | string, ...values: Array<unknown>): string {
   const inputString = typeof input === "string" ? input : String.raw({ raw: input }, ...values)
   const ignoreFirstUnindented = !inputString.startsWith("\n")
