@@ -1,10 +1,10 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
 import { context, declareLanguageModel, fork, infer, user } from "liminal"
-import { Exec } from "liminal"
+import { apply } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
-Exec(Refine("Write a rap about type-level programming in TypeScript"), {
+apply(Refine("Write a rap about type-level programming in TypeScript"), {
   default: AILanguageModel(openai("gpt-4o")),
   a: AILanguageModel(openai("gpt-4o-mini")),
   b: AILanguageModel(openai("o1-mini")),

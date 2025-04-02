@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test"
+import { apply } from "../apply.ts"
 import { context } from "../Context/Context.ts"
-import { Exec } from "../Exec/Exec.ts"
 import { TestEmbeddingModel } from "../testing/TestEmbeddingModel.ts"
 import { TestLanguageModel } from "../testing/TestLanguageModel.ts"
 import { declareEmbeddingModel } from "./declareEmbeddingModel.ts"
@@ -8,7 +8,7 @@ import { declareLanguageModel } from "./declareLanguageModel.ts"
 
 describe("Model", () => {
   it("generates the expected event sequence", async () => {
-    const scope = await Exec(function*() {
+    const scope = await apply(function*() {
       yield* declareLanguageModel("default")
       yield* declareLanguageModel("secondary")
       yield* context("child", function*() {

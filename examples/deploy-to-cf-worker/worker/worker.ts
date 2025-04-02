@@ -1,6 +1,6 @@
 import { createOpenAI } from "@ai-sdk/openai"
 import type { ExportedHandler } from "@cloudflare/workers-types"
-import { Exec } from "liminal"
+import { apply } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 import { env } from "liminal-common"
 import { Refine } from "./conversation.ts"
@@ -13,7 +13,7 @@ export default {
   async fetch(request) {
     const input = await request.text()
     try {
-      const exec = Exec(Refine(input), {
+      const exec = apply(Refine(input), {
         default: AILanguageModel(openai("gpt-4o")),
         a: AILanguageModel(openai("gpt-4o-mini")),
         b: AILanguageModel(openai("o1-mini")),
