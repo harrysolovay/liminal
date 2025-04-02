@@ -19,7 +19,7 @@ export function* setLanguageModel<K extends keyof any>(
   runInfer: RunInfer,
 ): Generator<
   SetLanguageModel<{
-    Field: never
+    Entry: never
     Event: LanguageModelSetEvent<K>
   }>,
   void

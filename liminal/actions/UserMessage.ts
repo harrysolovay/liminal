@@ -17,9 +17,7 @@ export function* user<S extends Array<keyof any> = []>(
   ...[raw, ...substitutions]: [content: UserContent] | [raw: TemplateStringsArray, ...substitutions: S]
 ): Generator<
   UserMessage<{
-    Field: {
-      [K in Extract<S[number], symbol>]: JSONValue
-    }
+    Entry: [Extract<S[number], symbol>, JSONValue]
     Event: UserMessagedEvent
   }>,
   void

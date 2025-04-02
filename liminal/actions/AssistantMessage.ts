@@ -11,7 +11,7 @@ export function* assistant(
   ...[raw, ...substitutions]: [content: AssistantContent] | [raw: TemplateStringsArray, ...substitutions: Array<string>]
 ): Generator<
   AssistantMessage<{
-    Field: never
+    Entry: never
     Event: AssistantMessagedEvent
   }>,
   void

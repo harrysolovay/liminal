@@ -1,9 +1,9 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { declareLanguageModel, exec, infer, system, user } from "liminal"
+import * as L from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
-exec(MarketingCopy, {
+L.exec(MarketingCopy, {
   bind: {
     default: AILanguageModel(openai("gpt-4o-mini")),
   },
@@ -11,11 +11,12 @@ exec(MarketingCopy, {
 })
 
 function* MarketingCopy() {
-  yield* system`Write persuasive marketing copy for: Buffy The Vampire Slayer. Focus on benefits and emotional appeal.`
-  yield* declareLanguageModel("default")
-  yield* user`Please generate the first draft.`
-  let copy = yield* infer()
-  yield* user`
+  yield* L
+    .system`Write persuasive marketing copy for: Buffy The Vampire Slayer. Focus on benefits and emotional appeal.`
+  yield* L.declareLanguageModel("default")
+  yield* L.user`Please generate the first draft.`
+  let copy = yield* L.infer()
+  yield* L.user`
     Now evaluate this marketing copy for:
 
     1. Presence of call to action (true/false)
@@ -24,13 +25,13 @@ function* MarketingCopy() {
 
     Copy to evaluate: ${copy}
   `
-  const qualityMetrics = yield* infer(type({
+  const qualityMetrics = yield* L.infer(type({
     hasCallToAction: "boolean",
     emotionalAppeal: "number.integer",
     clarity: "number.integer",
   }))
   if (!qualityMetrics.hasCallToAction || qualityMetrics.emotionalAppeal < 7 || qualityMetrics.clarity < 7) {
-    yield* user`
+    yield* L.user`
       Rewrite this marketing copy with:
 
       ${!qualityMetrics.hasCallToAction ? "- A clear call to action" : ""}
@@ -39,7 +40,7 @@ function* MarketingCopy() {
 
       Original copy: ${copy}
     `
-    copy = yield* infer()
+    copy = yield* L.infer()
   }
   return { copy, qualityMetrics }
 }

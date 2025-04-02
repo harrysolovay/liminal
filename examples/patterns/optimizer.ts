@@ -1,9 +1,9 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import { declareLanguageModel, exec, infer, system, user } from "liminal"
+import * as L from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
-exec(TranslationWithFeedback("typescript", "I love you!"), {
+L.exec(TranslationWithFeedback("typescript", "I love you!"), {
   bind: {
     default: AILanguageModel(openai("gpt-4o-mini")),
   },
@@ -11,18 +11,19 @@ exec(TranslationWithFeedback("typescript", "I love you!"), {
 })
 
 function* TranslationWithFeedback(targetLanguage: string, text: string) {
-  yield* declareLanguageModel("default")
-  yield* system`You are an expert literary translator. Translate the supplied text to the specified target language, preserving tone and cultural nuances.`
-  yield* user`Target language: ${targetLanguage}`
-  yield* user`Text:
+  yield* L.declareLanguageModel("default")
+  yield* L
+    .system`You are an expert literary translator. Translate the supplied text to the specified target language, preserving tone and cultural nuances.`
+  yield* L.user`Target language: ${targetLanguage}`
+  yield* L.user`Text:
 
     ${text}
   `
-  let currentTranslation = yield* infer()
+  let currentTranslation = yield* L.infer()
   let iterations = 0
   const MAX_ITERATIONS = 3
   while (iterations < MAX_ITERATIONS) {
-    yield* user`
+    yield* L.user`
       Evaluate this translation:
 
       Original: ${text}
@@ -34,7 +35,7 @@ function* TranslationWithFeedback(targetLanguage: string, text: string) {
       3. Preservation of nuance
       4. Cultural accuracy
     `
-    const evaluation = yield* infer(type({
+    const evaluation = yield* L.infer(type({
       qualityScore: "1 <= number.integer <= 10",
       preservesTone: "boolean",
       preservesNuance: "boolean",
@@ -50,7 +51,7 @@ function* TranslationWithFeedback(targetLanguage: string, text: string) {
     ) {
       break
     }
-    yield* user`
+    yield* L.user`
       Improve this translation based on the following feedback:
 
       ${evaluation.specificIssues.join("\n")}
@@ -59,7 +60,7 @@ function* TranslationWithFeedback(targetLanguage: string, text: string) {
       Original: ${text}
       Current Translation: ${currentTranslation}
     `
-    currentTranslation = yield* infer()
+    currentTranslation = yield* L.infer()
     iterations++
   }
   return {

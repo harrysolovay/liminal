@@ -21,7 +21,7 @@ export function fork<K extends keyof any, const B extends Array<ActorLike>>(
   Fork<
     {
       // TODO: fix this
-      Field: B[number] extends ActorLike<infer Y> ? ExtractSpec<Y>["Field"] : never
+      Entry: B[number] extends ActorLike<infer Y> ? ExtractSpec<Y>["Entry"] : never
       Event: ForkEvent<
         K,
         | EnteredEvent
@@ -44,7 +44,7 @@ export function fork<K extends keyof any, B extends Record<keyof any, ActorLike>
 ): Generator<
   Fork<
     {
-      Field: B[keyof B] extends ActorLike<infer Y> ? ExtractSpec<Y>["Field"] : never
+      Entry: B[keyof B] extends ActorLike<infer Y> ? ExtractSpec<Y>["Entry"] : never
       Event: ForkEvent<
         K,
         | EnteredEvent

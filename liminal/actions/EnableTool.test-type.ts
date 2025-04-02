@@ -19,14 +19,14 @@ const arrowTool = enableTool("Tool", "", null! as StandardSchemaV1<P>, (params) 
 })
 
 ActorAssertions(arrowTool).assertSpec<{
-  Field: never
+  Entry: never
   Event: ToolEnabledEvent<"Tool"> | ToolEvent<"Tool", EnteredEvent | ToolCalledEvent<P> | ExitedEvent<void>>
 }>()
 
 function* _0() {
   const detach = yield* arrowTool
   ActorAssertions(detach).assertSpec<{
-    Field: never
+    Entry: never
     Event: ToolDisabledEvent<"Tool">
   }>()
 }
@@ -38,7 +38,7 @@ const genTool = enableTool("Tool", "", null! as StandardSchemaV1<P>, function*(p
 })
 
 ActorAssertions(genTool).assertSpec<{
-  Field: never
+  Entry: never
   Event:
     | ToolEnabledEvent<"Tool">
     | ToolEvent<"Tool", ToolCalledEvent<P> | EnteredEvent | EmittedEvent<"Test", {}> | ExitedEvent<string>>
@@ -52,7 +52,7 @@ function* parent() {
 }
 
 ActorAssertions(parent).assertSpec<{
-  Field: never
+  Entry: never
   Event:
     | ToolEnabledEvent<"ParentTool">
     | ToolEvent<"ParentTool", EnteredEvent | ToolCalledEvent<P> | ExitedEvent<void>>

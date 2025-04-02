@@ -53,9 +53,7 @@ function* Conversation() {
   yield user`Rank those by order of importance`
 
   // Assistant Message (structured output)
-  const { ranking } = yield* infer(z.object({
-    ranking: z.string().array(),
-  }))
+  const ranking = yield* infer(z.string().array())
 
   return ranking
 }
