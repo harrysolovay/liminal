@@ -1,3 +1,4 @@
+// TODO: should the name indicate the additional piece of functionality (unescaping backticks)?
 export function dedent(input: TemplateStringsArray | string, ...values: Array<unknown>): string {
   const inputString = typeof input === "string" ? input : String.raw({ raw: input }, ...values)
   const ignoreFirstUnindented = !inputString.startsWith("\n")
@@ -22,5 +23,5 @@ export function dedent(input: TemplateStringsArray | string, ...values: Array<un
     return trimmedInput
   }
   const minIndentRegex = new RegExp(`^\\s{${minIndentWidth}}`, "gm")
-  return trimmedInput.replaceAll(minIndentRegex, "").replaceAll(/^\s+$/gm, "")
+  return trimmedInput.replaceAll(minIndentRegex, "").replaceAll(/^\s+$/gm, "").replaceAll("\\`", "`")
 }

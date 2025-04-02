@@ -1,4 +1,5 @@
 import type { Spec } from "../Spec.ts"
+import { dedent } from "../util/dedent.ts"
 import { isTemplateStringsArray } from "../util/isTemplateStringsArray.ts"
 import { ActionBase, type ActionEventBase } from "./actions_base.ts"
 
@@ -15,7 +16,7 @@ export function* system(
   }>,
   void
 > {
-  const content = isTemplateStringsArray(raw) ? String.raw(raw, ...substitutions) : raw
+  const content = isTemplateStringsArray(raw) ? dedent(String.raw(raw, ...substitutions)) : raw
   return yield ActionBase("system_message", {
     content,
     reduce(scope) {

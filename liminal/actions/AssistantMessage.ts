@@ -1,4 +1,5 @@
 import type { Spec } from "../Spec.ts"
+import { dedent } from "../util/dedent.ts"
 import { isTemplateStringsArray } from "../util/isTemplateStringsArray.ts"
 import { ActionBase, type ActionEventBase } from "./actions_base.ts"
 import type { FilePart, ReasoningPart, RedactedReasoningPart, TextPart, ToolCallPart } from "./content_part.ts"
@@ -16,7 +17,7 @@ export function* assistant(
   }>,
   void
 > {
-  const content = isTemplateStringsArray(raw) ? String.raw(raw, ...substitutions) : raw
+  const content = isTemplateStringsArray(raw) ? dedent(String.raw(raw, ...substitutions)) : raw
   return yield ActionBase("assistant_message", {
     content,
     reduce(scope) {
