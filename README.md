@@ -1,5 +1,8 @@
 # Liminal
 
+> Liminal is a work in progress. The documentation may not reflect the current
+> implementation.
+
 Liminal is a model-agnostic library for conversation state management. It
 exposes a set of primitives for buffering messages, generating text, objects and
 vectors, attaching and removing tools, emitting events, and instantiating and
@@ -9,23 +12,25 @@ branching conversations.
 
 - [Documentation &rarr;](https://liminal.land)<br />Usage guide intended for
   human readers.
-- [llms.txt &rarr;](./llms.txt)<br />Chunks of truth to be fed into LLMs.
 - [Examples &rarr;](https://github.com/harrysolovay/liminal/tree/main/examples)<br />Examples
   illustrating common use cases.
 
+  <!-- - [llms.txt &rarr;](./llms.txt)<br />Chunks of truth to be fed into LLMs. -->
+
 ## Rationale
 
-- [Implicit Message Buffers &rarr;](https://liminal.land/rationale/implicit_message_buffers.md)<br />Intuitive
+- [Implicit Message Buffers &rarr;](./liminal.land/rationale/implicit_message_buffers.md)<br />Intuitive
   conventions-based approach to managing message buffers.
-- [Decoupling Conversations From Models &rarr;](https://liminal.land/rationale/decoupling_from_models)<br />Ensure
+- [Decoupling Conversations From Models &rarr;](./liminal.land/rationale/decoupling_conversations_from_models.md)<br />Ensure
   conversations can be executed with any provider/model.
-- [Type-safe Observability &rarr;](https://liminal.land/rationale/type-safe_observability)<br />Observe
+- [Eliminating Boilerplate &rarr;](./liminal.land/rationale/eliminating_boilerplate.md)<br />Avoid
+  the redundancies of inferencing and embedding.
+
+<!-- - [Type-safe Observability &rarr;](https://liminal.land/rationale/type-safe_observability)<br />Observe
   events from the entire conversation tree; infer event static types like with
   TRPC or Hono Client.
 - [Step Comparison &rarr;](https://liminal.land/rationale/eliminating_boilerplate.md)<br />Stepped
-  execution of the same conversation with different models.
-- [Eliminating Boilerplate &rarr;](https://liminal.land/rationale/eliminating_boilerplate.md)<br />Avoid
-  the redundancies of inferencing and embedding.
+  execution of the same conversation with different models. -->
 
 ## Overview
 
