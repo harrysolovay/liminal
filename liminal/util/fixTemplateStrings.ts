@@ -1,4 +1,4 @@
-const INDENTATION_RE = /^\n( +)/
+const INDENTATION_RE = /^\n([ \t]+)/
 export function fixTemplateStrings(template: TemplateStringsArray): { readonly raw: readonly string[] } {
   const indentation = INDENTATION_RE.exec(template.raw[0]!)?.[1]
   return {
