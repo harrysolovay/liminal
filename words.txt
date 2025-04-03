@@ -6,10 +6,12 @@ inferencing
 initdb
 llms
 multimodel
+nullary
 ollama
 ossp
 pglite
 pgvector
+rootable
 shikijs
 solovay
 supabase

@@ -7,6 +7,20 @@ export function AILanguageModel(model: LanguageModelV1): L.RunInfer {
     const messages = liminalMessages.map(toCoreMessage)
     if (action.type) {
       let schema = await _util.JSONSchemaMemo(action.type)
+      // TODO: extract this logic and make reusable by other providers.
+      if (
+        // if `{ type: "string" }`, then do normal text completion
+        "type" in schema && schema.type === "string" && !("enum" in schema) && !("const" in schema)
+        && (!("description" in schema) || !schema.description)
+      ) {
+        const { text } = await generateText({
+          model,
+          messages,
+          // tools,
+        })
+        yield* L.assistant(text)
+        return text
+      }
       const isRoot = "type" in schema && schema.type === "object"
       if (!isRoot) {
         schema = {

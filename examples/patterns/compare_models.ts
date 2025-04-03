@@ -1,15 +1,14 @@
 import { openai } from "@ai-sdk/openai"
-import { type } from "arktype"
 import { exec, L } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
 exec(Refine("Write a rap about type-level programming in TypeScript"), {
   bind: {
-    default: AILanguageModel(openai("gpt-4o")),
+    default: AILanguageModel(openai("gpt-4o-mini")),
     a: AILanguageModel(openai("gpt-4o-mini")),
-    b: AILanguageModel(openai("o1-mini")),
-    c: AILanguageModel(openai("gpt-3.5-turbo-instruct")),
-    select: AILanguageModel(openai("gpt-3.5-turbo")),
+    b: AILanguageModel(openai("gpt-4o-mini")),
+    c: AILanguageModel(openai("gpt-4o-mini")),
+    select: AILanguageModel(openai("gpt-4o-mini")),
   },
   handler: console.log,
 })
@@ -17,20 +16,20 @@ exec(Refine("Write a rap about type-level programming in TypeScript"), {
 export function* Refine(input: string) {
   yield* L.declareLanguageModel("default")
   yield* L.user(input)
-  yield* L.infer()
+  yield* L.string
   yield* L.user`Rewrite it in whatever way you think best.`
   const variants = yield* L.fork("variants", {
     *a() {
       yield* L.declareLanguageModel("a")
-      return yield* L.infer()
+      return yield* L.string
     },
     *b() {
       yield* L.declareLanguageModel("b")
-      return yield* L.infer()
+      return yield* L.string
     },
     *c() {
       yield* L.declareLanguageModel("c")
-      return yield* L.infer()
+      return yield* L.string
     },
   })
   const best = yield* L.context("selection", function*() {
@@ -40,7 +39,7 @@ export function* Refine(input: string) {
 
       ${JSON.stringify(variants)}
     `
-    return yield* L.infer(type("'a' | 'b' | 'c'"))
+    return yield* L.enum("a", "b", "c")
   })
   return variants[best]
 }

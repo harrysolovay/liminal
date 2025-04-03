@@ -1,5 +1,4 @@
 import { openai } from "@ai-sdk/openai"
-import { type } from "arktype"
 import { exec, L } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
@@ -29,21 +28,21 @@ function* classifyQuery(query: string) {
     3. Brief reasoning for classification
   `
   yield* L.user(query)
-  return yield* L.infer(Classification)
+  return yield* Classification
 }
 
-const Classification = type({
-  reasoning: "string",
-  type: "'general' | 'refund' | 'technical'",
-  complexity: "'simple' | 'complex'",
+const Classification = L.object({
+  reasoning: L.string,
+  type: L.enum("general", "refund", "technical"),
+  complexity: L.enum("simple", "complex"),
 })
 
-function* useClassification(classification: typeof Classification.infer) {
+function* useClassification(classification: typeof Classification["T"]) {
   yield* L.system(USE_CLASSIFICATION_AGENT_PROMPTS[classification.type])
   if (classification.complexity === "complex") {
     yield* L.declareLanguageModel("reasoning")
   }
-  return yield* L.infer()
+  return yield* L.string
 }
 
 const USE_CLASSIFICATION_AGENT_PROMPTS = {

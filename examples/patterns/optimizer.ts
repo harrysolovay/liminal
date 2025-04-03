@@ -1,5 +1,4 @@
 import { openai } from "@ai-sdk/openai"
-import { type } from "arktype"
 import { exec, L } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
@@ -19,7 +18,7 @@ function* TranslationWithFeedback(targetLanguage: string, text: string) {
 
     ${text}
   `
-  let currentTranslation = yield* L.infer()
+  let currentTranslation = yield* L.string
   let iterations = 0
   const MAX_ITERATIONS = 3
   while (iterations < MAX_ITERATIONS) {
@@ -35,14 +34,14 @@ function* TranslationWithFeedback(targetLanguage: string, text: string) {
       3. Preservation of nuance
       4. Cultural accuracy
     `
-    const evaluation = yield* L.infer(type({
-      qualityScore: "1 <= number.integer <= 10",
-      preservesTone: "boolean",
-      preservesNuance: "boolean",
-      culturallyAccurate: "boolean",
-      specificIssues: "string[]",
-      improvementSuggestions: "string[]",
-    }))
+    const evaluation = yield* L.object({
+      qualityScore: L.integer`Between 1 and 10, inclusive.`,
+      preservesTone: L.boolean,
+      preservesNuance: L.boolean,
+      culturallyAccurate: L.boolean,
+      specificIssues: L.array(L.string),
+      improvementSuggestions: L.array(L.string),
+    })
     if (
       evaluation.qualityScore >= 8
       && evaluation.preservesTone
@@ -60,7 +59,7 @@ function* TranslationWithFeedback(targetLanguage: string, text: string) {
       Original: ${text}
       Current Translation: ${currentTranslation}
     `
-    currentTranslation = yield* L.infer()
+    currentTranslation = yield* L.string
     iterations++
   }
   return {
