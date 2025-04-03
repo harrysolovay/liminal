@@ -1,5 +1,5 @@
 import { type } from "arktype"
-import * as L from "liminal"
+import { L } from "liminal"
 
 export function* refine(input: string) {
   yield* L.declareLanguageModel("default")

@@ -19,11 +19,11 @@ export function TestLanguageModel({
   return async function*(action) {
     if (action.type) {
       const object = getObject()
-      yield* assistant(JSON.stringify(object))
+      yield* assistant`${JSON.stringify(object)}`
       return object
     }
     const text = getText()
-    yield* assistant(text)
+    yield* assistant`${text}`
     return text
   }
 }

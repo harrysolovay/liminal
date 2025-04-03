@@ -1,4 +1,4 @@
-import { Scope } from "../Scope.ts"
+import type { Scope } from "../Scope.ts"
 import type { Actor } from "./Actor.ts"
 
 export async function reduce(actor: Actor, scope: Scope): Promise<Scope> {
