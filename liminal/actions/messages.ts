@@ -1,5 +1,6 @@
 import type { Spec } from "../Spec.ts"
 import { fixTemplateStrings } from "../util/fixTemplateStrings.ts"
+import { isTemplateStringsArray } from "../util/isTemplateStringsArray.ts"
 import { ActionBase, type ActionEventBase } from "./actions_base.ts"
 import type {
   FilePart,
@@ -36,15 +37,20 @@ const messageFn = <
       ...substitutions: Array<string>,
     ]
   ): Generator<TMessage, void> {
-    const content = raw instanceof Object && "raw" in raw && Array.isArray(raw.raw)
+    const content = isTemplateStringsArray(raw)
       ? String.raw(fixTemplateStrings(raw as TemplateStringsArray), ...substitutions)
       : raw as TMessage["content"]
-    // @ts-ignore, you can't please everyone
+    // @ts-ignore This is not type safe because we can't guarantee that `TMessage` isn't extended further than just `BaseMessage`.
+    // It could have additional properties beyond what's just on `BaseMessage`, so you can't return a generator that returns
+    // `TMessage` because we may not have all of the extra fields specified either.
     return yield ActionBase(messageType, {
-      content,
+      content: content as TMessage["content"],
       reduce(scope) {
         scope.events.emit({ type: eventType, content })
-        return scope.spread({ messages: [...scope.messages, this as never], next: undefined })
+        return scope.spread({
+          messages: [...scope.messages, this as never],
+          next: undefined,
+        })
       },
     })
   }
