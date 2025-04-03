@@ -50,8 +50,8 @@ const visit = TypeVisitor<ToJSONState, JSONType>({
       }
       if (type !== state.root) {
         state.$defs[id] = jsonType
+        return { $ref: id }
       }
-      return jsonType
     }
     return next(state, type)
   },
