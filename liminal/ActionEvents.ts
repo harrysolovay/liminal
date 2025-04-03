@@ -4,14 +4,14 @@ export type EventHandler = (event: ActionEvent) => any
 
 export class ActionEvents extends Array<ActionEvent> {
   constructor(
-    readonly f: (inner: ActionEvent) => ActionEvent,
+    readonly f: (event: ActionEvent) => ActionEvent,
     readonly handler: EventHandler | undefined,
   ) {
     super()
   }
 
-  child = (f: (inner: ActionEvent) => ActionEvent): ActionEvents => {
-    return new ActionEvents((inner) => this.f(f(inner)), this.handler)
+  child = (f: (event: ActionEvent) => ActionEvent): ActionEvents => {
+    return new ActionEvents((event) => this.f(f(event)), this.handler)
   }
 
   emit = (event: ActionEvent) => {

@@ -4,8 +4,9 @@ import { reduce } from "../Actor/reduce.ts"
 import { Scope } from "../Scope.ts"
 import type { ExtractSpec, Spec } from "../Spec.ts"
 import { unwrapDeferred } from "../util/unwrapDeferred.ts"
-import type { ActionEventBase, EnteredEvent, ExitedEvent } from "./actions_base.ts"
+import type { ActionEventBase } from "./actions_base.ts"
 import { ActionBase } from "./actions_base.ts"
+import type { EnteredEvent, ExitedEvent } from "./actions_common.ts"
 
 export interface Fork<S extends Spec = Spec> extends ActionBase<"fork", S> {
   key: keyof any

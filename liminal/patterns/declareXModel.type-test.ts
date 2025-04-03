@@ -1,6 +1,5 @@
-import type { EnteredEvent, ExitedEvent } from "../actions/actions_base.ts"
+import type { ChildEvent, EnteredEvent, ExitedEvent } from "../actions/actions_common.ts"
 import { context } from "../actions/Context.ts"
-import type { ContextEvent } from "../actions/Context.ts"
 import type { RunEmbed } from "../actions/SetEmbeddingModel.ts"
 import type { EmbeddingModelSetEvent } from "../actions/SetEmbeddingModel.ts"
 import type { RunInfer } from "../actions/SetLanguageModel.ts"
@@ -48,7 +47,8 @@ ActorAssertions(parent).assertSpec<{
   Event:
     | LanguageModelSetEvent<"C">
     | EmbeddingModelSetEvent<"D">
-    | ContextEvent<
+    | ChildEvent<
+      "context",
       "Context",
       EnteredEvent | LanguageModelSetEvent<"A"> | EmbeddingModelSetEvent<"B"> | ExitedEvent<void>
     >

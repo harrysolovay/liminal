@@ -1,13 +1,12 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
 import type { AssertTrue, IsExact } from "conditional-type-checks"
 import { ActorAssertions } from "../testing/ActorAssertions/ActorAssertions.ts"
-import type { EnteredEvent, ExitedEvent } from "./actions_base.ts"
+import type { ChildEvent, EnteredEvent, ExitedEvent } from "./actions_common.ts"
 import { context } from "./Context.ts"
-import type { ContextEvent } from "./Context.ts"
 import type { ToolDisabledEvent } from "./DisableTool.ts"
 import { emit } from "./Emit.ts"
 import type { EmittedEvent } from "./Emit.ts"
-import { enableTool, type ToolCalledEvent, type ToolEnabledEvent, type ToolEvent } from "./EnableTool.ts"
+import { enableTool, type ToolCalledEvent, type ToolEnabledEvent } from "./EnableTool.ts"
 
 type P = {
   a: string
@@ -20,7 +19,7 @@ const arrowTool = enableTool("Tool", "", null! as StandardSchemaV1<P>, (params) 
 
 ActorAssertions(arrowTool).assertSpec<{
   Entry: never
-  Event: ToolEnabledEvent<"Tool"> | ToolEvent<"Tool", EnteredEvent | ToolCalledEvent<P> | ExitedEvent<void>>
+  Event: ToolEnabledEvent<"Tool"> | ChildEvent<"tool", "Tool", EnteredEvent | ToolCalledEvent<P> | ExitedEvent<void>>
 }>()
 
 function* _0() {
@@ -41,7 +40,7 @@ ActorAssertions(genTool).assertSpec<{
   Entry: never
   Event:
     | ToolEnabledEvent<"Tool">
-    | ToolEvent<"Tool", ToolCalledEvent<P> | EnteredEvent | EmittedEvent<"Test", {}> | ExitedEvent<string>>
+    | ChildEvent<"tool", "Tool", ToolCalledEvent<P> | EnteredEvent | EmittedEvent<"Test", {}> | ExitedEvent<string>>
 }>()
 
 function* parent() {
@@ -55,12 +54,13 @@ ActorAssertions(parent).assertSpec<{
   Entry: never
   Event:
     | ToolEnabledEvent<"ParentTool">
-    | ToolEvent<"ParentTool", EnteredEvent | ToolCalledEvent<P> | ExitedEvent<void>>
-    | ContextEvent<
+    | ChildEvent<"tool", "ParentTool", EnteredEvent | ToolCalledEvent<P> | ExitedEvent<void>>
+    | ChildEvent<
+      "context",
       "Context",
       | EnteredEvent
       | ToolEnabledEvent<"Tool">
       | ExitedEvent<void>
-      | ToolEvent<"Tool", EnteredEvent | ToolCalledEvent<P> | ExitedEvent<void>>
+      | ChildEvent<"tool", "Tool", EnteredEvent | ToolCalledEvent<P> | ExitedEvent<void>>
     >
 }>()

@@ -1,14 +1,14 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
 import type { Action } from "../Action.ts"
-import type { ActionEvent } from "../ActionEvent.ts"
 import type { ActionLike } from "../Actor/ActionLike.ts"
 import type { Actor } from "../Actor/Actor.ts"
 import type { Spec } from "../Spec.ts"
 import { JSONSchemaMemo } from "../util/JSONSchemaMemo.ts"
 import type { JSONValue } from "../util/JSONValue.ts"
 import type { PromiseOr } from "../util/PromiseOr.ts"
-import type { ActionEventBase, EnteredEvent, ExitedEvent } from "./actions_base.ts"
+import type { ActionEventBase } from "./actions_base.ts"
 import { ActionBase } from "./actions_base.ts"
+import type { ChildEvent, EnteredEvent, ExitedEvent } from "./actions_common.ts"
 import { type DisableTool, disableTool } from "./DisableTool.ts"
 import type { ToolDisabledEvent } from "./DisableTool.ts"
 
@@ -29,7 +29,7 @@ export function enableTool<K extends keyof any, A extends JSONValue, R extends P
 ): Generator<
   EnableTool<{
     Entry: never
-    Event: ToolEnabledEvent<K> | ToolEvent<K, ToolCalledEvent<A> | EnteredEvent | ExitedEvent<Awaited<R>>>
+    Event: ToolEnabledEvent<K> | ChildEvent<"tool", K, ToolCalledEvent<A> | EnteredEvent | ExitedEvent<Awaited<R>>>
   }>,
   () => Generator<
     DisableTool<{
@@ -54,7 +54,11 @@ export function enableTool<
     Entry: Extract<Y, Action>[""]["Entry"]
     Event:
       | ToolEnabledEvent<K>
-      | ToolEvent<K, ToolCalledEvent<A> | EnteredEvent | Extract<Y, Action>[""]["Event"] | ExitedEvent<Awaited<R>>>
+      | ChildEvent<
+        "tool",
+        K,
+        ToolCalledEvent<A> | EnteredEvent | Extract<Y, Action>[""]["Event"] | ExitedEvent<Awaited<R>>
+      >
   }>,
   () => Generator<
     DisableTool<{
@@ -94,13 +98,6 @@ export interface ToolEnabledEvent<K extends keyof any = keyof any> extends Actio
   key: K
   description: string
   schema: object
-}
-
-export interface ToolEvent<K extends keyof any = keyof any, E extends ActionEvent = any>
-  extends ActionEventBase<"tool">
-{
-  tool: K
-  event: E
 }
 
 export interface ToolCalledEvent<A extends JSONValue = JSONValue> extends ActionEventBase<"tool_called"> {
