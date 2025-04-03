@@ -92,6 +92,8 @@ export interface ToolContentPart {
 
 export interface ToolMessage<S extends Spec = Spec> extends BaseMessage<"tool_message", Array<ToolContentPart>, S> {}
 export interface ToolMessagedEvent extends BaseMessagedEvent<"tool_messaged", Array<ToolContentPart>> {}
+
+// TODO: rename
 export function* toolMessage(
   content: Array<ToolContentPart>,
 ): Generator<ToolMessage<{ Entry: never; Event: ToolMessagedEvent }>, void> {

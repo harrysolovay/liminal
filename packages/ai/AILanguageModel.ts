@@ -1,7 +1,7 @@
 import { type CoreMessage, generateObject, generateText, jsonSchema, type LanguageModelV1, tool } from "ai"
-import { _util, type JSONValue, L, reduce, Scope } from "liminal"
+import { _util, L, type Message, reduce, type RunInfer, Scope } from "liminal"
 
-export function AILanguageModel(model: LanguageModelV1): L.RunInfer {
+export function AILanguageModel(model: LanguageModelV1): RunInfer {
   return async function*(action, scope) {
     const { messages: liminalMessages } = scope
     const messages = liminalMessages.map(toCoreMessage)
@@ -56,7 +56,7 @@ export function AILanguageModel(model: LanguageModelV1): L.RunInfer {
     //           scope.events.emit({
     //             type: "tool_entered",
     //             tool: tool_.key,
-    //             args: params as JSONValue,
+    //             args: params as _util.JSONValue,
     //           })
     //           let result = await tool_.implementation(params as never)
     //           if (_util.isIteratorLike(result)) {
@@ -80,7 +80,7 @@ export function AILanguageModel(model: LanguageModelV1): L.RunInfer {
     //           scope.events.emit({
     //             type: "tool_exited",
     //             tool: tool_.key,
-    //             result: result as JSONValue,
+    //             result: result as _util.JSONValue,
     //           })
     //           return result
     //         },
@@ -98,7 +98,7 @@ export function AILanguageModel(model: LanguageModelV1): L.RunInfer {
   }
 }
 
-function toCoreMessage(message: L.Message): CoreMessage {
+function toCoreMessage(message: Message): CoreMessage {
   switch (message.action) {
     case "assistant_message": {
       return {
