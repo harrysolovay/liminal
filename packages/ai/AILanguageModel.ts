@@ -1,7 +1,7 @@
 import { type CoreMessage, generateObject, generateText, jsonSchema, type LanguageModelV1, tool } from "ai"
-import { _util, assistant, type JSONValue, type Message, reduce, type RunInfer, Scope } from "liminal"
+import { _util, type JSONValue, L, reduce, Scope } from "liminal"
 
-export function AILanguageModel(model: LanguageModelV1): RunInfer {
+export function AILanguageModel(model: LanguageModelV1): L.RunInfer {
   return async function*(action, scope) {
     const { messages: liminalMessages } = scope
     const messages = liminalMessages.map(toCoreMessage)
@@ -27,7 +27,7 @@ export function AILanguageModel(model: LanguageModelV1): RunInfer {
       if (!isRoot) {
         object = (object as { value: object }).value
       }
-      yield* assistant(JSON.stringify(object, null, 2))
+      yield* L.assistant(JSON.stringify(object, null, 2))
       return object
     }
     // const tools = await Promise.all(
@@ -79,12 +79,12 @@ export function AILanguageModel(model: LanguageModelV1): RunInfer {
       messages,
       // tools,
     })
-    yield* assistant(text)
+    yield* L.assistant(text)
     return text
   }
 }
 
-function toCoreMessage(message: Message): CoreMessage {
+function toCoreMessage(message: L.Message): CoreMessage {
   switch (message.action) {
     case "assistant_message": {
       return {

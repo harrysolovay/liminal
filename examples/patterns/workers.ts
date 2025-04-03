@@ -1,9 +1,9 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import * as L from "liminal"
+import { exec, L } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
-L.exec(CodeReviewers("Alert administrators via text whenever site traffic exceeds a certain threshold."), {
+exec(CodeReviewers("Alert administrators via text whenever site traffic exceeds a certain threshold."), {
   bind: {
     default: AILanguageModel(openai("gpt-4o-mini")),
   },

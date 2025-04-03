@@ -1,9 +1,9 @@
 import { openai } from "@ai-sdk/openai"
 import { type } from "arktype"
-import * as L from "liminal"
+import { exec, L } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
-L.exec(PlanTrip("New York City"), {
+exec(PlanTrip("New York City"), {
   bind: {
     default: AILanguageModel(openai("gpt-4o-mini")),
   },
