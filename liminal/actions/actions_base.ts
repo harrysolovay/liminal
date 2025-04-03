@@ -9,10 +9,7 @@ export interface ActionBase<K extends string = string, S extends Spec = Spec> {
 }
 
 export function ActionBase<A extends ActionBase>(action: A["action"], fields: Omit<A, "" | "action">): A {
-  return {
-    action,
-    ...fields,
-  } as A
+  return { action, ...fields } as A
 }
 
 export interface ActionEventBase<K extends string> {

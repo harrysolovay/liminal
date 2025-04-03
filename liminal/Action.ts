@@ -7,7 +7,7 @@ import type { EnableTool } from "./actions/EnableTool.ts"
 import type { Fork } from "./actions/Fork.ts"
 import type { GetScope } from "./actions/GetScope.ts"
 import type { Infer } from "./actions/Infer.ts"
-import type { Message } from "./actions/Message.ts"
+import type { Message } from "./actions/messages.ts"
 import type { SetEmbeddingModel } from "./actions/SetEmbeddingModel.ts"
 import type { SetLanguageModel } from "./actions/SetLanguageModel.ts"
 
