@@ -38,9 +38,7 @@ export function* infer(type?: StandardSchemaV1): Generator<Infer, unknown> {
         type: "inferred",
         value: scope.result,
       })
-      return scope.spread({
-        next: scope.result,
-      })
+      return scope.spread({ next: scope.result })
     },
   })
 }

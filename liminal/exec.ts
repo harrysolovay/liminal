@@ -1,5 +1,5 @@
 import { ActionEvents } from "./ActionEvents.ts"
-import type { EnteredEvent, ExitedEvent } from "./actions/actions_base.ts"
+import type { EnteredEvent, ExitedEvent } from "./actions/actions_common.ts"
 import type { ActionLike } from "./Actor/ActionLike.ts"
 import type { ActorLike } from "./Actor/ActorLike.ts"
 import { reduce } from "./Actor/reduce.ts"

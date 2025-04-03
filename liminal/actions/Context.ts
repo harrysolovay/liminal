@@ -1,11 +1,11 @@
-import type { ActionEvent } from "../ActionEvent.ts"
 import type { ActionLike } from "../Actor/ActionLike.ts"
 import type { ActorLike } from "../Actor/ActorLike.ts"
 import { reduce } from "../Actor/reduce.ts"
 import { Scope } from "../Scope.ts"
 import type { ExtractSpec, Spec } from "../Spec.ts"
 import { unwrapDeferred } from "../util/unwrapDeferred.ts"
-import { ActionBase, type ActionEventBase, type EnteredEvent, type ExitedEvent } from "./actions_base.ts"
+import { ActionBase } from "./actions_base.ts"
+import type { ChildEvent, EnteredEvent, ExitedEvent } from "./actions_common.ts"
 
 export interface Context<S extends Spec = Spec> extends ActionBase<"context", S> {
   key: keyof any
@@ -18,7 +18,7 @@ export function* context<K extends keyof any, Y extends ActionLike, S extends Ex
 ): Generator<
   Context<{
     Entry: S["Entry"]
-    Event: ContextEvent<K, EnteredEvent | S["Event"] | ExitedEvent<T>>
+    Event: ChildEvent<"context", K, EnteredEvent | S["Event"] | ExitedEvent<T>>
   }>,
   T
 > {
@@ -28,8 +28,9 @@ export function* context<K extends keyof any, Y extends ActionLike, S extends Ex
     async reduce(scope) {
       const actor = unwrapDeferred(implementation)
       const events = scope.events.child((event) => ({
-        type: "context",
-        context: key,
+        type: "child",
+        scopeType: "context",
+        scope: key,
         event,
       }))
       events.emit({
@@ -58,11 +59,4 @@ export function* context<K extends keyof any, Y extends ActionLike, S extends Ex
       })
     },
   })
-}
-
-export interface ContextEvent<K extends keyof any = keyof any, E extends ActionEvent = any>
-  extends ActionEventBase<"context">
-{
-  context: K
-  event: E
 }

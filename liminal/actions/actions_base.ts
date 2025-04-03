@@ -15,9 +15,3 @@ export function ActionBase<A extends ActionBase>(action: A["action"], fields: Om
 export interface ActionEventBase<K extends string> {
   type: K
 }
-
-export interface EnteredEvent extends ActionEventBase<"entered"> {}
-
-export interface ExitedEvent<T = any> extends ActionEventBase<"exited"> {
-  result: T
-}
