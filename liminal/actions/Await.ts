@@ -13,7 +13,7 @@ export interface Await<T = unknown> extends
   value: T
 }
 
-export function* await_<T>(value: T): Generator<Await<T>, Awaited<T>> {
+function* await_<T>(value: T): Generator<Await<T>, Awaited<T>> {
   return yield ActionBase("await", {
     value,
     async reduce(scope) {
@@ -26,3 +26,5 @@ export function* await_<T>(value: T): Generator<Await<T>, Awaited<T>> {
     },
   })
 }
+Object.defineProperty(await_, "name", { value: "await" })
+export { await_ as await }
