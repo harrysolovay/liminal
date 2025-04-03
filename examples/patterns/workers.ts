@@ -1,5 +1,4 @@
 import { openai } from "@ai-sdk/openai"
-import { type } from "arktype"
 import { exec, L } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
@@ -15,21 +14,21 @@ function* CodeReviewers(feat: string) {
   yield* L.declareLanguageModel("default")
   yield* L.user`Analyze this feature request and create an implementation plan:`
   yield* L.user(feat)
-  const implementationPlan = yield* L.infer(type({
-    files: FileInfo.array(),
-    estimatedComplexity: "'create' | 'medium' | 'high'",
-  }))
+  const implementationPlan = yield* L.object({
+    files: L.array(FileInfo),
+    estimatedComplexity: L.enum("create", "medium", "high"),
+  })
   const fileChanges = yield* L.fork("FileChanges", implementationPlan.files.map((file) => Implementor(feat, file)))
   return { fileChanges, implementationPlan }
 }
 
-const FileInfo = type({
-  purpose: "string",
-  filePath: "string",
-  changeType: "'create' | 'modify' | 'delete'",
+const FileInfo = L.object({
+  purpose: L.string,
+  filePath: L.string,
+  changeType: L.enum("create", "modify", "delete"),
 })
 
-function* Implementor(featureRequest: string, file: typeof FileInfo.infer) {
+function* Implementor(featureRequest: string, file: typeof FileInfo["T"]) {
   yield* L.system(IMPLEMENTATION_PROMPTS[file.changeType])
   yield* L.user`
     Implement the changes for ${file.filePath} to support:
@@ -40,10 +39,10 @@ function* Implementor(featureRequest: string, file: typeof FileInfo.infer) {
 
     ${featureRequest}
   `
-  const implementation = yield* L.infer(type({
-    explanation: "string",
-    code: "string",
-  }))
+  const implementation = yield* L.object({
+    explanation: L.string,
+    code: L.string,
+  })
   return { file, implementation }
 }
 

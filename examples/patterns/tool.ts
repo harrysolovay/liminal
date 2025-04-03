@@ -1,5 +1,4 @@
 import { openai } from "@ai-sdk/openai"
-import { type } from "arktype"
 import { exec, L } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 import * as mathjs from "mathjs"
@@ -26,14 +25,14 @@ function* ToolUser() {
       - \`12.7 cm to inch\`
       - \`sin(45 deg) ^ 2\`
     `,
-    type.string.array(),
-    mathjs.evaluate,
+    L.array(L.string),
+    (params) => mathjs.evaluate(params),
   )
   yield* L.user`
     A taxi driver earns $9461 per 1-hour of work. If he works 12 hours a day and in 1 hour
     he uses 12 liters of petrol with a price  of $134 for 1 liter. How much money does he earn in one day?
   `
-  const answer = yield* L.infer()
+  const answer = yield* L.string
   yield* detach()
   return answer
 }

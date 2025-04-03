@@ -1,5 +1,4 @@
 import { openai } from "@ai-sdk/openai"
-import { type } from "arktype"
 import { exec, L } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 import { readFile } from "node:fs/promises"
@@ -7,7 +6,7 @@ import { fileURLToPath } from "node:url"
 
 const code = await readFile(fileURLToPath(import.meta.url), "utf-8")
 
-const LMH = type("'lower' | 'medium' | 'high'")
+const LMH = L.enum("lower", "medium", "high")
 
 exec(Review(code), {
   bind: { default: AILanguageModel(openai("gpt-4o-mini")) },
@@ -25,39 +24,39 @@ function* Review(code: string) {
   })
   yield* L.user(JSON.stringify(Object.values(reviews), null, 2))
   yield* L.user`You are a technical lead summarizing multiple code reviews.`
-  const summary = yield* L.infer()
+  const summary = yield* L.string
   return { reviews, summary }
 }
 
 function* SecurityReview() {
   yield* L
     .system`You are an expert in code security. Focus on identifying security vulnerabilities, injection risks, and authentication issues.`
-  return yield* L.infer(type({
-    type: "'security'",
-    vulnerabilities: "string[]",
+  return yield* L.object({
+    type: "security",
+    vulnerabilities: L.array(L.string),
     riskLevel: LMH,
-    suggestions: "string[]",
-  }))
+    suggestions: L.array(L.string),
+  })
 }
 
 function* PerformanceReview() {
   yield* L
     .system`You are an expert in code performance. Focus on identifying performance bottlenecks, memory leaks, and optimization opportunities.`
-  return yield* L.infer(type({
-    type: "'performance'",
-    issues: "string[]",
+  return yield* L.object({
+    type: "performance",
+    issues: L.array(L.string),
     impact: LMH,
-    optimizations: "string[]",
-  }))
+    optimizations: L.array(L.string),
+  })
 }
 
 function* MaintainabilityReview() {
   yield* L
     .system`You are an expert in code quality. Focus on code structure, readability, and adherence to best practices.`
-  return yield* L.infer(type({
-    type: "'maintainability'",
-    concerns: "string[]",
-    qualityScore: "1 <= number.integer <= 10",
+  return yield* L.object({
+    type: "maintainability",
+    concerns: L.array(L.string),
+    qualityScore: L.integer`Between 1 and 10, inclusive.`,
     recommendations: "string[]",
-  }))
+  })
 }

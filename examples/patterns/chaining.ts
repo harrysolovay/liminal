@@ -1,5 +1,4 @@
 import { openai } from "@ai-sdk/openai"
-import { type } from "arktype"
 import { exec, L } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
@@ -15,7 +14,7 @@ function* MarketingCopy() {
     .system`Write persuasive marketing copy for: Buffy The Vampire Slayer. Focus on benefits and emotional appeal.`
   yield* L.declareLanguageModel("default")
   yield* L.user`Please generate the first draft.`
-  let copy = yield* L.infer()
+  let copy = yield* L.string
   yield* L.user`
     Now evaluate this marketing copy for:
 
@@ -25,11 +24,11 @@ function* MarketingCopy() {
 
     Copy to evaluate: ${copy}
   `
-  const qualityMetrics = yield* L.infer(type({
-    hasCallToAction: "boolean",
-    emotionalAppeal: "number.integer",
-    clarity: "number.integer",
-  }))
+  const qualityMetrics = yield* L.object({
+    hasCallToAction: L.boolean,
+    emotionalAppeal: L.integer,
+    clarity: L.integer,
+  })
   if (!qualityMetrics.hasCallToAction || qualityMetrics.emotionalAppeal < 7 || qualityMetrics.clarity < 7) {
     yield* L.user`
       Rewrite this marketing copy with:
@@ -40,7 +39,7 @@ function* MarketingCopy() {
 
       Original copy: ${copy}
     `
-    copy = yield* L.infer()
+    copy = yield* L.string
   }
   return { copy, qualityMetrics }
 }

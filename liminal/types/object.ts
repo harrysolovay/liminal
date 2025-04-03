@@ -28,7 +28,7 @@ export type FieldValue = Type | ObjectFields | string
 
 export type ObjectT<F extends ObjectFields> = [
   {
-    [K in keyof F]: F[K] extends ObjectFields ? ObjectT<F[K]>
+    -readonly [K in keyof F]: F[K] extends ObjectFields ? ObjectT<F[K]>
       : F[K] extends string ? F[K]
       : F[K] extends Type<infer T> ? T
       : never
