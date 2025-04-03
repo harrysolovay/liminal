@@ -1,6 +1,5 @@
 import type { Spec } from "../Spec.ts"
-import { dedent } from "../util/dedent.ts"
-import { isTemplateStringsArray } from "../util/isTemplateStringsArray.ts"
+import { normalizeTemplateArgs } from "../util/normalizeTemplateArgs.ts"
 import { ActionBase, type ActionEventBase } from "./actions_base.ts"
 
 export interface SystemMessage<S extends Spec = Spec> extends ActionBase<"system_message", S> {
@@ -8,7 +7,7 @@ export interface SystemMessage<S extends Spec = Spec> extends ActionBase<"system
 }
 
 export function* system(
-  ...[raw, ...substitutions]: [content: string] | [raw: TemplateStringsArray, ...substitutions: Array<string>]
+  ...args: [content: string] | [raw: TemplateStringsArray, ...substitutions: Array<string>]
 ): Generator<
   SystemMessage<{
     Entry: never
@@ -16,7 +15,7 @@ export function* system(
   }>,
   void
 > {
-  const content = isTemplateStringsArray(raw) ? dedent(String.raw(raw, ...substitutions)) : raw
+  const content = normalizeTemplateArgs(...args)
   return yield ActionBase("system_message", {
     content,
     reduce(scope) {

@@ -1,6 +1,5 @@
 import type { Spec } from "../Spec.ts"
-import { dedent } from "../util/dedent.ts"
-import { isTemplateStringsArray } from "../util/isTemplateStringsArray.ts"
+import { normalizeTemplateArgs } from "../util/normalizeTemplateArgs.ts"
 import { ActionBase, type ActionEventBase } from "./actions_base.ts"
 import type { FilePart, ReasoningPart, RedactedReasoningPart, TextPart, ToolCallPart } from "./content_part.ts"
 
@@ -9,7 +8,7 @@ export interface AssistantMessage<S extends Spec = Spec> extends ActionBase<"ass
 }
 
 export function* assistant(
-  ...[raw, ...substitutions]: [content: AssistantContent] | [raw: TemplateStringsArray, ...substitutions: Array<string>]
+  ...args: [content: AssistantContent] | [raw: TemplateStringsArray, ...substitutions: Array<string>]
 ): Generator<
   AssistantMessage<{
     Entry: never
@@ -17,7 +16,7 @@ export function* assistant(
   }>,
   void
 > {
-  const content = isTemplateStringsArray(raw) ? dedent(String.raw(raw, ...substitutions)) : raw
+  const content = normalizeTemplateArgs(...args)
   return yield ActionBase("assistant_message", {
     content,
     reduce(scope) {

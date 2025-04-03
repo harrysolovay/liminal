@@ -1,7 +1,6 @@
 import type { Scope } from "../Scope.ts"
 import type { Spec } from "../Spec.ts"
-import { dedent } from "../util/dedent.ts"
-import { isTemplateStringsArray } from "../util/isTemplateStringsArray.ts"
+import { normalizeTemplateArgs } from "../util/normalizeTemplateArgs.ts"
 import { ActionBase, type ActionEventBase } from "./actions_base.ts"
 import type { FilePart, ImagePart, TextPart } from "./content_part.ts"
 
@@ -12,7 +11,7 @@ export interface UserMessage<S extends Spec = Spec> extends ActionBase<"user_mes
 }
 
 export function* user(
-  ...[raw, ...substitutions]: [content: UserContent] | [raw: TemplateStringsArray, ...substitutions: Array<string>]
+  ...args: [content: UserContent] | [raw: TemplateStringsArray, ...substitutions: Array<string>]
 ): Generator<
   UserMessage<{
     Entry: never
@@ -20,9 +19,8 @@ export function* user(
   }>,
   void
 > {
-  const content = isTemplateStringsArray(raw) ? dedent(String.raw(raw, substitutions)) : raw
   return yield ActionBase("user_message", {
-    content,
+    content: normalizeTemplateArgs(...args),
     reduce(scope) {
       return reduceUserMessage(this as never, scope)
     },
