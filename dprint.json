@@ -12,6 +12,7 @@
   },
   "typescript": {
     "arrowFunction.useParentheses": "force",
+    "lineWidth": 120,
     "quoteProps": "asNeeded",
     "semiColons": "asi"
   },
