@@ -1,5 +1,5 @@
 import type { Spec } from "../Spec.ts"
-import { fixTemplateStrings } from "../util/fixTemplateStrings.ts"
+import { applyTemplateWithIndentation, fixTemplateStrings } from "../util/fixTemplateStrings.ts"
 import { isTemplateStringsArray } from "../util/isTemplateStringsArray.ts"
 import { ActionBase, type ActionEventBase } from "./actions_base.ts"
 import type {
@@ -38,7 +38,7 @@ const messageFn = <
     ]
   ): Generator<TMessage, void> {
     const content = isTemplateStringsArray(raw)
-      ? String.raw(fixTemplateStrings(raw as TemplateStringsArray), ...substitutions)
+      ? applyTemplateWithIndentation(raw as TemplateStringsArray, ...substitutions)
       : raw as TMessage["content"]
     // @ts-ignore This is not type safe because we can't guarantee that `TMessage` isn't extended further than just `BaseMessage`.
     // It could have additional properties beyond what's just on `BaseMessage`, so you can't return a generator that returns
