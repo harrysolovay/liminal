@@ -3,9 +3,8 @@ import type { Actor } from "../Actor/Actor.ts"
 import type { Scope } from "../Scope.ts"
 import type { Spec } from "../Spec.ts"
 import { ActionBase, type ActionEventBase } from "./actions_base.ts"
-import type { AssistantMessage } from "./AssistantMessage.ts"
 import type { Infer } from "./Infer.ts"
-import type { ToolMessage } from "./ToolMessage.ts"
+import type { AssistantMessage, ToolMessage } from "./messages.ts"
 
 export interface SetLanguageModel<S extends Spec = Spec> extends ActionBase<"set_language_model", S> {
   key: keyof any
