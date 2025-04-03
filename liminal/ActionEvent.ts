@@ -1,4 +1,5 @@
 import type { ChildEvent, EnteredEvent, ExitedEvent } from "./actions/actions_common.ts"
+import type { AwaitedEvent } from "./actions/Await.ts"
 import type { ToolDisabledEvent } from "./actions/DisableTool.ts"
 import type { EmbeddedEvent, EmbeddingRequestedEvent } from "./actions/Embed.ts"
 import type { EmittedEvent } from "./actions/Emit.ts"
@@ -36,3 +37,4 @@ export type ActionEvent =
   | ToolMessagedEvent
   | MessagesSetEvent
   | ChildEvent
+  | AwaitedEvent
