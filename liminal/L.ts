@@ -1,5 +1,5 @@
 export { arg } from "./actions/Arg.ts"
-export { await_ as await } from "./actions/Await.ts"
+export { await } from "./actions/Await.ts"
 export { context } from "./actions/Context.ts"
 export { disableTool } from "./actions/DisableTool.ts"
 export { embed } from "./actions/Embed.ts"
