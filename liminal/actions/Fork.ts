@@ -1,7 +1,7 @@
 import type { ActionLike } from "../Action.ts"
-import type { ActorLike, ActorLikesY } from "../Actor.ts"
+import type { Actor, ActorLike, ActorLikesY } from "../Actor.ts"
 import type { ActorLikes } from "../Actor.ts"
-import { reduce } from "../reduceActor.ts"
+import { reduceScope } from "../reduceScope.ts"
 import { Scope } from "../Scope.ts"
 import type { ExtractSpec, Spec } from "../Spec.ts"
 import type { Expand } from "../util/Expand.ts"
@@ -71,8 +71,7 @@ export function* fork(
       let result: unknown
       if (typeof implementation === "function" || isIteratorLike(implementation)) {
         const actor = unwrapDeferred(implementation as ActorLike)
-        const forkScope = await reduce(
-          actor,
+        const forkScope = await reduceScope(
           new Scope(
             "fork",
             scope.args,
@@ -82,6 +81,7 @@ export function* fork(
             scope.runEmbed,
             [...scope.messages],
           ),
+          actor,
         )
         scopes = [forkScope]
         result = forkScope.result
@@ -97,9 +97,8 @@ export function* fork(
             event,
           }))
           armEvents.emit({ type: "entered" })
-          const actor = unwrapDeferred(implementation[key as never])
-          const armScope = await reduce(
-            actor,
+          const actor = unwrapDeferred(implementation[key as never]) as Actor
+          const armScope = await reduceScope(
             new Scope(
               "fork_arm",
               scope.args,
@@ -109,6 +108,7 @@ export function* fork(
               scope.runEmbed,
               [...scope.messages],
             ),
+            actor,
           )
           armEvents.emit({
             type: "exited",

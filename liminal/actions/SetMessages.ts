@@ -1,6 +1,6 @@
 import type { Action, ActionLike } from "../Action.ts"
 import type { Actor } from "../Actor.ts"
-import { reduce } from "../reduceActor.ts"
+import { reduceScope } from "../reduceScope.ts"
 import { Scope } from "../Scope.ts"
 import type { ExtractSpec, Spec } from "../Spec.ts"
 import { isPropertyKey } from "../util/isPropertyKey.ts"
@@ -46,8 +46,7 @@ export function* setMessages(
         events.emit({
           type: "entered",
         })
-        const { result } = await reduce(
-          maybeSetter!([...scope.messages]),
+        const { result } = await reduceScope(
           new Scope(
             "set_messages",
             scope.args,
@@ -56,6 +55,7 @@ export function* setMessages(
             scope.runInfer,
             scope.runEmbed,
           ),
+          maybeSetter!([...scope.messages]),
         )
         events.emit({
           type: "exited",

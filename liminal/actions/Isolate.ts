@@ -1,6 +1,6 @@
 import type { ActionLike } from "../Action.ts"
 import type { ActorLike } from "../Actor.ts"
-import { reduce } from "../reduceActor.ts"
+import { reduceScope } from "../reduceScope.ts"
 import { Scope } from "../Scope.ts"
 import type { ExtractSpec, Spec } from "../Spec.ts"
 import { unwrapDeferred } from "../util/unwrapDeferred.ts"
@@ -26,8 +26,7 @@ export function* isolate<K extends keyof any, Y extends ActionLike, T, S extends
     key,
     actorLike,
     async reduce(scope) {
-      const isolateScope = await reduce(
-        unwrapDeferred(actorLike),
+      const isolateScope = await reduceScope(
         new Scope(
           "isolate",
           scope.args,
@@ -36,6 +35,7 @@ export function* isolate<K extends keyof any, Y extends ActionLike, T, S extends
           scope.runInfer,
           scope.runEmbed,
         ),
+        unwrapDeferred(actorLike),
       )
       return scope.spread({
         next: isolateScope.result,
