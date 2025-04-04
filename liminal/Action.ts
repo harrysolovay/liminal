@@ -28,3 +28,5 @@ export type Action =
   | SetMessages
   | GetMessages
   | Isolate
+
+export type ActionLike = Action | Array<Message>

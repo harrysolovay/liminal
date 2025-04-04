@@ -1,5 +1,5 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
-import { reduce } from "../Actor/reduce.ts"
+import { reduce } from "../reduceActor.ts"
 import type { Spec } from "../Spec.ts"
 import { assert } from "../util/assert.ts"
 import type { JSONValue } from "../util/JSONValue.ts"

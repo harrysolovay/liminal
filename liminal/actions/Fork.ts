@@ -1,6 +1,7 @@
-import type { ActionLike } from "../Actor/ActionLike.ts"
-import type { ActorLike } from "../Actor/ActorLike.ts"
-import { reduce } from "../Actor/reduce.ts"
+import type { ActionLike } from "../Action.ts"
+import type { ActorLike, ActorLikesY } from "../Actor.ts"
+import type { ActorLikes } from "../Actor.ts"
+import { reduce } from "../reduceActor.ts"
 import { Scope } from "../Scope.ts"
 import type { ExtractSpec, Spec } from "../Spec.ts"
 import type { Expand } from "../util/Expand.ts"
@@ -13,13 +14,6 @@ export interface Fork<S extends Spec = Spec> extends ActionBase<"fork", S> {
   key: keyof any
   implementation: ActorLikes | ActorLike
 }
-
-export type ActorLikes = ActorLikeArray | ActorLikeRecord
-export type ActorLikeArray = Array<ActorLike>
-export type ActorLikeRecord = Record<string, ActorLike>
-export type ActorLikesY<A extends ActorLikes> = {
-  [L in keyof A]: A[L] extends ActorLike<infer Y> ? Y : never
-}[keyof A]
 
 export function fork<
   K extends keyof any,

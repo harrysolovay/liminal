@@ -1,5 +1,5 @@
-import type { Scope } from "../Scope.ts"
 import type { Actor } from "./Actor.ts"
+import type { Scope } from "./Scope.ts"
 
 export async function reduce(actor: Actor, scope: Scope): Promise<Scope> {
   let current = await actor.next()
