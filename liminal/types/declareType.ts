@@ -1,4 +1,3 @@
-import { infer } from "../actions/Infer.ts"
 import type { Falsy } from "../util/Falsy"
 import { isTemplateStringsArray } from "../util/isTemplateStringsArray"
 import { unimplemented } from "../util/unimplemented.ts"
@@ -25,9 +24,6 @@ export function declareType<X extends Type>(
         },
       },
       toJSON,
-      *[Symbol.iterator]() {
-        return yield* infer(this)
-      },
     } satisfies TypeMembers<X["T"], X["J"]>,
   ) as never
 

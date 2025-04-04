@@ -34,7 +34,7 @@ function* processCustomerQuery(query: string) {
     if (classification.complexity === "complex") {
       yield* L.declareLanguageModel("reasoning")
     }
-    return yield* L.string
+    return yield* L.infer()
   })
   return { classification, response }
 }

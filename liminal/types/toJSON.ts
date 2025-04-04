@@ -1,59 +1,53 @@
 import type { JSONValue } from "../util/JSONValue.ts"
+import { _object, type _ObjectFields, type JSONObjectType } from "./_object.ts"
 import type { JSONArrayType } from "./array.ts"
 import type { JSONBooleanType } from "./boolean.ts"
-import type { JSONConstType } from "./const.ts"
+import { type JSONConstType } from "./const.ts"
 import type { JSONEnumType } from "./enum.ts"
 import type { JSONIntegerType } from "./integer.ts"
 import type { JSONRootType } from "./JSONRootType.ts"
 import { JSONSchema$schema } from "./JSONRootType.ts"
-import type { ConstableType, JSONRootableType, JSONType } from "./JSONType"
+import type { JSONRootableType, JSONType } from "./JSONType"
+import type { JSONNullType } from "./null.ts"
 import type { JSONNumberType } from "./number.ts"
-import { type JSONObjectType, object, type ObjectFields } from "./object.ts"
-import { RecursiveTypeVisitorState } from "./RecursiveTypeVisitorState.ts"
 import type { JSONRefType } from "./ref.ts"
-import type { JSONStringType } from "./string.ts"
-import { isType, type Type } from "./Type.ts"
-import { allowsRecursion, TypeVisitor } from "./TypeVisitor.ts"
+import { type JSONStringType } from "./string.ts"
+import { type Type } from "./Type.ts"
+import { TypeContext } from "./TypeContext.ts"
+import { isParentType, TypeVisitor } from "./TypeVisitor.ts"
 import type { JSONUnionType } from "./union.ts"
 
-export function toJSON<T extends JSONValue, J extends JSONRootableType>(
-  this: Type<T, J>,
-): J extends JSONRootableType ? JSONRootType<J> : J {
-  const state = new ToJSONState(this)
-  const jsonType = visit(state, this)
-  if (allowsRecursion(this)) {
-    const { $defs } = state
-    return {
-      $schema: JSONSchema$schema,
-      ...jsonType,
-      $defs,
-    } as never
+export function toJSON<T extends JSONValue, J extends JSONRootableType>(this: Type<T, J>): JSONRootType<J> {
+  const { $defs: { 0: root, ...$defs } } = new ToJSONContext(this)
+  return {
+    $schema: JSONSchema$schema,
+    ...root,
+    $defs,
+  } as never
+}
+
+class ToJSONContext extends TypeContext {
+  readonly $defs: Record<string, JSONType | undefined> = {}
+  constructor(root: Type) {
+    super(root)
+    visit(this, root)
   }
-  return jsonType as never
 }
 
-class ToJSONState extends RecursiveTypeVisitorState {
-  $defs: Record<string, undefined | ConstableType> = {}
-}
-
-const visit = TypeVisitor<ToJSONState, JSONType>({
-  hook(next, state, type): JSONType {
-    if (allowsRecursion(type)) {
+const visit = TypeVisitor<ToJSONContext, JSONType>({
+  hook(next, state, type) {
+    if (isParentType(type)) {
       const id = state.id(type)
-      if (id in state.$defs) {
-        return type === state.root ? { $ref: "$" } : { $ref: `#/$defs/${id}` }
+      if (!(id in state.$defs)) {
+        state.$defs[id] = undefined
+        state.$defs[id] = next(state, type)
       }
-      state.$defs[id] = undefined
-      const jsonType = {
-        ...next(state, type) as ConstableType,
-        description: type.descriptions?.join("\n"),
-      }
-      if (type !== state.root) {
-        state.$defs[id] = jsonType
-        return { $ref: id }
-      }
+      return type === state.root ? { $ref: "$" } : { $ref: `#/$defs/${id}` }
     }
     return next(state, type)
+  },
+  null(): JSONNullType {
+    return { type: "null" }
   },
   boolean(): JSONBooleanType {
     return { type: "boolean" }
@@ -90,27 +84,19 @@ const visit = TypeVisitor<ToJSONState, JSONType>({
       anyOf: members.map((member) => visit(state, member)),
     }
   },
-  object(state, _type, fields): JSONObjectType {
+  _object(state, _type, fields): JSONObjectType {
     return {
       type: "object",
-      fields: Object.fromEntries(
+      properties: Object.fromEntries(
         Array.isArray(fields)
-          ? fields.map((value, i) => [i, visitObjectFieldValue(state, value)])
-          : Object.entries(fields).map(([key, value]) => [key, visitObjectFieldValue(state, value)]),
+          ? fields.map((value, i) => [i, visit(state, value)])
+          : Object.entries(fields).map(([key, value]) => [key, visit(state, value)]),
       ),
       required: Object.keys(fields),
+      additionalProperties: false,
     }
   },
   ref(state, _type, getType): JSONRefType {
     return visit(state, getType()) as JSONRefType
   },
 })
-
-function visitObjectFieldValue(state: ToJSONState, value: string | ObjectFields | Type): JSONType {
-  return typeof value === "string"
-    ? {
-      type: "string",
-      const: value,
-    }
-    : visit(state, isType(value) ? value : object(value))
-}

@@ -1,6 +1,6 @@
 import type { Type } from "./Type.js"
 
-export class RecursiveTypeVisitorState {
+export class TypeContext {
   constructor(
     readonly root: Type,
     readonly ids: Map<Type, string> = new Map(),

@@ -18,7 +18,7 @@ function* TranslationWithFeedback(targetLanguage: string, text: string) {
 
     ${text}
   `
-  let currentTranslation = yield* L.string
+  let currentTranslation = yield* L.infer()
   let iterations = 0
   const MAX_ITERATIONS = 3
   while (iterations < MAX_ITERATIONS) {
@@ -59,7 +59,7 @@ function* TranslationWithFeedback(targetLanguage: string, text: string) {
       Original: ${text}
       Current Translation: ${currentTranslation}
     `
-    currentTranslation = yield* L.string
+    currentTranslation = yield* L.infer()
     iterations++
   }
   return {

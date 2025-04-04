@@ -1,8 +1,8 @@
 import { describe, expect, it } from "bun:test"
 import { exec } from "../exec.ts"
 import * as L from "../L.ts"
-import { TestEmbeddingModel } from "../testing/TestEmbeddingModel/TestEmbeddingModel.ts"
-import { TestLanguageModel } from "../testing/TestLanguageModel/TestLanguageModel.ts"
+import { TestEmbeddingModel } from "../testing/TestEmbeddingModel.ts"
+import { TestLanguageModel } from "../testing/TestLanguageModel.ts"
 
 describe("Model", () => {
   it("generates the expected event sequence", async () => {

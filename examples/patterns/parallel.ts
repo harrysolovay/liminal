@@ -27,7 +27,7 @@ function* Review(code: string) {
   )
   yield* L.user(JSON.stringify(Object.values(reviews), null, 2))
   yield* L.user`You are a technical lead summarizing multiple code reviews.`
-  const summary = yield* L.string
+  const summary = yield* L.infer()
   return { reviews, summary }
 }
 

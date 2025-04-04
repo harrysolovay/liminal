@@ -1,5 +1,4 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
-import type { Infer, InferenceRequestedEvent, InferredEvent } from "../actions/Infer.ts"
 import type { Falsy } from "../util/Falsy.ts"
 import type { JSONValue } from "../util/JSONValue.ts"
 import type { JSONRootType } from "./JSONRootType.ts"
@@ -13,16 +12,7 @@ export interface Type<T extends JSONValue = JSONValue, J extends JSONType = JSON
   J: J
 }
 
-export interface TypeMembers<T extends JSONValue, J extends JSONType> extends
-  StandardSchemaV1<T>,
-  Iterable<
-    Infer<{
-      Entry: never
-      Event: InferenceRequestedEvent | InferredEvent<T>
-    }>,
-    T
-  >
-{
+export interface TypeMembers<T extends JSONValue, J extends JSONType> extends StandardSchemaV1<T> {
   [TypeKey]: true
   declaration: () => Type<T, J> | ((...args: any) => Type<T, J>)
   args?: Array<any>

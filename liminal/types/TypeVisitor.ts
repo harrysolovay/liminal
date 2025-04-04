@@ -14,8 +14,9 @@ export function getTypeName(type: Type): IntrinsicTypeName {
   return getIntrinsicNameLookup().get(type.declaration() as IntrinsicType)!
 }
 
-export function allowsRecursion(type: Type): boolean {
-  return ["object", "array", "union"].includes(getTypeName(type))
+// TODO: better name?
+export function isParentType(type: Type): boolean {
+  return ["_object", "array", "union"].includes(getTypeName(type))
 }
 
 export type VisitorArms<S, R> =

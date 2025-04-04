@@ -14,7 +14,7 @@ function* g() {
   yield* L.declareLanguageModel("default")
   yield* L.user`Lorem.`
   yield* L.user`Ipsum.`
-  yield* L.string
+  yield* L.infer()
   const before = yield* L.getMessages()
   yield* L.setMessages((_messages) => [])
   const after = yield* L.getMessages()

@@ -3,7 +3,7 @@
   "compilerOptions": {
     "noEmit": true
   },
-  "include": ["."],
+  "include": [".", "../../liminal/types/JSONStringifyReplacer.ts"],
   "references": [
     {
       "path": "../../liminal"
