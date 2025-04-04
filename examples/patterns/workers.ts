@@ -18,15 +18,17 @@ function* plan(feat: string) {
     files: L.array(FileInfo),
     estimatedComplexity: L.enum("create", "medium", "high"),
   })
-  const fileChanges = yield* L.fork(
-    "group-key",
-    implementationPlan.files.map((file) => implement(feat, file)),
+  const fileChanges = yield* L.isolate(
+    "implement",
+    L.fork(
+      "group-key",
+      implementationPlan.files.map((file) => implement(feat, file)),
+    ),
   )
   return { fileChanges, implementationPlan }
 }
 
 function* implement(featureRequest: string, file: typeof FileInfo["T"]) {
-  yield* L.clear()
   yield* L.system(IMPLEMENTATION_PROMPTS[file.changeType])
   yield* L.user`
     Implement the changes for ${file.filePath} to support:

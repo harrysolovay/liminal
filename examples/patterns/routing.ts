@@ -2,7 +2,7 @@ import { openai } from "@ai-sdk/openai"
 import { exec, L } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
-exec(Main("I'd like a refund please."), {
+exec(processCustomerQuery("I'd like a refund please."), {
   bind: {
     default: AILanguageModel(openai("gpt-4o-mini")),
     reasoning: AILanguageModel(openai("o1-mini")),
@@ -10,9 +10,9 @@ exec(Main("I'd like a refund please."), {
   handler: console.log,
 })
 
-function* Main(query: string) {
+function* processCustomerQuery(query: string) {
   yield* L.declareLanguageModel("default")
-  const classification = yield* L.fork("classify-query", function*() {
+  const classification = yield* L.isolate("classify", function*() {
     yield* L.system`
       Classify this supplied customer query:
 
@@ -29,7 +29,7 @@ function* Main(query: string) {
       complexity: L.enum("simple", "complex"),
     })
   })
-  const response = yield* L.fork("reply-to-query", function*() {
+  const response = yield* L.isolate("handle", function*() {
     yield* L.system(USE_CLASSIFICATION_AGENT_PROMPTS[classification.type])
     if (classification.complexity === "complex") {
       yield* L.declareLanguageModel("reasoning")

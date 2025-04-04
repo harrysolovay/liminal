@@ -17,11 +17,14 @@ function* Review(code: string) {
   yield* L.declareLanguageModel("default")
   yield* L.system`You are a technical lead summarizing multiple code reviews. Review the supplied code.`
   yield* L.user(code)
-  const reviews = yield* L.fork("reviews", {
-    SecurityReview,
-    PerformanceReview,
-    MaintainabilityReview,
-  })
+  const reviews = yield* L.isolate(
+    "reviews-isolate",
+    L.fork("reviews", {
+      SecurityReview,
+      PerformanceReview,
+      MaintainabilityReview,
+    }),
+  )
   yield* L.user(JSON.stringify(Object.values(reviews), null, 2))
   yield* L.user`You are a technical lead summarizing multiple code reviews.`
   const summary = yield* L.string
@@ -29,7 +32,6 @@ function* Review(code: string) {
 }
 
 function* SecurityReview() {
-  yield* L.clear()
   yield* L
     .system`You are an expert in code security. Focus on identifying security vulnerabilities, injection risks, and authentication issues.`
   return yield* L.object({
@@ -41,7 +43,6 @@ function* SecurityReview() {
 }
 
 function* PerformanceReview() {
-  yield* L.clear()
   yield* L
     .system`You are an expert in code performance. Focus on identifying performance bottlenecks, memory leaks, and optimization opportunities.`
   return yield* L.object({
@@ -53,7 +54,6 @@ function* PerformanceReview() {
 }
 
 function* MaintainabilityReview() {
-  yield* L.clear()
   yield* L
     .system`You are an expert in code quality. Focus on code structure, readability, and adherence to best practices.`
   return yield* L.object({
