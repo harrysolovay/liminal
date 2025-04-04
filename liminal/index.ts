@@ -18,6 +18,7 @@ export type {
 export type { Fork, ForkArmResults as ForkResult } from "./actions/Fork.ts"
 export type { GetMessages } from "./actions/GetMessages.ts"
 export type { Infer, InferenceRequestedEvent, InferredEvent } from "./actions/Infer.ts"
+export type { InferenceStreamRequestedEvent, InferStream, InferStreamedEvent } from "./actions/InferStream.ts"
 export type { Isolate } from "./actions/Isolate.ts"
 export type {
   AssistantContent,
@@ -34,12 +35,13 @@ export type {
   UserMessagedEvent,
 } from "./actions/messages.ts"
 export type { EmbeddingModelSetEvent, RunEmbed, SetEmbeddingModel } from "./actions/SetEmbeddingModel.ts"
-export type { LanguageModelSetEvent, RunInfer, SetLanguageModel } from "./actions/SetLanguageModel.ts"
+export type { LanguageModelSetEvent, RunInfer, RunInferStream, SetLanguageModel } from "./actions/SetLanguageModel.ts"
 export type { MessagesSetEvent, SetMessages } from "./actions/SetMessages.ts"
 export * from "./Actor.ts"
 export { exec, type ExecConfig } from "./exec.ts"
 export * as L from "./L.ts"
 export { LiminalAssertionError } from "./LiminalAssertionError.ts"
+export { declareLanguageModelWithStreaming } from "./patterns/declareLanguageModelWithStreaming.ts"
 export * from "./reduceScope.ts"
 export * from "./Scope.ts"
 export * from "./Spec.ts"

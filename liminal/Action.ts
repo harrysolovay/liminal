@@ -7,6 +7,7 @@ import type { EnableTool } from "./actions/EnableTool.ts"
 import type { Fork } from "./actions/Fork.ts"
 import type { GetMessages } from "./actions/GetMessages.ts"
 import type { Infer } from "./actions/Infer.ts"
+import type { InferStream } from "./actions/InferStream.ts"
 import type { Isolate } from "./actions/Isolate.ts"
 import type { Message } from "./actions/messages.ts"
 import type { SetEmbeddingModel } from "./actions/SetEmbeddingModel.ts"
@@ -21,6 +22,7 @@ export type Action =
   | Emit
   | Fork
   | Infer
+  | InferStream
   | Embed
   | EnableTool
   | DisableTool
