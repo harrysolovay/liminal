@@ -3,7 +3,7 @@ import type { RunEmbed } from "../actions/SetEmbeddingModel.ts"
 import type { EmbeddingModelSetEvent } from "../actions/SetEmbeddingModel.ts"
 import type { RunInfer } from "../actions/SetLanguageModel.ts"
 import type { LanguageModelSetEvent } from "../actions/SetLanguageModel.ts"
-import { L } from "../index.ts"
+import * as L from "../L.ts"
 import { ActorAssertions } from "../testing/ActorAssertions/ActorAssertions.ts"
 import { declareEmbeddingModel } from "./declareEmbeddingModel.ts"
 import { declareLanguageModel } from "./declareLanguageModel.ts"
@@ -51,9 +51,14 @@ ActorAssertions(parent).assertSpec<{
       "fork",
       "fork-key",
       | EnteredEvent
-      | LanguageModelSetEvent<"A">
-      | EmbeddingModelSetEvent<"B">
-      | ExitedEvent<{ key: void }>
+      | ChildEvent<
+        "fork_arm",
+        "key",
+        EnteredEvent | LanguageModelSetEvent<"A"> | EmbeddingModelSetEvent<"B"> | ExitedEvent<void>
+      >
+      | ExitedEvent<{
+        key: void
+      }>
     >
     | LanguageModelSetEvent<"C">
     | EmbeddingModelSetEvent<"D">

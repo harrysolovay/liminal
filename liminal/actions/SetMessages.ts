@@ -50,6 +50,7 @@ export function* setMessages(
         const { result } = await reduce(
           maybeSetter!([...scope.messages]),
           new Scope(
+            "set_messages",
             scope.args,
             setterOrKey,
             events,

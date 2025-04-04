@@ -22,7 +22,7 @@ export async function exec<Y extends ActionLike, T>(
   events.emit({
     type: "entered",
   })
-  let scope = new Scope(config.bind as never, undefined, events)
+  let scope = new Scope("exec", config.bind as never, undefined, events)
   scope = await reduce(actor, scope)
   events.emit({
     type: "exited",

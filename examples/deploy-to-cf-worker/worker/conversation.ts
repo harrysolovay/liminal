@@ -1,4 +1,3 @@
-import { type } from "arktype"
 import { L } from "liminal"
 
 export function* refine(input: string) {
@@ -20,17 +19,15 @@ export function* refine(input: string) {
       return yield* L.string
     },
   })
-  const { best } = yield* L.fork("selection", {
-    *best() {
-      yield* L.clear()
-      yield* L.declareLanguageModel("select")
-      yield* L.user`
+  const best = yield* L.fork("selection", function*() {
+    yield* L.clear()
+    yield* L.declareLanguageModel("select")
+    yield* L.user`
       Out of the following variants, which is your favorite?:
 
       ${JSON.stringify(variants)}
     `
-      return yield* L.infer(type("'a' | 'b' | 'c'"))
-    },
+    return yield* L.enum("a", "b", "c")
   })
   return variants[best]
 }

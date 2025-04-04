@@ -2,7 +2,7 @@ import { openai } from "@ai-sdk/openai"
 import { exec, L } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
-exec(Main, {
+exec(Main("I'd like a refund please."), {
   bind: {
     default: AILanguageModel(openai("gpt-4o-mini")),
     reasoning: AILanguageModel(openai("o1-mini")),
@@ -10,41 +10,33 @@ exec(Main, {
   handler: console.log,
 })
 
-function* Main() {
+function* Main(query: string) {
   yield* L.declareLanguageModel("default")
-  const [classification] = yield* L.fork("classification", [
-    classifyQuery("I'd like a refund please"),
-  ])
-  const [response] = yield* L.fork("ClassificationConsumer", [useClassification(classification)])
+  const classification = yield* L.fork("classify-query", function*() {
+    yield* L.system`
+      Classify this supplied customer query:
+
+      Determine:
+
+      1. Query type (general, refund, or technical)
+      2. Complexity (simple or complex)
+      3. Brief reasoning for classification
+    `
+    yield* L.user(query)
+    return yield* L.object({
+      reasoning: L.string,
+      type: L.enum("general", "refund", "technical"),
+      complexity: L.enum("simple", "complex"),
+    })
+  })
+  const response = yield* L.fork("reply-to-query", function*() {
+    yield* L.system(USE_CLASSIFICATION_AGENT_PROMPTS[classification.type])
+    if (classification.complexity === "complex") {
+      yield* L.declareLanguageModel("reasoning")
+    }
+    return yield* L.string
+  })
   return { classification, response }
-}
-
-function* classifyQuery(query: string) {
-  yield* L.system`
-    Classify this supplied customer query:
-
-    Determine:
-
-    1. Query type (general, refund, or technical)
-    2. Complexity (simple or complex)
-    3. Brief reasoning for classification
-  `
-  yield* L.user(query)
-  return yield* Classification
-}
-
-const Classification = L.object({
-  reasoning: L.string,
-  type: L.enum("general", "refund", "technical"),
-  complexity: L.enum("simple", "complex"),
-})
-
-function* useClassification(classification: typeof Classification["T"]) {
-  yield* L.system(USE_CLASSIFICATION_AGENT_PROMPTS[classification.type])
-  if (classification.complexity === "complex") {
-    yield* L.declareLanguageModel("reasoning")
-  }
-  return yield* L.string
 }
 
 const USE_CLASSIFICATION_AGENT_PROMPTS = {

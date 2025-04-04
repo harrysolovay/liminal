@@ -1,5 +1,5 @@
 import type { AssertTrue, IsExact } from "conditional-type-checks"
-import { L } from "../index.ts"
+import * as L from "../L.ts"
 import { ActorAssertions } from "../testing/ActorAssertions/ActorAssertions.ts"
 import type { ChildEvent, EnteredEvent, ExitedEvent } from "./actions_common.ts"
 import type { ToolDisabledEvent } from "./DisableTool.ts"
@@ -80,17 +80,25 @@ ActorAssertions(parent).assertSpec<{
       "fork",
       "fork-key",
       | EnteredEvent
-      | ToolEnabledEvent<"Tool">
       | ChildEvent<
-        "tool",
-        "Tool",
+        "fork_arm",
+        "arm-key",
         | EnteredEvent
-        | ToolCalledEvent<{
-          a: string
-          b: string
-        }>
+        | ToolEnabledEvent<"Tool">
         | ExitedEvent<void>
+        | ChildEvent<
+          "tool",
+          "Tool",
+          | EnteredEvent
+          | ToolCalledEvent<{
+            a: string
+            b: string
+          }>
+          | ExitedEvent<void>
+        >
       >
-      | ExitedEvent<{ "arm-key": void }>
+      | ExitedEvent<{
+        "arm-key": void
+      }>
     >
 }>()

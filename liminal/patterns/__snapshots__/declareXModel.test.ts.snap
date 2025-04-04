@@ -24,30 +24,24 @@ exports[`Model generates the expected event sequence 1`] = `
   ],
   "children": [
     {
-      "type": "fork",
-      "scopes": {
-        "key": {
-          "key": "fork-group",
-          "events": [
-            {
-              "type": "entered"
-            },
-            {
-              "type": "language_model_set",
-              "key": "child_a"
-            },
-            {
-              "type": "embedding_model_set",
-              "key": "child_b"
-            },
-            {
-              "type": "exited",
-              "result": {}
-            }
-          ],
-          "children": []
+      "key": "fork-key",
+      "events": [
+        {
+          "type": "entered"
+        },
+        {
+          "type": "language_model_set",
+          "key": "child_a"
+        },
+        {
+          "type": "embedding_model_set",
+          "key": "child_b"
+        },
+        {
+          "type": "exited"
         }
-      }
+      ],
+      "children": []
     }
   ]
 }"

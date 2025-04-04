@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test"
 import { exec } from "../exec.ts"
-import { L } from "../index.ts"
+import * as L from "../L.ts"
 import { TestEmbeddingModel } from "../testing/TestEmbeddingModel/TestEmbeddingModel.ts"
 import { TestLanguageModel } from "../testing/TestLanguageModel/TestLanguageModel.ts"
 
@@ -9,11 +9,9 @@ describe("Model", () => {
     const scope = await exec(function*() {
       yield* L.declareLanguageModel("default")
       yield* L.declareLanguageModel("secondary")
-      yield* L.fork("fork-group", {
-        *key() {
-          yield* L.declareLanguageModel("child_a")
-          yield* L.declareEmbeddingModel("child_b")
-        },
+      yield* L.fork("fork-key", function*() {
+        yield* L.declareLanguageModel("child_a")
+        yield* L.declareEmbeddingModel("child_b")
       })
       yield* L.declareEmbeddingModel("tertiary")
     }, {
