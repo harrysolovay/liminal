@@ -1,5 +1,5 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
-import { reduce } from "../Actor/reduce.ts"
+import { reduceScope } from "../reduceScope.ts"
 import type { Spec } from "../Spec.ts"
 import { assert } from "../util/assert.ts"
 import type { JSONValue } from "../util/JSONValue.ts"
@@ -36,7 +36,7 @@ export function inferStream(): Generator<
 
 export function inferStream<O extends JSONValue>(
   type: StandardSchemaV1<JSONValue, O>,
-  progress: (partial: DeepPartial<O>) => void,
+  progress: InferStreamObjectChunk<O>,
 ): Generator<
   InferStream<{
     Entry: never
@@ -58,7 +58,7 @@ export function* inferStream<O extends JSONValue>(
         // Fallback to regular infer if streaming isn't supported
         assert(scope.runInfer)
         scope.events.emit({ type: "inference_requested" })
-        scope = await reduce(scope.runInfer(this as unknown as Infer, scope), scope)
+        scope = await reduceScope(scope, scope.runInfer(this as unknown as Infer, scope))
         scope.events.emit({
           type: "inferred",
           value: scope.result,
@@ -67,7 +67,7 @@ export function* inferStream<O extends JSONValue>(
       }
 
       scope.events.emit({ type: "inference_requested" })
-      scope = await reduce(scope.runInferStream(this, scope, this.progress), scope)
+      scope = await reduceScope(scope, scope.runInferStream(this, scope, this.progress))
       scope.events.emit({
         type: "inferred",
         value: scope.result,

@@ -1,5 +1,5 @@
 import { type CoreMessage, generateObject, generateText, jsonSchema, type LanguageModelV1, tool } from "ai"
-import { _util, L, type Message, reduce, type RunInfer, Scope } from "liminal"
+import { _util, L, type Message, type RunInfer, Scope } from "liminal"
 import type { InferStream, RunInferStream } from "liminal"
 import { AILanguageModel } from "./AILanguageModel.ts"
 

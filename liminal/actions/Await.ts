@@ -1,7 +1,7 @@
 import { ActionBase, type ActionEventBase } from "./actions_base.ts"
 
 export interface AwaitedEvent<V = unknown> extends ActionEventBase<"await_resolved"> {
-  value: V
+  awaited: V
 }
 
 export interface Await<T = unknown> extends
@@ -18,11 +18,8 @@ function* await_<T>(toAwait: T): Generator<Await<T>, Awaited<T>> {
     toAwait,
     async reduce(scope) {
       const result = await toAwait
-      scope.events.emit({ type: "await_resolved", value: result })
-      return scope.spread({
-        result,
-        next: result,
-      })
+      scope.events.emit({ type: "await_resolved", awaited: result })
+      return scope.spread({ next: result })
     },
   })
 }
