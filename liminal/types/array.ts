@@ -1,13 +1,17 @@
-import type { JSONValue } from "../util/JSONValue.ts"
 import { declareType } from "./declareType.ts"
 import type { JSONType } from "./JSONType.ts"
 import type { JSONTypeBase } from "./JSONTypeBase.ts"
 import type { Type } from "./Type.ts"
+import { normalizeTypeLike, type NormalizeTypeLikeJ, type NormalizeTypeLikeT, type TypeLike } from "./TypeLike.ts"
 
-export function array<T extends JSONValue, J extends JSONType>(
-  element: Type<T, J>,
-): Type<Array<T>, JSONArrayType<J>> {
-  return declareType(() => array<T, J>, [element])
+export function array<const F extends TypeLike>(
+  element: F,
+): Type<Array<NormalizeTypeLikeT<F>>, JSONArrayType<NormalizeTypeLikeJ<F>>> {
+  return _array(normalizeTypeLike(element)) as never
+}
+
+export function _array(element: Type): Type {
+  return declareType(() => _array, [element])
 }
 
 export interface JSONArrayType<E extends JSONType = any> extends JSONTypeBase {

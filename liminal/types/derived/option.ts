@@ -1,11 +1,10 @@
-import type { JSONValue } from "../../util/JSONValue.ts"
-import type { JSONType } from "../JSONType.ts"
 import { type JSONNullType, null as null_ } from "../null.ts"
 import type { Type } from "../Type.ts"
-import { type JSONUnionType, union } from "../union.ts"
+import type { NormalizeTypeLikeJ, NormalizeTypeLikeT, TypeLike } from "../TypeLike.ts"
+import { _union, type JSONUnionType, union } from "../union.ts"
 
-export function option<T extends JSONValue, J extends JSONType>(
-  of: Type<T, J>,
-): Type<T | null, JSONUnionType<J | JSONNullType>> {
-  return union(of, null_)
+export function option<const X extends TypeLike>(
+  of: X,
+): Type<null | NormalizeTypeLikeT<X>, JSONUnionType<JSONNullType | NormalizeTypeLikeJ<X>>> {
+  return union(null_, of)
 }

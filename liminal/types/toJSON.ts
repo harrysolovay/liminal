@@ -1,5 +1,4 @@
 import type { JSONValue } from "../util/JSONValue.ts"
-import { _object, type _ObjectFields, type JSONObjectType } from "./_object.ts"
 import type { JSONArrayType } from "./array.ts"
 import type { JSONBooleanType } from "./boolean.ts"
 import { type JSONConstType } from "./const.ts"
@@ -10,6 +9,7 @@ import { JSONSchema$schema } from "./JSONRootType.ts"
 import type { JSONRootableType, JSONType } from "./JSONType"
 import type { JSONNullType } from "./null.ts"
 import type { JSONNumberType } from "./number.ts"
+import { _object, type JSONObjectType, type ObjectFields } from "./object.ts"
 import type { JSONRefType } from "./ref.ts"
 import { type JSONStringType } from "./string.ts"
 import { type Type } from "./Type.ts"
@@ -67,7 +67,7 @@ const visit = TypeVisitor<ToJSONContext, JSONType>({
       const: value,
     })
   },
-  array(state, _type, element): JSONArrayType {
+  _array(state, _type, element): JSONArrayType {
     return {
       type: "array",
       items: visit(state, element),
@@ -79,7 +79,7 @@ const visit = TypeVisitor<ToJSONContext, JSONType>({
       enum: values,
     }
   },
-  union(state, _type, ...members): JSONUnionType {
+  _union(state, _type, ...members): JSONUnionType {
     return {
       anyOf: members.map((member) => visit(state, member)),
     }

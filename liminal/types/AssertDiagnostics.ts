@@ -1,7 +1,7 @@
 import { assert } from "../util/assert.ts"
 import { assertJSONValueEquals } from "../util/assertJSONValueEquals.ts"
+import type { JSONKey } from "../util/JSONKey.ts"
 import type { JSONValue } from "../util/JSONValue.ts"
-import type { _ObjectFields, _TupleFields } from "./_object.ts"
 import type { JSONRootableType } from "./JSONType.ts"
 import type { Type } from "./Type.ts"
 import { TypeVisitor } from "./TypeVisitor.ts"
@@ -60,12 +60,12 @@ const visit = TypeVisitor<undefined, (value: JSONValue, vState: AssertDiagnostic
       assert(typeof value === "string")
     }
   },
-  const(_state, _type, _valueType, value_) {
+  const(_tState, _type, _valueType, value_) {
     return (value) => {
       assertJSONValueEquals(value_, value)
     }
   },
-  array(tState, _type, element) {
+  _array(tState, _type, element) {
     const visitElement = visit(tState, element)
     return (value, vState) => {
       assert(Array.isArray(value))
@@ -78,32 +78,25 @@ const visit = TypeVisitor<undefined, (value: JSONValue, vState: AssertDiagnostic
       assert(values.includes(value))
     }
   },
-  union(tState, _type, ...members) {
+  _union(_tState, _type, ...members) {
     return (value, vState) => {
       assert(members.some((member) => {
         const memberState = vState.new()
-        visit(tState, member)(value, memberState)
+        visit(undefined, member)(value, memberState)
         return !memberState.diagnostics.length
       }))
     }
   },
-  // TODO: clean up
-  _object(tState, _type, fields) {
+  _object(_tState, _type, fields) {
     return (value, vState) => {
       assert(typeof value === "object" && value !== null)
       if (Array.isArray(fields)) {
-        ;(fields as _TupleFields).forEach((fieldType, i) => {
-          assert(i in value)
-          const childValue = value[i]
-          assert(childValue !== undefined)
-          visit(tState, fieldType)(childValue, vState.new(i))
+        fields.forEach((v, i) => {
+          visitField(vState, value, i, v)
         })
       } else {
         Object.entries(fields).forEach(([k, v]) => {
-          assert(k in value)
-          const childValue = value[k as never]
-          assert(childValue !== undefined)
-          visit(tState, v)(childValue, vState.new(k))
+          visitField(vState, value, k, v)
         })
       }
     }
@@ -114,3 +107,15 @@ const visit = TypeVisitor<undefined, (value: JSONValue, vState: AssertDiagnostic
     }
   },
 })
+
+function visitField(
+  vState: AssertDiagnosticsState,
+  value: object,
+  key: JSONKey,
+  type: Type,
+) {
+  assert(key in value)
+  const childValue = value[key as never]
+  assert(childValue !== undefined)
+  visit(undefined, type)(childValue, vState.new(key))
+}

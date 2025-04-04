@@ -1,6 +1,6 @@
 import type { Infer, InferenceRequestedEvent, InferredEvent } from "../actions/Infer.ts"
 import type { JSONObject } from "../util/JSONObject.ts"
-import type { JSONObjectType } from "./_object.ts"
+import type { JSONObjectType } from "./object.ts"
 import { type Type } from "./Type.ts"
 
 // TODO: rename?
