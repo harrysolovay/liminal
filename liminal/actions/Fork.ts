@@ -106,6 +106,7 @@ export function* fork(
               events,
               scope.runInfer,
               scope.runEmbed,
+              scope.runInferStream,
               [...scope.messages],
             ),
             actor,

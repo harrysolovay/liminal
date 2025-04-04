@@ -2,7 +2,7 @@ import type { ActionEvents } from "./ActionEvents.ts"
 import type { EnableTool } from "./actions/EnableTool.ts"
 import type { Message } from "./actions/messages.ts"
 import type { RunEmbed } from "./actions/SetEmbeddingModel.ts"
-import type { RunInfer } from "./actions/SetLanguageModel.ts"
+import type { RunInfer, RunInferStream } from "./actions/SetLanguageModel.ts"
 
 export type ScopeSource = "exec" | "isolate" | "tool" | "fork" | "fork_arm" | "set_messages"
 
@@ -14,6 +14,7 @@ export class Scope<R = any> {
     readonly events: ActionEvents,
     public runInfer: RunInfer | undefined = undefined,
     public runEmbed: RunEmbed | undefined = undefined,
+    public runInferStream: RunInferStream | undefined = undefined,
     readonly messages: Array<Message> = [],
     readonly tools: Set<EnableTool> = new Set(),
     public next: any = undefined,
@@ -40,6 +41,7 @@ export class Scope<R = any> {
       fields?.events ?? this.events,
       fields?.runInfer ?? this.runInfer,
       fields?.runEmbed ?? this.runEmbed,
+      fields?.runInferStream ?? this.runInferStream,
       fields?.messages ?? this.messages,
       fields?.tools ?? this.tools,
       fields?.next ?? this.next,
