@@ -1,7 +1,6 @@
-import type { Action } from "./Action.ts"
+import type { Action, ActionLike } from "./Action.ts"
 import type { ActionEvent } from "./ActionEvent.ts"
 import type { Message } from "./actions/messages.ts"
-import type { ActionLike } from "./Actor/ActionLike.ts"
 
 export interface Spec {
   Entry: [keyof any, any]

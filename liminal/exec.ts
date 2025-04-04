@@ -1,8 +1,8 @@
+import type { ActionLike } from "./Action.ts"
 import { ActionEvents } from "./ActionEvents.ts"
 import type { EnteredEvent, ExitedEvent } from "./actions/actions_common.ts"
-import type { ActionLike } from "./Actor/ActionLike.ts"
-import type { ActorLike } from "./Actor/ActorLike.ts"
-import { reduce } from "./Actor/reduce.ts"
+import type { ActorLike } from "./Actor.ts"
+import { reduceScope } from "./reduceScope.ts"
 import { Scope } from "./Scope.ts"
 import type { ExtractSpec, Spec } from "./Spec.ts"
 import type { FromEntries } from "./util/FromEntries.ts"
@@ -22,8 +22,8 @@ export async function exec<Y extends ActionLike, T>(
   events.emit({
     type: "entered",
   })
-  let scope = new Scope(config.bind as never, undefined, events)
-  scope = await reduce(actor, scope)
+  let scope = new Scope("exec", config.bind as never, undefined, events)
+  scope = await reduceScope(scope, actor)
   events.emit({
     type: "exited",
     result: scope.result,

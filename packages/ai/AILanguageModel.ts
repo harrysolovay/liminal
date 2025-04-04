@@ -1,5 +1,5 @@
 import { type CoreMessage, generateObject, generateText, jsonSchema, type LanguageModelV1, tool } from "ai"
-import { _util, L, type Message, reduce, type RunInfer, Scope } from "liminal"
+import { _util, L, type Message, reduceScope, type RunInfer, Scope } from "liminal"
 
 export function AILanguageModel(model: LanguageModelV1): RunInfer {
   return async function*(action, scope) {

@@ -1,19 +1,19 @@
-import type { StandardSchemaV1 } from "@standard-schema/spec"
 import type { AssertTrue, IsExact } from "conditional-type-checks"
+import * as L from "../L.ts"
 import { ActorAssertions } from "../testing/ActorAssertions/ActorAssertions.ts"
 import type { ChildEvent, EnteredEvent, ExitedEvent } from "./actions_common.ts"
-import { context } from "./Context.ts"
 import type { ToolDisabledEvent } from "./DisableTool.ts"
 import { emit } from "./Emit.ts"
 import type { EmittedEvent } from "./Emit.ts"
 import { enableTool, type ToolCalledEvent, type ToolEnabledEvent } from "./EnableTool.ts"
 
-type P = {
-  a: string
-  b: string
-}
+type P = typeof P["T"]
+const P = L.object({
+  a: L.string,
+  b: L.string,
+})
 
-const arrowTool = enableTool("Tool", "", null! as StandardSchemaV1<P>, (params) => {
+const arrowTool = L.enableTool("Tool", "", P, (params) => {
   type _ = [AssertTrue<IsExact<typeof params, P>>]
 })
 
@@ -30,7 +30,7 @@ function* _0() {
   }>()
 }
 
-const genTool = enableTool("Tool", "", null! as StandardSchemaV1<P>, function*(params) {
+const genTool = enableTool("tool-key", "", P, function*(params) {
   type _ = [AssertTrue<IsExact<typeof params, P>>]
   yield* emit("Test", {})
   return ""
@@ -39,28 +39,66 @@ const genTool = enableTool("Tool", "", null! as StandardSchemaV1<P>, function*(p
 ActorAssertions(genTool).assertSpec<{
   Entry: never
   Event:
-    | ToolEnabledEvent<"Tool">
-    | ChildEvent<"tool", "Tool", ToolCalledEvent<P> | EnteredEvent | EmittedEvent<"Test", {}> | ExitedEvent<string>>
+    | ToolEnabledEvent<"tool-key">
+    | ChildEvent<
+      "tool",
+      "tool-key",
+      | EnteredEvent
+      | EmittedEvent<"Test", {}>
+      | ToolCalledEvent<{
+        a: string
+        b: string
+      }>
+      | ExitedEvent<string>
+    >
 }>()
 
 function* parent() {
-  yield* enableTool("ParentTool", "", null! as StandardSchemaV1<P>, () => {})
-  yield* context("Context", function*() {
-    yield* arrowTool
+  yield* L.enableTool("parent-tool", "", P, () => {})
+  yield* L.fork("fork-key", {
+    *"arm-key"() {
+      yield* arrowTool
+    },
   })
 }
 
 ActorAssertions(parent).assertSpec<{
   Entry: never
   Event:
-    | ToolEnabledEvent<"ParentTool">
-    | ChildEvent<"tool", "ParentTool", EnteredEvent | ToolCalledEvent<P> | ExitedEvent<void>>
+    | ToolEnabledEvent<"parent-tool">
     | ChildEvent<
-      "context",
-      "Context",
+      "tool",
+      "parent-tool",
       | EnteredEvent
-      | ToolEnabledEvent<"Tool">
+      | ToolCalledEvent<{
+        a: string
+        b: string
+      }>
       | ExitedEvent<void>
-      | ChildEvent<"tool", "Tool", EnteredEvent | ToolCalledEvent<P> | ExitedEvent<void>>
+    >
+    | ChildEvent<
+      "fork",
+      "fork-key",
+      | EnteredEvent
+      | ChildEvent<
+        "fork_arm",
+        "arm-key",
+        | EnteredEvent
+        | ToolEnabledEvent<"Tool">
+        | ExitedEvent<void>
+        | ChildEvent<
+          "tool",
+          "Tool",
+          | EnteredEvent
+          | ToolCalledEvent<{
+            a: string
+            b: string
+          }>
+          | ExitedEvent<void>
+        >
+      >
+      | ExitedEvent<{
+        "arm-key": void
+      }>
     >
 }>()

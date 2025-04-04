@@ -1,6 +1,6 @@
 import type { IsExact } from "conditional-type-checks"
-import type { ActionLike } from "../../Actor/ActionLike.ts"
-import type { ActorLike } from "../../Actor/ActorLike.ts"
+import type { ActionLike } from "../../Action.ts"
+import type { ActorLike } from "../../Actor.ts"
 import type { ExtractSpec, Spec } from "../../Spec.ts"
 
 export interface ActorAssertions<S extends Spec> {

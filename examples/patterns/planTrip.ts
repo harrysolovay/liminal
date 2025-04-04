@@ -2,14 +2,14 @@ import { openai } from "@ai-sdk/openai"
 import { exec, L } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
-exec(PlanTrip("New York City"), {
+exec(planTrip("New York City"), {
   bind: {
     default: AILanguageModel(openai("gpt-4o-mini")),
   },
   handler: console.log,
 })
 
-function* PlanTrip(departureLocation: string) {
+function* planTrip(departureLocation: string) {
   yield* L.declareLanguageModel("default")
   yield* L.user`
     I want to plan a weekend trip leaving from ${departureLocation}. I don't know where to go.

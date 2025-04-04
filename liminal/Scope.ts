@@ -4,8 +4,11 @@ import type { Message } from "./actions/messages.ts"
 import type { RunEmbed } from "./actions/SetEmbeddingModel.ts"
 import type { RunInfer } from "./actions/SetLanguageModel.ts"
 
+export type ScopeSource = "exec" | "isolate" | "tool" | "fork" | "fork_arm" | "set_messages"
+
 export class Scope<R = any> {
   constructor(
+    readonly source: ScopeSource,
     readonly args: Record<keyof any, any>,
     readonly key: keyof any | undefined,
     readonly events: ActionEvents,
@@ -15,7 +18,7 @@ export class Scope<R = any> {
     readonly tools: Set<EnableTool> = new Set(),
     public next: any = undefined,
     public result: R = undefined!,
-    public children: Array<ChildScopeContainer> = [],
+    public children: Array<Scope> = [],
   ) {}
 
   toJSON() {
@@ -31,6 +34,7 @@ export class Scope<R = any> {
 
   spread = (fields?: Partial<Scope<R>>): Scope<R> => {
     return new Scope(
+      fields?.source ?? this.source,
       fields?.args ?? this.args,
       fields?.key ?? this.key,
       fields?.events ?? this.events,
@@ -43,14 +47,4 @@ export class Scope<R = any> {
       fields?.children ?? this.children,
     )
   }
-}
-
-// TODO: how to capture tool scope?
-export type ChildScopeContainer = {
-  type: "context"
-  scope: Scope
-} | {
-  type: "fork"
-  key: keyof any
-  scopes: Record<keyof any, Scope>
 }

@@ -1,5 +1,5 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
-import { reduce } from "../Actor/reduce.ts"
+import { reduceScope } from "../reduceScope.ts"
 import type { Spec } from "../Spec.ts"
 import { assert } from "../util/assert.ts"
 import type { JSONValue } from "../util/JSONValue.ts"
@@ -33,7 +33,7 @@ export function* infer(type?: StandardSchemaV1): Generator<Infer, unknown> {
       scope.events.emit({
         type: "inference_requested",
       })
-      scope = await reduce(scope.runInfer(this as never, scope), scope)
+      scope = await reduceScope(scope, scope.runInfer(this as never, scope))
       scope.events.emit({
         type: "inferred",
         value: scope.result,

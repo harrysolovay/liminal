@@ -17,11 +17,14 @@ function* Review(code: string) {
   yield* L.declareLanguageModel("default")
   yield* L.system`You are a technical lead summarizing multiple code reviews. Review the supplied code.`
   yield* L.user(code)
-  const reviews = yield* L.fork("Reviews", {
-    SecurityReview,
-    PerformanceReview,
-    MaintainabilityReview,
-  })
+  const reviews = yield* L.isolate(
+    "reviews-isolate",
+    L.fork("reviews", {
+      SecurityReview,
+      PerformanceReview,
+      MaintainabilityReview,
+    }),
+  )
   yield* L.user(JSON.stringify(Object.values(reviews), null, 2))
   yield* L.user`You are a technical lead summarizing multiple code reviews.`
   const summary = yield* L.string

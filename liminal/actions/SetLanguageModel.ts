@@ -1,5 +1,5 @@
 import type {} from "./actions_base.ts"
-import type { Actor } from "../Actor/Actor.ts"
+import type { Actor } from "../Actor.ts"
 import type { Scope } from "../Scope.ts"
 import type { Spec } from "../Spec.ts"
 import { ActionBase, type ActionEventBase } from "./actions_base.ts"
