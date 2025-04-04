@@ -1,5 +1,6 @@
 import { assert } from "../util/assert.ts"
-import { assertJSONValueEquals } from "../util/assertJSONValueEquals.ts"
+import { isJSONValue } from "../util/isJSONValue.ts"
+import { jsonEquals } from "../util/jsonEquals.ts"
 import type { JSONKey } from "../util/JSONKey.ts"
 import type { JSONValue } from "../util/JSONValue.ts"
 import type { JSONRootableType } from "./JSONType.ts"
@@ -9,14 +10,14 @@ import { TypeVisitor } from "./TypeVisitor.ts"
 export type AssertDiagnostics = Array<Diagnostic>
 export interface Diagnostic {
   path: AssertPath
-  error: Error
+  error: unknown
 }
 export type AssertPath = Array<PathKey>
 export type PathKey = number | string
 
 export function AssertDiagnostics<T extends JSONValue, J extends JSONRootableType>(
   type: Type<T, J>,
-  value: JSONValue,
+  value: unknown,
 ): Array<Diagnostic> {
   const state = new AssertDiagnosticsState()
   visit(undefined, type)(value, state)
@@ -34,7 +35,19 @@ class AssertDiagnosticsState {
   }
 }
 
-const visit = TypeVisitor<undefined, (value: JSONValue, vState: AssertDiagnosticsState) => void>({
+const visit = TypeVisitor<undefined, (value: unknown, vState: AssertDiagnosticsState) => void>({
+  hook(next, state, type) {
+    return (value, vState) => {
+      try {
+        next(state, type)(value, vState)
+      } catch (error) {
+        vState.diagnostics.push({
+          error,
+          path: vState.path,
+        })
+      }
+    }
+  },
   null() {
     return (value) => {
       assert(value === null)
@@ -62,7 +75,7 @@ const visit = TypeVisitor<undefined, (value: JSONValue, vState: AssertDiagnostic
   },
   const(_tState, _type, _valueType, value_) {
     return (value) => {
-      assertJSONValueEquals(value_, value)
+      assert(isJSONValue(value) && jsonEquals(value_, value))
     }
   },
   _array(tState, _type, element) {

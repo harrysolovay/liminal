@@ -1,5 +1,4 @@
-import { type JSONObjectType, type JSONRefType, L } from "liminal"
-import type { RootType } from "../../liminal/types/RootType"
+import { type JSONObjectType, type JSONRefType, L, type Type } from "liminal"
 
 L.null
 
@@ -18,9 +17,9 @@ L.enum("A", "B", "C")
 L.union(
   L.number,
   L.string,
-  L.object({
+  {
     a: L.number,
-  }),
+  },
 )
 
 L.array(L.string)
@@ -44,9 +43,8 @@ type Recursive = {
 type JSONRecursive = JSONObjectType<{
   value: JSONRefType
 }>
-// Use `Type` instead of `RootType` for non-objects.
-const recursive = L.object({
-  value: L.ref((): RootType<Recursive, JSONRecursive> => recursive),
+const recursive: Type<Recursive, JSONRecursive> = L.object({
+  value: L.ref(() => recursive),
 })
 
 L.taggedUnion({

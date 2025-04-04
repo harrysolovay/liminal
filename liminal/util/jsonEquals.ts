@@ -1,6 +1,6 @@
 import type { JSONValue } from "./JSONValue"
 
-export function assertJSONValueEquals(actual: JSONValue, expected: JSONValue): boolean {
+export function jsonEquals(actual: JSONValue, expected: JSONValue): boolean {
   if (actual === expected) {
     return true
   }
@@ -20,7 +20,7 @@ export function assertJSONValueEquals(actual: JSONValue, expected: JSONValue): b
     if (actual.length !== expected.length) {
       return false
     }
-    return actual.every((value, index) => assertJSONValueEquals(value, expected[index]!))
+    return actual.every((value, index) => jsonEquals(value, expected[index]!))
   }
 
   if (typeof actual === "object") {
@@ -33,7 +33,7 @@ export function assertJSONValueEquals(actual: JSONValue, expected: JSONValue): b
     }
     return keys.every((key) =>
       Object.prototype.hasOwnProperty.call(expected, key)
-      && assertJSONValueEquals((actual as any)[key], (expected as any)[key])
+      && jsonEquals((actual as any)[key], (expected as any)[key])
     )
   }
 

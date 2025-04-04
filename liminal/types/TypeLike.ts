@@ -19,7 +19,6 @@ export type NormalizeTypeLikesT<F> = [
   { -readonly [K in keyof F]: NormalizeTypeLikeT<F[K]> },
 ][0]
 
-// TODO: `V` constraint
 export type NormalizeTypeLikeT<V> = V extends TypeLikes ? NormalizeTypeLikesT<V>
   : V extends JSONKey ? V
   : V extends Type<infer T> ? T
@@ -29,7 +28,6 @@ export type NormalizeTypeLikesJ<F> = [
   { -readonly [K in keyof F as F extends TypeLikeTuple ? Exclude<K, keyof Array<any>> : K]: NormalizeTypeLikeJ<F[K]> },
 ][0]
 
-// TODO: `V` constraint
 export type NormalizeTypeLikeJ<V> = V extends TypeLikes ? JSONObjectType<NormalizeTypeLikesJ<V>>
   : V extends string ? JSONConstType<JSONStringType, V>
   : V extends number ? JSONConstType<JSONNumberType, V>

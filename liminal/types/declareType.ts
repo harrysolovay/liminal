@@ -1,6 +1,9 @@
+import { infer } from "../L.ts"
+import { LiminalAssertionError } from "../LiminalAssertionError.ts"
 import type { Falsy } from "../util/Falsy"
 import { isTemplateStringsArray } from "../util/isTemplateStringsArray"
 import { unimplemented } from "../util/unimplemented.ts"
+import { AssertDiagnostics } from "./AssertDiagnostics.ts"
 import { toJSON } from "./toJSON.ts"
 import { type Type, TypeKey, type TypeMembers } from "./Type"
 
@@ -24,6 +27,19 @@ export function declareType<X extends Type>(
         },
       },
       toJSON,
+      assert(value) {
+        const diagnostics = AssertDiagnostics(this as never, value)
+        if (diagnostics.length) {
+          // TODO: better formatting of diagnostics
+          throw new LiminalAssertionError(
+            diagnostics.map(({ path, error }) => `path ${path}: ${JSON.stringify(error)}`).join("\n"),
+          )
+        }
+        return value as X["T"]
+      },
+      *[Symbol.iterator]() {
+        return yield* infer(this)
+      },
     } satisfies TypeMembers<X["T"], X["J"]>,
   ) as never
 
