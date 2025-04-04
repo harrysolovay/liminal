@@ -15,7 +15,7 @@ export type TypeLikeRecord = {
   [key: JSONKey]: TypeLike
 }
 
-export type NormalizeTypeLikesT<F extends TypeLikes> = [
+export type NormalizeTypeLikesT<F> = [
   { -readonly [K in keyof F]: NormalizeTypeLikeT<F[K]> },
 ][0]
 
@@ -25,7 +25,7 @@ export type NormalizeTypeLikeT<V> = V extends TypeLikes ? NormalizeTypeLikesT<V>
   : V extends Type<infer T> ? T
   : null
 
-export type NormalizeTypeLikesJ<F extends TypeLikes> = [
+export type NormalizeTypeLikesJ<F> = [
   { -readonly [K in keyof F as F extends TypeLikeTuple ? Exclude<K, keyof Array<any>> : K]: NormalizeTypeLikeJ<F[K]> },
 ][0]
 
