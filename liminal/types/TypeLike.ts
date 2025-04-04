@@ -1,16 +1,18 @@
 import type { Falsy } from "../util/Falsy.ts"
+import type { JSONKey } from "../util/JSONKey.ts"
 import { const as const_, type JSONConstType } from "./const.ts"
 import { type JSONNullType, null as null_ } from "./null.ts"
+import { type JSONNumberType, number } from "./number.ts"
 import { _object, type JSONObjectType } from "./object.ts"
 import { type JSONStringType, string } from "./string.ts"
 import { isType, type Type } from "./Type.ts"
 
-export type TypeLike = Type | TypeLikes | string | Falsy
+export type TypeLike = Type | TypeLikes | JSONKey | Falsy
 export type TypeLikes = TypeLikeTuple | TypeLikeRecord
 
 export type TypeLikeTuple = Array<TypeLike>
 export type TypeLikeRecord = {
-  [key: string]: TypeLike
+  [key: JSONKey]: TypeLike
 }
 
 export type NormalizeTypeLikesT<F extends TypeLikes> = [
@@ -19,7 +21,7 @@ export type NormalizeTypeLikesT<F extends TypeLikes> = [
 
 // TODO: `V` constraint
 export type NormalizeTypeLikeT<V> = V extends TypeLikes ? NormalizeTypeLikesT<V>
-  : V extends string ? V
+  : V extends JSONKey ? V
   : V extends Type<infer T> ? T
   : null
 
@@ -30,6 +32,7 @@ export type NormalizeTypeLikesJ<F extends TypeLikes> = [
 // TODO: `V` constraint
 export type NormalizeTypeLikeJ<V> = V extends TypeLikes ? JSONObjectType<NormalizeTypeLikesJ<V>>
   : V extends string ? JSONConstType<JSONStringType, V>
+  : V extends number ? JSONConstType<JSONNumberType, V>
   : V extends Type<any, infer J> ? J
   : JSONNullType
 
@@ -45,6 +48,9 @@ export function normalizeTypeLike(value: TypeLike): Type {
   }
   if (typeof value === "string") {
     return const_(string, value)
+  }
+  if (typeof value === "number") {
+    return const_(number, value)
   }
   if (isType(value)) {
     return value
