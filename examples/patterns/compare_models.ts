@@ -32,14 +32,16 @@ export function* Refine(input: string) {
       return yield* L.string
     },
   })
-  const best = yield* L.context("selection", function*() {
-    yield* L.declareLanguageModel("select")
-    yield* L.user`
-      Out of the following variants, which is your favorite?:
+  const { best } = yield* L.fork("selection", {
+    *best() {
+      yield* L.declareLanguageModel("select")
+      yield* L.user`
+        Out of the following variants, which is your favorite?:
 
-      ${JSON.stringify(variants)}
-    `
-    return yield* L.enum("a", "b", "c")
+        ${JSON.stringify(variants)}
+      `
+      return yield* L.enum("a", "b", "c")
+    },
   })
   return variants[best]
 }

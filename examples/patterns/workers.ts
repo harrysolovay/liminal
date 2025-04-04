@@ -2,33 +2,31 @@ import { openai } from "@ai-sdk/openai"
 import { exec, L } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
-exec(CodeReviewers("Alert administrators via text whenever site traffic exceeds a certain threshold."), {
+exec(plan("Alert administrators via text whenever site traffic exceeds a certain threshold."), {
   bind: {
     default: AILanguageModel(openai("gpt-4o-mini")),
   },
   handler: console.log,
 })
 
-function* CodeReviewers(feat: string) {
-  yield* L.system`You are a senior software architect planning feature implementations.`
+function* plan(feat: string) {
   yield* L.declareLanguageModel("default")
+  yield* L.system`You are a senior software architect planning feature implementations.`
   yield* L.user`Analyze this feature request and create an implementation plan:`
   yield* L.user(feat)
   const implementationPlan = yield* L.object({
     files: L.array(FileInfo),
     estimatedComplexity: L.enum("create", "medium", "high"),
   })
-  const fileChanges = yield* L.fork("FileChanges", implementationPlan.files.map((file) => Implementor(feat, file)))
+  const fileChanges = yield* L.fork(
+    "group-key",
+    implementationPlan.files.map((file) => implement(feat, file)),
+  )
   return { fileChanges, implementationPlan }
 }
 
-const FileInfo = L.object({
-  purpose: L.string,
-  filePath: L.string,
-  changeType: L.enum("create", "modify", "delete"),
-})
-
-function* Implementor(featureRequest: string, file: typeof FileInfo["T"]) {
+function* implement(featureRequest: string, file: typeof FileInfo["T"]) {
+  yield* L.clear()
   yield* L.system(IMPLEMENTATION_PROMPTS[file.changeType])
   yield* L.user`
     Implement the changes for ${file.filePath} to support:
@@ -45,6 +43,12 @@ function* Implementor(featureRequest: string, file: typeof FileInfo["T"]) {
   })
   return { file, implementation }
 }
+
+const FileInfo = L.object({
+  purpose: L.string,
+  filePath: L.string,
+  changeType: L.enum("create", "modify", "delete"),
+})
 
 const IMPLEMENTATION_PROMPTS = {
   create: "You are an expert at implementing new files following best practices and project patterns.",

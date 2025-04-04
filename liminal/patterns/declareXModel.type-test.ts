@@ -1,9 +1,9 @@
 import type { ChildEvent, EnteredEvent, ExitedEvent } from "../actions/actions_common.ts"
-import { context } from "../actions/Context.ts"
 import type { RunEmbed } from "../actions/SetEmbeddingModel.ts"
 import type { EmbeddingModelSetEvent } from "../actions/SetEmbeddingModel.ts"
 import type { RunInfer } from "../actions/SetLanguageModel.ts"
 import type { LanguageModelSetEvent } from "../actions/SetLanguageModel.ts"
+import { L } from "../index.ts"
 import { ActorAssertions } from "../testing/ActorAssertions/ActorAssertions.ts"
 import { declareEmbeddingModel } from "./declareEmbeddingModel.ts"
 import { declareLanguageModel } from "./declareLanguageModel.ts"
@@ -31,8 +31,10 @@ ActorAssertions(both).assertSpec<{
 }>()
 
 function* parent() {
-  yield* context("Context", function*() {
-    yield* both()
+  yield* L.fork("fork-key", {
+    *key() {
+      yield* both()
+    },
   })
   yield* declareLanguageModel("C")
   yield* declareEmbeddingModel("D")
@@ -45,11 +47,14 @@ ActorAssertions(parent).assertSpec<{
     | ["C", RunInfer]
     | ["D", RunEmbed]
   Event:
+    | ChildEvent<
+      "fork",
+      "fork-key",
+      | EnteredEvent
+      | LanguageModelSetEvent<"A">
+      | EmbeddingModelSetEvent<"B">
+      | ExitedEvent<{ key: void }>
+    >
     | LanguageModelSetEvent<"C">
     | EmbeddingModelSetEvent<"D">
-    | ChildEvent<
-      "context",
-      "Context",
-      EnteredEvent | LanguageModelSetEvent<"A"> | EmbeddingModelSetEvent<"B"> | ExitedEvent<void>
-    >
 }>()

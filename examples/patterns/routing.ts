@@ -12,8 +12,10 @@ exec(Main, {
 
 function* Main() {
   yield* L.declareLanguageModel("default")
-  const classification = yield* L.context("Classification", classifyQuery("I'd like a refund please"))
-  const response = yield* L.context("ClassificationConsumer", useClassification(classification))
+  const [classification] = yield* L.fork("classification", [
+    classifyQuery("I'd like a refund please"),
+  ])
+  const [response] = yield* L.fork("ClassificationConsumer", [useClassification(classification)])
   return { classification, response }
 }
 

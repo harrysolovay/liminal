@@ -1,6 +1,5 @@
 import type { Arg } from "./actions/Arg.ts"
 import type { Await } from "./actions/Await.ts"
-import type { Context } from "./actions/Context.ts"
 import type { DisableTool } from "./actions/DisableTool.ts"
 import type { Embed } from "./actions/Embed.ts"
 import type { Emit } from "./actions/Emit.ts"
@@ -15,7 +14,6 @@ import type { SetMessages } from "./actions/SetMessages.ts"
 
 export type Action =
   | Await
-  | Context
   | Arg
   | SetEmbeddingModel
   | SetLanguageModel

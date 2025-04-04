@@ -5,7 +5,6 @@ export type { ChildEvent, ChildEventSource, EnteredEvent, ExitedEvent } from "./
 export type { Arg } from "./actions/Arg.ts"
 export type { Await, AwaitedEvent } from "./actions/Await.ts"
 export * from "./actions/content_part.ts"
-export type { Context } from "./actions/Context.ts"
 export type { DisableTool, ToolDisabledEvent } from "./actions/DisableTool.ts"
 export type { Embed, EmbeddedEvent, EmbeddingRequestedEvent } from "./actions/Embed.ts"
 export type { Emit, EmittedEvent } from "./actions/Emit.ts"
@@ -16,7 +15,7 @@ export type {
   ToolImplementation,
   ToolResult,
 } from "./actions/EnableTool.ts"
-export type { Fork, ForkArmEvent, ForkArms, ForkEvent, ForkResult } from "./actions/Fork.ts"
+export type { ActorLikeArray, ActorLikeRecord, ActorLikes, Fork, ForkResult } from "./actions/Fork.ts"
 export type { GetMessages } from "./actions/GetMessages.ts"
 export type { Infer, InferenceRequestedEvent, InferredEvent } from "./actions/Infer.ts"
 export type {

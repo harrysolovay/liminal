@@ -13,7 +13,7 @@ export interface ChildEvent<
   event: E
 }
 
-export type ChildEventSource = "context" | "tool" | "fork" | "set_messages"
+export type ChildEventSource = "isolate" | "tool" | "fork" | "fork_arm" | "set_messages"
 
 export interface ExitedEvent<T = any> extends ActionEventBase<"exited"> {
   result: T

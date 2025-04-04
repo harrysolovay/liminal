@@ -45,12 +45,11 @@ export class Scope<R = any> {
   }
 }
 
-// TODO: how to capture tool scope?
+// TODO: tool, set_messages
 export type ChildScopeContainer = {
-  type: "context"
+  type: "isolate"
   scope: Scope
 } | {
   type: "fork"
-  key: keyof any
   scopes: Record<keyof any, Scope>
 }

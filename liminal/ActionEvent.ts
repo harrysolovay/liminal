@@ -4,7 +4,6 @@ import type { ToolDisabledEvent } from "./actions/DisableTool.ts"
 import type { EmbeddedEvent, EmbeddingRequestedEvent } from "./actions/Embed.ts"
 import type { EmittedEvent } from "./actions/Emit.ts"
 import type { ToolCalledEvent, ToolEnabledEvent } from "./actions/EnableTool.ts"
-import type { ForkArmEvent, ForkEvent } from "./actions/Fork.ts"
 import type { InferenceRequestedEvent, InferredEvent } from "./actions/Infer.ts"
 import type {
   AssistantMessagedEvent,
@@ -19,8 +18,6 @@ import type { MessagesSetEvent } from "./actions/SetMessages.ts"
 export type ActionEvent =
   | EnteredEvent
   | ExitedEvent
-  | ForkEvent
-  | ForkArmEvent
   | ToolEnabledEvent
   | ToolCalledEvent
   | ToolDisabledEvent
