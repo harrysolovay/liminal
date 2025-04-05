@@ -1,6 +1,7 @@
 .DS_Store
 .alchemy
 .env
+.githooks/pre-commit
 dist
 node_modules
 *.tsbuildinfo
