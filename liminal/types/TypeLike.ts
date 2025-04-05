@@ -7,16 +7,16 @@ import { type JSONStringType, string } from "./string.ts"
 import { isType, type Type } from "./Type.ts"
 
 export type TypeLike = Type | TypeLikes | string | Falsy
-export type TypeLikes = TypeLikeTuple | TypeLikeRecord
+export type TypeLikes = TypeLikeArray | TypeLikeRecord
 
-export type TypeLikeTuple = Array<TypeLike>
+export type TypeLikeArray = Array<TypeLike>
 export type TypeLikeRecord = {
   [key: JSONKey]: TypeLike
 }
 
 export type NormalizeTypeLikesT<F extends TypeLikes> =
   & {
-    -readonly [K in keyof F as F extends TypeLikeTuple ? Exclude<K, keyof Array<any>> : K]: NormalizeTypeLikeT<
+    -readonly [K in keyof F as F extends TypeLikeArray ? Exclude<K, keyof Array<any>> : K]: NormalizeTypeLikeT<
       Extract<F[K], TypeLike>
     >
   }
@@ -29,7 +29,7 @@ export type NormalizeTypeLikeT<V extends TypeLike> = V extends TypeLikes ? Norma
 
 export type NormalizeTypeLikesJ<F extends TypeLikes> =
   & {
-    -readonly [K in keyof F as F extends TypeLikeTuple ? Exclude<K, keyof Array<any>> : K]: NormalizeTypeLikeJ<
+    -readonly [K in keyof F as F extends TypeLikeArray ? Exclude<K, keyof Array<any>> : K]: NormalizeTypeLikeJ<
       Extract<F[K], TypeLike>
     >
   }
@@ -43,7 +43,7 @@ export type NormalizeTypeLikeJ<V extends TypeLike> = V extends TypeLikes ? JSONO
 export function normalizeTypeLikes(fields: TypeLikes): Type {
   return (Array.isArray(fields)
     ? _object(fields.map(normalizeTypeLike))
-    : _object(Object.fromEntries(Object.entries(fields).map(([k, v]) => [k, normalizeTypeLike(v)])))) as never
+    : _object(Object.fromEntries(Object.entries(fields).map(([k, v]) => [k, normalizeTypeLike(v)]))))
 }
 
 export function normalizeTypeLike(value: TypeLike): Type {

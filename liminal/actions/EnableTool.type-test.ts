@@ -1,7 +1,7 @@
 import type { AssertTrue, IsExact } from "conditional-type-checks"
 import * as L from "../L.ts"
 import { ActorAssertions } from "../testing/ActorAssertions.ts"
-import type { ChildEvent, EnteredEvent, ExitedEvent } from "./actions_common.ts"
+import type { ChildEvent } from "./actions_common.ts"
 import type { ToolDisabledEvent } from "./DisableTool.ts"
 import { emit } from "./Emit.ts"
 import type { EmittedEvent } from "./Emit.ts"
@@ -19,7 +19,7 @@ const arrowTool = L.enableTool("Tool", "", P, (params) => {
 
 ActorAssertions(arrowTool).assertSpec<{
   Entry: never
-  Event: ToolEnabledEvent<"Tool"> | ChildEvent<"tool", "Tool", EnteredEvent | ToolCalledEvent<P> | ExitedEvent<void>>
+  Event: ToolEnabledEvent<"Tool"> | ChildEvent<"tool", "Tool", ToolCalledEvent<P>, void>
 }>()
 
 function* _0() {
@@ -43,13 +43,12 @@ ActorAssertions(genTool).assertSpec<{
     | ChildEvent<
       "tool",
       "tool-key",
-      | EnteredEvent
       | EmittedEvent<"Test", {}>
       | ToolCalledEvent<{
         a: string
         b: string
-      }>
-      | ExitedEvent<string>
+      }>,
+      string
     >
 }>()
 
@@ -69,36 +68,30 @@ ActorAssertions(parent).assertSpec<{
     | ChildEvent<
       "tool",
       "parent-tool",
-      | EnteredEvent
-      | ToolCalledEvent<{
+      ToolCalledEvent<{
         a: string
         b: string
-      }>
-      | ExitedEvent<void>
+      }>,
+      void
     >
     | ChildEvent<
       "fork",
       "fork-key",
-      | EnteredEvent
-      | ChildEvent<
+      ChildEvent<
         "fork_arm",
         "arm-key",
-        | EnteredEvent
         | ToolEnabledEvent<"Tool">
-        | ExitedEvent<void>
         | ChildEvent<
           "tool",
           "Tool",
-          | EnteredEvent
-          | ToolCalledEvent<{
+          ToolCalledEvent<{
             a: string
             b: string
-          }>
-          | ExitedEvent<void>
-        >
-      >
-      | ExitedEvent<{
-        "arm-key": void
-      }>
+          }>,
+          void
+        >,
+        void
+      >,
+      { "arm-key": void }
     >
 }>()

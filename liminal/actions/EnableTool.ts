@@ -1,5 +1,5 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
-import type { Action, ActionLike } from "../Action.ts"
+import type { Action } from "../Action.ts"
 import type { Actor } from "../Actor.ts"
 import type { Spec } from "../Spec.ts"
 import { JSONSchemaMemo } from "../util/JSONSchemaMemo.ts"
@@ -18,7 +18,7 @@ export interface EnableTool<S extends Spec = Spec> extends ActionBase<"enable_to
   implementation: ToolImplementation
 }
 
-export type ToolImplementation = (params: JSONValue) => Actor<ActionLike, ToolResult> | PromiseOr<ToolResult>
+export type ToolImplementation = (params: JSONValue) => Actor<Action, ToolResult> | PromiseOr<ToolResult>
 
 export function enableTool<K extends keyof any, A extends JSONValue, R extends PromiseOr<ToolResult>>(
   key: K,
@@ -28,7 +28,7 @@ export function enableTool<K extends keyof any, A extends JSONValue, R extends P
 ): Generator<
   EnableTool<{
     Entry: never
-    Event: ToolEnabledEvent<K> | ChildEvent<"tool", K, ToolCalledEvent<A> | EnteredEvent | ExitedEvent<Awaited<R>>>
+    Event: ToolEnabledEvent<K> | ChildEvent<"tool", K, ToolCalledEvent<A>, Awaited<R>>
   }>,
   () => Generator<
     DisableTool<{
@@ -41,7 +41,7 @@ export function enableTool<K extends keyof any, A extends JSONValue, R extends P
 export function enableTool<
   K extends keyof any,
   A extends JSONValue,
-  Y extends ActionLike,
+  Y extends Action,
   R extends PromiseOr<ToolResult>,
 >(
   key: K,
@@ -56,7 +56,8 @@ export function enableTool<
       | ChildEvent<
         "tool",
         K,
-        ToolCalledEvent<A> | EnteredEvent | Extract<Y, Action>[""]["Event"] | ExitedEvent<Awaited<R>>
+        ToolCalledEvent<A> | Extract<Y, Action>[""]["Event"],
+        Awaited<R>
       >
   }>,
   () => Generator<
@@ -86,8 +87,8 @@ export function* enableTool(
         schema: JSONSchemaMemo(params),
       })
       return scope.spread({
-        tools: new Set([...scope.tools, this as never]),
-        next: () => disableTool(this as never),
+        tools: new Set([...scope.tools, this]),
+        next: () => disableTool(this),
       })
     },
   })
