@@ -2,7 +2,7 @@ import type { StandardSchemaV1 } from "@standard-schema/spec"
 import type { Spec } from "../Spec.ts"
 import { assert } from "../util/assert.ts"
 import type { JSONValue } from "../util/JSONValue.ts"
-import { ActionBase, type ActionEventBase } from "./actions_base.ts"
+import { ActionBase, type EventBase } from "./actions_base.ts"
 
 export interface Infer<S extends Spec = Spec> extends ActionBase<"infer", S> {
   type: StandardSchemaV1 | undefined
@@ -42,8 +42,8 @@ export function* infer(type?: StandardSchemaV1): Generator<Infer, unknown> {
   })
 }
 
-export interface InferenceRequestedEvent extends ActionEventBase<"inference_requested"> {}
+export interface InferenceRequestedEvent extends EventBase<"inference_requested"> {}
 
-export interface InferredEvent<V extends JSONValue = JSONValue> extends ActionEventBase<"inferred"> {
+export interface InferredEvent<V extends JSONValue = JSONValue> extends EventBase<"inferred"> {
   value: V
 }

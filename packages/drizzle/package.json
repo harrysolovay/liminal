@@ -1,6 +1,7 @@
 {
   "name": "liminal-drizzle",
   "private": true,
+  "type": "module",
   "exports": {
     ".": "./dist/index.js"
   },

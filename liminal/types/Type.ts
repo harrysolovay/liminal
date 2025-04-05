@@ -2,14 +2,14 @@ import type { StandardSchemaV1 } from "@standard-schema/spec"
 import type { Infer, InferenceRequestedEvent, InferredEvent } from "../actions/Infer.ts"
 import type { Falsy } from "../util/Falsy.ts"
 import type { JSONValue } from "../util/JSONValue.ts"
+import type { Taggable } from "../util/Taggable.ts"
 import type { JSONRootType } from "./JSONRootType.ts"
 import type { JSONType } from "./JSONType.ts"
 import type { JSONObjectType } from "./object.ts"
 
-export interface Type<T extends JSONValue = JSONValue, J extends JSONType = JSONType> extends TypeMembers<T, J> {
-  (template: TemplateStringsArray, ...substitutions: Array<string>): this
-  (...values: Array<Falsy | string>): this
-
+export interface Type<T extends JSONValue = JSONValue, J extends JSONType = JSONType>
+  extends Taggable<Array<string | Falsy>>, TypeMembers<T, J>
+{
   T: T
   J: J
 

@@ -3,16 +3,17 @@ import { fromMetatypeRootDescriptor } from "../types/Metatype/fromMetatypeDescri
 import { MetatypeRootDescriptor } from "../types/Metatype/MetatypeDescriptor.ts"
 import type { JSONObjectType } from "../types/object.ts"
 import type { Type } from "../types/Type.ts"
+import type { Falsy } from "../util/Falsy.ts"
 import type { JSONObject } from "../util/JSONObject.ts"
+import type { TaggableArgs } from "../util/Taggable.ts"
 
-export const metatype: Iterable<
+export function* inferMetatype(...args: TaggableArgs<[...description: Array<string | Falsy>]>): Generator<
   Infer<{
     Entry: never
     Event: InferenceRequestedEvent | InferredEvent<MetatypeRootDescriptor>
   }>,
   Type<JSONObject, JSONObjectType<any>>
-> = {
-  *[Symbol.iterator]() {
-    return fromMetatypeRootDescriptor(yield* MetatypeRootDescriptor)
-  },
+> {
+  const descriptor = yield* MetatypeRootDescriptor(args.map((e) => typeof e === "string").join("\n"))
+  return fromMetatypeRootDescriptor(descriptor)
 }

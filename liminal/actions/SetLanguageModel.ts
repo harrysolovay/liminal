@@ -1,7 +1,7 @@
 import type { Actor } from "../Actor.ts"
 import type { Scope } from "../Scope.ts"
 import type { Spec } from "../Spec.ts"
-import { ActionBase, type ActionEventBase } from "./actions_base.ts"
+import { ActionBase, type EventBase } from "./actions_base.ts"
 import type { AppendMessage } from "./AppendMessage.ts"
 import type { Infer } from "./Infer.ts"
 
@@ -38,6 +38,6 @@ export function* setLanguageModel<K extends keyof any>(
   })
 }
 
-export interface LanguageModelSetEvent<K extends keyof any = keyof any> extends ActionEventBase<"language_model_set"> {
+export interface LanguageModelSetEvent<K extends keyof any = keyof any> extends EventBase<"language_model_set"> {
   key: K
 }

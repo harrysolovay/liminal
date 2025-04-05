@@ -1,6 +1,6 @@
-import { ActionBase, type ActionEventBase } from "./actions_base.ts"
+import { ActionBase, type EventBase } from "./actions_base.ts"
 
-export interface AwaitedEvent<V = unknown> extends ActionEventBase<"await_resolved"> {
+export interface AwaitedEvent<V = unknown> extends EventBase<"await_resolved"> {
   value: V
 }
 

@@ -1,16 +1,8 @@
-import { openai } from "@ai-sdk/openai"
-import { exec, L } from "liminal"
-import { AILanguageModel } from "liminal-ai"
+import { L } from "liminal"
 
-exec(processCustomerQuery("I'd like a refund please."), {
-  bind: {
-    default: AILanguageModel(openai("gpt-4o-mini")),
-    reasoning: AILanguageModel(openai("o1-mini")),
-  },
-  handler: console.log,
-})
+const QUERY = "I'd like a refund please."
 
-function* processCustomerQuery(query: string) {
+export default function*() {
   yield* L.declareLanguageModel("default")
   const classification = yield* L.fork("classify", function*() {
     yield* L.clear()
@@ -23,7 +15,7 @@ function* processCustomerQuery(query: string) {
       2. Complexity (simple or complex)
       3. Brief reasoning for classification
     `
-    yield* L.user(query)
+    yield* L.user(QUERY)
     return yield* L.object({
       reasoning: L.string,
       type: L.enum("general", "refund", "technical"),

@@ -1,0 +1,9 @@
+{
+  "name": "liminal-example-actors",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "liminal": "workspace:*",
+    "mathjs": "^14.3.1"
+  }
+}

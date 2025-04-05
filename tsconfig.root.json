@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.base",
+  "include": ["liminal.ts"],
+  "references": [
+    {
+      "path": "./liminal"
+    },
+    {
+      "path": "./packages/ai"
+    }
+  ]
+}

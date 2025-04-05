@@ -1,22 +1,16 @@
-import { openai } from "@ai-sdk/openai"
-import { exec, L } from "liminal"
-import { AILanguageModel } from "liminal-ai"
+import { L } from "liminal"
 
-exec(TranslationWithFeedback("typescript", "I love you!"), {
-  bind: {
-    default: AILanguageModel(openai("gpt-4o-mini")),
-  },
-  handler: console.log,
-})
+const LANGUAGE = "typescript"
+const TEXT = "I love you!"
 
-function* TranslationWithFeedback(targetLanguage: string, text: string) {
+export default function*() {
   yield* L.declareLanguageModel("default")
   yield* L
     .system`You are an expert literary translator. Translate the supplied text to the specified target language, preserving tone and cultural nuances.`
-  yield* L.user`Target language: ${targetLanguage}`
+  yield* L.user`Target language: ${LANGUAGE}`
   yield* L.user`Text:
 
-    ${text}
+    ${TEXT}
   `
   let currentTranslation = yield* L.infer()
   let iterations = 0
@@ -25,7 +19,7 @@ function* TranslationWithFeedback(targetLanguage: string, text: string) {
     yield* L.user`
       Evaluate this translation:
 
-      Original: ${text}
+      Original: ${TEXT}
       Translation: ${currentTranslation}
 
       Consider:
@@ -56,7 +50,7 @@ function* TranslationWithFeedback(targetLanguage: string, text: string) {
       ${evaluation.specificIssues.join("\n")}
       ${evaluation.improvementSuggestions.join("\n")}
 
-      Original: ${text}
+      Original: ${TEXT}
       Current Translation: ${currentTranslation}
     `
     currentTranslation = yield* L.infer()

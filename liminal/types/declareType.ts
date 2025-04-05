@@ -2,7 +2,7 @@ import type { StandardSchemaV1 } from "@standard-schema/spec"
 import { infer } from "../actions/Infer.ts"
 import { LiminalAssertionError } from "../LiminalAssertionError.ts"
 import type { Falsy } from "../util/Falsy"
-import { fixTemplateStrings } from "../util/fixTemplateStrings.ts"
+import { applyTemplateWithIndentation } from "../util/fixTemplateStrings.ts"
 import { isTemplateStringsArray } from "../util/isTemplateStringsArray"
 import { AssertDiagnostics, formatAssertDiagnostics } from "./AssertDiagnostics.ts"
 import { toJSON } from "./toJSON.ts"
@@ -62,7 +62,7 @@ export function declareType<X extends Type>(
     return declareType(declaration, args, [
       ...descriptions,
       ...isTemplateStringsArray(e0)
-        ? [String.raw(fixTemplateStrings(e0), ...eRest)]
+        ? [applyTemplateWithIndentation(e0, ...eRest)]
         : [e0, ...eRest].filter((v): v is string => !!v),
     ])
   }

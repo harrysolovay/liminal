@@ -10,7 +10,7 @@ import type { EmbeddingModelSetEvent } from "./actions/SetEmbeddingModel.ts"
 import type { LanguageModelSetEvent } from "./actions/SetLanguageModel.ts"
 import type { MessagesSetEvent } from "./actions/SetMessages.ts"
 
-export type ActionEvent =
+export type LEvent =
   | EnteredEvent
   | ExitedEvent
   | ToolEnabledEvent

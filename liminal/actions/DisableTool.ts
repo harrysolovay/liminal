@@ -1,5 +1,5 @@
 import type { Spec } from "../Spec.ts"
-import { ActionBase, type ActionEventBase } from "./actions_base.ts"
+import { ActionBase, type EventBase } from "./actions_base.ts"
 import type { EnableTool } from "./EnableTool.ts"
 
 export interface DisableTool<S extends Spec = Spec> extends ActionBase<"disable_tool", S> {
@@ -24,6 +24,6 @@ export function* disableTool(enableTool: EnableTool): Generator<DisableTool, voi
   })
 }
 
-export interface ToolDisabledEvent<K extends keyof any = keyof any> extends ActionEventBase<"tool_disabled"> {
+export interface ToolDisabledEvent<K extends keyof any = keyof any> extends EventBase<"tool_disabled"> {
   tool: K
 }

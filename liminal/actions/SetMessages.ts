@@ -5,7 +5,7 @@ import { Scope } from "../Scope.ts"
 import type { Spec } from "../Spec.ts"
 import { isPropertyKey } from "../util/isPropertyKey.ts"
 import type { PromiseOr } from "../util/PromiseOr.ts"
-import { ActionBase, type ActionEventBase } from "./actions_base.ts"
+import { ActionBase, type EventBase } from "./actions_base.ts"
 import type { ChildEvent } from "./actions_common.ts"
 
 export interface SetMessages<S extends Spec = Spec> extends ActionBase<"set_messages", S> {}
@@ -77,6 +77,6 @@ export function* setMessages(
   })
 }
 
-export interface MessagesSetEvent extends ActionEventBase<"messages_set"> {
+export interface MessagesSetEvent extends EventBase<"messages_set"> {
   messages: Array<Message>
 }

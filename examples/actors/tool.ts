@@ -1,16 +1,7 @@
-import { openai } from "@ai-sdk/openai"
-import { exec, L } from "liminal"
-import { AILanguageModel } from "liminal-ai"
+import { L } from "liminal"
 import * as mathjs from "mathjs"
 
-exec(ToolUser(), {
-  bind: {
-    default: AILanguageModel(openai("gpt-4o-mini")),
-  },
-  handler: console.log,
-})
-
-function* ToolUser() {
+export default function*() {
   yield* L.declareLanguageModel("default")
   yield* L.system`
     You are solving math problems. Reason step by step. Use the calculator when necessary.

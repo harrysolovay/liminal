@@ -1,6 +1,6 @@
 import type { Spec } from "../Spec.ts"
 import { assert } from "../util/assert.ts"
-import { ActionBase, type ActionEventBase } from "./actions_base.ts"
+import { ActionBase, type EventBase } from "./actions_base.ts"
 
 export interface Embed<S extends Spec = Spec> extends ActionBase<"embed", S> {
   value: string
@@ -34,11 +34,11 @@ export function* embed(value: string): Generator<
   })
 }
 
-export interface EmbeddingRequestedEvent extends ActionEventBase<"embedding_requested"> {
+export interface EmbeddingRequestedEvent extends EventBase<"embedding_requested"> {
   value: string
 }
 
-export interface EmbeddedEvent extends ActionEventBase<"embedded"> {
+export interface EmbeddedEvent extends EventBase<"embedded"> {
   value: string
   embedding: Array<number>
 }

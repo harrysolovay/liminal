@@ -5,7 +5,7 @@ import type { Spec } from "../Spec.ts"
 import { JSONSchemaMemo } from "../util/JSONSchemaMemo.ts"
 import type { JSONValue } from "../util/JSONValue.ts"
 import type { PromiseOr } from "../util/PromiseOr.ts"
-import type { ActionEventBase } from "./actions_base.ts"
+import type { EventBase } from "./actions_base.ts"
 import { ActionBase } from "./actions_base.ts"
 import type { ChildEvent, EnteredEvent, ExitedEvent } from "./actions_common.ts"
 import { type DisableTool, disableTool } from "./DisableTool.ts"
@@ -94,13 +94,13 @@ export function* enableTool(
   })
 }
 
-export interface ToolEnabledEvent<K extends keyof any = keyof any> extends ActionEventBase<"tool_enabled"> {
+export interface ToolEnabledEvent<K extends keyof any = keyof any> extends EventBase<"tool_enabled"> {
   key: K
   description: string
   schema: object
 }
 
-export interface ToolCalledEvent<A extends JSONValue = JSONValue> extends ActionEventBase<"tool_called"> {
+export interface ToolCalledEvent<A extends JSONValue = JSONValue> extends EventBase<"tool_called"> {
   args: A
 }
 

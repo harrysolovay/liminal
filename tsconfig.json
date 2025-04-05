@@ -11,10 +11,10 @@
       "path": "./common"
     },
     {
-      "path": "./examples/deploy-to-cf-worker"
+      "path": "./examples/actors"
     },
     {
-      "path": "./examples/patterns"
+      "path": "./examples/deploy-to-cf-worker"
     },
     {
       "path": "./examples/vite-react-app"
@@ -30,6 +30,9 @@
     },
     {
       "path": "./packages/drizzle"
+    },
+    {
+      "path": "./tsconfig.root.json"
     }
   ]
 }
