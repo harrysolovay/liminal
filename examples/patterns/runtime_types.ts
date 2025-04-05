@@ -15,7 +15,7 @@ L.const(L.string, "Hello Liminal.")
 L.enum("A", "B", "C")
 
 L.union(
-  L.number,
+  L.number`Something here.`,
   L.string,
   {
     a: L.number,
