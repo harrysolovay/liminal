@@ -12,7 +12,7 @@ L.string
 
 L.const(L.string, "Hello Liminal.")
 
-L.enum("A", "B", "C")
+L.enum("A", "B", "C")``
 
 L.union(
   L.number`Something here.`,

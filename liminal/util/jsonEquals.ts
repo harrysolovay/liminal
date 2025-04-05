@@ -20,7 +20,7 @@ export function jsonEquals(actual: JSONValue, expected: JSONValue): boolean {
     if (actual.length !== expected.length) {
       return false
     }
-    return actual.every((value, index) => jsonEquals(value, expected[index]!))
+    return actual.every((e, i) => jsonEquals(e, expected[i]!))
   }
 
   if (typeof actual === "object") {
@@ -33,7 +33,7 @@ export function jsonEquals(actual: JSONValue, expected: JSONValue): boolean {
     }
     return keys.every((key) =>
       Object.prototype.hasOwnProperty.call(expected, key)
-      && jsonEquals((actual as any)[key], (expected as any)[key])
+      && jsonEquals(actual[key]!, expected[key]!)
     )
   }
 
