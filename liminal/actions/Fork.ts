@@ -84,7 +84,7 @@ export function* fork(key: keyof any, implementation: ActorLike | ActorLikes): G
         type: "entered",
       })
       let scopes: Array<Scope>
-      let result: unknown
+      let value: unknown
       if (typeof implementation === "function" || (!Array.isArray(implementation) && isIteratorLike(implementation))) {
         const actor = unwrapDeferred(implementation as ActorLike)
         const forkScope = await new Scope(
@@ -97,7 +97,7 @@ export function* fork(key: keyof any, implementation: ActorLike | ActorLikes): G
           [...scope.messages],
         ).reduce(actor)
         scopes = [forkScope]
-        result = forkScope.result
+        value = forkScope.value
       } else {
         const armKeys = Array.isArray(implementation)
           ? Array.from({ length: implementation.length }, (_0, i) => i)
@@ -122,20 +122,20 @@ export function* fork(key: keyof any, implementation: ActorLike | ActorLikes): G
           ).reduce(actor)
           armEvents.emit({
             type: "exited",
-            result: armScope.result,
+            value: armScope.value,
           })
           return armScope
         }))
-        result = Array.isArray(implementation)
-          ? scopes.map((scope) => scope.result)
-          : Object.fromEntries(scopes.map(({ key, result }) => [key, result]))
+        value = Array.isArray(implementation)
+          ? scopes.map((scope) => scope.value)
+          : Object.fromEntries(scopes.map(({ key, value: result }) => [key, result]))
       }
       events.emit({
         type: "exited",
-        result,
+        value: value,
       })
       return scope.spread({
-        next: result,
+        next: value,
         children: [...scope.children, ...scopes],
       })
     },

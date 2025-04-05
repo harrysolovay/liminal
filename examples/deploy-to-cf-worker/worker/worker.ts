@@ -13,7 +13,7 @@ export default {
   async fetch(request) {
     const input = await request.text()
     try {
-      const { result } = await exec(refine(input), {
+      const { value: result } = await exec(refine(input), {
         bind: {
           default: AILanguageModel(openai("gpt-4o")),
           a: AILanguageModel(openai("gpt-4o-mini")),

@@ -35,9 +35,9 @@ export function* infer(type?: StandardSchemaV1): Generator<Infer, unknown> {
       scope = await scope.reduce(scope.runInfer(this, scope))
       scope.events.emit({
         type: "inferred",
-        value: scope.result,
+        value: scope.value,
       })
-      return scope.spread({ next: scope.result })
+      return scope.spread({ next: scope.value })
     },
   })
 }

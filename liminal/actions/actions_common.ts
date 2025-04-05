@@ -22,5 +22,5 @@ export interface PropagatedEvent<
 }
 
 export interface ExitedEvent<T = any> extends EventBase<"exited"> {
-  result: T
+  value: T
 }

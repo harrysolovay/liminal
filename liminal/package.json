@@ -5,7 +5,7 @@
   "description": "Liminal is a model-agnostic library for conversation state management.",
   "version": "0.1.0",
   "bin": {
-    "liminal": "./dist/main.js"
+    "liminal": "./dist/cli/main.js"
   },
   "exports": {
     ".": "./dist/index.js",

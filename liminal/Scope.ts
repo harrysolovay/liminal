@@ -6,7 +6,7 @@ import type { Actor } from "./Actor.ts"
 import type { Events } from "./Events.ts"
 import type { Message } from "./Message.ts"
 
-export type ScopeSource = "exec" | "tool" | "fork" | "fork_arm" | "set_messages"
+export type ScopeSource = "try" | "module" | "exec" | "tool" | "fork" | "fork_arm" | "set_messages"
 
 export class Scope<R = any> {
   constructor(
@@ -19,17 +19,17 @@ export class Scope<R = any> {
     readonly messages: Array<Message> = [],
     readonly tools: Set<EnableTool> = new Set(),
     public next: any = undefined,
-    public result: R = undefined!,
+    public value: R = undefined!,
     public children: Array<Scope> = [],
   ) {}
 
   toJSON() {
-    const { messages, key, events, children, result } = this
+    const { messages, key, events, children, value } = this
     return {
       key,
       events,
       children,
-      result,
+      value,
       ...messages.length ? { messages } : {},
     }
   }
@@ -45,7 +45,7 @@ export class Scope<R = any> {
       fields?.messages ?? this.messages,
       fields?.tools ?? this.tools,
       fields?.next ?? this.next,
-      fields?.result ?? this.result,
+      fields?.value ?? this.value,
       fields?.children ?? this.children,
     )
   }
@@ -59,7 +59,7 @@ export class Scope<R = any> {
       currentActor = await actor.next(currentScope.next)
     }
     return currentScope.spread({
-      result: currentActor.value,
+      value: currentActor.value,
       next: undefined,
     })
   }

@@ -9,6 +9,6 @@
   ],
   "enableGlobDot": true,
   "dictionaries": ["project-words"],
-  "ignorePaths": ["**/*.tsbuildinfo", ".env", "LICENSE"],
+  "ignorePaths": ["LICENSE"],
   "useGitignore": true
 }

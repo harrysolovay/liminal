@@ -66,7 +66,7 @@
       "name": "liminal",
       "version": "0.1.0",
       "bin": {
-        "liminal": "./dist/main.js",
+        "liminal": "./dist/cli/main.js",
       },
       "dependencies": {
         "standard-json-schema": "^0.1.1",

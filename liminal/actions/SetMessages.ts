@@ -53,10 +53,10 @@ export function* setMessages(
           scope.runInfer,
           scope.runEmbed,
         ).reduce(maybeSetter!([...scope.messages]))
-        const { result } = setterScope
+        const { value: result } = setterScope
         events.emit({
           type: "exited",
-          result,
+          value: result,
         })
         events.emit({
           type: "messages_set",
