@@ -16,7 +16,7 @@ export type TypeLikeRecord = {
 
 export type NormalizeTypeLikesT<F extends TypeLikes> =
   & {
-    -readonly [K in keyof F as F extends TypeLikeArray ? Exclude<K, keyof Array<any>> : K]: NormalizeTypeLikeT<
+    -readonly [K in keyof F as F extends TypeLikeArray ? K extends `${number}` ? K : never : K]: NormalizeTypeLikeT<
       Extract<F[K], TypeLike>
     >
   }
@@ -29,7 +29,7 @@ export type NormalizeTypeLikeT<V extends TypeLike> = V extends TypeLikes ? Norma
 
 export type NormalizeTypeLikesJ<F extends TypeLikes> =
   & {
-    -readonly [K in keyof F as F extends TypeLikeArray ? Exclude<K, keyof Array<any>> : K]: NormalizeTypeLikeJ<
+    -readonly [K in keyof F as F extends TypeLikeArray ? K extends `${number}` ? K : never : K]: NormalizeTypeLikeJ<
       Extract<F[K], TypeLike>
     >
   }

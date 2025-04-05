@@ -40,7 +40,13 @@ L.object({
   },
 })
 
-L.object([L.string, L.number])
+L.object([L.string, L.number, [L.integer, {
+  b: {
+    c: {
+      d: [L.string, L.boolean, [L.string]],
+    },
+  },
+}]])
 
 type Recursive = {
   value: Recursive
