@@ -1,6 +1,7 @@
 import type { ExecConfig } from "./exec.ts"
 
-export interface LiminalConfig {
-  actorsDir?: string
-  exec: ExecConfig
+export interface LiminalConfig extends ExecConfig {
+  actors?: string
+  bind: Record<keyof any, any>
+  print?: boolean
 }

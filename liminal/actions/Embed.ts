@@ -28,7 +28,7 @@ export function* embed(value: string): Generator<
         embedding,
       })
       return scope.spread({
-        next: scope.result,
+        next: scope.value,
       })
     },
   })

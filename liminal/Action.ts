@@ -11,8 +11,10 @@ import type { Infer } from "./actions/Infer.ts"
 import type { SetEmbeddingModel } from "./actions/SetEmbeddingModel.ts"
 import type { SetLanguageModel } from "./actions/SetLanguageModel.ts"
 import type { SetMessages } from "./actions/SetMessages.ts"
+import type { Try } from "./actions/Try.ts"
 
 export type Action =
+  | Try
   | Await
   | Arg
   | SetEmbeddingModel

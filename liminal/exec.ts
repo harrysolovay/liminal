@@ -24,7 +24,7 @@ export async function exec<Y extends Action, T>(
   const scope = await new Scope("exec", config.bind as never, undefined, events).reduce(actor)
   events.emit({
     type: "exited",
-    result: scope.result,
+    value: scope.value,
   })
   return scope
 }
