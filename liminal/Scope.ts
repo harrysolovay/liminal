@@ -4,7 +4,7 @@ import type { Message } from "./actions/messages.ts"
 import type { RunEmbed } from "./actions/SetEmbeddingModel.ts"
 import type { RunInfer } from "./actions/SetLanguageModel.ts"
 
-export type ScopeSource = "exec" | "isolate" | "tool" | "fork" | "fork_arm" | "set_messages"
+export type ScopeSource = "exec" | "tool" | "fork" | "fork_arm" | "set_messages"
 
 export class Scope<R = any> {
   constructor(

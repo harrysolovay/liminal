@@ -20,12 +20,9 @@ function* plan(feat: string) {
     files: L.array(FileInfo),
     estimatedComplexity: L.enum("create", "medium", "high"),
   })
-  const fileChanges = yield* L.isolate(
-    "implement",
-    L.fork(
-      "group-key",
-      implementationPlan.files.map((file) => implement(feat, file)),
-    ),
+  const fileChanges = yield* L.fork(
+    "group-key",
+    implementationPlan.files.map((file) => implement(feat, file)),
   )
   return { fileChanges, implementationPlan }
 }

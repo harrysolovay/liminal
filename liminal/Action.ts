@@ -7,7 +7,6 @@ import type { EnableTool } from "./actions/EnableTool.ts"
 import type { Fork } from "./actions/Fork.ts"
 import type { GetMessages } from "./actions/GetMessages.ts"
 import type { Infer } from "./actions/Infer.ts"
-import type { Isolate } from "./actions/Isolate.ts"
 import type { Message } from "./actions/messages.ts"
 import type { SetEmbeddingModel } from "./actions/SetEmbeddingModel.ts"
 import type { SetLanguageModel } from "./actions/SetLanguageModel.ts"
@@ -27,6 +26,5 @@ export type Action =
   | Message
   | SetMessages
   | GetMessages
-  | Isolate
 
 export type ActionLike = Action | Array<Message>

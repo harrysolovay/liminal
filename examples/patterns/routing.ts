@@ -12,7 +12,8 @@ exec(processCustomerQuery("I'd like a refund please."), {
 
 function* processCustomerQuery(query: string) {
   yield* L.declareLanguageModel("default")
-  const classification = yield* L.isolate("classify", function*() {
+  const classification = yield* L.fork("classify", function*() {
+    yield* L.clear()
     yield* L.system`
       Classify this supplied customer query:
 
@@ -29,7 +30,8 @@ function* processCustomerQuery(query: string) {
       complexity: L.enum("simple", "complex"),
     })
   })
-  const response = yield* L.isolate("handle", function*() {
+  const response = yield* L.fork("handle", function*() {
+    yield* L.clear()
     yield* L.system(USE_CLASSIFICATION_AGENT_PROMPTS[classification.type])
     if (classification.complexity === "complex") {
       yield* L.declareLanguageModel("reasoning")
