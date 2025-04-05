@@ -23,6 +23,11 @@ L.union(
 )
 
 L.array(L.string)
+L.array({
+  a: {
+    b: L.string,
+  },
+})
 
 L.option(L.string)
 
