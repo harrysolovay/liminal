@@ -1,5 +1,5 @@
 import type { Type } from "./Type.ts"
-import { getTypeName, type IntrinsicTypes } from "./type_common.ts"
+import { type IntrinsicTypes, typeName } from "./type_common.ts"
 
 export type VisitorArms<S, R> =
   & {
@@ -40,7 +40,7 @@ export function TypeVisitor<S, R>(arms: VisitorArms<S, R>): (state: S, type: Typ
   return next
 
   function next(state: S, type: Type): R {
-    return (arms[getTypeName(type)] as any ?? arms.fallback)(
+    return (arms[typeName(type)] as any ?? arms.fallback)(
       state,
       type,
       ...(type.args ?? []),

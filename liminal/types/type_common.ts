@@ -10,10 +10,12 @@ export const getIntrinsicNameLookup = nullaryMemo(() =>
   new Map(Object.entries(I).map((entry) => entry.reverse() as [IntrinsicType, keyof IntrinsicTypes]))
 )
 
-export function getTypeName(type: Type): IntrinsicTypeName {
+export function typeName(type: Type): IntrinsicTypeName {
   return getIntrinsicNameLookup().get(type.declaration() as IntrinsicType)!
 }
 
-export function isParentType(type: Type): boolean {
-  return ["_object", "array", "union"].includes(getTypeName(type))
+export const PARENT_TYPE_NAMES: { [K in IntrinsicTypeName]?: true } = {
+  _object: true,
+  _array: true,
+  _union: true,
 }

@@ -7,6 +7,7 @@ export type { JSONIntegerType } from "./integer.ts"
 export * from "./JSONRootType.ts"
 export * from "./JSONType.ts"
 export { match } from "./match.ts"
+export * from "./Metatype/fromMetatypeDescriptor.ts"
 export type { JSONNullType } from "./null.ts"
 export type { JSONNumberType } from "./number.ts"
 export type {

@@ -9,21 +9,21 @@ import { _union, type JSONUnionType, union } from "../union.ts"
 export function taggedUnion<const M extends TaggedUnionMembers, K extends Extract<keyof M, string>>(members: M): Type<
   {
     [L in K]: {
-      key: L
+      type: L
       value: NormalizeTypeLikeT<M[L]>
     }
   }[K],
   JSONUnionType<
     {
       [L in K]: JSONObjectType<{
-        key: JSONConstType<JSONStringType, L>
+        type: JSONConstType<JSONStringType, L>
         value: NormalizeTypeLikeJ<M[L]>
       }>
     }[K]
   >
 > {
   return union(
-    ...Object.entries(members).map(([key, value]) => object({ key, value })),
+    ...Object.entries(members).map(([type, value]) => object({ type, value })),
   ) as never
 }
 
