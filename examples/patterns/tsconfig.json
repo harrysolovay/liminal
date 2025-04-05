@@ -3,7 +3,7 @@
   "compilerOptions": {
     "noEmit": true
   },
-  "include": ["."],
+  "include": [".", "../../liminal/types/replacer.ts"],
   "references": [
     {
       "path": "../../liminal"

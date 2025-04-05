@@ -1,3 +1,3 @@
-export * from "./ActorAssertions/ActorAssertions.ts"
-export * from "./TestEmbeddingModel/TestEmbeddingModel.ts"
-export * from "./TestLanguageModel/TestLanguageModel.ts"
+export * from "./ActorAssertions.ts"
+export * from "./TestEmbeddingModel.ts"
+export * from "./TestLanguageModel.ts"

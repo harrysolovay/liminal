@@ -1,4 +1,4 @@
-import type { RunEmbed } from "../../actions/SetEmbeddingModel"
+import type { RunEmbed } from "../actions/SetEmbeddingModel"
 
 export interface TestEmbeddingModelConfig {
   getEmbedding: () => Array<number>

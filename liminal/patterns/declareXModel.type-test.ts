@@ -4,7 +4,7 @@ import type { EmbeddingModelSetEvent } from "../actions/SetEmbeddingModel.ts"
 import type { RunInfer } from "../actions/SetLanguageModel.ts"
 import type { LanguageModelSetEvent } from "../actions/SetLanguageModel.ts"
 import * as L from "../L.ts"
-import { ActorAssertions } from "../testing/ActorAssertions/ActorAssertions.ts"
+import { ActorAssertions } from "../testing/ActorAssertions.ts"
 import { declareEmbeddingModel } from "./declareEmbeddingModel.ts"
 import { declareLanguageModel } from "./declareLanguageModel.ts"
 

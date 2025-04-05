@@ -1,6 +1,7 @@
 arktype
 bunx
 cspotcode
+dprint
 fuzzystrmatch
 inferencing
 initdb

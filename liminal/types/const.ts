@@ -12,6 +12,6 @@ function const_<T extends JSONValue, J extends ConstableType, const V extends T>
 Object.defineProperty(const_, "name", { value: "const" })
 export { const_ as const }
 
-export type JSONConstType<J extends ConstableType = ConstableType, V extends JSONValue = JSONValue> = J & {
+export type JSONConstType<J extends ConstableType = any, V extends JSONValue = JSONValue> = J & {
   const: V
 }

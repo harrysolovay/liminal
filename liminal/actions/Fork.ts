@@ -69,7 +69,7 @@ export function* fork(
       })
       let scopes: Array<Scope>
       let result: unknown
-      if (typeof implementation === "function" || isIteratorLike(implementation)) {
+      if (typeof implementation === "function" || (!Array.isArray(implementation) && isIteratorLike(implementation))) {
         const actor = unwrapDeferred(implementation as ActorLike)
         const forkScope = await reduceScope(
           new Scope(

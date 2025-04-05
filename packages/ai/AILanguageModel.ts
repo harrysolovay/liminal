@@ -1,49 +1,21 @@
 import { type CoreMessage, generateObject, generateText, jsonSchema, type LanguageModelV1, tool } from "ai"
-import { _util, L, type Message, reduceScope, type RunInfer, Scope } from "liminal"
+import { _util, isType, L, type Message, reduceScope, type RunInfer, Scope } from "liminal"
 
 export function AILanguageModel(model: LanguageModelV1): RunInfer {
   return async function*(action, scope) {
     const { messages: liminalMessages } = scope
     const messages = liminalMessages.map(toCoreMessage)
     if (action.type) {
-      let schema = await _util.JSONSchemaMemo(action.type)
-      // TODO: extract this logic and make reusable by other providers.
-      if (
-        // if `{ type: "string" }`, then do normal text completion
-        "type" in schema && schema.type === "string" && !("enum" in schema) && !("const" in schema)
-        && (!("description" in schema) || !schema.description)
-      ) {
-        const { text } = await generateText({
-          model,
-          messages,
-          // tools,
-        })
-        yield* L.assistant(text)
-        return text
-      }
-      const isRoot = "type" in schema && schema.type === "object"
-      if (!isRoot) {
-        schema = {
-          type: "object",
-          fields: {
-            value: schema,
-          },
-          required: ["value"],
-        }
-      }
-      const aiSchema = jsonSchema(schema)
+      const schema = await _util.JSONSchemaMemo(action.type)
       let { object } = await generateObject({
         model,
         messages,
-        schema: aiSchema,
-        mode: "json",
+        schema: jsonSchema(schema),
       })
-      if (!isRoot) {
-        object = (object as { value: object }).value
-      }
       yield* L.assistant(JSON.stringify(object, null, 2))
       return object
     }
+    // TODO: reenable tools
     // const tools = await Promise.all(
     //   scope.tools.values().map(async (tool_) => {
     //     const schema = await _util.JSONSchemaMemo(tool_.params)

@@ -3,7 +3,7 @@ import type { JSONTypeBase } from "./JSONTypeBase.ts"
 import type { Type } from "./Type.ts"
 
 function enum_<A extends Array<string>>(...values: A): Type<A[number], JSONEnumType<A[number]>> {
-  return declareType(() => enum_<A>, values.sort())
+  return declareType(() => enum_<A>, values)
 }
 Object.defineProperty(enum_, "name", { value: "enum" })
 export { enum_ as enum }

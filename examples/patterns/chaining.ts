@@ -1,5 +1,5 @@
 import { openai } from "@ai-sdk/openai"
-import { exec, L } from "liminal"
+import { type Actor, exec, L } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
 exec(MarketingCopy, {
@@ -9,12 +9,12 @@ exec(MarketingCopy, {
   handler: console.log,
 })
 
-function* MarketingCopy() {
+function* MarketingCopy(): Actor {
   yield* L
     .system`Write persuasive marketing copy for: Buffy The Vampire Slayer. Focus on benefits and emotional appeal.`
   yield* L.declareLanguageModel("default")
   yield* L.user`Please generate the first draft.`
-  let copy = yield* L.string
+  let copy = yield* L.infer()
   yield* L.user`
     Now evaluate this marketing copy for:
 
@@ -39,7 +39,7 @@ function* MarketingCopy() {
 
       Original copy: ${copy}
     `
-    copy = yield* L.string
+    copy = yield* L.infer()
   }
   return { copy, qualityMetrics }
 }

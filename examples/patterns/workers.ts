@@ -4,7 +4,9 @@ import { AILanguageModel } from "liminal-ai"
 
 exec(plan("Alert administrators via text whenever site traffic exceeds a certain threshold."), {
   bind: {
-    default: AILanguageModel(openai("gpt-4o-mini")),
+    default: AILanguageModel(openai("gpt-4o-mini", {
+      structuredOutputs: true,
+    })),
   },
   handler: console.log,
 })

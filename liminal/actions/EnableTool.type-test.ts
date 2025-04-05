@@ -1,6 +1,6 @@
 import type { AssertTrue, IsExact } from "conditional-type-checks"
 import * as L from "../L.ts"
-import { ActorAssertions } from "../testing/ActorAssertions/ActorAssertions.ts"
+import { ActorAssertions } from "../testing/ActorAssertions.ts"
 import type { ChildEvent, EnteredEvent, ExitedEvent } from "./actions_common.ts"
 import type { ToolDisabledEvent } from "./DisableTool.ts"
 import { emit } from "./Emit.ts"
