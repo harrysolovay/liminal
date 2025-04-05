@@ -19,7 +19,8 @@ export function* refine(input: string) {
       return yield* L.infer()
     },
   })
-  const { best } = yield* L.isolate("select", function*() {
+  const { best } = yield* L.fork("select", function*() {
+    yield* L.clear()
     yield* L.declareLanguageModel("select")
     yield* L.user`
       Out of the following variants, which is your favorite?:

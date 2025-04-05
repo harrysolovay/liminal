@@ -18,7 +18,6 @@ export type {
 export type { Fork, ForkArmResults as ForkResult } from "./actions/Fork.ts"
 export type { GetMessages } from "./actions/GetMessages.ts"
 export type { Infer, InferenceRequestedEvent, InferredEvent } from "./actions/Infer.ts"
-export type { Isolate } from "./actions/Isolate.ts"
 export type {
   AssistantContent,
   AssistantMessage,
