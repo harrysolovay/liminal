@@ -18,5 +18,6 @@ jobs:
         with:
           bun-version: latest
       - run: bun i
+      - uses: dprint/check@v2.2
       - run: bun run build
       - run: bun test
