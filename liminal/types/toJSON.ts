@@ -13,13 +13,13 @@ import { _object, type JSONObjectType } from "./object.ts"
 import type { JSONRefType } from "./ref.ts"
 import { type JSONStringType } from "./string.ts"
 import { type Type } from "./Type.ts"
-import { isParentType } from "./type_common.ts"
+import { PARENT_TYPE_NAMES, typeName } from "./type_common.ts"
 import { TypeContext } from "./TypeContext.ts"
 import { TypeVisitor } from "./TypeVisitor.ts"
 import type { JSONUnionType } from "./union.ts"
 
 export function toJSON<T extends JSONValue, J extends JSONRootableType>(this: Type<T, J>): JSONRootType<J> {
-  const { $defs: { 0: root, ...$defs } } = new ToJSONContext(this)
+  const { $defs: { 0: root, ...$defs } } = new ToJSONState(this)
   return {
     JSONSchema$schema,
     ...root,
@@ -27,7 +27,7 @@ export function toJSON<T extends JSONValue, J extends JSONRootableType>(this: Ty
   } as never
 }
 
-class ToJSONContext extends TypeContext {
+class ToJSONState extends TypeContext {
   readonly $defs: Record<string, JSONType | undefined> = {}
   constructor(root: Type) {
     super(root)
@@ -35,15 +35,24 @@ class ToJSONContext extends TypeContext {
   }
 }
 
-const visit: TypeVisitor<ToJSONContext, JSONType> = TypeVisitor({
+const visit: TypeVisitor<ToJSONState, JSONType> = TypeVisitor({
   hook(next, state, type) {
-    if (isParentType(type)) {
+    const which = typeName(type)
+    if (PARENT_TYPE_NAMES[which]) {
       const id = state.id(type)
       if (!(id in state.$defs)) {
         state.$defs[id] = undefined
         state.$defs[id] = next(state, type)
       }
       return type === state.root ? { $ref: "$" } : { $ref: `#/$defs/${id}` }
+    }
+    if (which === "ref") {
+      if (state.ids.has(type)) {
+        const getType = type.args?.[0] as () => Type
+        return { $ref: `#/$defs/${state.id(getType())}` }
+      }
+      state.id(type)
+      return next(state, type)
     }
     return next(state, type)
   },
@@ -82,7 +91,7 @@ const visit: TypeVisitor<ToJSONContext, JSONType> = TypeVisitor({
   },
   _union(state, _type, ...members): JSONUnionType {
     return {
-      anyOf: members.map((member) => visit(state, member)),
+      anyOf: members.map((m) => visit(state, m)),
     }
   },
   _object(state, _type, fields): JSONObjectType {
@@ -90,14 +99,14 @@ const visit: TypeVisitor<ToJSONContext, JSONType> = TypeVisitor({
       type: "object",
       properties: Object.fromEntries(
         Array.isArray(fields)
-          ? fields.map((value, i) => [i, visit(state, value)])
-          : Object.entries(fields).map(([key, value]) => [key, visit(state, value)]),
+          ? fields.map((v, i) => [i, visit(state, v)])
+          : Object.entries(fields).map(([k, v]) => [k, visit(state, v)]),
       ),
       required: Object.keys(fields),
       additionalProperties: false,
     }
   },
-  ref(state, _type, getType): JSONRefType {
-    return visit(state, getType()) as JSONRefType
+  ref(state, _type, getType) {
+    return visit(state, getType())
   },
 })

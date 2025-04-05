@@ -6,6 +6,10 @@ fuzzystrmatch
 inferencing
 initdb
 llms
+metaarray
+metaatom
+metaobject
+metatype
 multimodel
 nullary
 ollama
