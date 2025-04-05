@@ -1,12 +1,12 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
 import { infer } from "../actions/Infer.ts"
 import { LiminalAssertionError } from "../LiminalAssertionError.ts"
-import type { Falsy } from "../util/Falsy"
+import type { Falsy } from "../util/Falsy.ts"
 import { applyTemplateWithIndentation } from "../util/fixTemplateStrings.ts"
-import { isTemplateStringsArray } from "../util/isTemplateStringsArray"
+import { isTemplateStringsArray } from "../util/isTemplateStringsArray.ts"
 import { AssertDiagnostics, formatAssertDiagnostics } from "./AssertDiagnostics.ts"
 import { toJSON } from "./toJSON.ts"
-import { type Type, TypeKey, type TypeMembers } from "./Type"
+import { type Type, TypeKey, type TypeMembers } from "./Type.ts"
 
 export function declareType<X extends Type>(
   declaration: () => X | ((...args: any) => X),

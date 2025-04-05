@@ -4,12 +4,14 @@
   "workspaces": ["common", "examples/*", "liminal", "liminal.land", "packages/*"],
   "scripts": {
     "build": "tsc -b",
-    "liminal": "liminal",
+    "watch": "tsc -b -w",
+    "liminal": "dotenvx run -- liminal",
     "liminal.land": "bun run --filter liminal.land vitepress",
     "example:vite-react-app": "bun run --filter=liminal-example-vite-react-app dev"
   },
   "devDependencies": {
     "@ai-sdk/openai": "^1.2.5",
+    "@dotenvx/dotenvx": "^1.39.1",
     "@types/bun": "^1.2.8",
     "@types/node": "^22.13.16",
     "conditional-type-checks": "^1.0.6",

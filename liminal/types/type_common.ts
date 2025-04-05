@@ -1,5 +1,5 @@
 import { nullaryMemo } from "../util/nullaryMemo.ts"
-import * as I from "./intrinsics"
+import * as I from "./intrinsics.ts"
 import type { Type } from "./Type.ts"
 
 export type IntrinsicTypes = typeof I

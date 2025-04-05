@@ -1,6 +1,7 @@
 arktype
 bunx
 cspotcode
+dotenvx
 dprint
 fuzzystrmatch
 inferencing
