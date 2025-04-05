@@ -15,11 +15,11 @@ function* await_<T>(value: T): Generator<
   return yield ActionBase("await", {
     value,
     async reduce(scope) {
-      const result = await value
-      scope.events.emit({ type: "await_resolved", value: result })
+      value = await value
+      scope.events.emit({ type: "await_resolved", value })
       return scope.spread({
-        value: result,
-        next: result,
+        value,
+        next: value,
       })
     },
   })

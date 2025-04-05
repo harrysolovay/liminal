@@ -13,7 +13,7 @@ export default {
   async fetch(request) {
     const input = await request.text()
     try {
-      const { value: result } = await exec(refine(input), {
+      const { value } = await exec(refine(input), {
         bind: {
           default: AILanguageModel(openai("gpt-4o")),
           a: AILanguageModel(openai("gpt-4o-mini")),
@@ -22,7 +22,7 @@ export default {
           select: AILanguageModel(openai("gpt-3.5-turbo")),
         },
       })
-      return new Response(result)
+      return new Response(value)
     } catch (e: unknown) {
       console.error(e)
       return new Response("INTERNAL SERVER ERROR", {

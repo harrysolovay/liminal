@@ -51,9 +51,9 @@ export async function runExec(args: Array<string>) {
       })
     },
   })
-  const { value: result } = scope
+  const { value } = scope
   config.handler?.({
     type: "exited",
-    value: result,
+    value,
   })
 }

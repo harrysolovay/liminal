@@ -128,7 +128,7 @@ export function* fork(key: keyof any, implementation: ActorLike | ActorLikes): G
         }))
         value = Array.isArray(implementation)
           ? scopes.map((scope) => scope.value)
-          : Object.fromEntries(scopes.map(({ key, value: result }) => [key, result]))
+          : Object.fromEntries(scopes.map(({ key, value }) => [key, value]))
       }
       events.emit({
         type: "exited",

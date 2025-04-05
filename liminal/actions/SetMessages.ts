@@ -53,17 +53,17 @@ export function* setMessages(
           scope.runInfer,
           scope.runEmbed,
         ).reduce(maybeSetter!([...scope.messages]))
-        const { value: result } = setterScope
+        const { value } = setterScope
         events.emit({
           type: "exited",
-          value: result,
+          value,
         })
         events.emit({
           type: "messages_set",
-          messages: result,
+          messages: value,
         })
         return scope.spread({
-          messages: result,
+          messages: value,
           next: undefined,
           children: [...scope.children, setterScope],
         })
