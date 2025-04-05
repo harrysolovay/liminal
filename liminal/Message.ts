@@ -1,3 +1,25 @@
+export type Message = SystemMessage | UserMessage | AssistantMessage | ToolMessage
+
+export interface AssistantMessage extends MessageBase<"assistant", AssistantContent> {}
+export type AssistantContent =
+  | string
+  | Array<TextPart | FilePart | ReasoningPart | RedactedReasoningPart | ToolCallPart>
+
+export interface SystemMessage extends MessageBase<"system", string> {}
+
+export interface UserMessage extends MessageBase<"user", UserContent> {}
+export type UserContent = string | Array<TextPart | ImagePart | FilePart>
+
+export interface ToolMessage extends MessageBase<"tool", ToolContent> {}
+export type ToolContent = Array<ToolContentPart>
+export interface ToolContentPart {
+  type: "tool-result"
+  toolCallId: string
+  toolName: string
+  result: unknown
+  isError?: boolean
+}
+
 export interface TextPart {
   type: "text"
   text: string
@@ -49,4 +71,9 @@ export interface ImagePart {
   type: "image"
   image: DataContent | URL
   mimeType?: string
+}
+
+interface MessageBase<R extends string, C> {
+  role: R
+  content: C
 }

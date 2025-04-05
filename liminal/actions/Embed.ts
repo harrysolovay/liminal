@@ -21,8 +21,7 @@ export function* embed(value: string): Generator<
         type: "embedding_requested",
         value,
       })
-      // TODO: clean up this typing
-      const embedding = await scope.runEmbed(this as never, scope)
+      const embedding = await scope.runEmbed(this, scope)
       scope.events.emit({
         type: "embedded",
         value,

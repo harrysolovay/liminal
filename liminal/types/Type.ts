@@ -33,6 +33,7 @@ export interface TypeMembers<T extends JSONValue, J extends JSONType> extends St
   assert(value: unknown): T
 }
 
+export type TypeKey = typeof TypeKey
 export const TypeKey = Symbol.for("Liminal/Type")
 
 export function isType(value: unknown): value is Type {

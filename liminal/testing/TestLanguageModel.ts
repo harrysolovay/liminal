@@ -1,5 +1,5 @@
-import { assistant } from "../actions/messages.ts"
 import type { RunInfer } from "../actions/SetLanguageModel.ts"
+import { assistant } from "../patterns/messages.ts"
 import type { JSONValue } from "../util/JSONValue.ts"
 
 export interface TestLanguageModelConfig {

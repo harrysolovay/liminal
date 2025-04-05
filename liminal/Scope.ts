@@ -1,8 +1,10 @@
 import type { ActionEvents } from "./ActionEvents.ts"
+import type { ActionBase } from "./actions/actions_base.ts"
 import type { EnableTool } from "./actions/EnableTool.ts"
-import type { Message } from "./actions/messages.ts"
 import type { RunEmbed } from "./actions/SetEmbeddingModel.ts"
 import type { RunInfer } from "./actions/SetLanguageModel.ts"
+import type { Actor } from "./Actor.ts"
+import type { Message } from "./Message.ts"
 
 export type ScopeSource = "exec" | "tool" | "fork" | "fork_arm" | "set_messages"
 
@@ -46,5 +48,19 @@ export class Scope<R = any> {
       fields?.result ?? this.result,
       fields?.children ?? this.children,
     )
+  }
+
+  reduce = async (actor: Actor): Promise<Scope> => {
+    let currentScope: Scope<any> = this
+    let currentActor = await actor.next()
+    while (!currentActor.done) {
+      const { value } = currentActor
+      currentScope = await (value as ActionBase).reduce(currentScope)
+      currentActor = await actor.next(currentScope.next)
+    }
+    return currentScope.spread({
+      result: currentActor.value,
+      next: undefined,
+    })
   }
 }

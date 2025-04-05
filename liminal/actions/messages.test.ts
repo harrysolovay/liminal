@@ -1,6 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { assistant, system, user } from "./messages"
-import type { AssistantMessage, SystemMessage, UserMessage } from "./messages"
+import * as L from "../L.ts"
 
 // Helper function to extract the content from a generator
 function getMessageContent<T>(generator: Generator<T, void, any>): any {
@@ -11,7 +10,7 @@ function getMessageContent<T>(generator: Generator<T, void, any>): any {
 describe("message templates", () => {
   test("system messages with indentation", () => {
     // Create a system message with indented multiline content
-    const messageGenerator = system`
+    const messageGenerator = L.system`
       Hello, I am an AI assistant.
       I can help with the following:
         - Code generation
@@ -28,7 +27,7 @@ describe("message templates", () => {
 
   test("user messages with substitution", () => {
     const name = "John"
-    const messageGenerator = user`Hello, my name is ${name}.`
+    const messageGenerator = L.user`Hello, my name is ${name}.`
 
     const content = getMessageContent(messageGenerator)
 
@@ -38,7 +37,7 @@ describe("message templates", () => {
   test("user messages with multiline substitution and indentation", () => {
     const codeBlock = "function example() {\n  console.log('Hello');\n}"
 
-    const messageGenerator = user`
+    const messageGenerator = L.user`
       Here's my code:
         ${codeBlock}
       Can you help me understand it?
@@ -56,7 +55,7 @@ describe("message templates", () => {
     const explanation =
       "1. First, we declare a function\n2. Then we log a message\n3. The function doesn't return anything"
 
-    const messageGenerator = assistant`
+    const messageGenerator = L.assistant`
       Let me explain:
         ${explanation}
       Does that help?
@@ -78,7 +77,7 @@ describe("message templates", () => {
   }
 }`
 
-    const messageGenerator = user`
+    const messageGenerator = L.user`
       My code:
         ${code}
     `

@@ -1,17 +1,16 @@
-import type {} from "./actions_base.ts"
 import type { Actor } from "../Actor.ts"
 import type { Scope } from "../Scope.ts"
 import type { Spec } from "../Spec.ts"
 import { ActionBase, type ActionEventBase } from "./actions_base.ts"
+import type { AppendMessage } from "./AppendMessage.ts"
 import type { Infer } from "./Infer.ts"
-import type { AssistantMessage, ToolMessage } from "./messages.ts"
 
 export interface SetLanguageModel<S extends Spec = Spec> extends ActionBase<"set_language_model", S> {
   key: keyof any
   runInfer: RunInfer
 }
 
-export type RunInfer = (action: Infer, scope: Scope) => Actor<AssistantMessage | ToolMessage, any>
+export type RunInfer = (action: Infer, scope: Scope) => Actor<AppendMessage, any>
 
 export function* setLanguageModel<K extends keyof any>(
   key: K,

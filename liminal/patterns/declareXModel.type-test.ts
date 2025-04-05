@@ -1,4 +1,4 @@
-import type { ChildEvent, EnteredEvent, ExitedEvent } from "../actions/actions_common.ts"
+import type { ChildEvent } from "../actions/actions_common.ts"
 import type { RunEmbed } from "../actions/SetEmbeddingModel.ts"
 import type { EmbeddingModelSetEvent } from "../actions/SetEmbeddingModel.ts"
 import type { RunInfer } from "../actions/SetLanguageModel.ts"
@@ -50,15 +50,13 @@ ActorAssertions(parent).assertSpec<{
     | ChildEvent<
       "fork",
       "fork-key",
-      | EnteredEvent
-      | ChildEvent<
+      ChildEvent<
         "fork_arm",
         "key",
-        EnteredEvent | LanguageModelSetEvent<"A"> | EmbeddingModelSetEvent<"B"> | ExitedEvent<void>
-      >
-      | ExitedEvent<{
-        key: void
-      }>
+        LanguageModelSetEvent<"A"> | EmbeddingModelSetEvent<"B">,
+        void
+      >,
+      { key: void }
     >
     | LanguageModelSetEvent<"C">
     | EmbeddingModelSetEvent<"D">

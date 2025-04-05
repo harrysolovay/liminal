@@ -1,5 +1,5 @@
 import { type CoreMessage, generateObject, generateText, jsonSchema, type LanguageModelV1, tool } from "ai"
-import { _util, isType, L, type Message, reduceScope, type RunInfer, Scope } from "liminal"
+import { _util, isType, L, type Message, type RunInfer, Scope } from "liminal"
 
 export function AILanguageModel(model: LanguageModelV1): RunInfer {
   return async function*(action, scope) {
@@ -12,7 +12,10 @@ export function AILanguageModel(model: LanguageModelV1): RunInfer {
         messages,
         schema: jsonSchema(schema),
       })
-      yield* L.assistant(JSON.stringify(object, null, 2))
+      yield* L.appendMessage({
+        role: "assistant",
+        content: JSON.stringify(object, null, 2),
+      })
       return object
     }
     // TODO: reenable tools
@@ -65,32 +68,35 @@ export function AILanguageModel(model: LanguageModelV1): RunInfer {
       messages,
       // tools,
     })
-    yield* L.assistant(text)
+    yield* L.appendMessage({
+      role: "assistant",
+      content: text,
+    })
     return text
   }
 }
 
 function toCoreMessage(message: Message): CoreMessage {
-  switch (message.action) {
-    case "assistant_message": {
+  switch (message.role) {
+    case "assistant": {
       return {
         role: "assistant",
         content: message.content,
       }
     }
-    case "system_message": {
+    case "system": {
       return {
         role: "system",
         content: message.content,
       }
     }
-    case "tool_message": {
+    case "tool": {
       return {
         role: "tool",
         content: message.content,
       }
     }
-    case "user_message": {
+    case "user": {
       return {
         role: "user",
         content: message.content,
