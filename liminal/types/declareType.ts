@@ -1,10 +1,10 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
-import { infer } from "../L.ts"
+import { infer } from "../actions/Infer.ts"
 import { LiminalAssertionError } from "../LiminalAssertionError.ts"
 import type { Falsy } from "../util/Falsy"
 import { fixTemplateStrings } from "../util/fixTemplateStrings.ts"
 import { isTemplateStringsArray } from "../util/isTemplateStringsArray"
-import { AssertDiagnostics } from "./AssertDiagnostics.ts"
+import { AssertDiagnostics, formatAssertDiagnostics } from "./AssertDiagnostics.ts"
 import { toJSON } from "./toJSON.ts"
 import { type Type, TypeKey, type TypeMembers } from "./Type"
 
@@ -20,6 +20,9 @@ export function declareType<X extends Type>(
       declaration,
       args,
       descriptions,
+      description() {
+        return descriptions.join("\n")
+      },
       "~standard": {
         vendor: "liminal",
         version: 1,
@@ -40,15 +43,14 @@ export function declareType<X extends Type>(
       assert: (value) => {
         const diagnostics = AssertDiagnostics(type as never, value)
         if (diagnostics.length) {
-          throw new LiminalAssertionError(
-            // TODO: better formatting of diagnostics
-            diagnostics.map(({ path, error }) => `path ${path}: ${JSON.stringify(error)}`).join("\n"),
-          )
+          throw new LiminalAssertionError(formatAssertDiagnostics(diagnostics))
         }
         return value as never
       },
-      *[Symbol.iterator]() {
-        return yield* infer(this)
+      ...{
+        *[Symbol.iterator]() {
+          return yield* infer(this)
+        },
       },
     } satisfies TypeMembers<X["T"], X["J"]>,
   ) as never as X

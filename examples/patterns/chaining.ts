@@ -1,5 +1,5 @@
 import { openai } from "@ai-sdk/openai"
-import { exec, L } from "liminal"
+import { type Actor, exec, L } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
 exec(MarketingCopy, {
@@ -9,7 +9,7 @@ exec(MarketingCopy, {
   handler: console.log,
 })
 
-function* MarketingCopy() {
+function* MarketingCopy(): Actor {
   yield* L
     .system`Write persuasive marketing copy for: Buffy The Vampire Slayer. Focus on benefits and emotional appeal.`
   yield* L.declareLanguageModel("default")

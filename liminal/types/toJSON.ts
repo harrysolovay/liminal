@@ -9,18 +9,19 @@ import { JSONSchema$schema } from "./JSONRootType.ts"
 import type { JSONRootableType, JSONType } from "./JSONType"
 import type { JSONNullType } from "./null.ts"
 import type { JSONNumberType } from "./number.ts"
-import { _object, type JSONObjectType, type ObjectFields } from "./object.ts"
+import { _object, type JSONObjectType } from "./object.ts"
 import type { JSONRefType } from "./ref.ts"
 import { type JSONStringType } from "./string.ts"
 import { type Type } from "./Type.ts"
+import { isParentType } from "./type_common.ts"
 import { TypeContext } from "./TypeContext.ts"
-import { isParentType, TypeVisitor } from "./TypeVisitor.ts"
+import { TypeVisitor } from "./TypeVisitor.ts"
 import type { JSONUnionType } from "./union.ts"
 
 export function toJSON<T extends JSONValue, J extends JSONRootableType>(this: Type<T, J>): JSONRootType<J> {
   const { $defs: { 0: root, ...$defs } } = new ToJSONContext(this)
   return {
-    $schema: JSONSchema$schema,
+    JSONSchema$schema,
     ...root,
     $defs,
   } as never
@@ -34,7 +35,7 @@ class ToJSONContext extends TypeContext {
   }
 }
 
-const visit = TypeVisitor<ToJSONContext, JSONType>({
+const visit: TypeVisitor<ToJSONContext, JSONType> = TypeVisitor({
   hook(next, state, type) {
     if (isParentType(type)) {
       const id = state.id(type)
@@ -62,10 +63,10 @@ const visit = TypeVisitor<ToJSONContext, JSONType>({
     return { type: "string" }
   },
   const(state, _type, valueType, value): JSONConstType {
-    const initial = visit(state, valueType)
-    return Object.assign(initial as Exclude<typeof initial, JSONRefType>, {
+    return {
+      ...visit(state, valueType),
       const: value,
-    })
+    } as never
   },
   _array(state, _type, element): JSONArrayType {
     return {

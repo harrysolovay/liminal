@@ -6,6 +6,7 @@ export type { JSONEnumType } from "./enum.ts"
 export type { JSONIntegerType } from "./integer.ts"
 export * from "./JSONRootType.ts"
 export * from "./JSONType.ts"
+export { match } from "./match.ts"
 export type { JSONNullType } from "./null.ts"
 export type { JSONNumberType } from "./number.ts"
 export type {
