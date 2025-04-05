@@ -1,6 +1,6 @@
 import type { Scope } from "../Scope.ts"
 import type { Spec } from "../Spec.ts"
-import type { ActionEventBase } from "./actions_base.ts"
+import type { EventBase } from "./actions_base.ts"
 import { ActionBase } from "./actions_base.ts"
 import type { Embed } from "./Embed.ts"
 
@@ -34,8 +34,6 @@ export function* setEmbeddingModel<K extends keyof any>(key: K, runEmbed: RunEmb
   })
 }
 
-export interface EmbeddingModelSetEvent<K extends keyof any = keyof any>
-  extends ActionEventBase<"embedding_model_set">
-{
+export interface EmbeddingModelSetEvent<K extends keyof any = keyof any> extends EventBase<"embedding_model_set"> {
   key: K
 }

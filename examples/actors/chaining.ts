@@ -1,15 +1,6 @@
-import { openai } from "@ai-sdk/openai"
-import { type Actor, exec, L } from "liminal"
-import { AILanguageModel } from "liminal-ai"
+import { L } from "liminal"
 
-exec(MarketingCopy, {
-  bind: {
-    default: AILanguageModel(openai("gpt-4o-mini")),
-  },
-  handler: console.log,
-})
-
-function* MarketingCopy(): Actor {
+export default function*() {
   yield* L
     .system`Write persuasive marketing copy for: Buffy The Vampire Slayer. Focus on benefits and emotional appeal.`
   yield* L.declareLanguageModel("default")

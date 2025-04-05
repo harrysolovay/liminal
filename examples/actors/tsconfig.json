@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": ["."],
+  "references": [
+    {
+      "path": "../../liminal"
+    }
+  ]
+}

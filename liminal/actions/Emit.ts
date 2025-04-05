@@ -1,6 +1,6 @@
 import type { Spec } from "../Spec.ts"
 import type { JSONValue } from "../util/JSONValue.ts"
-import { ActionBase, type ActionEventBase } from "./actions_base.ts"
+import { ActionBase, type EventBase } from "./actions_base.ts"
 
 export interface Emit<S extends Spec = Spec> extends ActionBase<"emit", S> {
   key: keyof any
@@ -31,7 +31,7 @@ export function* emit<K extends keyof any, V extends JSONValue>(key: K, value: V
 }
 
 export interface EmittedEvent<K extends keyof any = keyof any, E extends JSONValue = JSONValue>
-  extends ActionEventBase<"emitted">
+  extends EventBase<"emitted">
 {
   key: K
   value: E

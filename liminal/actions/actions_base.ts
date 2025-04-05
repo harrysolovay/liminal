@@ -21,7 +21,7 @@ export function ActionBase<A extends ActionBase>(
   } as A
 }
 
-export interface ActionEventBase<K extends string> {
+export interface EventBase<K extends string> {
   type: K
 }
 

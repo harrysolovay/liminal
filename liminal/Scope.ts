@@ -1,9 +1,9 @@
-import type { ActionEvents } from "./ActionEvents.ts"
 import type { ActionBase } from "./actions/actions_base.ts"
 import type { EnableTool } from "./actions/EnableTool.ts"
 import type { RunEmbed } from "./actions/SetEmbeddingModel.ts"
 import type { RunInfer } from "./actions/SetLanguageModel.ts"
 import type { Actor } from "./Actor.ts"
+import type { Events } from "./Events.ts"
 import type { Message } from "./Message.ts"
 
 export type ScopeSource = "exec" | "tool" | "fork" | "fork_arm" | "set_messages"
@@ -13,7 +13,7 @@ export class Scope<R = any> {
     readonly source: ScopeSource,
     readonly args: Record<keyof any, any>,
     readonly key: keyof any | undefined,
-    readonly events: ActionEvents,
+    readonly events: Events,
     public runInfer: RunInfer | undefined = undefined,
     public runEmbed: RunEmbed | undefined = undefined,
     readonly messages: Array<Message> = [],

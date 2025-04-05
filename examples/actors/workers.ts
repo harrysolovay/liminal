@@ -1,28 +1,19 @@
-import { openai } from "@ai-sdk/openai"
-import { exec, L } from "liminal"
-import { AILanguageModel } from "liminal-ai"
+import { L } from "liminal"
 
-exec(plan("Alert administrators via text whenever site traffic exceeds a certain threshold."), {
-  bind: {
-    default: AILanguageModel(openai("gpt-4o-mini", {
-      structuredOutputs: true,
-    })),
-  },
-  handler: console.log,
-})
+const FEAT = "Alert administrators via text whenever site traffic exceeds a certain threshold."
 
-function* plan(feat: string) {
+export default function*() {
   yield* L.declareLanguageModel("default")
   yield* L.system`You are a senior software architect planning feature implementations.`
   yield* L.user`Analyze this feature request and create an implementation plan:`
-  yield* L.user(feat)
+  yield* L.user(FEAT)
   const implementationPlan = yield* L.object({
     files: L.array(FileInfo),
     estimatedComplexity: L.enum("create", "medium", "high"),
   })
   const fileChanges = yield* L.fork(
     "group-key",
-    implementationPlan.files.map((file) => implement(feat, file)),
+    implementationPlan.files.map((file) => implement(FEAT, file)),
   )
   return { fileChanges, implementationPlan }
 }

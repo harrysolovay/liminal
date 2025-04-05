@@ -1,8 +1,8 @@
-import type { ActionEvent } from "./ActionEvent.ts"
+import type { LEvent } from "./LEvent.ts"
 
 export interface Spec {
   Entry: [keyof any, any]
-  Event: ActionEvent
+  Event: LEvent
 }
 
 export type MergeSpec<S extends Spec> = {

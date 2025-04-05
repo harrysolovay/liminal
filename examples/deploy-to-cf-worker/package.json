@@ -1,6 +1,7 @@
 {
   "name": "liminal-example-deploy-to-cf-worker",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@ai-sdk/openai": "^1.2.5",
     "ai": "^4.1.61",

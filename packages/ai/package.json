@@ -1,6 +1,7 @@
 {
   "name": "liminal-ai",
   "private": true,
+  "type": "module",
   "exports": {
     ".": "./dist/index.js"
   },

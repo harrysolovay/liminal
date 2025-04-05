@@ -1,19 +1,9 @@
-import { openai } from "@ai-sdk/openai"
-import { exec, L } from "liminal"
-import { AILanguageModel } from "liminal-ai"
+import { L } from "liminal"
 import { readFile } from "node:fs/promises"
 import { fileURLToPath } from "node:url"
 
-const code = await readFile(fileURLToPath(import.meta.url), "utf-8")
-
-const LMH = L.enum("lower", "medium", "high")
-
-exec(review(code), {
-  bind: { default: AILanguageModel(openai("gpt-4o-mini")) },
-  handler: console.log,
-})
-
-function* review(code: string) {
+export default async function*() {
+  const code = await readFile(fileURLToPath(import.meta.url), "utf-8")
   yield* L.declareLanguageModel("default")
   yield* L.system`You are a technical lead summarizing multiple code reviews. Review the supplied code.`
   yield* L.user(code)
@@ -56,3 +46,5 @@ function* maintainability() {
     recommendations: "string[]",
   })
 }
+
+const LMH = L.enum("lower", "medium", "high")

@@ -1,18 +1,11 @@
-import { openai } from "@ai-sdk/openai"
-import { exec, L } from "liminal"
-import { AILanguageModel } from "liminal-ai"
+import { L } from "liminal"
 
-exec(planTrip("New York City"), {
-  bind: {
-    default: AILanguageModel(openai("gpt-4o-mini")),
-  },
-  handler: console.log,
-})
+const DEPARTURE_LOCATION = "New York City"
 
-function* planTrip(departureLocation: string) {
+export default function*() {
   yield* L.declareLanguageModel("default")
   yield* L.user`
-    I want to plan a weekend trip leaving from ${departureLocation}. I don't know where to go.
+    I want to plan a weekend trip leaving from ${DEPARTURE_LOCATION}. I don't know where to go.
     Suggest some follow-up questions that will help you narrow down the possible destination.
   `
   const { questions } = yield* L.object({
