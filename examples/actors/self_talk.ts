@@ -10,7 +10,7 @@ export default function*() {
   yield* L.infer()
   let i = 0
   while (i < 5) {
-    i++
+    i += 1
     const userReply = yield* L.fork("infer-user-reply", function*() {
       yield* L.user`Please answer this question on my behalf (no follow-up questions allowed).`
       return yield* L.infer()
