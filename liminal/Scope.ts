@@ -1,11 +1,10 @@
-import type { ActionBase } from "./actions/actions_base.ts"
-import type { EnableTool } from "./actions/EnableTool.ts"
-import type { RunEmbed } from "./actions/SetEmbeddingModel.ts"
-import type { RunInfer } from "./actions/SetLanguageModel.ts"
+import type { Action } from "./Action.ts"
 import type { Actor } from "./Actor.ts"
+import type { RunEmbed, RunInfer } from "./adapters.ts"
 import type { EventHandler } from "./EventHandler.ts"
 import type { LEvent } from "./LEvent.ts"
 import type { Message } from "./Message.ts"
+import type { Tool } from "./Tool.ts"
 
 export type Scope = RootScope | ChildScope
 
@@ -24,7 +23,7 @@ export interface ScopeBase<Type extends ScopeType, T> {
   readonly args: Record<keyof any, any>
   readonly controller: AbortController
   readonly messages: Array<Message>
-  readonly tools: Set<EnableTool>
+  readonly tools: Set<Tool>
   readonly nextArg?: any
   readonly value: T
   readonly runInfer?: RunInfer
@@ -60,7 +59,7 @@ async function reduce(this: Scope, actor: Actor): Promise<Scope> {
   let current = await actor.next()
   while (!current.done) {
     const { value } = current
-    scope = await (value as ActionBase).reduce(scope)
+    scope = await (value as Action).reducer(scope)
     current = await actor.next(scope.nextArg)
   }
   return {

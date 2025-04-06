@@ -1,30 +1,23 @@
-import type { Spec } from "../Spec.ts"
-import { ActionBase, type EventBase } from "./actions_base.ts"
-
-export interface Await<S extends Spec = Spec> extends ActionBase<"await", S> {
-  value: any
-}
+import { Action, type EventBase } from "../Action.ts"
 
 function* await_<T>(value: T): Generator<
-  Await<{
+  Action<"await", {
     Entry: never
     Event: AwaitResolvedEvent<T>
+    Throw: never
   }>,
   Awaited<T>
 > {
-  return yield ActionBase("await", {
-    value,
-    async reduce(scope) {
-      value = await value
-      scope.event({
-        type: "await_resolved",
-        value,
-      })
-      return {
-        ...scope,
-        nextArg: value,
-      }
-    },
+  return yield Action<never>()("await", async (scope) => {
+    value = await value
+    scope.event({
+      type: "await_resolved",
+      value,
+    })
+    return {
+      ...scope,
+      nextArg: value,
+    }
   })
 }
 Object.defineProperty(await_, "name", { value: "await" })

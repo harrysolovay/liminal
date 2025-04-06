@@ -20,6 +20,7 @@ const arrowTool = L.enableTool("Tool", "", P, (params) => {
 ActorAssertions(arrowTool).assertSpec<{
   Entry: never
   Event: ToolEnabledEvent<"Tool"> | ChildEvent<"tool", "Tool", ToolCalledEvent<P>, void>
+  Throw: never
 }>()
 
 function* _0() {
@@ -27,6 +28,7 @@ function* _0() {
   ActorAssertions(detach).assertSpec<{
     Entry: never
     Event: ToolDisabledEvent<"Tool">
+    Throw: never
   }>()
 }
 
@@ -50,6 +52,7 @@ ActorAssertions(genTool).assertSpec<{
       }>,
       string
     >
+  Throw: never
 }>()
 
 function* parent() {
@@ -94,4 +97,5 @@ ActorAssertions(parent).assertSpec<{
       >,
       { "arm-key": void }
     >
+  Throw: never
 }>()

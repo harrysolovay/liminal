@@ -1,37 +1,25 @@
-import type { Scope } from "../Scope.ts"
-import type { Spec } from "../Spec.ts"
-import type { EventBase } from "./actions_base.ts"
-import { ActionBase } from "./actions_base.ts"
-import type { Embed } from "./Embed.ts"
-
-export interface SetEmbeddingModel<S extends Spec = Spec> extends ActionBase<"set_embedding_model", S> {
-  key: keyof any
-  runEmbed: RunEmbed
-}
-
-export type RunEmbed = (action: Embed, scope: Scope) => Promise<Array<number>>
+import type { EventBase } from "../Action.ts"
+import { Action } from "../Action.ts"
+import type { RunEmbed } from "../adapters.ts"
 
 export function* setEmbeddingModel<K extends keyof any>(key: K, runEmbed: RunEmbed): Generator<
-  SetEmbeddingModel<{
+  Action<"set_embedding_model", {
     Entry: never
     Event: EmbeddingModelSetEvent<K>
+    Throw: never
   }>,
   void
 > {
-  return yield ActionBase("set_embedding_model", {
-    key,
-    runEmbed,
-    reduce(scope) {
-      scope.event({
-        type: "embedding_model_set",
-        key,
-      })
-      return {
-        ...scope,
-        nextArg: undefined,
-        runEmbed,
-      }
-    },
+  return yield Action<never>()("set_embedding_model", (scope) => {
+    scope.event({
+      type: "embedding_model_set",
+      key,
+    })
+    return {
+      ...scope,
+      nextArg: undefined,
+      runEmbed,
+    }
   })
 }
 

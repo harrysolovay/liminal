@@ -1,4 +1,5 @@
-import type { Infer, InferenceRequestedEvent, InferredEvent } from "../actions/Infer.ts"
+import type { Action } from "../Action.ts"
+import type { InferenceRequestedEvent, InferredEvent } from "../actions/Infer.ts"
 import { fromMetatypeRootDescriptor } from "../types/Metatype/fromMetatypeDescriptor.ts"
 import { MetatypeRootDescriptor } from "../types/Metatype/MetatypeDescriptor.ts"
 import type { JSONObjectType } from "../types/object.ts"
@@ -8,9 +9,10 @@ import type { JSONObject } from "../util/JSONObject.ts"
 import type { TaggableArgs } from "../util/Taggable.ts"
 
 export function* inferMetatype(...args: TaggableArgs<[...description: Array<string | Falsy>]>): Generator<
-  Infer<{
+  Action<"infer", {
     Entry: never
     Event: InferenceRequestedEvent | InferredEvent<MetatypeRootDescriptor>
+    Throw: never
   }>,
   Type<JSONObject, JSONObjectType<any>>
 > {

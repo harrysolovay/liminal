@@ -17,10 +17,9 @@ export async function exec<Y extends Action, T>(
 ): Promise<RootScope<T>> {
   let scope: Scope = RootScope("exec", "exec", config.bind, config.handler)
   const actor = unwrapDeferred(actorLike)
-  scope.event({ type: "entered" })
   scope = await scope.reduce(actor)
   scope.event({
-    type: "exited",
+    type: "returned",
     value: scope.value,
   })
   return scope as never

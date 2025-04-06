@@ -1,5 +1,6 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
-import type { Infer, InferenceRequestedEvent, InferredEvent } from "../actions/Infer.ts"
+import type { Action } from "../Action.ts"
+import type { InferenceRequestedEvent, InferredEvent } from "../actions/Infer.ts"
 import type { Falsy } from "../util/Falsy.ts"
 import type { JSONValue } from "../util/JSONValue.ts"
 import type { Taggable } from "../util/Taggable.ts"
@@ -14,9 +15,10 @@ export interface Type<T extends JSONValue = JSONValue, J extends JSONType = JSON
   J: J
 
   [Symbol.iterator]: J extends JSONObjectType ? () => Iterator<
-      Infer<{
+      Action<"infer", {
         Entry: never
         Event: InferenceRequestedEvent | InferredEvent<T>
+        Throw: never
       }>,
       T
     >

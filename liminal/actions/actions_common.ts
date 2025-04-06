@@ -1,15 +1,13 @@
+import type { EventBase } from "../Action.ts"
 import type { LEvent } from "../LEvent.ts"
 import type { ChildScopeType } from "../Scope.ts"
-import type { EventBase } from "./actions_base.ts"
 
 export type ChildEvent<
   S extends ChildScopeType = ChildScopeType,
   K extends keyof any = keyof any,
   E extends LEvent = any,
   T = any,
-> = PropagatedEvent<S, K, EnteredEvent | E | ExitedEvent<T>>
-
-export interface EnteredEvent extends EventBase<"entered"> {}
+> = PropagatedEvent<S, K, E | ReturnedEvent<T>>
 
 export interface PropagatedEvent<
   S extends ChildScopeType = ChildScopeType,
@@ -21,6 +19,6 @@ export interface PropagatedEvent<
   event: E
 }
 
-export interface ExitedEvent<T = any> extends EventBase<"exited"> {
+export interface ReturnedEvent<T = any> extends EventBase<"returned"> {
   value: T
 }

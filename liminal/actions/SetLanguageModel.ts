@@ -1,41 +1,27 @@
-import type { Actor } from "../Actor.ts"
-import type { Scope } from "../Scope.ts"
-import type { Spec } from "../Spec.ts"
-import { ActionBase, type EventBase } from "./actions_base.ts"
-import type { AppendMessage } from "./AppendMessage.ts"
-import type { Infer } from "./Infer.ts"
-
-export interface SetLanguageModel<S extends Spec = Spec> extends ActionBase<"set_language_model", S> {
-  key: keyof any
-  runInfer: RunInfer
-}
-
-export type RunInfer = (action: Infer, scope: Scope) => Actor<AppendMessage, any>
+import { Action, type EventBase } from "../Action.ts"
+import type { RunInfer } from "../adapters.ts"
 
 export function* setLanguageModel<K extends keyof any>(
   key: K,
   runInfer: RunInfer,
 ): Generator<
-  SetLanguageModel<{
+  Action<"set_language_model", {
     Entry: never
     Event: LanguageModelSetEvent<K>
+    Throw: never
   }>,
   void
 > {
-  return yield ActionBase("set_language_model", {
-    key,
-    runInfer,
-    reduce(scope) {
-      scope.event({
-        type: "language_model_set",
-        key,
-      })
-      return {
-        ...scope,
-        nextArg: undefined,
-        runInfer,
-      }
-    },
+  return yield Action<never>()("set_language_model", (scope) => {
+    scope.event({
+      type: "language_model_set",
+      key,
+    })
+    return {
+      ...scope,
+      nextArg: undefined,
+      runInfer,
+    }
   })
 }
 

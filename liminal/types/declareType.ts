@@ -4,7 +4,9 @@ import { LiminalAssertionError } from "../LiminalAssertionError.ts"
 import type { Falsy } from "../util/Falsy.ts"
 import { applyTemplateWithIndentation } from "../util/fixTemplateStrings.ts"
 import { isTemplateStringsArray } from "../util/isTemplateStringsArray.ts"
+import type { JSONObject } from "../util/JSONObject.ts"
 import { AssertDiagnostics, formatAssertDiagnostics } from "./AssertDiagnostics.ts"
+import type { JSONObjectType } from "./object.ts"
 import { toJSON } from "./toJSON.ts"
 import { type Type, TypeKey, type TypeMembers } from "./Type.ts"
 
@@ -48,7 +50,7 @@ export function declareType<X extends Type>(
         return value as never
       },
       ...{
-        *[Symbol.iterator]() {
+        *[Symbol.iterator](this: Type<JSONObject, JSONObjectType>) {
           return yield* infer(this)
         },
       },

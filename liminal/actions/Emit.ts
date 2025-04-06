@@ -1,33 +1,24 @@
-import type { Spec } from "../Spec.ts"
+import { Action, type EventBase } from "../Action.ts"
 import type { JSONValue } from "../util/JSONValue.ts"
-import { ActionBase, type EventBase } from "./actions_base.ts"
-
-export interface Emit<S extends Spec = Spec> extends ActionBase<"emit", S> {
-  key: keyof any
-  value: JSONValue
-}
 
 export function* emit<K extends keyof any, V extends JSONValue>(key: K, value: V): Generator<
-  Emit<{
+  Action<"emit", {
     Entry: never
     Event: EmittedEvent<K, V>
+    Throw: never
   }>,
   undefined
 > {
-  return yield ActionBase("emit", {
-    key,
-    value,
-    reduce(scope) {
-      scope.event({
-        type: "emitted",
-        key,
-        value,
-      })
-      return {
-        ...scope,
-        nextArg: undefined,
-      }
-    },
+  return yield Action<never>()("emit", (scope) => {
+    scope.event({
+      type: "emitted",
+      key,
+      value,
+    })
+    return {
+      ...scope,
+      nextArg: undefined,
+    }
   })
 }
 

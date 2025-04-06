@@ -1,27 +1,19 @@
-import type { Spec } from "../Spec.ts"
-import { ActionBase, type EventBase } from "./actions_base.ts"
-import type { EnableTool } from "./EnableTool.ts"
+import { Action, type EventBase } from "../Action.ts"
+import type { Tool } from "../Tool.ts"
 
-export interface DisableTool<S extends Spec = Spec> extends ActionBase<"disable_tool", S> {
-  enableTool: EnableTool
-}
-
-export function* disableTool(enableTool: EnableTool): Generator<DisableTool, void> {
-  yield ActionBase("disable_tool", {
-    enableTool,
-    reduce(scope) {
-      scope.event({
-        type: "tool_disabled",
-        tool: enableTool.key,
-      })
-      const tools = new Set(scope.tools)
-      tools.delete(enableTool)
-      return {
-        ...scope,
-        tools,
-        nextArg: undefined,
-      }
-    },
+export function* disableTool(tool: Tool): Generator<Action<"disable_tool", never>, void> {
+  yield Action<never>()("disable_tool", (scope) => {
+    scope.event({
+      type: "tool_disabled",
+      tool: tool.key,
+    })
+    const tools = new Set(scope.tools)
+    tools.delete(tool)
+    return {
+      ...scope,
+      tools,
+      nextArg: undefined,
+    }
   })
 }
 

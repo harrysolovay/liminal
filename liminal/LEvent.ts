@@ -1,4 +1,4 @@
-import type { EnteredEvent, ExitedEvent, PropagatedEvent } from "./actions/actions_common.ts"
+import type { PropagatedEvent, ReturnedEvent } from "./actions/actions_common.ts"
 import type { MessageAppendedEvent } from "./actions/AppendMessage.ts"
 import type { AwaitResolvedEvent } from "./actions/Await.ts"
 import type { ToolDisabledEvent } from "./actions/DisableTool.ts"
@@ -12,8 +12,7 @@ import type { MessagesSetEvent } from "./actions/SetMessages.ts"
 import type { ExceptionUncaught } from "./actions/Try.ts"
 
 export type LEvent =
-  | EnteredEvent
-  | ExitedEvent
+  | ReturnedEvent
   | ToolEnabledEvent
   | ToolCalledEvent
   | ToolDisabledEvent

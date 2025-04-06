@@ -1,15 +1,14 @@
-import { type Arg, arg } from "../actions/Arg.ts"
-import { type RunEmbed, type SetEmbeddingModel, setEmbeddingModel } from "../actions/SetEmbeddingModel.ts"
+import type { Action } from "../Action.ts"
+import { arg } from "../actions/Arg.ts"
+import { setEmbeddingModel } from "../actions/SetEmbeddingModel.ts"
 import type { EmbeddingModelSetEvent } from "../actions/SetEmbeddingModel.ts"
+import type { RunEmbed } from "../adapters.ts"
 
 export function* declareEmbeddingModel<K extends keyof any>(key: K): Generator<
-  | Arg<{
+  Action<"arg" | "set_embedding_model", {
     Entry: [K, RunEmbed]
-    Event: never
-  }>
-  | SetEmbeddingModel<{
-    Entry: never
     Event: EmbeddingModelSetEvent<K>
+    Throw: never
   }>,
   void
 > {

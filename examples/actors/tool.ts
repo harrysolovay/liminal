@@ -24,6 +24,6 @@ export default function*() {
     he uses 12 liters of petrol with a price  of $134 for 1 liter. How much money does he earn in one day?
   `
   const answer = yield* L.infer()
-  yield* detach()
+  yield* detach
   return answer
 }

@@ -1,34 +1,27 @@
+import { Action, type EventBase } from "../Action.ts"
 import type { Message } from "../Message.ts"
-import type { Spec } from "../Spec.ts"
-import { ActionBase, type EventBase } from "./actions_base.ts"
 
-export interface AppendMessage<S extends Spec = Spec> extends ActionBase<"append_message", S> {
-  message: Message
+export function* appendMessage<M extends Message>(message: M): Generator<
+  Action<"append_message", {
+    Entry: never
+    Event: MessageAppendedEvent<M>
+    Throw: never
+  }>,
+  void
+> {
+  yield Action<never>()("append_message", (scope) => {
+    scope.event({
+      type: "message_appended",
+      message,
+    })
+    return {
+      ...scope,
+      nextArg: undefined,
+      messages: [...scope.messages, message],
+    }
+  })
 }
 
 export interface MessageAppendedEvent<M extends Message = Message> extends EventBase<"message_appended"> {
   message: M
-}
-
-export function* appendMessage<M extends Message>(message: M): Generator<
-  AppendMessage<{
-    Entry: never
-    Event: MessageAppendedEvent<M>
-  }>,
-  void
-> {
-  yield ActionBase("append_message", {
-    message,
-    reduce(scope) {
-      scope.event({
-        type: "message_appended",
-        message,
-      })
-      return {
-        ...scope,
-        nextArg: undefined,
-        messages: [...scope.messages, message],
-      }
-    },
-  })
 }
