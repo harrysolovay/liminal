@@ -7,6 +7,7 @@ import type { InferenceRequestedEvent } from "./InferenceRequestedEvent.ts"
 import type { InferredEvent } from "./InferredEvent.ts"
 import type { LanguageModelSetEvent } from "./LanguageModelSetEvent.ts"
 import type { MessageAppendedEvent } from "./MessageAppendedEvent.ts"
+import type { MessageRemovedEvent } from "./MessageRemovedEvent.ts"
 import type { MessagesSetEvent } from "./MessagesSetEvent.ts"
 import type { PropagatedEvent } from "./PropagatedEvent.ts"
 import type { ReturnedEvent } from "./ReturnedEvent.ts"
@@ -32,3 +33,4 @@ export type LEvent =
   | ToolDisabledEvent
   | ToolEnabledEvent
   | AbortedEvent
+  | MessageRemovedEvent
