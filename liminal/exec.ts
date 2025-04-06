@@ -8,7 +8,6 @@ import { unwrapDeferred } from "./util/unwrapDeferred.ts"
 
 export interface ExecConfig<S extends Action = Action, T = any> {
   default: RunInfer
-  key?: keyof any
   args: FromEntries<S[""]["Entry"]>
   handler?: EventHandler<S[""]["Event"], T>
 }

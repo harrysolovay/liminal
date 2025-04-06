@@ -6,7 +6,7 @@ export interface PropagatedEvent<
   S extends ChildScopeType = ChildScopeType,
   K extends keyof any = keyof any,
   E extends LEvent = any,
-> extends EventBase<"event_propagated"> {
+> extends EventBase<"propagated"> {
   scopeType: S
   scope: K
   event: E

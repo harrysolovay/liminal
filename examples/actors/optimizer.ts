@@ -53,7 +53,7 @@ export default function*() {
       Current Translation: ${currentTranslation}
     `
     currentTranslation = yield* L.infer()
-    iterations++
+    iterations += 1
   }
   return {
     finalTranslation: currentTranslation,
