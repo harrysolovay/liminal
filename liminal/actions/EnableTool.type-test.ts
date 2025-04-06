@@ -6,8 +6,8 @@ import type { ToolDisabledEvent } from "../events/ToolDisabledEvent.ts"
 import type { ToolEnabledEvent } from "../events/ToolEnabledEvent.ts"
 import * as L from "../L.ts"
 import { ActorAssertions } from "../testing/ActorAssertions.ts"
-import { emit } from "./Emit.ts"
-import { enableTool } from "./EnableTool.ts"
+import { emit } from "./emit.ts"
+import { enableTool } from "./enableTool.ts"
 
 type P = typeof P["T"]
 const P = L.object({

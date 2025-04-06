@@ -14,7 +14,7 @@ export interface ChildScope extends ScopeBase<ChildScopeType, unknown> {
 }
 
 export type RootScopeType = "module" | "exec"
-export type ChildScopeType = "try" | "catch" | "tool" | "fork" | "fork_arm" | "set_messages"
+export type ChildScopeType = "catch" | "tool" | "fork" | "fork_arm" | "set_messages"
 export type ScopeType = RootScopeType | ChildScopeType
 
 export interface ScopeBase<Type extends ScopeType, T> {
@@ -26,6 +26,7 @@ export interface ScopeBase<Type extends ScopeType, T> {
   readonly tools: Set<Tool>
   readonly nextArg?: any
   readonly value: T
+  readonly thrown?: unknown
   readonly runInfer?: RunInfer
   readonly runEmbed?: RunEmbed
 
@@ -55,11 +56,15 @@ export function RootScope(
 }
 
 async function reduce(this: Scope, actor: Actor): Promise<Scope> {
+  const { signal } = this.controller
   let scope = { ...this }
+  if (signal.aborted) return scope
   let current = await actor.next()
   while (!current.done) {
     const { value } = current
+    if (signal.aborted) return scope
     scope = await (value as Action).reducer(scope)
+    if (signal.aborted) return scope
     current = await actor.next(scope.nextArg)
   }
   return {

@@ -1,24 +1,21 @@
 import { Action } from "../Action.ts"
-import { unimplemented } from "../util/unimplemented.ts"
+import type { EnsureNarrow } from "../util/EnsureNarrow.ts"
 
-function* throw_<V>(
-  _value: V,
-  ...[_error]: unknown extends V ? [typeof WIDENING_THROW_TYPE_ERROR]
-    : [V] extends [never] ? [typeof WIDENING_THROW_TYPE_ERROR]
-    : []
-): Generator<
+function* throw_<V>(value: V, ...[_error]: EnsureNarrow<V>): Generator<
   Action<"throw", {
     Entry: never
     Event: never
-    Throw: never
+    Throw: V
   }>,
-  never
+  () => never
 > {
-  return (yield (Action("throw", (_scope) => {
-    unimplemented()
-  }))) as never
+  return yield Action("throw", (scope) => {
+    return {
+      ...scope,
+      thrown: value,
+      nextArg: () => {},
+    }
+  })
 }
 Object.defineProperty(throw_, "name", { value: "throw" })
 export { throw_ as throw }
-
-export declare const WIDENING_THROW_TYPE_ERROR: unique symbol

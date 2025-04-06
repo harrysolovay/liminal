@@ -1,6 +1,6 @@
 import type { Action } from "../Action.ts"
-import { arg } from "../actions/Arg.ts"
-import { setEmbeddingModel } from "../actions/SetEmbeddingModel.ts"
+import { arg } from "../actions/arg.ts"
+import { setEmbeddingModel } from "../actions/setEmbeddingModel.ts"
 import type { RunEmbed } from "../adapters.ts"
 import type { EmbeddingModelSetEvent } from "../events/EmbeddingModelSetEvent.ts"
 

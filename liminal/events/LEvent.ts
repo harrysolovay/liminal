@@ -1,3 +1,4 @@
+import type { AbortedEvent } from "./AbortedEvent.ts"
 import type { EmbeddedEvent } from "./EmbeddedEvent.ts"
 import type { EmbeddingModelSetEvent } from "./EmbeddingModelSetEvent.ts"
 import type { EmbeddingRequestedEvent } from "./EmbeddingRequestedEvent.ts"
@@ -30,3 +31,4 @@ export type LEvent =
   | ToolCalledEvent
   | ToolDisabledEvent
   | ToolEnabledEvent
+  | AbortedEvent

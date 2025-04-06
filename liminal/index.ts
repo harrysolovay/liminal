@@ -1,5 +1,5 @@
 export * from "./Action.ts"
-export * from "./actions/AppendMessage.ts"
+export * from "./actions/appendMessage.ts"
 export * from "./Actor.ts"
 export * from "./adapters.ts"
 export * from "./EventHandler.ts"

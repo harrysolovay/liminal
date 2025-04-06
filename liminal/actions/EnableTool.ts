@@ -9,7 +9,7 @@ import type { Tool, ToolImplementation, ToolResult } from "../Tool.ts"
 import { JSONSchemaMemo } from "../util/JSONSchemaMemo.ts"
 import type { JSONValue } from "../util/JSONValue.ts"
 import type { PromiseOr } from "../util/PromiseOr.ts"
-import { disableTool } from "./DisableTool.ts"
+import { disableTool } from "./disableTool.ts"
 
 export function enableTool<K extends keyof any, A extends JSONValue, R extends PromiseOr<ToolResult>>(
   key: K,

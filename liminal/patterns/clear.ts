@@ -1,5 +1,5 @@
 import type { Action } from "../Action.ts"
-import { setMessages } from "../actions/SetMessages.ts"
+import { setMessages } from "../actions/setMessages.ts"
 import type { MessagesSetEvent } from "../events/MessagesSetEvent.ts"
 import type { Message } from "../Message.ts"
 
