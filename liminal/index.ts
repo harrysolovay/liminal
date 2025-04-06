@@ -19,7 +19,7 @@ export type { Infer, InferenceRequestedEvent, InferredEvent } from "./actions/In
 export type { EmbeddingModelSetEvent, RunEmbed, SetEmbeddingModel } from "./actions/SetEmbeddingModel.ts"
 export type { LanguageModelSetEvent, RunInfer, SetLanguageModel } from "./actions/SetLanguageModel.ts"
 export type { MessagesSetEvent, SetMessages } from "./actions/SetMessages.ts"
-export type { ErroredEvent, Try } from "./actions/Try.ts"
+export type { ExceptionUncaught as ErroredEvent, Try } from "./actions/Try.ts"
 export * from "./Actor.ts"
 export * from "./EventHandler.ts"
 export * from "./Events.ts"

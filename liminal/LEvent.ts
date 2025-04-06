@@ -9,7 +9,7 @@ import type { InferenceRequestedEvent, InferredEvent } from "./actions/Infer.ts"
 import type { EmbeddingModelSetEvent } from "./actions/SetEmbeddingModel.ts"
 import type { LanguageModelSetEvent } from "./actions/SetLanguageModel.ts"
 import type { MessagesSetEvent } from "./actions/SetMessages.ts"
-import type { ErroredEvent } from "./actions/Try.ts"
+import type { ExceptionUncaught } from "./actions/Try.ts"
 
 export type LEvent =
   | EnteredEvent
@@ -28,4 +28,4 @@ export type LEvent =
   | MessagesSetEvent
   | PropagatedEvent
   | AwaitResolvedEvent
-  | ErroredEvent
+  | ExceptionUncaught
