@@ -6,7 +6,7 @@ import type { Actor } from "./Actor.ts"
 import type { Events } from "./Events.ts"
 import type { Message } from "./Message.ts"
 
-export type ScopeSource = "try" | "module" | "exec" | "tool" | "fork" | "fork_arm" | "set_messages"
+export type ScopeSource = "try" | "catch" | "module" | "exec" | "tool" | "fork" | "fork_arm" | "set_messages"
 
 export class Scope<R = any> {
   constructor(
@@ -62,5 +62,22 @@ export class Scope<R = any> {
       value: currentActor.value,
       next: undefined,
     })
+  }
+
+  fork(source: ScopeSource, key: keyof any): Scope {
+    return new Scope(
+      source,
+      this.args,
+      key,
+      this.events.child((event) => ({
+        type: "event_propagated",
+        scopeType: source,
+        scope: key,
+        event,
+      })),
+      this.runInfer,
+      this.runEmbed,
+      [...this.messages],
+    )
   }
 }
