@@ -80,16 +80,17 @@ export function* enableTool(
     params,
     implementation,
     reduce(scope) {
-      scope.events.emit({
+      scope.event({
         type: "tool_enabled",
         key,
         description,
         schema: JSONSchemaMemo(params),
       })
-      return scope.spread({
+      return {
+        ...scope,
         tools: new Set([...scope.tools, this]),
-        next: () => disableTool(this),
-      })
+        nextArg: () => disableTool(this),
+      }
     },
   })
 }

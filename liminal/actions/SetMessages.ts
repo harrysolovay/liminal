@@ -1,7 +1,6 @@
 import type { Action } from "../Action.ts"
 import type { Actor } from "../Actor.ts"
 import type { Message } from "../Message.ts"
-import { Scope } from "../Scope.ts"
 import type { Spec } from "../Spec.ts"
 import { isPropertyKey } from "../util/isPropertyKey.ts"
 import type { PromiseOr } from "../util/PromiseOr.ts"
@@ -17,7 +16,7 @@ export function setMessages(
     Entry: never
     Event: MessagesSetEvent
   }>,
-  void
+  Array<Message>
 >
 export function setMessages<K extends keyof any, Y extends Action>(
   key: K,
@@ -27,52 +26,39 @@ export function setMessages<K extends keyof any, Y extends Action>(
     Entry: Y[""]["Entry"]
     Event: MessagesSetEvent | ChildEvent<"set_messages", K, Y[""]["Event"], Array<Message>>
   }>,
-  void
+  Array<Message>
 >
 export function* setMessages(
   setterOrKey: keyof any | ((messages: Array<Message>) => PromiseOr<Array<Message>>),
   maybeSetter?: (messages: Array<Message>) => Actor<Action, Array<Message>>,
-): Generator<SetMessages, void> {
+): Generator<SetMessages, Array<Message>> {
   return yield ActionBase("set_messages", {
     async reduce(scope) {
       if (isPropertyKey(setterOrKey)) {
-        const events = scope.events.child((event) => ({
-          type: "event_propagated",
-          scopeType: "set_messages",
-          scope: setterOrKey,
-          event,
-        }))
-        events.emit({
-          type: "entered",
-        })
-        const setterScope = await new Scope(
-          "set_messages",
-          scope.args,
-          setterOrKey,
-          events,
-          scope.runInfer,
-          scope.runEmbed,
-        ).reduce(maybeSetter!([...scope.messages]))
-        const { value } = setterScope
-        events.emit({
+        const setterScope = scope.fork("set_messages", setterOrKey)
+        setterScope.event({ type: "entered" })
+        const reduced = await setterScope.reduce(maybeSetter!([...scope.messages]))
+        const { value } = reduced
+        setterScope.event({
           type: "exited",
           value,
         })
-        events.emit({
+        setterScope.event({
           type: "messages_set",
           messages: value,
         })
-        return scope.spread({
+        return {
+          ...scope,
           messages: value,
-          next: undefined,
-          children: [...scope.children, setterScope],
-        })
+          nextArg: scope.messages,
+        }
       }
       const messages = await setterOrKey([...scope.messages])
-      return scope.spread({
-        next: undefined,
+      return {
+        ...scope,
         messages,
-      })
+        nextArg: scope.messages,
+      }
     },
   })
 }

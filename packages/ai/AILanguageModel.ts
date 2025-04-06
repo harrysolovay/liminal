@@ -1,5 +1,5 @@
 import { type CoreMessage, generateObject, generateText, jsonSchema, type LanguageModelV1, tool } from "ai"
-import { _util, isType, L, type Message, type RunInfer, Scope } from "liminal"
+import { _util, L, type Message, type RunInfer } from "liminal"
 
 export function AILanguageModel(model: LanguageModelV1): RunInfer {
   return async function*(action, scope) {
@@ -81,7 +81,7 @@ function toCoreMessage(message: Message): CoreMessage {
     case "assistant": {
       return {
         role: "assistant",
-        content: message.content,
+        content: message.content.slice(),
       }
     }
     case "system": {

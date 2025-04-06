@@ -17,19 +17,20 @@ export function* embed(value: string): Generator<
     value,
     async reduce(scope) {
       assert(scope.runEmbed)
-      scope.events.emit({
+      scope.event({
         type: "embedding_requested",
         value,
       })
       const embedding = await scope.runEmbed(this, scope)
-      scope.events.emit({
+      scope.event({
         type: "embedded",
         value,
         embedding,
       })
-      return scope.spread({
-        next: scope.value,
-      })
+      return {
+        ...scope,
+        nextArg: scope.value,
+      }
     },
   })
 }

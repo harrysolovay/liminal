@@ -22,14 +22,15 @@ export function* setEmbeddingModel<K extends keyof any>(key: K, runEmbed: RunEmb
     key,
     runEmbed,
     reduce(scope) {
-      scope.events.emit({
+      scope.event({
         type: "embedding_model_set",
         key,
       })
-      return scope.spread({
-        next: undefined,
+      return {
+        ...scope,
+        nextArg: undefined,
         runEmbed,
-      })
+      }
     },
   })
 }

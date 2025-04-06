@@ -26,14 +26,15 @@ export function* setLanguageModel<K extends keyof any>(
     key,
     runInfer,
     reduce(scope) {
-      scope.events.emit({
+      scope.event({
         type: "language_model_set",
         key,
       })
-      return scope.spread({
-        next: undefined,
+      return {
+        ...scope,
+        nextArg: undefined,
         runInfer,
-      })
+      }
     },
   })
 }

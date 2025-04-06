@@ -29,15 +29,18 @@ export function* infer(type?: StandardSchemaV1): Generator<Infer, unknown> {
     type,
     async reduce(scope) {
       assert(scope.runInfer)
-      scope.events.emit({
+      scope.event({
         type: "inference_requested",
       })
       scope = await scope.reduce(scope.runInfer(this, scope))
-      scope.events.emit({
+      scope.event({
         type: "inferred",
         value: scope.value,
       })
-      return scope.spread({ next: scope.value })
+      return {
+        ...scope,
+        nextArg: scope.value,
+      }
     },
   })
 }

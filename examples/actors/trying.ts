@@ -1,7 +1,7 @@
 import { L } from "liminal"
 
 export default function*() {
-  yield* L.try("may-fail", function*() {
+  return yield* L.try("may-fail", function*() {
     if (Math.random() > .5) {
       throw new RandomError()
     }

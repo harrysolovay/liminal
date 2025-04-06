@@ -9,7 +9,6 @@ import type {
   ActorLikeY,
 } from "../Actor.ts"
 import type { ActorLikes } from "../Actor.ts"
-import { Scope } from "../Scope.ts"
 import type { Spec } from "../Spec.ts"
 import { isIteratorLike } from "../util/isIteratorLike.ts"
 import { unwrapDeferred } from "../util/unwrapDeferred.ts"
@@ -74,70 +73,45 @@ export function* fork(key: keyof any, implementation: ActorLike | ActorLikes): G
     key,
     implementation,
     async reduce(scope) {
-      const events = scope.events.child((event) => ({
-        type: "event_propagated",
-        scopeType: "fork",
-        scope: key,
-        event,
-      }))
-      events.emit({
-        type: "entered",
-      })
-      let scopes: Array<Scope>
-      let value: unknown
+      const forkScope = scope.fork("fork", key)
+      forkScope.event({ type: "entered" })
       if (typeof implementation === "function" || (!Array.isArray(implementation) && isIteratorLike(implementation))) {
         const actor = unwrapDeferred(implementation as ActorLike)
-        const forkScope = await new Scope(
-          "fork",
-          scope.args,
-          key,
-          events,
-          scope.runInfer,
-          scope.runEmbed,
-          [...scope.messages],
-        ).reduce(actor)
-        scopes = [forkScope]
-        value = forkScope.value
-      } else {
-        const armKeys = Array.isArray(implementation)
-          ? Array.from({ length: implementation.length }, (_0, i) => i)
-          : Reflect.ownKeys(implementation)
-        scopes = await Promise.all(armKeys.map(async (key) => {
-          const armEvents = events.child((event) => ({
-            type: "event_propagated",
-            scopeType: "fork_arm",
-            scope: key,
-            event,
-          }))
-          armEvents.emit({ type: "entered" })
-          const actor = unwrapDeferred(implementation[key as never]) as Actor
-          const armScope = await new Scope(
-            "fork_arm",
-            scope.args,
-            key,
-            events,
-            scope.runInfer,
-            scope.runEmbed,
-            [...scope.messages],
-          ).reduce(actor)
-          armEvents.emit({
-            type: "exited",
-            value: armScope.value,
-          })
-          return armScope
-        }))
-        value = Array.isArray(implementation)
-          ? scopes.map((scope) => scope.value)
-          : Object.fromEntries(scopes.map(({ key, value }) => [key, value]))
+        const { value } = await forkScope.reduce(actor)
+        forkScope.event({
+          type: "exited",
+          value,
+        })
+        return {
+          ...scope,
+          nextArg: value,
+        }
       }
-      events.emit({
+      const armKeys = Array.isArray(implementation)
+        ? Array.from({ length: implementation.length }, (_0, i) => i)
+        : Reflect.ownKeys(implementation)
+      const values = await Promise.all(armKeys.map(async (key) => {
+        const forkArmScope = forkScope.fork("fork_arm", key)
+        forkArmScope.event({ type: "entered" })
+        const actor = unwrapDeferred(implementation[key as never]) as Actor
+        const { value } = await forkArmScope.reduce(actor)
+        forkArmScope.event({
+          type: "exited",
+          value,
+        })
+        return value
+      }))
+      const value = Array.isArray(implementation)
+        ? values
+        : Object.fromEntries(armKeys.map((key, i) => [key, values[i]]))
+      forkScope.event({
         type: "exited",
         value: value,
       })
-      return scope.spread({
-        next: value,
-        children: [...scope.children, ...scopes],
-      })
+      return {
+        ...scope,
+        nextArg: value,
+      }
     },
   })
 }

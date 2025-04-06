@@ -16,7 +16,10 @@ export function arg<K extends keyof any>(key: K): <T>() => Generator<
     return yield ActionBase("arg", {
       key,
       reduce(scope) {
-        return scope.spread({ next: scope.args[key] })
+        return {
+          ...scope,
+          nextArg: scope.args[key],
+        }
       },
     })
   }

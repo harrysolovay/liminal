@@ -3,81 +3,96 @@ import type { EnableTool } from "./actions/EnableTool.ts"
 import type { RunEmbed } from "./actions/SetEmbeddingModel.ts"
 import type { RunInfer } from "./actions/SetLanguageModel.ts"
 import type { Actor } from "./Actor.ts"
-import type { Events } from "./Events.ts"
+import type { EventHandler } from "./EventHandler.ts"
+import type { LEvent } from "./LEvent.ts"
 import type { Message } from "./Message.ts"
 
-export type ScopeSource = "try" | "catch" | "module" | "exec" | "tool" | "fork" | "fork_arm" | "set_messages"
+export type Scope = RootScope | ChildScope
 
-export class Scope<R = any> {
-  constructor(
-    readonly source: ScopeSource,
-    readonly args: Record<keyof any, any>,
-    readonly key: keyof any | undefined,
-    readonly events: Events,
-    public runInfer: RunInfer | undefined = undefined,
-    public runEmbed: RunEmbed | undefined = undefined,
-    readonly messages: Array<Message> = [],
-    readonly tools: Set<EnableTool> = new Set(),
-    public next: any = undefined,
-    public value: R = undefined!,
-    public children: Array<Scope> = [],
-  ) {}
+export interface RootScope<T = any> extends ScopeBase<RootScopeType, T> {}
+export interface ChildScope extends ScopeBase<ChildScopeType, unknown> {
+  readonly parent: Scope
+}
 
-  toJSON() {
-    const { messages, key, events, children, value } = this
-    return {
-      key,
-      events,
-      children,
-      value,
-      ...messages.length ? { messages } : {},
-    }
+export type RootScopeType = "module" | "exec"
+export type ChildScopeType = "try" | "catch" | "tool" | "fork" | "fork_arm" | "set_messages"
+export type ScopeType = RootScopeType | ChildScopeType
+
+export interface ScopeBase<Type extends ScopeType, T> {
+  readonly type: Type
+  readonly key: keyof any
+  readonly args: Record<keyof any, any>
+  readonly controller: AbortController
+  readonly messages: Array<Message>
+  readonly tools: Set<EnableTool>
+  readonly nextArg?: any
+  readonly value: T
+  readonly runInfer?: RunInfer
+  readonly runEmbed?: RunEmbed
+
+  reduce(this: Scope, actor: Actor): Promise<Scope>
+  fork(source: ChildScopeType, key: keyof any): Scope
+  event(event: LEvent): void
+}
+
+export function RootScope(
+  type: RootScopeType,
+  key: string,
+  args: Record<keyof any, any>,
+  event: EventHandler = () => {},
+): RootScope {
+  return {
+    type,
+    key,
+    args,
+    controller: new AbortController(),
+    messages: [],
+    tools: new Set(),
+    value: undefined,
+    reduce,
+    fork,
+    event,
   }
+}
 
-  spread = (fields?: Partial<Scope<R>>): Scope<R> => {
-    return new Scope(
-      fields?.source ?? this.source,
-      fields?.args ?? this.args,
-      fields?.key ?? this.key,
-      fields?.events ?? this.events,
-      fields?.runInfer ?? this.runInfer,
-      fields?.runEmbed ?? this.runEmbed,
-      fields?.messages ?? this.messages,
-      fields?.tools ?? this.tools,
-      fields?.next ?? this.next,
-      fields?.value ?? this.value,
-      fields?.children ?? this.children,
-    )
+async function reduce(this: Scope, actor: Actor): Promise<Scope> {
+  let scope = { ...this }
+  let current = await actor.next()
+  while (!current.done) {
+    const { value } = current
+    scope = await (value as ActionBase).reduce(scope)
+    current = await actor.next(scope.nextArg)
   }
+  return {
+    ...scope,
+    value: current.value,
+    nextArg: undefined,
+  }
+}
 
-  reduce = async (actor: Actor): Promise<Scope> => {
-    let currentScope: Scope<any> = this
-    let currentActor = await actor.next()
-    while (!currentActor.done) {
-      const { value } = currentActor
-      currentScope = await (value as ActionBase).reduce(currentScope)
-      currentActor = await actor.next(currentScope.next)
-    }
-    return currentScope.spread({
-      value: currentActor.value,
-      next: undefined,
-    })
+function fork(this: Scope, type: ChildScopeType, key: keyof any): ChildScope {
+  return {
+    type,
+    controller: this.controller,
+    args: this.args,
+    messages: [...this.messages],
+    tools: new Set(),
+    runInfer: this.runInfer,
+    runEmbed: this.runEmbed,
+    key,
+    parent: this,
+    value: undefined,
+    reduce,
+    fork,
+    event,
   }
+}
 
-  fork(source: ScopeSource, key: keyof any): Scope {
-    return new Scope(
-      source,
-      this.args,
-      key,
-      this.events.child((event) => ({
-        type: "event_propagated",
-        scopeType: source,
-        scope: key,
-        event,
-      })),
-      this.runInfer,
-      this.runEmbed,
-      [...this.messages],
-    )
-  }
+function event(this: ChildScope, event: LEvent): void {
+  this.parent.event({
+    type: "event_propagated",
+    scopeType: this.type,
+    scope: this.key,
+    event,
+  })
 }
