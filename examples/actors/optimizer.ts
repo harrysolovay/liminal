@@ -4,7 +4,6 @@ const LANGUAGE = "typescript"
 const TEXT = "I love you!"
 
 export default function*() {
-  yield* L.declareLanguageModel("default")
   yield* L
     .system`You are an expert literary translator. Translate the supplied text to the specified target language, preserving tone and cultural nuances.`
   yield* L.user`Target language: ${LANGUAGE}`

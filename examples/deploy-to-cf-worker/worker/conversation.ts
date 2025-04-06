@@ -1,7 +1,6 @@
 import { L } from "liminal"
 
 export function* refine(input: string) {
-  yield* L.declareLanguageModel("default")
   yield* L.user(input)
   yield* L.infer()
   yield* L.user`Rewrite it in whatever way you think best.`

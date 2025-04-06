@@ -4,7 +4,6 @@ import { fileURLToPath } from "node:url"
 
 export default async function*() {
   const code = await readFile(fileURLToPath(import.meta.url), "utf-8")
-  yield* L.declareLanguageModel("default")
   yield* L.system`You are a technical lead summarizing multiple code reviews. Review the supplied code.`
   yield* L.user(code)
   const reviews = L.fork("reviews", { security, performance, maintainability })

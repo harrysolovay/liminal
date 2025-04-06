@@ -1,7 +1,6 @@
 import { L } from "liminal"
 
 export default function*() {
-  yield* L.declareLanguageModel("default")
   yield* L.user`
     I need a type that represents the data of a fantastical story world
     full of super-powered beings such as witches, vampires, werewolves and fae.

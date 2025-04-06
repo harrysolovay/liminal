@@ -38,24 +38,29 @@ the model, appending messages to the underlying message buffer and triggering
 inference.
 
 ```ts
-import { declareLanguageModel, infer, run, user } from "liminal"
+import { L } from "liminal"
 
-function* Conversation() {
-  yield* declareLanguageModel("default")
-
-  // User Message
-  yield user`What are some key factors that affect plant growth?`
-
-  // Assistant Message
-  const factors = yield* infer()
-
-  // User Message
-  yield user`Rank those by order of importance`
-
-  // Assistant Message (structured output)
-  const ranking = yield* infer(z.string().array())
-
-  return ranking
+export default function*() {
+  yield* L.user`
+    Can you please decide on a subtopic for us to discuss within the domain of technological futurism.
+    Don't ask any follow-up questions. Just pick a subtopic.
+  `
+  yield* L.infer()
+  yield* L
+    .user`Great, please teach something interesting about your choice of subtopic.`
+  yield* L.infer()
+  let i = 0
+  while (i < 5) {
+    const userReply = yield* L.fork("infer-user-reply", function*() {
+      yield* L
+        .user`Please answer this question on my behalf (no follow-up questions allowed).`
+      return yield* L.infer()
+    })
+    yield* L.user(userReply)
+    yield* L.infer()
+  }
+  yield* L.user`Please summarize the key points from our conversation.`
+  return yield* L.infer()
 }
 ```
 
@@ -77,7 +82,7 @@ import { openai } from "@ai-sdk/openai"
 import { AILanguageModel } from "liminal-ai"
 
 const { result } = exec(Conversation, {
-  bind: {
+  args: {
     default: AILanguageModel(openai("gpt-4o-mini")),
   },
   handler: (event) => console.log(event),

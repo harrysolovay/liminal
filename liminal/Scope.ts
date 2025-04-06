@@ -11,15 +11,15 @@ export type Scope = RootScope | ChildScope
 export interface RootScope extends ScopeBase<RootScopeType> {}
 export interface ChildScope extends ScopeBase<ChildScopeType> {
   readonly parent: Scope
+  readonly key: keyof any
 }
 
-export type RootScopeType = "module" | "exec"
+export type RootScopeType = "root"
 export type ChildScopeType = "catch" | "tool" | "fork" | "fork_arm" | "set_messages"
 export type ScopeType = RootScopeType | ChildScopeType
 
 export interface ScopeBase<Type extends ScopeType> {
   readonly type: Type
-  readonly key: keyof any
   readonly args: Record<keyof any, any>
   readonly controller: AbortController
   readonly messages: Array<Message>
@@ -27,7 +27,7 @@ export interface ScopeBase<Type extends ScopeType> {
   readonly nextArg?: any
   readonly value: any
   readonly thrown?: any
-  readonly runInfer?: RunInfer
+  readonly runInfer: RunInfer
   readonly runEmbed?: RunEmbed
 
   reduce(this: Scope, actor: Actor): Promise<Scope>
@@ -36,19 +36,18 @@ export interface ScopeBase<Type extends ScopeType> {
 }
 
 export function RootScope(
-  type: RootScopeType,
-  key: string,
+  runInfer: RunInfer,
   args: Record<keyof any, any>,
   event: EventHandler = () => {},
 ): RootScope {
   return {
-    type,
-    key,
+    type: "root",
     args,
     controller: new AbortController(),
     messages: [],
     tools: new Set(),
     value: undefined,
+    runInfer,
     reduce,
     fork,
     event,
