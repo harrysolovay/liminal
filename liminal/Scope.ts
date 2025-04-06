@@ -99,7 +99,7 @@ function fork(this: Scope, type: ChildScopeType, key: keyof any): ChildScope {
 
 function event(this: ChildScope, event: LEvent): void {
   this.parent.event({
-    type: "event_propagated",
+    type: "propagated",
     scopeType: this.type,
     scope: this.key,
     event,

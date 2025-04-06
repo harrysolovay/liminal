@@ -14,5 +14,5 @@ export default {
     two: AILanguageModel(openai("gpt-4o-mini")),
     three: AILanguageModel(openai("gpt-4o-mini")),
   },
-  print: true,
+  write: true,
 } satisfies LiminalConfig

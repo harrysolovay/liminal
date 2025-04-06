@@ -1,9 +1,7 @@
-import { mkdir } from "node:fs/promises"
-import { resolve } from "node:path"
+import { dirname, isAbsolute, parse, resolve } from "node:path"
 import { parseArgs, type ParseArgsConfig } from "node:util"
 import { type ActorLike, exec, L, type LEvent, type LiminalConfig } from "../index.ts"
-import { assert } from "../util/assert.ts"
-import { createWriteHandler } from "./createWriteHandler.ts"
+import { WriteHandler } from "./WriteHandler.ts"
 
 const options = {
   config: {
@@ -15,24 +13,12 @@ const options = {
     type: "string",
     short: "i",
   },
-  stateDir: {
-    type: "string",
-    default: ".liminal",
-    short: "o",
-  },
-  write: {
-    type: "boolean",
-    default: false,
-    short: "w",
-  },
 } satisfies ParseArgsConfig["options"]
 
 export async function runExec(args: Array<string>) {
-  const {
+  let {
     values: {
       config: configPath,
-      stateDir,
-      write,
       execId,
     },
     positionals,
@@ -42,13 +28,31 @@ export async function runExec(args: Array<string>) {
     allowPositionals: true,
     options,
   })
-  const config = await import(resolve(configPath)).then(({ default: default_ }) => default_ as LiminalConfig)
-  const actorPath = L.string.assert(positionals[0])
-  const actorLike = await import(resolve(config.actors ?? "", actorPath)).then(({ default: default_ }) =>
-    default_ as ActorLike
-  )
-
-  let writeHandlerOrNoop = write ? createWriteHandler(stateDir, execId) : undefined
+  const configPathResolved = resolve(configPath)
+  const configDir = dirname(configPathResolved)
+  const config = await import(configPathResolved).then(({ default: default_ }) => default_ as LiminalConfig)
+  const actorPathInitial = L.string.assert(positionals[0])
+  let actorPathResolved: string
+  if (isAbsolute(actorPathInitial)) {
+    actorPathResolved = actorPathInitial
+  } else {
+    actorPathResolved = resolve(configDir, ...config.actors ? [config.actors] : [], actorPathInitial)
+  }
+  if (!actorPathResolved.endsWith(".ts")) {
+    actorPathResolved = `${actorPathResolved}.ts`
+  }
+  const parsedPath = parse(actorPathResolved)
+  const actorLike = await import(actorPathResolved).then(({ default: default_ }) => default_ as ActorLike)
+  const startTime = Date.now()
+  let writeHandlerOrNoop = config.write
+    ? await WriteHandler({
+      configDir,
+      parsedPath,
+      execId,
+      startTime,
+      stateDir: typeof config.write === "string" ? config.write : ".liminal",
+    })
+    : undefined
   let printHandlerOrNoop = config.print ? (event: LEvent) => console.log(event) : undefined
 
   await exec(actorLike, {

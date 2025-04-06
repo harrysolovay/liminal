@@ -2,6 +2,7 @@
 .DS_Store
 .alchemy
 .env
+.liminal
 dist
 liminal.land/.vitepress/cache
 node_modules
