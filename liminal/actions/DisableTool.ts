@@ -10,16 +10,17 @@ export function* disableTool(enableTool: EnableTool): Generator<DisableTool, voi
   yield ActionBase("disable_tool", {
     enableTool,
     reduce(scope) {
-      scope.events.emit({
+      scope.event({
         type: "tool_disabled",
         tool: enableTool.key,
       })
       const tools = new Set(scope.tools)
       tools.delete(enableTool)
-      return scope.spread({
+      return {
+        ...scope,
         tools,
-        next: undefined,
-      })
+        nextArg: undefined,
+      }
     },
   })
 }

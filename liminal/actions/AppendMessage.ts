@@ -20,14 +20,15 @@ export function* appendMessage<M extends Message>(message: M): Generator<
   yield ActionBase("append_message", {
     message,
     reduce(scope) {
-      scope.events.emit({
+      scope.event({
         type: "message_appended",
         message,
       })
-      return scope.spread({
-        next: undefined,
+      return {
+        ...scope,
+        nextArg: undefined,
         messages: [...scope.messages, message],
-      })
+      }
     },
   })
 }

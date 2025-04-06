@@ -18,14 +18,15 @@ export function* emit<K extends keyof any, V extends JSONValue>(key: K, value: V
     key,
     value,
     reduce(scope) {
-      scope.events.emit({
+      scope.event({
         type: "emitted",
         key,
         value,
       })
-      return scope.spread({
-        next: undefined,
-      })
+      return {
+        ...scope,
+        nextArg: undefined,
+      }
     },
   })
 }

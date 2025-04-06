@@ -5,6 +5,7 @@ dotenvx
 dprint
 fuzzystrmatch
 inferencing
+inheritables
 initdb
 llms
 metaarray

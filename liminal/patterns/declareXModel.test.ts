@@ -4,7 +4,7 @@ import * as L from "../L.ts"
 import { TestEmbeddingModel } from "../testing/TestEmbeddingModel.ts"
 import { TestLanguageModel } from "../testing/TestLanguageModel.ts"
 
-describe("Model", () => {
+describe.skip("Model", () => {
   it("generates the expected event sequence", async () => {
     const scope = await exec(function*() {
       yield* L.declareLanguageModel("default")

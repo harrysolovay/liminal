@@ -33,26 +33,20 @@ function* try_<
 > {
   return yield ActionBase("try", {
     async reduce(scope) {
-      const events = scope.events.child((event) => ({
-        type: "event_propagated",
-        scopeType: "try",
-        scope: key,
-        event,
-      }))
-      events.emit({
-        type: "entered",
-      })
+      const tryScope = scope.fork("try", key)
+      tryScope.event({ type: "entered" })
       const tryActor = unwrapDeferred(actorLike)
       let value: unknown
       let type: "value" | "error"
       try {
-        ;({ value } = await scope.fork("try", key).reduce(tryActor))
+        ;({ value } = await tryScope.reduce(tryActor))
         type = "value"
       } catch (thrown: unknown) {
         if (catch_) {
           const catchResult = await catch_(thrown)
           if (isIteratorLike(catchResult)) {
-            ;({ value } = await scope.fork("catch", key).reduce(unwrapDeferred(catchResult as never)))
+            const catchScope = scope.fork("catch", key)
+            ;({ value } = await catchScope.reduce(unwrapDeferred(catchResult as never)))
             type = "value"
           } else {
             type = "value"
@@ -64,13 +58,16 @@ function* try_<
         }
       }
       if (type === "value") {
-        events.emit({
+        tryScope.event({
           type: "exited",
           value,
         })
-        return scope.spread({ value })
+        return {
+          ...scope,
+          nextArg: value,
+        }
       }
-      events.emit({
+      scope.event({
         type: "exception_uncaught",
         thrown: value,
       })

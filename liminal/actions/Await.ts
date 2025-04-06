@@ -16,11 +16,14 @@ function* await_<T>(value: T): Generator<
     value,
     async reduce(scope) {
       value = await value
-      scope.events.emit({ type: "await_resolved", value })
-      return scope.spread({
+      scope.event({
+        type: "await_resolved",
         value,
-        next: value,
       })
+      return {
+        ...scope,
+        nextArg: value,
+      }
     },
   })
 }
