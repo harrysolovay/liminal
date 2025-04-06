@@ -44,7 +44,7 @@ export async function runExec(args: Array<string>) {
   const parsedPath = parse(actorPathResolved)
   const actorLike = await import(actorPathResolved).then(({ default: default_ }) => default_ as ActorLike)
   const startTime = Date.now()
-  let writeHandlerOrNoop = config.write
+  const writeHandlerOrNoop = config.write
     ? await WriteHandler({
       configDir,
       parsedPath,
@@ -53,7 +53,7 @@ export async function runExec(args: Array<string>) {
       stateDir: typeof config.write === "string" ? config.write : ".liminal",
     })
     : undefined
-  let printHandlerOrNoop = config.silent ? undefined : (event: LEvent) => console.log(event)
+  const printHandlerOrNoop = config.silent ? undefined : (event: LEvent) => console.log(event)
 
   await exec(actorLike, {
     default: config.default,
