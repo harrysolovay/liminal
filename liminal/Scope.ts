@@ -8,8 +8,8 @@ import type { Tool } from "./Tool.ts"
 
 export type Scope = RootScope | ChildScope
 
-export interface RootScope<T = any> extends ScopeBase<RootScopeType, T> {}
-export interface ChildScope extends ScopeBase<ChildScopeType, unknown> {
+export interface RootScope extends ScopeBase<RootScopeType> {}
+export interface ChildScope extends ScopeBase<ChildScopeType> {
   readonly parent: Scope
 }
 
@@ -17,7 +17,7 @@ export type RootScopeType = "module" | "exec"
 export type ChildScopeType = "catch" | "tool" | "fork" | "fork_arm" | "set_messages"
 export type ScopeType = RootScopeType | ChildScopeType
 
-export interface ScopeBase<Type extends ScopeType, T> {
+export interface ScopeBase<Type extends ScopeType> {
   readonly type: Type
   readonly key: keyof any
   readonly args: Record<keyof any, any>
@@ -25,8 +25,8 @@ export interface ScopeBase<Type extends ScopeType, T> {
   readonly messages: Array<Message>
   readonly tools: Set<Tool>
   readonly nextArg?: any
-  readonly value: T
-  readonly thrown?: unknown
+  readonly value: any
+  readonly thrown?: any
   readonly runInfer?: RunInfer
   readonly runEmbed?: RunEmbed
 
@@ -59,17 +59,23 @@ async function reduce(this: Scope, actor: Actor): Promise<Scope> {
   const { signal } = this.controller
   let scope = { ...this }
   if (signal.aborted) return scope
-  let current = await actor.next()
-  while (!current.done) {
-    const { value } = current
-    if (signal.aborted) return scope
-    scope = await (value as Action).reducer(scope)
-    if (signal.aborted) return scope
-    current = await actor.next(scope.nextArg)
+  let value: unknown
+  try {
+    let current = await actor.next()
+    while (!current.done) {
+      const { value } = current
+      if (signal.aborted) return scope
+      scope = await (value as Action).reducer(scope)
+      if (signal.aborted) return scope
+      current = await actor.next(scope.nextArg)
+    }
+    value = current.value
+  } catch (thrown: unknown) {
+    scope.controller.abort(thrown)
   }
   return {
     ...scope,
-    value: current.value,
+    value,
     nextArg: undefined,
   }
 }
