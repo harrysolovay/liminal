@@ -16,13 +16,13 @@ function* mayThrow() {
       throw new RandomError()
     }
     return rand
-  } catch (e: unknown) {
-    if (e instanceof RandomError) {
+  } catch (thrown: unknown) {
+    if (thrown instanceof RandomError) {
       yield* L.emit("some-error")
-      ;(yield* L.throw(e))()
+      ;(yield* L.throw(thrown))()
       // TODO: Why isn't subsequent code identified as unreachable. TS compiler bug?
     }
-    throw e
+    throw thrown
   }
 }
 
