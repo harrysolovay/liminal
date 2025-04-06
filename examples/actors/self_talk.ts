@@ -1,4 +1,4 @@
-import { exec, L } from "liminal"
+import { L } from "liminal"
 
 export default function*() {
   yield* L.user`

@@ -53,7 +53,7 @@ export async function runExec(args: Array<string>) {
       stateDir: typeof config.write === "string" ? config.write : ".liminal",
     })
     : undefined
-  let printHandlerOrNoop = config.print ? (event: LEvent) => console.log(event) : undefined
+  let printHandlerOrNoop = config.silent ? undefined : (event: LEvent) => console.log(event)
 
   await exec(actorLike, {
     default: config.default,
