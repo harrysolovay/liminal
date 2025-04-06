@@ -14,8 +14,8 @@ export default {
     const input = await request.text()
     try {
       const value = await exec(refine(input), {
-        bind: {
-          default: AILanguageModel(openai("gpt-4o")),
+        default: AILanguageModel(openai("gpt-4o")),
+        args: {
           a: AILanguageModel(openai("gpt-4o-mini")),
           b: AILanguageModel(openai("o1-mini")),
           c: AILanguageModel(openai("gpt-3.5-turbo-instruct")),

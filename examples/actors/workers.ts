@@ -3,7 +3,6 @@ import { L } from "liminal"
 const FEAT = "Alert administrators via text whenever site traffic exceeds a certain threshold."
 
 export default function*() {
-  yield* L.declareLanguageModel("default")
   yield* L.system`You are a senior software architect planning feature implementations.`
   yield* L.user`Analyze this feature request and create an implementation plan:`
   yield* L.user(FEAT)

@@ -32,7 +32,8 @@ export async function runExec(args: Array<string>) {
     default_ as ActorLike
   )
   await exec(actorLike, {
-    bind: config.bind,
+    default: config.default,
+    args: config.args,
     handler: config.print
       ? (event) => {
         console.log(event)

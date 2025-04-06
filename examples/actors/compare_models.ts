@@ -1,7 +1,6 @@
 import { L } from "liminal"
 
 export default function*() {
-  yield* L.declareLanguageModel("default")
   yield* L.user`Write a rap about type-level programming in TypeScript`
   yield* L.infer()
   yield* L.user`Rewrite it in whatever way you think best.`

@@ -12,7 +12,7 @@ export function* abort<V>(reason: V, ...[_error]: EnsureNarrow<V>): Generator<
 > {
   return (yield (Action("abort", (scope) => {
     scope.event({
-      type: "aborted_event",
+      type: "aborted",
       reason,
     })
     scope.controller.abort(reason)

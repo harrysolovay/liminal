@@ -7,7 +7,6 @@ import { TestLanguageModel } from "../testing/TestLanguageModel.ts"
 describe.skip("Model", () => {
   it("generates the expected event sequence", async () => {
     const scope = await exec(function*() {
-      yield* L.declareLanguageModel("default")
       yield* L.declareLanguageModel("secondary")
       yield* L.fork("fork-key", function*() {
         yield* L.declareLanguageModel("child_a")
@@ -15,8 +14,8 @@ describe.skip("Model", () => {
       })
       yield* L.declareEmbeddingModel("tertiary")
     }, {
-      bind: {
-        default: TestLanguageModel(),
+      default: TestLanguageModel(),
+      args: {
         secondary: TestLanguageModel(),
         child_a: TestLanguageModel(),
         child_b: TestEmbeddingModel(),

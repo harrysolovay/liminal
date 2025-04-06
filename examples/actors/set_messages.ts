@@ -1,7 +1,6 @@
 import { L } from "liminal"
 
 export default function*() {
-  yield* L.declareLanguageModel("default")
   yield* L.user`Lorem.`
   yield* L.user`Ipsum.`
   yield* L.infer()

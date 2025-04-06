@@ -3,7 +3,6 @@ import { L } from "liminal"
 const QUERY = "I'd like a refund please."
 
 export default function*() {
-  yield* L.declareLanguageModel("default")
   const classification = yield* L.fork("classify", function*() {
     yield* L.clear()
     yield* L.system`

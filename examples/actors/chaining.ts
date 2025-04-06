@@ -3,7 +3,6 @@ import { L } from "liminal"
 export default function*() {
   yield* L
     .system`Write persuasive marketing copy for: Buffy The Vampire Slayer. Focus on benefits and emotional appeal.`
-  yield* L.declareLanguageModel("default")
   yield* L.user`Please generate the first draft.`
   let copy = yield* L.infer()
   yield* L.user`
