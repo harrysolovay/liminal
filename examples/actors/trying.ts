@@ -1,7 +1,7 @@
 import { L } from "liminal"
 
 export default function*() {
-  const result = yield* L.try("attempt", mayThrowG)
+  const result = yield* L.try("attempt", mayThrow)
   if (result.thrown) {
     console.log("Threw the following value:", result.thrown)
   } else {
@@ -9,9 +9,13 @@ export default function*() {
   }
 }
 
-function* mayThrowG() {
+function* mayThrow() {
   try {
-    return mayThrow()
+    const rand = Math.random()
+    if (rand > .5) {
+      throw new RandomError()
+    }
+    return rand
   } catch (e: unknown) {
     if (e instanceof RandomError) {
       yield* L.emit("some-error")
@@ -20,14 +24,6 @@ function* mayThrowG() {
     }
     throw e
   }
-}
-
-function mayThrow() {
-  const rand = Math.random()
-  if (rand > .5) {
-    throw new RandomError()
-  }
-  return rand
 }
 
 class RandomError extends Error {
