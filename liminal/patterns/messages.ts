@@ -1,6 +1,7 @@
 import type { Action } from "../Action.ts"
 import { appendMessage } from "../actions/appendMessage.ts"
 import type { MessageAppendedEvent } from "../events/MessageAppendedEvent.ts"
+import type { MessageRemovedEvent } from "../events/MessageRemovedEvent.ts"
 import type { AssistantContent, AssistantMessage, SystemMessage, UserContent, UserMessage } from "../Message.ts"
 import { normalizeTaggableArgs, type TaggableArgs } from "../util/Taggable.ts"
 
@@ -10,7 +11,14 @@ export function user(...args: TaggableArgs<[content: UserContent]>): Generator<
     Event: MessageAppendedEvent<UserMessage>
     Throw: never
   }>,
-  void
+  Generator<
+    Action<"remove_message", {
+      Entry: never
+      Event: MessageRemovedEvent
+      Throw: never
+    }>,
+    void
+  >
 > {
   const [content] = normalizeTaggableArgs(...args)
   return appendMessage({
@@ -25,7 +33,14 @@ export function system(...args: TaggableArgs<[content: string]>): Generator<
     Event: MessageAppendedEvent<SystemMessage>
     Throw: never
   }>,
-  void
+  Generator<
+    Action<"remove_message", {
+      Entry: never
+      Event: MessageRemovedEvent
+      Throw: never
+    }>,
+    void
+  >
 > {
   const [content] = normalizeTaggableArgs(...args)
   return appendMessage({
@@ -40,7 +55,14 @@ export function assistant(...args: TaggableArgs<[content: AssistantContent]>): G
     Event: MessageAppendedEvent<AssistantMessage>
     Throw: never
   }>,
-  void
+  Generator<
+    Action<"remove_message", {
+      Entry: never
+      Event: MessageRemovedEvent
+      Throw: never
+    }>,
+    void
+  >
 > {
   const [content] = normalizeTaggableArgs(...args)
   return appendMessage({

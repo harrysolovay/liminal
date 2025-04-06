@@ -22,7 +22,7 @@ export interface ScopeBase<Type extends ScopeType> {
   readonly type: Type
   readonly args: Record<keyof any, any>
   readonly controller: AbortController
-  readonly messages: Array<Message>
+  readonly messages: Set<Message>
   readonly tools: Set<Tool>
   readonly nextArg?: any
   readonly value: any
@@ -44,7 +44,7 @@ export function RootScope(
     type: "root",
     args,
     controller: new AbortController(),
-    messages: [],
+    messages: new Set(),
     tools: new Set(),
     value: undefined,
     runInfer,
@@ -84,7 +84,7 @@ function fork(this: Scope, type: ChildScopeType, key: keyof any): ChildScope {
     type,
     controller: this.controller,
     args: this.args,
-    messages: [...this.messages],
+    messages: new Set(this.messages),
     tools: new Set(),
     runInfer: this.runInfer,
     runEmbed: this.runEmbed,
