@@ -1,4 +1,4 @@
-import { Action, type EventBase } from "../Action.ts"
+import { Action } from "../Action.ts"
 import { unimplemented } from "../util/unimplemented.ts"
 
 function* throw_<V>(
@@ -14,15 +14,11 @@ function* throw_<V>(
   }>,
   never
 > {
-  return (yield (Action<never>()("throw", (_scope) => {
+  return (yield (Action("throw", (_scope) => {
     unimplemented()
   }))) as never
 }
 Object.defineProperty(throw_, "name", { value: "throw" })
 export { throw_ as throw }
-
-export interface ThrownEvent extends EventBase<"thrown"> {
-  thrown: unknown
-}
 
 export declare const WIDENING_THROW_TYPE_ERROR: unique symbol

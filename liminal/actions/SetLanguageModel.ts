@@ -1,5 +1,6 @@
-import { Action, type EventBase } from "../Action.ts"
+import { Action } from "../Action.ts"
 import type { RunInfer } from "../adapters.ts"
+import type { LanguageModelSetEvent } from "../events/LanguageModelSetEvent.ts"
 
 export function* setLanguageModel<K extends keyof any>(
   key: K,
@@ -12,7 +13,7 @@ export function* setLanguageModel<K extends keyof any>(
   }>,
   void
 > {
-  return yield Action<never>()("set_language_model", (scope) => {
+  return yield Action("set_language_model", (scope) => {
     scope.event({
       type: "language_model_set",
       key,
@@ -23,8 +24,4 @@ export function* setLanguageModel<K extends keyof any>(
       runInfer,
     }
   })
-}
-
-export interface LanguageModelSetEvent<K extends keyof any = keyof any> extends EventBase<"language_model_set"> {
-  key: K
 }

@@ -1,13 +1,15 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
-import { Action, type EventBase } from "../Action.ts"
+import { Action } from "../Action.ts"
 import type { Actor } from "../Actor.ts"
+import type { ChildEvent } from "../events/ChildEvent.ts"
+import type { ToolCalledEvent } from "../events/ToolCalledEvent.ts"
+import type { ToolDisabledEvent } from "../events/ToolDisabledEvent.ts"
+import type { ToolEnabledEvent } from "../events/ToolEnabledEvent.ts"
 import type { Tool, ToolImplementation, ToolResult } from "../Tool.ts"
 import { JSONSchemaMemo } from "../util/JSONSchemaMemo.ts"
 import type { JSONValue } from "../util/JSONValue.ts"
 import type { PromiseOr } from "../util/PromiseOr.ts"
-import type { ChildEvent } from "./actions_common.ts"
 import { disableTool } from "./DisableTool.ts"
-import type { ToolDisabledEvent } from "./DisableTool.ts"
 
 export function enableTool<K extends keyof any, A extends JSONValue, R extends PromiseOr<ToolResult>>(
   key: K,
@@ -67,7 +69,7 @@ export function* enableTool(
   params: StandardSchemaV1<JSONValue, JSONValue>,
   implementation: ToolImplementation,
 ): Generator<Action<"enable_tool">, Generator<Action<"disable_tool">, void>> {
-  return yield Action()("enable_tool", (scope) => {
+  return yield Action("enable_tool", (scope) => {
     scope.event({
       type: "tool_enabled",
       key,
@@ -86,14 +88,4 @@ export function* enableTool(
       nextArg: disableTool(tool),
     }
   })
-}
-
-export interface ToolEnabledEvent<K extends keyof any = keyof any> extends EventBase<"tool_enabled"> {
-  key: K
-  description: string
-  schema: object
-}
-
-export interface ToolCalledEvent<A extends JSONValue = JSONValue> extends EventBase<"tool_called"> {
-  args: A
 }

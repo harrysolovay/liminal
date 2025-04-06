@@ -1,5 +1,7 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
-import { Action, type EventBase } from "../Action.ts"
+import { Action } from "../Action.ts"
+import type { InferenceRequestedEvent } from "../events/InferenceRequestedEvent.ts"
+import type { InferredEvent } from "../events/InferredEvent.ts"
 import { assert } from "../util/assert.ts"
 import type { JSONObject } from "../util/JSONObject.ts"
 import type { JSONValue } from "../util/JSONValue.ts"
@@ -23,7 +25,7 @@ export function infer<O extends JSONValue>(
   O
 >
 export function* infer(type?: StandardSchemaV1<JSONObject>): Generator<Action<"infer">, any> {
-  return yield Action<never>()("infer", async (scope) => {
+  return yield Action("infer", async (scope) => {
     assert(scope.runInfer)
     scope.event({
       type: "inference_requested",
@@ -38,10 +40,4 @@ export function* infer(type?: StandardSchemaV1<JSONObject>): Generator<Action<"i
       nextArg: scope.value,
     }
   })
-}
-
-export interface InferenceRequestedEvent extends EventBase<"inference_requested"> {}
-
-export interface InferredEvent<V extends JSONValue = JSONValue> extends EventBase<"inferred"> {
-  value: V
 }

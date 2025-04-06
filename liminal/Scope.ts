@@ -2,7 +2,7 @@ import type { Action } from "./Action.ts"
 import type { Actor } from "./Actor.ts"
 import type { RunEmbed, RunInfer } from "./adapters.ts"
 import type { EventHandler } from "./EventHandler.ts"
-import type { LEvent } from "./LEvent.ts"
+import type { LEvent } from "./events/LEvent.ts"
 import type { Message } from "./Message.ts"
 import type { Tool } from "./Tool.ts"
 

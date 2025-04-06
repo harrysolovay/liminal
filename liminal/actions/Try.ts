@@ -1,10 +1,9 @@
-import { Action, type EventBase } from "../Action.ts"
+import { Action } from "../Action.ts"
 import type { Actor, ActorLike, ActorLikeY } from "../Actor.ts"
-import type { Spec } from "../Spec.ts"
+import type { ChildEvent } from "../events/ChildEvent.ts"
 import { isIteratorLike } from "../util/isIteratorLike.ts"
 import { unimplemented } from "../util/unimplemented.ts"
 import { unwrapDeferred } from "../util/unwrapDeferred.ts"
-import type { ChildEvent } from "./actions_common.ts"
 
 function* try_<
   K extends keyof any,
@@ -22,14 +21,14 @@ function* try_<
     Event: ChildEvent<
       "try",
       K,
-      Y[""]["Event"] | ActorLikeY<M>[""]["Event"] | ExceptionUncaught,
+      Y[""]["Event"] | ActorLikeY<M>[""]["Event"],
       T | F extends Actor<Action, infer U> ? U : F
     >
     Throw: never
   }>,
   T
 > {
-  return yield Action<never>()("try", async (scope) => {
+  return yield Action("try", async (scope) => {
     const tryScope = scope.fork("try", key)
     const tryActor = unwrapDeferred(actorLike)
     let value: unknown
@@ -63,16 +62,8 @@ function* try_<
         nextArg: value,
       }
     }
-    scope.event({
-      type: "exception_uncaught",
-      thrown: value,
-    })
     unimplemented() // TODO: early exit
   })
 }
 Object.defineProperty(try_, "name", { value: "try" })
 export { try_ as try }
-
-export interface ExceptionUncaught extends EventBase<"exception_uncaught"> {
-  thrown: unknown
-}

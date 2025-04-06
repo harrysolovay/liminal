@@ -1,6 +1,7 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
 import type { Action } from "../Action.ts"
-import type { InferenceRequestedEvent, InferredEvent } from "../actions/Infer.ts"
+import type { InferenceRequestedEvent } from "../events/InferenceRequestedEvent.ts"
+import type { InferredEvent } from "../events/InferredEvent.ts"
 import type { Falsy } from "../util/Falsy.ts"
 import type { JSONValue } from "../util/JSONValue.ts"
 import type { Taggable } from "../util/Taggable.ts"

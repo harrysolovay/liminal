@@ -1,4 +1,5 @@
-import { Action, type EventBase } from "../Action.ts"
+import { Action } from "../Action.ts"
+import type { MessageAppendedEvent } from "../events/MessageAppendedEvent.ts"
 import type { Message } from "../Message.ts"
 
 export function* appendMessage<M extends Message>(message: M): Generator<
@@ -9,7 +10,7 @@ export function* appendMessage<M extends Message>(message: M): Generator<
   }>,
   void
 > {
-  yield Action<never>()("append_message", (scope) => {
+  yield Action("append_message", (scope) => {
     scope.event({
       type: "message_appended",
       message,
@@ -20,8 +21,4 @@ export function* appendMessage<M extends Message>(message: M): Generator<
       messages: [...scope.messages, message],
     }
   })
-}
-
-export interface MessageAppendedEvent<M extends Message = Message> extends EventBase<"message_appended"> {
-  message: M
 }

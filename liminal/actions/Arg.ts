@@ -9,7 +9,7 @@ export function arg<K extends keyof any>(key: K): <T>() => Generator<
   T
 > {
   return function*() {
-    return yield Action<never>()("arg", (scope) => ({
+    return yield Action("arg", (scope) => ({
       ...scope,
       nextArg: scope.args[key],
     }))

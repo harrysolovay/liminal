@@ -1,9 +1,10 @@
-import { Action, type EventBase } from "../Action.ts"
+import { Action } from "../Action.ts"
 import type { Actor } from "../Actor.ts"
+import type { ChildEvent } from "../events/ChildEvent.ts"
+import type { MessagesSetEvent } from "../events/MessagesSetEvent.ts"
 import type { Message } from "../Message.ts"
 import { isPropertyKey } from "../util/isPropertyKey.ts"
 import type { PromiseOr } from "../util/PromiseOr.ts"
-import type { ChildEvent } from "./actions_common.ts"
 
 export function setMessages(
   setter: (messages: Array<Message>) => PromiseOr<Array<Message>>,
@@ -30,7 +31,7 @@ export function* setMessages(
   setterOrKey: keyof any | ((messages: Array<Message>) => PromiseOr<Array<Message>>),
   maybeSetter?: (messages: Array<Message>) => Actor<Action, Array<Message>>,
 ): Generator<Action<"set_messages">, Array<Message>> {
-  return yield Action<never>()("set_messages", async (scope) => {
+  return yield Action("set_messages", async (scope) => {
     if (isPropertyKey(setterOrKey)) {
       const setterScope = scope.fork("set_messages", setterOrKey)
       const reduced = await setterScope.reduce(maybeSetter!([...scope.messages]))
@@ -56,8 +57,4 @@ export function* setMessages(
       nextArg: scope.messages,
     }
   })
-}
-
-export interface MessagesSetEvent extends EventBase<"messages_set"> {
-  messages: Array<Message>
 }

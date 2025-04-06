@@ -11,17 +11,12 @@ export interface Action<K extends string = string, S extends Spec = Spec> {
 
 export type ActionReducer<K extends string, S extends Spec> = (this: Action<K, S>, scope: Scope) => PromiseOr<Scope>
 
-export function Action<S extends Spec>() {
-  return <K extends string>(type: K, reducer: ActionReducer<K, S>): Action<K, S> =>
-    ({
-      type,
-      [ActionKey]: true,
-      reducer,
-    } satisfies Omit<Action<K, S>, "">) as never
-}
-
-export interface EventBase<K extends string> {
-  type: K
+export function Action<K extends string, S extends Spec>(type: K, reducer: ActionReducer<K, S>): Action<K, S> {
+  return ({
+    type,
+    [ActionKey]: true,
+    reducer,
+  } satisfies Omit<Action<K, S>, "">) as never
 }
 
 export type ActionKey = typeof ActionKey

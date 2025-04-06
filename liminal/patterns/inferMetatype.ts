@@ -1,5 +1,6 @@
 import type { Action } from "../Action.ts"
-import type { InferenceRequestedEvent, InferredEvent } from "../actions/Infer.ts"
+import type { InferenceRequestedEvent } from "../events/InferenceRequestedEvent.ts"
+import type { InferredEvent } from "../events/InferredEvent.ts"
 import { fromMetatypeRootDescriptor } from "../types/Metatype/fromMetatypeDescriptor.ts"
 import { MetatypeRootDescriptor } from "../types/Metatype/MetatypeDescriptor.ts"
 import type { JSONObjectType } from "../types/object.ts"

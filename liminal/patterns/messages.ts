@@ -1,5 +1,6 @@
 import type { Action } from "../Action.ts"
-import { appendMessage, type MessageAppendedEvent } from "../actions/AppendMessage.ts"
+import { appendMessage } from "../actions/AppendMessage.ts"
+import type { MessageAppendedEvent } from "../events/MessageAppendedEvent.ts"
 import type { AssistantContent, AssistantMessage, SystemMessage, UserContent, UserMessage } from "../Message.ts"
 import { normalizeTaggableArgs, type TaggableArgs } from "../util/Taggable.ts"
 
