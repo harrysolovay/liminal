@@ -1,5 +1,5 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
-import { infer } from "../actions/Infer2.ts"
+import { infer } from "../actions/infer.ts"
 import { LiminalAssertionError } from "../LiminalAssertionError.ts"
 import type { Falsy } from "../util/Falsy.ts"
 import { applyTemplateWithIndentation } from "../util/fixTemplateStrings.ts"
