@@ -1,6 +1,6 @@
 import type { Action } from "../Action.ts"
 import { arg } from "../actions/arg.ts"
-import { setLanguageModel } from "../actions/pushLanguageModel.ts"
+import { setLanguageModel } from "../actions/setLanguageModel.ts"
 import type { RunInfer } from "../adapters.ts"
 import type { LanguageModelSetEvent } from "../events/LanguageModelSetEvent.ts"
 
