@@ -7,7 +7,7 @@ export default function*() {
     full of super-powered beings such as witches, vampires, werewolves and fae.
     Prefer producing complex object types.
   `
-  const result = yield* L.fork("types", {
+  return yield* L.fork("types", {
     *gritty() {
       return yield* yield* L.inferMetatype`Add a gritty undertone. Horrific and scary. True monsters to be feared.`
     },
@@ -19,5 +19,4 @@ export default function*() {
       return yield* yield* L.inferMetatype`Make it seductive, romantic and passionate.`
     },
   })
-  console.log(JSON.stringify(result, null, 2))
 }

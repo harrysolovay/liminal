@@ -52,7 +52,7 @@ function* try_<
         if (catch_) {
           const catchResult = await catch_(thrown)
           if (isIteratorLike(catchResult)) {
-            ;({ value } = await scope.fork("try", key).reduce(unwrapDeferred(catchResult as never)))
+            ;({ value } = await scope.fork("catch", key).reduce(unwrapDeferred(catchResult as never)))
             type = "value"
           } else {
             type = "value"
