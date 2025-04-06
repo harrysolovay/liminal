@@ -1,11 +1,13 @@
 import type { AssertTrue, IsExact } from "conditional-type-checks"
+import type { ChildEvent } from "../events/ChildEvent.ts"
+import type { EmittedEvent } from "../events/EmittedEvent.ts"
+import type { ToolCalledEvent } from "../events/ToolCalledEvent.ts"
+import type { ToolDisabledEvent } from "../events/ToolDisabledEvent.ts"
+import type { ToolEnabledEvent } from "../events/ToolEnabledEvent.ts"
 import * as L from "../L.ts"
 import { ActorAssertions } from "../testing/ActorAssertions.ts"
-import type { ChildEvent } from "./actions_common.ts"
-import type { ToolDisabledEvent } from "./DisableTool.ts"
-import { emit } from "./Emit.ts"
-import type { EmittedEvent } from "./Emit.ts"
-import { enableTool, type ToolCalledEvent, type ToolEnabledEvent } from "./EnableTool.ts"
+import { emit } from "./emit.ts"
+import { enableTool } from "./enableTool.ts"
 
 type P = typeof P["T"]
 const P = L.object({
@@ -20,6 +22,7 @@ const arrowTool = L.enableTool("Tool", "", P, (params) => {
 ActorAssertions(arrowTool).assertSpec<{
   Entry: never
   Event: ToolEnabledEvent<"Tool"> | ChildEvent<"tool", "Tool", ToolCalledEvent<P>, void>
+  Throw: never
 }>()
 
 function* _0() {
@@ -27,6 +30,7 @@ function* _0() {
   ActorAssertions(detach).assertSpec<{
     Entry: never
     Event: ToolDisabledEvent<"Tool">
+    Throw: never
   }>()
 }
 
@@ -50,6 +54,7 @@ ActorAssertions(genTool).assertSpec<{
       }>,
       string
     >
+  Throw: never
 }>()
 
 function* parent() {
@@ -94,4 +99,5 @@ ActorAssertions(parent).assertSpec<{
       >,
       { "arm-key": void }
     >
+  Throw: never
 }>()

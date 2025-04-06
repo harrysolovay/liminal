@@ -1,15 +1,9 @@
+import { Action } from "../Action.ts"
 import type { Message } from "../Message.ts"
-import { ActionBase } from "./actions_base.ts"
 
-export interface GetMessages extends ActionBase<"get_messages", never> {}
-
-export function* getMessages(): Generator<GetMessages, Array<Message>> {
-  return yield ActionBase("get_messages", {
-    reduce(scope) {
-      return {
-        ...scope,
-        nextArg: [...scope.messages],
-      }
-    },
-  })
+export function* getMessages(): Generator<Action<"get_messages">, Array<Message>> {
+  return yield Action("get_messages", (scope) => ({
+    ...scope,
+    nextArg: [...scope.messages],
+  }))
 }

@@ -1,52 +1,43 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
-import type { Spec } from "../Spec.ts"
+import { Action } from "../Action.ts"
+import type { InferenceRequestedEvent } from "../events/InferenceRequestedEvent.ts"
+import type { InferredEvent } from "../events/InferredEvent.ts"
 import { assert } from "../util/assert.ts"
+import type { JSONObject } from "../util/JSONObject.ts"
 import type { JSONValue } from "../util/JSONValue.ts"
-import { ActionBase, type EventBase } from "./actions_base.ts"
-
-export interface Infer<S extends Spec = Spec> extends ActionBase<"infer", S> {
-  type: StandardSchemaV1 | undefined
-}
 
 export function infer(): Generator<
-  Infer<{
+  Action<"infer", {
     Entry: never
     Event: InferenceRequestedEvent | InferredEvent<string>
+    Throw: never
   }>,
   string
 >
 export function infer<O extends JSONValue>(
-  type: StandardSchemaV1<JSONValue, O>,
+  type: StandardSchemaV1<JSONObject, O>,
 ): Generator<
-  Infer<{
+  Action<"infer", {
     Entry: never
     Event: InferenceRequestedEvent | InferredEvent<O>
+    Throw: never
   }>,
   O
 >
-export function* infer(type?: StandardSchemaV1): Generator<Infer, unknown> {
-  return yield ActionBase("infer", {
-    type,
-    async reduce(scope) {
-      assert(scope.runInfer)
-      scope.event({
-        type: "inference_requested",
-      })
-      scope = await scope.reduce(scope.runInfer(this, scope))
-      scope.event({
-        type: "inferred",
-        value: scope.value,
-      })
-      return {
-        ...scope,
-        nextArg: scope.value,
-      }
-    },
+export function* infer(type?: StandardSchemaV1<JSONObject>): Generator<Action<"infer">, any> {
+  return yield Action("infer", async (scope) => {
+    assert(scope.runInfer)
+    scope.event({
+      type: "inference_requested",
+    })
+    scope = await scope.reduce(scope.runInfer(type))
+    scope.event({
+      type: "inferred",
+      value: scope.value,
+    })
+    return {
+      ...scope,
+      nextArg: scope.value,
+    }
   })
-}
-
-export interface InferenceRequestedEvent extends EventBase<"inference_requested"> {}
-
-export interface InferredEvent<V extends JSONValue = JSONValue> extends EventBase<"inferred"> {
-  value: V
 }

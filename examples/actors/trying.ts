@@ -1,17 +1,29 @@
 import { L } from "liminal"
 
 export default function*() {
-  return yield* L.try("may-fail", function*() {
-    if (Math.random() > .5) {
+  const result = yield* L.try("attempt", mayThrow)
+  if (result.thrown) {
+    console.log("Threw the following value:", result.thrown)
+  } else {
+    console.log("Succeed with the following value:", result.value)
+  }
+}
+
+function* mayThrow() {
+  try {
+    const rand = Math.random()
+    if (rand > .5) {
       throw new RandomError()
     }
-    return 2
-  }, function*(thrown) {
+    return rand
+  } catch (thrown: unknown) {
     if (thrown instanceof RandomError) {
-      return 3
+      yield* L.emit("some-error")
+      ;(yield* L.throw(thrown))()
+      // TODO: Why isn't subsequent code identified as unreachable. TS compiler bug?
     }
     throw thrown
-  })
+  }
 }
 
 class RandomError extends Error {

@@ -1,8 +1,7 @@
-import type { ChildEvent } from "../actions/actions_common.ts"
-import type { RunEmbed } from "../actions/SetEmbeddingModel.ts"
-import type { EmbeddingModelSetEvent } from "../actions/SetEmbeddingModel.ts"
-import type { RunInfer } from "../actions/SetLanguageModel.ts"
-import type { LanguageModelSetEvent } from "../actions/SetLanguageModel.ts"
+import type { RunEmbed, RunInfer } from "../adapters.ts"
+import type { ChildEvent } from "../events/ChildEvent.ts"
+import type { EmbeddingModelSetEvent } from "../events/EmbeddingModelSetEvent.ts"
+import type { LanguageModelSetEvent } from "../events/LanguageModelSetEvent.ts"
 import * as L from "../L.ts"
 import { ActorAssertions } from "../testing/ActorAssertions.ts"
 import { declareEmbeddingModel } from "./declareEmbeddingModel.ts"
@@ -12,12 +11,14 @@ const languageModel = declareLanguageModel("A")
 ActorAssertions(languageModel).assertSpec<{
   Entry: ["A", RunInfer]
   Event: LanguageModelSetEvent<"A">
+  Throw: never
 }>()
 
 const embeddingModel = declareEmbeddingModel("B")
 ActorAssertions(embeddingModel).assertSpec<{
   Entry: ["B", RunEmbed]
   Event: EmbeddingModelSetEvent<"B">
+  Throw: never
 }>()
 
 function* both() {
@@ -28,6 +29,7 @@ function* both() {
 ActorAssertions(both).assertSpec<{
   Entry: ["A", RunInfer] | ["B", RunEmbed]
   Event: LanguageModelSetEvent<"A"> | EmbeddingModelSetEvent<"B">
+  Throw: never
 }>()
 
 function* parent() {
@@ -60,4 +62,5 @@ ActorAssertions(parent).assertSpec<{
     >
     | LanguageModelSetEvent<"C">
     | EmbeddingModelSetEvent<"D">
+  Throw: never
 }>()

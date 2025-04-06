@@ -2,14 +2,14 @@ import { type CoreMessage, generateObject, generateText, jsonSchema, type Langua
 import { _util, L, type Message, type RunInfer } from "liminal"
 
 export function AILanguageModel(model: LanguageModelV1): RunInfer {
-  return async function*(action, scope) {
-    const { messages: liminalMessages } = scope
-    const messages = liminalMessages.map(toCoreMessage)
-    if (action.type) {
-      const schema = await _util.JSONSchemaMemo(action.type)
+  return async function*(type) {
+    const messages = yield* L.getMessages()
+    const coreMessages = messages.map(toCoreMessage)
+    if (type) {
+      const schema = await _util.JSONSchemaMemo(type)
       let { object } = await generateObject({
         model,
-        messages,
+        messages: coreMessages,
         schema: jsonSchema(schema),
       })
       yield* L.appendMessage({
@@ -65,7 +65,7 @@ export function AILanguageModel(model: LanguageModelV1): RunInfer {
     // ).then(Object.fromEntries)
     const { text } = await generateText({
       model,
-      messages,
+      messages: coreMessages,
       // tools,
     })
     yield* L.appendMessage({

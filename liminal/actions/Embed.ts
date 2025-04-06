@@ -1,45 +1,31 @@
-import type { Spec } from "../Spec.ts"
+import { Action } from "../Action.ts"
+import type { EmbeddedEvent } from "../events/EmbeddedEvent.ts"
+import type { EmbeddingRequestedEvent } from "../events/EmbeddingRequestedEvent.ts"
 import { assert } from "../util/assert.ts"
-import { ActionBase, type EventBase } from "./actions_base.ts"
-
-export interface Embed<S extends Spec = Spec> extends ActionBase<"embed", S> {
-  value: string
-}
 
 export function* embed(value: string): Generator<
-  Embed<{
+  Action<"embed", {
     Entry: never
-    Event: EmbeddedEvent | EmbeddingRequestedEvent
+    Event: EmbeddingRequestedEvent | EmbeddedEvent
+    Throw: never
   }>,
   Array<number>
 > {
-  return yield ActionBase("embed", {
-    value,
-    async reduce(scope) {
-      assert(scope.runEmbed)
-      scope.event({
-        type: "embedding_requested",
-        value,
-      })
-      const embedding = await scope.runEmbed(this, scope)
-      scope.event({
-        type: "embedded",
-        value,
-        embedding,
-      })
-      return {
-        ...scope,
-        nextArg: scope.value,
-      }
-    },
+  return yield Action("embed", async (scope) => {
+    assert(scope.runEmbed)
+    scope.event({
+      type: "embedding_requested",
+      value,
+    })
+    const embedding = await scope.runEmbed(value)
+    scope.event({
+      type: "embedded",
+      value,
+      embedding,
+    })
+    return {
+      ...scope,
+      nextArg: scope.value,
+    }
   })
-}
-
-export interface EmbeddingRequestedEvent extends EventBase<"embedding_requested"> {
-  value: string
-}
-
-export interface EmbeddedEvent extends EventBase<"embedded"> {
-  value: string
-  embedding: Array<number>
 }

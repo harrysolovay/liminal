@@ -1,11 +1,14 @@
-import { type AppendMessage, appendMessage, type MessageAppendedEvent } from "../actions/AppendMessage.ts"
+import type { Action } from "../Action.ts"
+import { appendMessage } from "../actions/appendMessage.ts"
+import type { MessageAppendedEvent } from "../events/MessageAppendedEvent.ts"
 import type { AssistantContent, AssistantMessage, SystemMessage, UserContent, UserMessage } from "../Message.ts"
 import { normalizeTaggableArgs, type TaggableArgs } from "../util/Taggable.ts"
 
 export function user(...args: TaggableArgs<[content: UserContent]>): Generator<
-  AppendMessage<{
+  Action<"append_message", {
     Entry: never
     Event: MessageAppendedEvent<UserMessage>
+    Throw: never
   }>,
   void
 > {
@@ -17,9 +20,10 @@ export function user(...args: TaggableArgs<[content: UserContent]>): Generator<
 }
 
 export function system(...args: TaggableArgs<[content: string]>): Generator<
-  AppendMessage<{
+  Action<"append_message", {
     Entry: never
     Event: MessageAppendedEvent<SystemMessage>
+    Throw: never
   }>,
   void
 > {
@@ -31,9 +35,10 @@ export function system(...args: TaggableArgs<[content: string]>): Generator<
 }
 
 export function assistant(...args: TaggableArgs<[content: AssistantContent]>): Generator<
-  AppendMessage<{
+  Action<"append_message", {
     Entry: never
     Event: MessageAppendedEvent<AssistantMessage>
+    Throw: never
   }>,
   void
 > {
