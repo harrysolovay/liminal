@@ -45,6 +45,7 @@ export function AILanguageModel(model: LanguageModelV1): RunInfer {
       model,
       messages: coreMessages,
       tools: aiTools,
+      maxSteps: Infinity,
     })
     yield* L.assistant(text)
     return text
