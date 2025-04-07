@@ -4,6 +4,7 @@ import type { ChildEvent } from "../events/ChildEvent.ts"
 import type { MessagesSetEvent } from "../events/MessagesSetEvent.ts"
 import type { Message } from "../Message.ts"
 import { isPropertyKey } from "../util/isPropertyKey.ts"
+import type { JSONKey } from "../util/JSONKey.ts"
 import type { PromiseOr } from "../util/PromiseOr.ts"
 
 export function setMessages(
@@ -16,7 +17,7 @@ export function setMessages(
   }>,
   Array<Message>
 >
-export function setMessages<K extends keyof any, Y extends Action>(
+export function setMessages<K extends JSONKey, Y extends Action>(
   key: K,
   setter: (messages: Array<Message>) => Actor<Y, Array<Message>>,
 ): Generator<
@@ -28,7 +29,7 @@ export function setMessages<K extends keyof any, Y extends Action>(
   Array<Message>
 >
 export function* setMessages(
-  setterOrKey: keyof any | ((messages: Array<Message>) => PromiseOr<Array<Message>>),
+  setterOrKey: JSONKey | ((messages: Array<Message>) => PromiseOr<Array<Message>>),
   maybeSetter?: (messages: Array<Message>) => Actor<Action, Array<Message>>,
 ): Generator<Action<"set_messages">, Array<Message>> {
   return yield Action("set_messages", async (scope) => {

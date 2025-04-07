@@ -1,7 +1,8 @@
 import type { LEvent } from "./events/LEvent.ts"
+import type { JSONKey } from "./util/JSONKey.ts"
 
 export interface Spec {
-  Entry: [keyof any, any]
+  Entry: [JSONKey, any]
   Event: LEvent
   Throw: any
 }

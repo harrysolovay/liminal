@@ -31,7 +31,6 @@ function eventPath(event: LEvent) {
   let path = ""
   let current = event
   while (current.type === "propagated") {
-    assert(typeof current.scope !== "symbol")
     path += `__${current.scopeType}_${current.scope}`
     current = current.event
   }

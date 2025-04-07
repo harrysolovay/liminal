@@ -10,9 +10,10 @@ import type {
 } from "../Actor.ts"
 import type { ActorLikes } from "../Actor.ts"
 import type { ChildEvent } from "../events/ChildEvent.ts"
+import type { JSONKey } from "../util/JSONKey.ts"
 import { unwrapDeferred } from "../util/unwrapDeferred.ts"
 
-export function fork<K extends keyof any, Y extends Action, T>(
+export function fork<K extends JSONKey, Y extends Action, T>(
   key: K,
   actorLike: ActorLike<Y, T>,
 ): Generator<
@@ -23,7 +24,7 @@ export function fork<K extends keyof any, Y extends Action, T>(
   }>,
   T
 >
-export function fork<K extends keyof any, const A extends ActorLikeArray>(name: K, actorLikeArray: A): Generator<
+export function fork<K extends JSONKey, const A extends ActorLikeArray>(name: K, actorLikeArray: A): Generator<
   Action<"fork", {
     Entry: ActorLikeY<A[number]>[""]["Entry"]
     Event: ChildEvent<
@@ -43,7 +44,7 @@ export function fork<K extends keyof any, const A extends ActorLikeArray>(name: 
   }>,
   ActorLikesT<A>
 >
-export function fork<K extends keyof any, A extends ActorLikeRecord>(name: K, implementation: A): Generator<
+export function fork<K extends JSONKey, A extends ActorLikeRecord>(name: K, implementation: A): Generator<
   Action<"fork", {
     Entry: ActorLikeY<A[keyof A]>[""]["Entry"]
     Event: ChildEvent<
@@ -52,7 +53,7 @@ export function fork<K extends keyof any, A extends ActorLikeRecord>(name: K, im
       {
         [L in keyof A]: ChildEvent<
           "fork_arm",
-          L,
+          Extract<L, JSONKey>,
           ActorLikeY<A[L]>[""]["Event"],
           ActorLikeT<A[L]>
         >
@@ -63,7 +64,7 @@ export function fork<K extends keyof any, A extends ActorLikeRecord>(name: K, im
   }>,
   ActorLikesT<A>
 >
-export function* fork(key: keyof any, implementation: ActorLike | ActorLikes): Generator<Action<"fork">, any> {
+export function* fork(key: JSONKey, implementation: ActorLike | ActorLikes): Generator<Action<"fork">, any> {
   return yield Action("fork", async (scope) => {
     const forkScope = scope.fork("fork", key)
     if (typeof implementation === "function") {
@@ -76,7 +77,7 @@ export function* fork(key: keyof any, implementation: ActorLike | ActorLikes): G
     }
     const armKeys = Array.isArray(implementation)
       ? Array.from({ length: implementation.length }, (_0, i) => i)
-      : Reflect.ownKeys(implementation)
+      : Reflect.ownKeys(implementation) as Array<string>
     const values = await Promise.all(armKeys.map(async (key) => {
       const forkArmScope = forkScope.fork("fork_arm", key)
       const actor = unwrapDeferred(implementation[key as never]) as Actor

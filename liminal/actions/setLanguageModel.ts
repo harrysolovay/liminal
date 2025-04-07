@@ -1,8 +1,9 @@
 import { Action } from "../Action.ts"
 import type { RunInfer } from "../adapters.ts"
 import type { LanguageModelSetEvent } from "../events/LanguageModelSetEvent.ts"
+import type { JSONKey } from "../util/JSONKey.ts"
 
-export function* setLanguageModel<K extends keyof any>(
+export function* setLanguageModel<K extends JSONKey>(
   key: K,
   runInfer: RunInfer,
 ): Generator<

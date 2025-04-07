@@ -1,5 +1,6 @@
+import type { JSONKey } from "../util/JSONKey.ts"
 import type { EventBase } from "./_EventBase.ts"
 
-export interface EmbeddingModelSetEvent<K extends keyof any = keyof any> extends EventBase<"embedding_model_set"> {
+export interface EmbeddingModelSetEvent<K extends JSONKey = JSONKey> extends EventBase<"embedding_model_set"> {
   key: K
 }
