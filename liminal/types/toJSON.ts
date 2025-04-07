@@ -10,7 +10,6 @@ import type { JSONRootableType, JSONType } from "./JSONType"
 import type { JSONNullType } from "./null.ts"
 import type { JSONNumberType } from "./number.ts"
 import { _object, type JSONObjectType } from "./object.ts"
-import type { JSONRefType } from "./ref.ts"
 import { type JSONStringType } from "./string.ts"
 import { type Type } from "./Type.ts"
 import { PARENT_TYPE_NAMES, typeName } from "./type_common.ts"
@@ -21,7 +20,7 @@ import type { JSONUnionType } from "./union.ts"
 export function toJSON<T extends JSONValue, J extends JSONRootableType>(this: Type<T, J>): JSONRootType<J> {
   const { $defs: { 0: root, ...$defs } } = new ToJSONState(this)
   return {
-    JSONSchema$schema,
+    $schema: JSONSchema$schema,
     ...root,
     $defs,
   } as never
