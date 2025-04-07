@@ -4,7 +4,7 @@ import type { ChildEvent } from "../events/ChildEvent.ts"
 import type { Result } from "../util/Result.ts"
 import { unwrapDeferred } from "../util/unwrapDeferred.ts"
 
-function* try_<K extends keyof any, Y extends Action, T>(
+function* catch_<K extends keyof any, Y extends Action, T>(
   key: K,
   actorLike: ActorLike<Y, T>,
 ): Generator<
@@ -31,5 +31,5 @@ function* try_<K extends keyof any, Y extends Action, T>(
     }
   })
 }
-Object.defineProperty(try_, "name", { value: "try" })
-export { try_ as try }
+Object.defineProperty(catch_, "name", { value: "catch" })
+export { catch_ as catch }

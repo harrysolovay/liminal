@@ -1,7 +1,7 @@
 import { L } from "liminal"
 
 export default function*() {
-  const result = yield* L.try("attempt", mayThrow)
+  const result = yield* L.catch("attempt", mayThrow)
   if (result.thrown) {
     console.log("Threw the following value:", result.thrown)
   } else {
@@ -11,21 +11,23 @@ export default function*() {
 
 function* mayThrow() {
   try {
-    const rand = Math.random()
-    if (rand > .5) {
-      throw new RandomError()
-    }
-    return rand
+    externalExample()
   } catch (thrown: unknown) {
     if (thrown instanceof RandomError) {
-      yield* L.emit("some-error")
-      ;(yield* L.throw(thrown))()
-      // TODO: Why isn't subsequent code identified as unreachable. TS compiler bug?
+      return yield* L.throw(thrown)
     }
-    throw thrown
+    throw thrown // unrecoverable
   }
 }
 
 class RandomError extends Error {
   override readonly name = "RandomError"
+}
+
+function externalExample(): number {
+  const rand = Math.random()
+  if (rand > .5) {
+    throw new RandomError()
+  }
+  return rand
 }

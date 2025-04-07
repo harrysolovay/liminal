@@ -5,16 +5,17 @@ import type { ChildEvent } from "../events/ChildEvent.ts"
 import type { ToolCalledEvent } from "../events/ToolCalledEvent.ts"
 import type { ToolDisabledEvent } from "../events/ToolDisabledEvent.ts"
 import type { ToolEnabledEvent } from "../events/ToolEnabledEvent.ts"
-import type { Tool, ToolImplementation, ToolResult } from "../Tool.ts"
+import { Tool, type ToolImplementation, type ToolResult } from "../Tool.ts"
+import type { JSONKey } from "../util/JSONKey.ts"
+import type { JSONObject } from "../util/JSONObject.ts"
 import { JSONSchemaMemo } from "../util/JSONSchemaMemo.ts"
-import type { JSONValue } from "../util/JSONValue.ts"
 import type { PromiseOr } from "../util/PromiseOr.ts"
 import { disableTool } from "./disableTool.ts"
 
-export function enableTool<K extends keyof any, A extends JSONValue, R extends PromiseOr<ToolResult>>(
+export function enableTool<K extends JSONKey, A, R extends PromiseOr<ToolResult>>(
   key: K,
   description: string,
-  params: StandardSchemaV1<JSONValue, A>,
+  params: StandardSchemaV1<JSONObject, A>,
   implementation: (params: A) => R,
 ): Generator<
   Action<"enable_tool", {
@@ -32,14 +33,14 @@ export function enableTool<K extends keyof any, A extends JSONValue, R extends P
   >
 >
 export function enableTool<
-  K extends keyof any,
-  A extends JSONValue,
+  K extends JSONKey,
+  A,
   Y extends Action,
   R extends PromiseOr<ToolResult>,
 >(
   key: K,
   description: string,
-  params: StandardSchemaV1<JSONValue, A>,
+  params: StandardSchemaV1<JSONObject, A>,
   implementation: (params: A) => Actor<Y, R>,
 ): Generator<
   Action<"enable_tool", {
@@ -64,9 +65,9 @@ export function enableTool<
   >
 >
 export function* enableTool(
-  key: keyof any,
+  key: JSONKey,
   description: string,
-  params: StandardSchemaV1<JSONValue, JSONValue>,
+  params: StandardSchemaV1<JSONObject, any>,
   implementation: ToolImplementation,
 ): Generator<Action<"enable_tool">, Generator<Action<"disable_tool">, void>> {
   return yield Action("enable_tool", (scope) => {
@@ -76,12 +77,12 @@ export function* enableTool(
       description,
       schema: JSONSchemaMemo(params),
     })
-    const tool: Tool = {
+    const tool = Tool({
       key,
       description,
       params,
       implementation,
-    }
+    })
     return {
       ...scope,
       tools: new Set([...scope.tools, tool]),

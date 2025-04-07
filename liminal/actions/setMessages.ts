@@ -37,10 +37,6 @@ export function* setMessages(
       const reduced = await setterScope.reduce(maybeSetter!([...scope.messages]))
       const { value } = reduced
       setterScope.event({
-        type: "returned",
-        value,
-      })
-      setterScope.event({
         type: "messages_set",
         messages: value,
       })

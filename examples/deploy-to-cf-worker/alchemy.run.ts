@@ -15,7 +15,7 @@ await using _ = alchemy("liminal:liminal-example-deploy-to-cf-worker", {
 })
 
 export const worker = await Worker("liminal-exec-worker", {
-  name: "liminal-exec",
+  name: "liminal-exec-worker",
   url: true,
   // @ts-ignore
   entrypoint: fileURLToPath(import.meta.resolve("./worker/worker.ts")),

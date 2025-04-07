@@ -2,15 +2,14 @@ import { createOpenAI } from "@ai-sdk/openai"
 import type { ExportedHandler } from "@cloudflare/workers-types"
 import { exec } from "liminal"
 import { AILanguageModel } from "liminal-ai"
-import { env } from "liminal-common"
 import { refine } from "./conversation.ts"
 
-const openai = createOpenAI({
-  apiKey: env.OPENAI_API_KEY,
-})
-
 export default {
-  async fetch(request) {
+  async fetch(request, env) {
+    const openai = createOpenAI({
+      // @ts-ignore
+      apiKey: env.OPENAI_API_KEY,
+    })
     const input = await request.text()
     try {
       const value = await exec(refine(input), {
