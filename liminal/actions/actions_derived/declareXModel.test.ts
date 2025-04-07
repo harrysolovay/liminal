@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test"
-import { Exec } from "../../Exec.ts"
+import { Exec } from "../../Exec1.ts"
 import * as L from "../../L.ts"
 import { TestEmbeddingModel } from "../../testing/TestEmbeddingModel.ts"
 import { TestLanguageModel } from "../../testing/TestLanguageModel.ts"
