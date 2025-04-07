@@ -5,8 +5,8 @@
 
 Liminal is a model-agnostic library for conversation state management. It
 exposes a set of primitives for buffering messages, generating text, objects and
-vectors, attaching and removing tools, emitting events, and instantiating and
-forking conversations.
+vectors, attaching and removing tools, emitting events and forking
+conversations.
 
 <!-- ## Resources
 
@@ -37,10 +37,13 @@ Model a conversation as a generator function. Yield actions such as declaring
 the model, appending messages to the underlying message buffer and triggering
 inference.
 
+`conversation.ts`
+
 ```ts
-import { L } from "liminal"
+import { Exec, L } from "liminal"
 
 export default function*() {
+  yield* L.declareLanguageModel("reasoning")
   yield* L.system`
     When an instruction is given, don't ask any follow-up questions.
     Just reply to the best of your ability given the information you have.
@@ -82,12 +85,17 @@ In this example, we use a Vercel AI SDK `LanguageModelV1` (produced by the
 import { openai } from "@ai-sdk/openai"
 import { AILanguageModel } from "liminal-ai"
 
-const { result } = exec(Conversation, {
+// From before.
+import conversation from "./conversation.ts"
+
+const exec = Exec(Conversation, {
   default: AILanguageModel(openai("gpt-4o-mini")),
-  handler(event) {
-    console.log(event)
+  bind: {
+    reasoning: AILanguageModel(openai("o3-mini")),
   },
 })
+
+const result = await exec()
 
 result satisfies Array<string>
 ```
@@ -95,8 +103,8 @@ result satisfies Array<string>
 ## Actions
 
 Actions are the values yielded from Liminal conversations (generators or other
-iterables). They tell the executor how to update internal state such as the
-model or tool selections.
+iterables/iterators). They tell the executor how to update internal state such
+as the model or tool selection.
 
 ---
 
