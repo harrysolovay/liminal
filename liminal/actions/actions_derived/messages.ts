@@ -1,9 +1,9 @@
-import type { Action } from "../Action.ts"
-import { appendMessage } from "../actions/appendMessage.ts"
-import type { MessageAppendedEvent } from "../events/MessageAppendedEvent.ts"
-import type { MessageRemovedEvent } from "../events/MessageRemovedEvent.ts"
-import type { AssistantContent, AssistantMessage, SystemMessage, UserContent, UserMessage } from "../Message.ts"
-import { normalizeTaggableArgs, type TaggableArgs } from "../util/Taggable.ts"
+import type { Action } from "../../Action.ts"
+import type { MessageAppendedEvent } from "../../events/MessageAppendedEvent.ts"
+import type { MessageRemovedEvent } from "../../events/MessageRemovedEvent.ts"
+import type { AssistantContent, AssistantMessage, SystemMessage, UserContent, UserMessage } from "../../Message.ts"
+import { normalizeTaggableArgs, type TaggableArgs } from "../../util/Taggable.ts"
+import { appendMessage } from "../appendMessage.ts"
 
 export function user(...args: TaggableArgs<[content: UserContent]>): Generator<
   Action<"append_message", {

@@ -1,6 +1,6 @@
 import { createOpenAI } from "@ai-sdk/openai"
 import type { ExportedHandler } from "@cloudflare/workers-types"
-import { exec } from "liminal"
+import { Exec } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 import { refine } from "./conversation.ts"
 
@@ -12,7 +12,7 @@ export default {
     })
     const input = await request.text()
     try {
-      const value = await exec(refine(input), {
+      const exec = Exec(() => refine(input), {
         default: AILanguageModel(openai("gpt-4o")),
         args: {
           a: AILanguageModel(openai("gpt-4o-mini")),
@@ -21,7 +21,7 @@ export default {
           select: AILanguageModel(openai("gpt-3.5-turbo")),
         },
       })
-      return new Response(value)
+      return new Response(await exec())
     } catch (e: unknown) {
       console.error(e)
       return new Response("INTERNAL SERVER ERROR", {

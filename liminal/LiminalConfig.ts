@@ -1,4 +1,4 @@
-import type { ExecConfig } from "./exec.ts"
+import type { ExecConfig } from "./Exec.ts"
 
 export interface LiminalConfig extends ExecConfig {
   actors?: string

@@ -1,10 +1,10 @@
 import { array } from "../array.ts"
-import { taggedUnion } from "../derived/taggedUnion.ts"
 import { enum as enum_ } from "../enum.ts"
 import { object } from "../object.ts"
 import { ref } from "../ref.ts"
 import { string } from "../string.ts"
 import type { Type } from "../Type.ts"
+import { taggedUnion } from "../types_derived/taggedUnion.ts"
 import type { JSONUnionType } from "../union.ts"
 
 export type MetatypeRootDescriptor = {

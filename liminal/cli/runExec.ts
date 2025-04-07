@@ -1,6 +1,7 @@
 import { dirname, isAbsolute, parse, resolve } from "node:path"
 import { parseArgs, type ParseArgsConfig } from "node:util"
-import { type ActorLike, exec, L, type LEvent, type LiminalConfig } from "../index.ts"
+import { type Actor, Exec, L, type LEvent, type LiminalConfig } from "../index.ts"
+import type { CliCtx } from "./cli_common.ts"
 import { WriteHandler } from "./WriteHandler.ts"
 
 const options = {
@@ -15,7 +16,7 @@ const options = {
   },
 } satisfies ParseArgsConfig["options"]
 
-export async function runExec(args: Array<string>) {
+export async function runExec(ctx: CliCtx, args: Array<string>) {
   let {
     values: {
       config: configPath,
@@ -42,7 +43,7 @@ export async function runExec(args: Array<string>) {
     actorPathResolved = `${actorPathResolved}.ts`
   }
   const parsedPath = parse(actorPathResolved)
-  const actorLike = await import(actorPathResolved).then(({ default: default_ }) => default_ as ActorLike)
+  const actorLike = await import(actorPathResolved).then(({ default: default_ }) => default_ as () => Actor)
   const startTime = Date.now()
   const writeHandlerOrNoop = config.write
     ? await WriteHandler({
@@ -54,14 +55,14 @@ export async function runExec(args: Array<string>) {
     })
     : undefined
   const printHandlerOrNoop = config.silent ? undefined : (event: LEvent) => console.log(event)
-
-  await exec(actorLike, {
+  const exec = Exec(actorLike, {
     default: config.default,
-    args: config.args,
-    handler: (event) => {
-      config.handler?.(event)
-      printHandlerOrNoop?.(event)
-      writeHandlerOrNoop?.(event)
-    },
+    args: config.args!,
+  })
+  await exec((event) => {
+    printHandlerOrNoop?.(event)
+    writeHandlerOrNoop?.(event)
+  }, {
+    signal: ctx.ctl.signal,
   })
 }

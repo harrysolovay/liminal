@@ -8,14 +8,14 @@ export default function*() {
   `
   return yield* L.fork("types", {
     *gritty() {
-      return yield* yield* L.inferMetatype`Add a gritty undertone. Horrific and scary. True monsters to be feared.`
+      return yield* yield* L.metatype`Add a gritty undertone. Horrific and scary. True monsters to be feared.`
     },
     *comedic() {
       return yield* yield* L
-        .inferMetatype`Make it hilarious. Identify and make fun of the goofier elements of supernatural lure.`
+        .metatype`Make it hilarious. Identify and make fun of the goofier elements of supernatural lure.`
     },
     *romantic() {
-      return yield* yield* L.inferMetatype`Make it seductive, romantic and passionate.`
+      return yield* yield* L.metatype`Make it seductive, romantic and passionate.`
     },
   })
 }

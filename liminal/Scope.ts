@@ -21,7 +21,7 @@ export type ScopeType = RootScopeType | ChildScopeType
 
 export interface ScopeBase<Type extends ScopeType> {
   readonly type: Type
-  readonly args: Record<JSONKey, any>
+  readonly args?: Record<JSONKey, any>
   readonly controller: AbortController
   readonly messages: Set<Message>
   readonly tools: Set<Tool>
@@ -38,7 +38,7 @@ export interface ScopeBase<Type extends ScopeType> {
 
 export function RootScope(
   runInfer: RunInfer,
-  args: Record<JSONKey, any>,
+  args?: Record<JSONKey, any>,
   event: EventHandler = () => {},
   signal?: AbortSignal,
 ): RootScope {

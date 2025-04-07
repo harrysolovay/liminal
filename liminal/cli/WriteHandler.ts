@@ -1,7 +1,6 @@
 import { mkdir, writeFile } from "node:fs/promises"
 import { type ParsedPath, relative, resolve } from "node:path"
 import type { LEvent } from "../events/LEvent.ts"
-import { assert } from "../util/assert.ts"
 
 export async function WriteHandler({
   stateDir,
