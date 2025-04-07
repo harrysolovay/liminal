@@ -10,7 +10,6 @@ import type {
 } from "../Actor.ts"
 import type { ActorLikes } from "../Actor.ts"
 import type { ChildEvent } from "../events/ChildEvent.ts"
-import { isIteratorLike } from "../util/isIteratorLike.ts"
 import { unwrapDeferred } from "../util/unwrapDeferred.ts"
 
 export function fork<K extends keyof any, Y extends Action, T>(
@@ -67,7 +66,7 @@ export function fork<K extends keyof any, A extends ActorLikeRecord>(name: K, im
 export function* fork(key: keyof any, implementation: ActorLike | ActorLikes): Generator<Action<"fork">, any> {
   return yield Action("fork", async (scope) => {
     const forkScope = scope.fork("fork", key)
-    if (typeof implementation === "function" || (!Array.isArray(implementation) && isIteratorLike(implementation))) {
+    if (typeof implementation === "function") {
       const actor = unwrapDeferred(implementation as ActorLike)
       const { value } = await forkScope.reduce(actor)
       return {

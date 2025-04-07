@@ -3,7 +3,7 @@ import type { Action } from "./Action.ts"
 import type { Actor } from "./Actor.ts"
 import type { Scope } from "./Scope.ts"
 import { assert } from "./util/assert.ts"
-import { isIteratorLike } from "./util/isIteratorLike.ts"
+import { isJSONValue } from "./util/isJSONValue.ts"
 import type { JSONKey } from "./util/JSONKey.ts"
 import type { JSONObject } from "./util/JSONObject.ts"
 import type { JSONValue } from "./util/JSONValue.ts"
@@ -37,17 +37,18 @@ function executor(this: Tool, scope: Scope): ToolExecutor {
   return async (args) => {
     scope.event({
       type: "tool_called",
+      tool: this.key,
       args,
     })
     const parsed = await this.params["~standard"].validate(args)
     assert(!parsed.issues)
     const { value } = parsed
     const initial = await this.implementation(value)
-    if (!isIteratorLike(initial)) {
-      return initial
+    if (isJSONValue(initial)) {
+      return { value: initial }
     }
     const fork = scope.fork("tool", this.key)
     const reduced = await fork.reduce(initial as Actor)
-    return reduced.value
+    return { value: reduced.value }
   }
 }

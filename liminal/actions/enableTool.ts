@@ -20,7 +20,7 @@ export function enableTool<K extends JSONKey, A, R extends PromiseOr<ToolResult>
 ): Generator<
   Action<"enable_tool", {
     Entry: never
-    Event: ToolEnabledEvent<K> | ChildEvent<"tool", K, ToolCalledEvent<A>, Awaited<R>>
+    Event: ToolEnabledEvent<K> | ChildEvent<"tool", K, ToolCalledEvent<K, A>, Awaited<R>>
     Throw: never
   }>,
   Generator<
@@ -50,7 +50,7 @@ export function enableTool<
       | ChildEvent<
         "tool",
         K,
-        ToolCalledEvent<A> | Extract<Y, Action>[""]["Event"],
+        ToolCalledEvent<K, A> | Extract<Y, Action>[""]["Event"],
         Awaited<R>
       >
     Throw: never
@@ -70,12 +70,12 @@ export function* enableTool(
   params: StandardSchemaV1<JSONObject, any>,
   implementation: ToolImplementation,
 ): Generator<Action<"enable_tool">, Generator<Action<"disable_tool">, void>> {
-  return yield Action("enable_tool", (scope) => {
+  return yield Action("enable_tool", async (scope) => {
     scope.event({
       type: "tool_enabled",
       key,
       description,
-      schema: JSONSchemaMemo(params),
+      schema: await JSONSchemaMemo(params),
     })
     const tool = Tool({
       key,

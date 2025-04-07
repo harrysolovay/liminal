@@ -29,13 +29,12 @@ export function AILanguageModel(model: LanguageModelV1): RunInfer {
     const aiTools: ToolSet = await Promise
       .all(
         scope.tools.values().map(async (tool) => {
-          const schema = await _util.JSONSchemaMemo(tool.params)
           return [
             tool.key,
             aiTool({
               type: "function",
               description: tool.description,
-              parameters: jsonSchema(schema),
+              parameters: jsonSchema(await _util.JSONSchemaMemo(tool.params)),
               execute: tool.executor(scope),
             }),
           ] as const
