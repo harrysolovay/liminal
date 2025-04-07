@@ -10,6 +10,7 @@ export interface ExecConfig<Y extends Action = Action, T = any> {
   default: RunInfer
   args: FromEntries<Y[""]["Entry"]>
   handler?: EventHandler<Y[""]["Event"], T>
+  signal?: AbortSignal
 }
 
 // TODO: consider `Result` type.
@@ -17,7 +18,7 @@ export async function exec<Y extends Action, T>(
   actorLike: ActorLike<Y, T>,
   config: ExecConfig<Y, T>,
 ): Promise<T> {
-  let scope: Scope = RootScope(config.default, config.args, config.handler)
+  let scope: Scope = RootScope(config.default, config.args, config.handler, config.signal)
   const actor = unwrapDeferred(actorLike)
   scope = await scope.reduce(actor)
   const { signal: { aborted, reason } } = scope.controller

@@ -40,6 +40,16 @@
         "alchemy": "^0.2.5",
       },
     },
+    "examples/hono": {
+      "name": "liminal-example-hono",
+      "dependencies": {
+        "@ai-sdk/openai": "^1.3.7",
+        "eventsource": "^3.0.6",
+        "hono": "^4.7.5",
+        "liminal": "workspace:*",
+        "liminal-ai": "workspace:*",
+      },
+    },
     "examples/vite-react-app": {
       "name": "liminal-example-vite-react-app",
       "dependencies": {
@@ -859,6 +869,10 @@
 
     "esutils": ["esutils@2.0.3", "", {}, "sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g=="],
 
+    "eventsource": ["eventsource@3.0.6", "", { "dependencies": { "eventsource-parser": "^3.0.1" } }, "sha512-l19WpE2m9hSuyP06+FbuUUf1G+R0SFLrtQfbRb9PRr+oimOfxQhgGCbVaXg5IvZyyTThJsxh6L/srkMiCeBPDA=="],
+
+    "eventsource-parser": ["eventsource-parser@3.0.1", "", {}, "sha512-VARTJ9CYeuQYb0pZEPbzi740OWFgpHe7AYJ2WFZVnUDUQp5Dk2yJUgF36YsZ81cOyxT0QxmXD2EQpapAouzWVA=="],
+
     "execa": ["execa@5.1.1", "", { "dependencies": { "cross-spawn": "^7.0.3", "get-stream": "^6.0.0", "human-signals": "^2.1.0", "is-stream": "^2.0.0", "merge-stream": "^2.0.0", "npm-run-path": "^4.0.1", "onetime": "^5.1.2", "signal-exit": "^3.0.3", "strip-final-newline": "^2.0.0" } }, "sha512-8uSpZZocAZRBAPIEINJj3Lo9HyGitllczc27Eh5YYojjMFMn8yHMDMaUHE2Jqfq05D/wucwI4JGURyXt1vchyg=="],
 
     "fast-check": ["fast-check@3.23.2", "", { "dependencies": { "pure-rand": "^6.1.0" } }, "sha512-h5+1OzzfCC3Ef7VbtKdcv7zsstUQwUDlYpUTvjeUsJAssPgLn7QzbboPtL5ro04Mq0rPOsMzl7q5hIbRs2wD1A=="],
@@ -994,6 +1008,8 @@
     "liminal-example-actors": ["liminal-example-actors@workspace:examples/actors"],
 
     "liminal-example-deploy-to-cf-worker": ["liminal-example-deploy-to-cf-worker@workspace:examples/deploy-to-cf-worker"],
+
+    "liminal-example-hono": ["liminal-example-hono@workspace:examples/hono"],
 
     "liminal-example-vite-react-app": ["liminal-example-vite-react-app@workspace:examples/vite-react-app"],
 

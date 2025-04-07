@@ -39,11 +39,16 @@ export function RootScope(
   runInfer: RunInfer,
   args: Record<keyof any, any>,
   event: EventHandler = () => {},
+  signal?: AbortSignal,
 ): RootScope {
+  const controller = new AbortController()
+  signal?.addEventListener("abort", () => {
+    controller.abort()
+  })
   return {
     type: "root",
     args,
-    controller: new AbortController(),
+    controller,
     messages: new Set(),
     tools: new Set(),
     value: undefined,
