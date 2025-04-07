@@ -43,111 +43,118 @@ export class Diagnostic {
 }
 export type AssertPath = Array<JSONKey>
 
+// Possibly: `nullUnionFieldsAsOptional?: boolean`
+export interface AssertDiagnosticsConfig {}
+
 export function AssertDiagnostics<T extends JSONValue, J extends JSONType>(
+  config: AssertDiagnosticsConfig,
   type: Type<T, J>,
   value: unknown,
 ): Array<Diagnostic> {
-  const state = new AssertDiagnosticsState()
-  visit(undefined, type)(value, state)
+  const state = new ValueVisitorState()
+  visit([config, false], type)(value, state)
   return state.diagnostics
 }
 
-class AssertDiagnosticsState {
+class ValueVisitorState {
   constructor(
     readonly diagnostics: Array<Diagnostic> = [],
     readonly path: Array<number | string> = [],
   ) {}
 
   new(key?: JSONKey) {
-    return new AssertDiagnosticsState(this.diagnostics, [...this.path, ...key !== undefined ? [key] : []])
+    return new ValueVisitorState(this.diagnostics, [...this.path, ...key !== undefined ? [key] : []])
   }
 }
 
-const visit: TypeVisitor<undefined, (value: unknown, vState: AssertDiagnosticsState) => void> = TypeVisitor({
-  hook(next, state, type) {
-    return (value, vState) => {
-      try {
-        next(state, type)(value, vState)
-      } catch (error) {
-        vState.diagnostics.push(new Diagnostic(vState.path, type, error))
+const visit: TypeVisitor<AssertDiagnosticsConfig, (value: unknown, vState: ValueVisitorState) => void> = TypeVisitor(
+  {
+    hook(next, tState, type) {
+      return (value, vState) => {
+        try {
+          next(tState, type)(value, vState)
+        } catch (error) {
+          vState.diagnostics.push(new Diagnostic(vState.path, type, error))
+        }
       }
-    }
-  },
-  null() {
-    return (value) => {
-      assert(value === null)
-    }
-  },
-  boolean() {
-    return (value) => {
-      assert(typeof value === "boolean")
-    }
-  },
-  integer() {
-    return (value) => {
-      assert(typeof value === "number" && Number.isInteger(value))
-    }
-  },
-  number() {
-    return (value) => {
-      assert(typeof value === "number")
-    }
-  },
-  string() {
-    return (value) => {
-      assert(typeof value === "string")
-    }
-  },
-  const(_tState, _type, _valueType, value_) {
-    return (value) => {
-      assert(isJSONValue(value) && jsonEquals(value_, value))
-    }
-  },
-  _array(tState, _type, element) {
-    const visitElement = visit(tState, element)
-    return (value, vState) => {
-      assert(Array.isArray(value))
-      value.forEach((e, i) => visitElement(e, vState.new(i)))
-    }
-  },
-  enum(_tState, _type, ...values) {
-    return (value) => {
-      assert(typeof value == "string")
-      assert(values.includes(value))
-    }
-  },
-  _union(_tState, _type, ...members) {
-    return (value, vState) => {
-      assert(members.some((member) => {
-        const memberState = vState.new()
-        visit(undefined, member)(value, memberState)
-        return !memberState.diagnostics.length
-      }))
-    }
-  },
-  _object(_tState, _type, fields) {
-    return (value, vState) => {
-      assert(typeof value === "object" && value !== null)
-      if (Array.isArray(fields)) {
-        fields.forEach((v, i) => {
-          visitField(vState, value, i, v)
-        })
-      } else {
-        Object.entries(fields).forEach(([k, v]) => {
-          visitField(vState, value, k, v)
-        })
+    },
+    null() {
+      return (value) => {
+        assert(value === null)
       }
-    }
+    },
+    boolean() {
+      return (value) => {
+        assert(typeof value === "boolean")
+      }
+    },
+    integer() {
+      return (value) => {
+        assert(typeof value === "number" && Number.isInteger(value))
+      }
+    },
+    number() {
+      return (value) => {
+        assert(typeof value === "number")
+      }
+    },
+    string() {
+      return (value) => {
+        assert(typeof value === "string")
+      }
+    },
+    const(_tState, _type, _valueType, value_) {
+      return (value) => {
+        assert(isJSONValue(value) && jsonEquals(value_, value))
+      }
+    },
+    _array(tState, _type, element) {
+      const visitElement = visit(tState, element)
+      return (value, vState) => {
+        assert(Array.isArray(value))
+        value.forEach((e, i) => visitElement(e, vState.new(i)))
+      }
+    },
+    enum(_tState, _type, ...values) {
+      return (value) => {
+        assert(typeof value == "string")
+        assert(values.includes(value))
+      }
+    },
+    _union(tState, _type, ...members) {
+      return (value, vState) => {
+        assert(members.some((member) => {
+          const memberState = vState.new()
+          visit(tState, member)(value, memberState)
+          return !memberState.diagnostics.length
+        }))
+      }
+    },
+    _object(tState, _type, fields) {
+      return (value, vState) => {
+        assert(typeof value === "object" && value !== null)
+        if (Array.isArray(fields)) {
+          fields.forEach((v, i) => {
+            visitField(tState, vState, value, i, v)
+          })
+        } else {
+          Object.entries(fields).forEach(([k, v]) => {
+            visitField(tState, vState, value, k, v)
+          })
+        }
+      }
+    },
+    ref(tState, _type, getType) {
+      return (value, vState) => {
+        visit(tState, getType())(value, vState)
+      }
+    },
   },
-  ref(tState, _type, getType) {
-    return (value, vState) => {
-      visit(tState, getType())(value, vState)
-    }
-  },
-})
+)
 
 function visitField(
-  vState: AssertDiagnosticsState,
+  tState: AssertDiagnosticsConfig,
+  vState: ValueVisitorState,
   value: object,
   key: JSONKey,
   type: Type,
@@ -155,7 +162,7 @@ function visitField(
   assert(key in value)
   const childValue = value[key as never]
   assert(childValue !== undefined)
-  visit(undefined, type)(childValue, vState.new(key))
+  visit(tState, type)(childValue, vState.new(key))
 }
 
 // TODO: serialize signature

@@ -1,6 +1,7 @@
 import { Action } from "../Action.ts"
+import type { JSONKey } from "../util/JSONKey.ts"
 
-export function arg<K extends keyof any>(key: K): <T>() => Generator<
+export function arg<K extends JSONKey>(key: K): <T>() => Generator<
   Action<"arg", {
     Entry: [K, T]
     Event: never

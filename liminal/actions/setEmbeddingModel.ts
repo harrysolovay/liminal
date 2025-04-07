@@ -1,8 +1,9 @@
 import { Action } from "../Action.ts"
 import type { RunEmbed } from "../adapters.ts"
 import type { EmbeddingModelSetEvent } from "../events/EmbeddingModelSetEvent.ts"
+import type { JSONKey } from "../util/JSONKey.ts"
 
-export function* setEmbeddingModel<K extends keyof any>(key: K, runEmbed: RunEmbed): Generator<
+export function* setEmbeddingModel<K extends JSONKey>(key: K, runEmbed: RunEmbed): Generator<
   Action<"set_embedding_model", {
     Entry: never
     Event: EmbeddingModelSetEvent<K>

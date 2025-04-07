@@ -29,7 +29,7 @@ export function declareType<X extends Type>(
         vendor: "liminal",
         version: 1,
         validate: (value) => {
-          const diagnostics = AssertDiagnostics(type as never, value)
+          const diagnostics = AssertDiagnostics({}, type as never, value)
           if (diagnostics.length) {
             return {
               issues: diagnostics.map(({ path, error }): StandardSchemaV1.Issue => ({
@@ -43,7 +43,7 @@ export function declareType<X extends Type>(
       },
       toJSON,
       assert: (value) => {
-        const diagnostics = AssertDiagnostics(type as never, value)
+        const diagnostics = AssertDiagnostics({}, type as never, value)
         if (diagnostics.length) {
           throw new LiminalAssertionError(formatAssertDiagnostics(diagnostics))
         }

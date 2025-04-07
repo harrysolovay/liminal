@@ -1,10 +1,11 @@
 import { Action } from "../Action.ts"
 import type { ActorLike } from "../Actor.ts"
 import type { ChildEvent } from "../events/ChildEvent.ts"
+import type { JSONKey } from "../util/JSONKey.ts"
 import type { Result } from "../util/Result.ts"
 import { unwrapDeferred } from "../util/unwrapDeferred.ts"
 
-function* catch_<K extends keyof any, Y extends Action, T>(
+function* catch_<K extends JSONKey, Y extends Action, T>(
   key: K,
   actorLike: ActorLike<Y, T>,
 ): Generator<

@@ -5,13 +5,14 @@ import type { EventHandler } from "./EventHandler.ts"
 import type { LEvent } from "./events/LEvent.ts"
 import type { Message } from "./Message.ts"
 import type { Tool } from "./Tool.ts"
+import type { JSONKey } from "./util/JSONKey.ts"
 
 export type Scope = RootScope | ChildScope
 
 export interface RootScope extends ScopeBase<RootScopeType> {}
 export interface ChildScope extends ScopeBase<ChildScopeType> {
   readonly parent: Scope
-  readonly key: keyof any
+  readonly key: JSONKey
 }
 
 export type RootScopeType = "root"
@@ -20,7 +21,7 @@ export type ScopeType = RootScopeType | ChildScopeType
 
 export interface ScopeBase<Type extends ScopeType> {
   readonly type: Type
-  readonly args: Record<keyof any, any>
+  readonly args: Record<JSONKey, any>
   readonly controller: AbortController
   readonly messages: Set<Message>
   readonly tools: Set<Tool>
@@ -31,13 +32,13 @@ export interface ScopeBase<Type extends ScopeType> {
   readonly runEmbed?: RunEmbed
 
   reduce(this: Scope, actor: Actor): Promise<Scope>
-  fork(source: ChildScopeType, key: keyof any): Scope
+  fork(source: ChildScopeType, key: JSONKey): Scope
   event(event: LEvent): void
 }
 
 export function RootScope(
   runInfer: RunInfer,
-  args: Record<keyof any, any>,
+  args: Record<JSONKey, any>,
   event: EventHandler = () => {},
   signal?: AbortSignal,
 ): RootScope {
@@ -88,7 +89,7 @@ async function reduce(this: Scope, actor: Actor): Promise<Scope> {
   }
 }
 
-function fork(this: Scope, type: ChildScopeType, key: keyof any): ChildScope {
+function fork(this: Scope, type: ChildScopeType, key: JSONKey): ChildScope {
   return {
     type,
     controller: this.controller,
