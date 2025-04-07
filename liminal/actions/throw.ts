@@ -7,15 +7,15 @@ function* throw_<V>(value: V, ...[_error]: EnsureNarrow<V>): Generator<
     Event: never
     Throw: V
   }>,
-  () => never
+  never
 > {
-  return yield Action("throw", (scope) => {
+  return (yield Action("throw", (scope) => {
     return {
       ...scope,
       thrown: value,
-      nextArg: () => {},
+      nextArg: undefined,
     }
-  })
+  })) as never
 }
 Object.defineProperty(throw_, "name", { value: "throw" })
 export { throw_ as throw }

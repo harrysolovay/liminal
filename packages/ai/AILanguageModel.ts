@@ -1,4 +1,12 @@
-import { type CoreMessage, generateObject, generateText, jsonSchema, type LanguageModelV1, tool } from "ai"
+import {
+  type CoreMessage,
+  generateObject,
+  generateText,
+  jsonSchema,
+  type LanguageModelV1,
+  tool as aiTool,
+  type ToolSet,
+} from "ai"
 import { _util, L, type Message, type RunInfer } from "liminal"
 
 export function AILanguageModel(model: LanguageModelV1): RunInfer {
@@ -12,66 +20,33 @@ export function AILanguageModel(model: LanguageModelV1): RunInfer {
         messages: coreMessages,
         schema: jsonSchema(schema),
       })
-      yield* L.appendMessage({
-        role: "assistant",
-        content: JSON.stringify(object, null, 2),
-      })
-      return object
+      yield* L.assistant(JSON.stringify(object, null, 2))
+      const validateResult = await type["~standard"].validate(object)
+      _util.assert(!validateResult.issues)
+      return validateResult.value
     }
-    // TODO: reenable tools
-    // const tools = await Promise.all(
-    //   scope.tools.values().map(async (tool_) => {
-    //     const schema = await _util.JSONSchemaMemo(tool_.params)
-    //     return [
-    //       tool_.key,
-    //       tool({
-    //         description: tool_.description,
-    //         parameters: jsonSchema(schema),
-    //         execute: async (params) => {
-    //           scope.events.emit({
-    //             type: "tool_entered",
-    //             tool: tool_.key,
-    //             args: params as _util.JSONValue,
-    //           })
-    //           let result = await tool_.implementation(params as never)
-    //           if (_util.isIteratorLike(result)) {
-    //             const actor = result as never
-    //             const toolScope = await reduceActor(
-    //               new Scope(
-    //                 scope.args,
-    //                 undefined,
-    //                 scope.events.child((event) => ({
-    //                   type: "tool_inner",
-    //                   tool: tool_.key,
-    //                   event: event,
-    //                 })),
-    //                 scope.infer,
-    //                 scope.embed,
-    //               ),
-    //               actor,
-    //             )
-    //             result = toolScope.result
-    //           }
-    //           scope.events.emit({
-    //             type: "tool_exited",
-    //             tool: tool_.key,
-    //             result: result as _util.JSONValue,
-    //           })
-    //           return result
-    //         },
-    //       }),
-    //     ]
-    //   }),
-    // ).then(Object.fromEntries)
+    const scope = yield* L.getScope()
+    const aiTools: ToolSet = await Promise
+      .all(
+        scope.tools.values().map(async (tool) => {
+          return [
+            tool.key,
+            aiTool({
+              type: "function",
+              description: tool.description,
+              parameters: jsonSchema(await _util.JSONSchemaMemo(tool.params)),
+              execute: tool.executor(scope),
+            }),
+          ] as const
+        }),
+      )
+      .then(Object.fromEntries)
     const { text } = await generateText({
       model,
       messages: coreMessages,
-      // tools,
+      tools: aiTools,
     })
-    yield* L.appendMessage({
-      role: "assistant",
-      content: text,
-    })
+    yield* L.assistant(text)
     return text
   }
 }

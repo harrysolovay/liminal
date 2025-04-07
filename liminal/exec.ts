@@ -6,12 +6,13 @@ import { RootScope, type Scope } from "./Scope.ts"
 import type { FromEntries } from "./util/FromEntries.ts"
 import { unwrapDeferred } from "./util/unwrapDeferred.ts"
 
-export interface ExecConfig<S extends Action = Action, T = any> {
+export interface ExecConfig<Y extends Action = Action, T = any> {
   default: RunInfer
-  args: FromEntries<S[""]["Entry"]>
-  handler?: EventHandler<S[""]["Event"], T>
+  args: FromEntries<Y[""]["Entry"]>
+  handler?: EventHandler<Y[""]["Event"], T>
 }
 
+// TODO: consider `Result` type.
 export async function exec<Y extends Action, T>(
   actorLike: ActorLike<Y, T>,
   config: ExecConfig<Y, T>,
@@ -27,9 +28,5 @@ export async function exec<Y extends Action, T>(
     })
     throw reason
   }
-  scope.event({
-    type: "returned",
-    value: scope.value,
-  })
   return scope.value
 }

@@ -69,6 +69,10 @@ async function reduce(this: Scope, actor: Actor): Promise<Scope> {
       current = await actor.next(scope.nextArg)
     }
     value = current.value
+    this.event({
+      type: "returned",
+      value,
+    })
   } catch (thrown: unknown) {
     scope.controller.abort(thrown)
   }
