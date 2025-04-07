@@ -17,6 +17,9 @@
       "path": "./examples/deploy-to-cf-worker"
     },
     {
+      "path": "./examples/hono"
+    },
+    {
       "path": "./examples/vite-react-app"
     },
     {
