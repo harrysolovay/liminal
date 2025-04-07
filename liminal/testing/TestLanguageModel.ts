@@ -1,4 +1,4 @@
-import { assistant } from "../actions_derived/messages.ts"
+import { assistant } from "../actions/actions_derived/messages.ts"
 import type { RunInfer } from "../adapters.ts"
 import type { JSONValue } from "../util/JSONValue.ts"
 

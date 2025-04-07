@@ -12,7 +12,7 @@ export function arg<K extends JSONKey>(key: K): <T>() => Generator<
   return function*() {
     return yield Action("arg", (scope) => ({
       ...scope,
-      nextArg: scope.args[key],
+      nextArg: scope.args?.[key],
     }))
   }
 }

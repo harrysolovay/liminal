@@ -1,33 +1,56 @@
 import type { Action } from "./Action.ts"
-import type { ActorLike } from "./Actor.ts"
+import type { Actor, ActorLike } from "./Actor.ts"
 import type { RunInfer } from "./adapters.ts"
 import type { EventHandler } from "./EventHandler.ts"
 import { RootScope, type Scope } from "./Scope.ts"
 import type { FromEntries } from "./util/FromEntries.ts"
-import { unwrapDeferred } from "./util/unwrapDeferred.ts"
+import type { JSONKey } from "./util/JSONKey.ts"
 
-export interface ExecConfig<Y extends Action = Action, T = any> {
+export interface Exec<Y extends Action = Action, T = any> {
+  (
+    handler?: EventHandler<Y[""]["Event"], T>,
+    options?: ExecOptions,
+  ): Promise<T>
+}
+
+export interface ExecConfig {
   default: RunInfer
-  args: FromEntries<Y[""]["Entry"]>
-  handler?: EventHandler<Y[""]["Event"], T>
+  args?: Record<JSONKey, any>
+}
+
+export interface ExecOptions {
   signal?: AbortSignal
 }
 
-// TODO: consider `Result` type.
-export async function exec<Y extends Action, T>(
-  actorLike: ActorLike<Y, T>,
-  config: ExecConfig<Y, T>,
-): Promise<T> {
-  let scope: Scope = RootScope(config.default, config.args, config.handler, config.signal)
-  const actor = unwrapDeferred(actorLike)
-  scope = await scope.reduce(actor)
-  const { signal: { aborted, reason } } = scope.controller
-  if (aborted) {
-    scope.event({
-      type: "aborted",
-      reason,
-    })
-    throw reason
+export type ExtractExecConfig<Y extends Action> =
+  & {
+    default: RunInfer
   }
-  return scope.value
+  & (
+    [Y[""]["Entry"]] extends [never] ? {
+        args?: undefined
+      }
+      : {
+        args: FromEntries<Y[""]["Entry"]>
+      }
+  )
+
+export function Exec<Y extends Action, T>(
+  createActor: () => Actor<Y, T>,
+  config: ExtractExecConfig<Y>,
+): Exec<Y, T> {
+  // TODO: consider `Result` type.
+  return async (handler, options) => {
+    let scope: Scope = RootScope(config.default, config.args, handler, options?.signal)
+    scope = await scope.reduce(createActor())
+    const { signal: { aborted, reason } } = scope.controller
+    if (aborted) {
+      scope.event({
+        type: "aborted",
+        reason,
+      })
+      throw reason
+    }
+    return scope.value
+  }
 }

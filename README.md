@@ -83,10 +83,10 @@ import { openai } from "@ai-sdk/openai"
 import { AILanguageModel } from "liminal-ai"
 
 const { result } = exec(Conversation, {
-  args: {
-    default: AILanguageModel(openai("gpt-4o-mini")),
+  default: AILanguageModel(openai("gpt-4o-mini")),
+  handler(event) {
+    console.log(event)
   },
-  handler: (event) => console.log(event),
 })
 
 result satisfies Array<string>

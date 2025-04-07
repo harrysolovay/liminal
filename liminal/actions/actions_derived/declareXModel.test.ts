@@ -1,12 +1,12 @@
 import { describe, expect, it } from "bun:test"
-import { exec } from "../exec.ts"
-import * as L from "../L.ts"
-import { TestEmbeddingModel } from "../testing/TestEmbeddingModel.ts"
-import { TestLanguageModel } from "../testing/TestLanguageModel.ts"
+import { Exec } from "../../Exec.ts"
+import * as L from "../../L.ts"
+import { TestEmbeddingModel } from "../../testing/TestEmbeddingModel.ts"
+import { TestLanguageModel } from "../../testing/TestLanguageModel.ts"
 
 describe.skip("Model", () => {
   it("generates the expected event sequence", async () => {
-    const scope = await exec(function*() {
+    const scope = await Exec(function*() {
       yield* L.declareLanguageModel("secondary")
       yield* L.fork("fork-key", function*() {
         yield* L.declareLanguageModel("child_a")
