@@ -1,15 +1,16 @@
 import { Action } from "../Action.ts"
 import type { RunEmbed } from "../adapters.ts"
 import type { EmbeddingModelSet } from "../events/EmbeddingModelSet.ts"
+import type { MakeSpec } from "../Spec.ts"
 import type { JSONKey } from "../util/JSONKey.ts"
 
 export function* setEmbeddingModel<K extends JSONKey>(modelKey: K, runEmbed: RunEmbed): Generator<
-  Action<"set_embedding_model", {
-    Event: EmbeddingModelSet<K>
-    Child: never
-    Entry: never
-    Throw: never
-  }>,
+  Action<
+    "set_embedding_model",
+    MakeSpec<{
+      Event: EmbeddingModelSet<K>
+    }>
+  >,
   void
 > {
   return yield Action("set_embedding_model", (scope) => {

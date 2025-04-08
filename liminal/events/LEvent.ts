@@ -1,4 +1,3 @@
-import type { EventScope } from "../EventScope.ts"
 import type { Aborted } from "./Aborted.ts"
 import type { Embedded } from "./Embedded.ts"
 import type { EmbeddingModelSet } from "./EmbeddingModelSet.ts"
@@ -26,7 +25,6 @@ export type LEvent =
   | LanguageModelSet
   | MessageAppended
   | MessagesSet
-  | EventScope
   | Returned
   | Threw
   | ToolCalled

@@ -11,7 +11,7 @@ export default function*() {
 
 function* mayThrow() {
   try {
-    externalExample()
+    return externalExample()
   } catch (thrown: unknown) {
     if (thrown instanceof RandomError) {
       return yield* L.throw(thrown)

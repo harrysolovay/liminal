@@ -23,41 +23,39 @@ export function branch<
   T
 >
 export function branch<K extends JSONKey, const A extends ActorLikeArray>(name: K, actorLikeArray: A): Generator<
-  Action<"branch", {
-    Event: never
-    Child: [
-      K,
-      {
-        [L in keyof A]: MakeSpec<{
-          Event: never
-          Child: [L, ActorLikeY<A[L]>[""]]
-          Entry: ActorLikeY<A[L]>[""]["Entry"]
-          Throw: never
-        }>
-      }[keyof A],
-    ]
-    Entry: ActorLikeY<A[number]>[""]["Entry"]
-    Throw: never
-  }>,
+  Action<
+    "branch",
+    MakeSpec<{
+      Child: [
+        K,
+        {
+          [L in keyof A]: MakeSpec<{
+            Child: [L, ActorLikeY<A[L]>[""]]
+            Entry: ActorLikeY<A[L]>[""]["Entry"]
+          }>
+        }[keyof A],
+      ]
+      Entry: ActorLikeY<A[number]>[""]["Entry"]
+    }>
+  >,
   ActorLikesT<A>
 >
 export function branch<K extends JSONKey, A extends ActorLikeRecord>(name: K, actorLikeRecord: A): Generator<
-  Action<"branch", {
-    Event: never
-    Child: [
-      K,
-      {
-        [L in keyof A]: {
-          Event: never
-          Child: [L, ActorLikeY<A[L]>[""]]
-          Entry: ActorLikeY<A[L]>[""]["Entry"]
-          Throw: never
-        }
-      }[keyof A],
-    ]
-    Entry: ActorLikeY<A[keyof A]>[""]["Entry"]
-    Throw: never
-  }>,
+  Action<
+    "branch",
+    MakeSpec<{
+      Child: [
+        K,
+        {
+          [L in Exclude<keyof A, symbol>]: MakeSpec<{
+            Child: [L, ActorLikeY<A[L]>[""]]
+            Entry: ActorLikeY<A[L]>[""]["Entry"]
+          }>
+        }[Exclude<keyof A, symbol>],
+      ]
+      Entry: ActorLikeY<A[keyof A]>[""]["Entry"]
+    }>
+  >,
   ActorLikesT<A>
 >
 export function* branch(key: JSONKey, implementation: ActorLike | ActorLikes): Generator<Action<"branch">, any> {

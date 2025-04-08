@@ -9,18 +9,18 @@ import type { JSONObject } from "./util/JSONObject.ts"
 import type { JSONValue } from "./util/JSONValue.ts"
 import type { PromiseOr } from "./util/PromiseOr.ts"
 
-export interface ToolConfig {
-  toolKey: JSONKey
+export interface ToolConfig<K extends JSONKey = JSONKey> {
+  toolKey: K
   description: string
   params: StandardSchemaV1<JSONObject, any>
   implementation: ToolImplementation
 }
 
-export interface Tool extends ToolConfig {
+export interface Tool<K extends JSONKey = JSONKey> extends ToolConfig<K> {
   executor: (scope: Scope) => ToolExecutor
 }
 
-export function Tool(config: ToolConfig): Tool {
+export function Tool<K extends JSONKey>(config: ToolConfig<K>): Tool<K> {
   return {
     ...config,
     executor,

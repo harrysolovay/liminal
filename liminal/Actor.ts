@@ -1,6 +1,7 @@
 import type { Action } from "./Action.ts"
 import type { DeferredOr } from "./util/DeferredOr.ts"
 import type { IteratorLike } from "./util/IteratorLike.ts"
+import type { JSONKey } from "./util/JSONKey.ts"
 
 export type Actor<Y extends Action = Action, R = any> = IteratorLike<Y, R>
 
@@ -10,7 +11,7 @@ export type ActorLikeT<A extends ActorLike> = A extends ActorLike<Action, infer 
 
 export type ActorLikes = ActorLikeArray | ActorLikeRecord
 export type ActorLikeArray = Array<ActorLike>
-export type ActorLikeRecord = Record<string, ActorLike>
+export type ActorLikeRecord = Record<JSONKey, ActorLike>
 
 export type ActorLikesT<A extends ActorLikes> =
   & {

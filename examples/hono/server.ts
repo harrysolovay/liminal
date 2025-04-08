@@ -17,9 +17,10 @@ export const app = new Hono().get("/sse", (c) => {
     })
     exec((event) => {
       console.log(event)
-      if (event.event.type === "inferred") {
+      if (event.type === "inferred") {
+        const { value } = event
         stream.writeSSE({
-          data: event.event.value,
+          data: typeof value === "string" ? value : JSON.stringify(value, null, 2),
         })
       }
     }, {

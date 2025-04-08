@@ -1,23 +1,24 @@
 import { Action } from "../Action.ts"
 import type { MessageAppended } from "../events/MessageAppended.ts"
 import type { MessageRemoved } from "../events/MessageRemoved.ts"
-import type { Message, MessageContents, MessageRole, Messages } from "../Message.ts"
+import type { MessageContents, MessageRole, Messages } from "../Message.ts"
+import type { MakeSpec } from "../Spec.ts"
 import { removeMessage } from "./removeMessage.ts"
 
 export function* appendMessage<R extends MessageRole>(role: R, content: MessageContents[R]): Generator<
-  Action<"append_message", {
-    Event: MessageAppended<Messages[R]>
-    Child: never
-    Entry: never
-    Throw: never
-  }>,
+  Action<
+    "append_message",
+    MakeSpec<{
+      Event: MessageAppended<Messages[R]>
+    }>
+  >,
   Generator<
-    Action<"remove_message", {
-      Event: MessageRemoved
-      Child: never
-      Entry: never
-      Throw: never
-    }>,
+    Action<
+      "remove_message",
+      MakeSpec<{
+        Event: MessageRemoved
+      }>
+    >,
     void
   >
 > {

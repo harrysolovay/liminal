@@ -1,6 +1,6 @@
 import type { JSONValue } from "../util/JSONValue.ts"
 import type { EventBase } from "./_EventBase.ts"
 
-export interface Inferred<V extends JSONValue = JSONValue> extends EventBase<"inferred"> {
-  value: V
+export interface Inferred extends EventBase<"inferred"> {
+  value: JSONValue
 }

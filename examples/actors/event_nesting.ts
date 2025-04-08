@@ -1,15 +1,13 @@
-import { type ActorLike, Exec, type ExtractEventScope, L } from "liminal"
-
-type g = typeof g extends ActorLike<infer Y> ? Y[""] : never
-
-type f = ExtractEventScope<g>
+import { Exec, L } from "liminal"
 
 const exec = Exec(g, {
   default: null!,
 })
 
 exec((event) => {
-  event
+  if (event.type === "emitted" && event.key === "event-f") {
+    event.scope // see how it narrows.
+  }
 })
 
 export default function* g() {
@@ -20,6 +18,9 @@ export default function* g() {
   yield* L.branch("child-a", function*() {
     yield* L.emit("event-a")
     yield* L.branch("child-b", function*() {
+      yield* L.object({
+        something: L.string,
+      })
       yield* L.emit("event-b")
       yield* L.branch("child-c", function*() {
         yield* L.emit("event-c")

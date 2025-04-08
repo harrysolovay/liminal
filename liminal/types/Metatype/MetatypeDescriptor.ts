@@ -1,6 +1,6 @@
 import { array } from "../array.ts"
 import { enum as enum_ } from "../enum.ts"
-import { object } from "../object.ts"
+import { type JSONObjectType, object } from "../object.ts"
 import { ref } from "../ref.ts"
 import { string } from "../string.ts"
 import type { Type } from "../Type.ts"
@@ -28,7 +28,7 @@ const recordFields = {
   }),
 }
 
-export const MetatypeRootDescriptor: Type<MetatypeRootDescriptor> = object({
+export const MetatypeRootDescriptor: Type<MetatypeRootDescriptor, JSONObjectType> = object({
   type: "record",
   value: recordFields,
 })

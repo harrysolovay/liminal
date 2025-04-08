@@ -1,15 +1,16 @@
 import { Action } from "../Action.ts"
 import type { Embedded } from "../events/Embedded.ts"
 import type { EmbeddingRequested } from "../events/EmbeddingRequested.ts"
+import type { MakeSpec } from "../Spec.ts"
 import { assert } from "../util/assert.ts"
 
 export function* embed(value: string): Generator<
-  Action<"embed", {
-    Event: EmbeddingRequested | Embedded
-    Child: never
-    Entry: never
-    Throw: never
-  }>,
+  Action<
+    "embed",
+    MakeSpec<{
+      Event: EmbeddingRequested | Embedded
+    }>
+  >,
   Array<number>
 > {
   return yield Action("embed", async (scope) => {

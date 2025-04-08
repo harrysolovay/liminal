@@ -1,13 +1,14 @@
 import { Action } from "../Action.ts"
+import type { MakeSpec } from "../Spec.ts"
 import type { EnsureNarrow } from "../util/EnsureNarrow.ts"
 
 function* throw_<V>(value: V, ...[_error]: EnsureNarrow<V>): Generator<
-  Action<"throw", {
-    Event: never
-    Child: never
-    Entry: never
-    Throw: V
-  }>,
+  Action<
+    "throw",
+    MakeSpec<{
+      Throw: V
+    }>
+  >,
   never
 > {
   return (yield Action("throw", (scope) => {

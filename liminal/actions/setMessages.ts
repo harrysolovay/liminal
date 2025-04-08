@@ -2,6 +2,7 @@ import { Action } from "../Action.ts"
 import type { Actor } from "../Actor.ts"
 import type { MessagesSet } from "../events/MessagesSet.ts"
 import type { Message } from "../Message.ts"
+import type { MakeSpec } from "../Spec.ts"
 import { isPropertyKey } from "../util/isPropertyKey.ts"
 import type { JSONKey } from "../util/JSONKey.ts"
 import type { PromiseOr } from "../util/PromiseOr.ts"
@@ -9,24 +10,26 @@ import type { PromiseOr } from "../util/PromiseOr.ts"
 export function setMessages(
   setter: (messages: Array<Message>) => PromiseOr<Array<Message>>,
 ): Generator<
-  Action<"set_messages", {
-    Event: MessagesSet
-    Child: never
-    Entry: never
-    Throw: never
-  }>,
+  Action<
+    "set_messages",
+    MakeSpec<{
+      Event: MessagesSet
+    }>
+  >,
   Array<Message>
 >
 export function setMessages<K extends JSONKey, Y extends Action>(
   key: K,
   setter: (messages: Array<Message>) => Actor<Y, Array<Message>>,
 ): Generator<
-  Action<"set_messages", {
-    Event: MessagesSet
-    Child: [K, Y[""]]
-    Entry: Y[""]["Entry"]
-    Throw: never
-  }>,
+  Action<
+    "set_messages",
+    MakeSpec<{
+      Event: MessagesSet
+      Child: [K, Y[""]]
+      Entry: Y[""]["Entry"]
+    }>
+  >,
   Array<Message>
 >
 export function* setMessages(

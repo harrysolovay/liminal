@@ -18,7 +18,7 @@ export function* refine(input: string) {
       return yield* L.infer()
     },
   })
-  const { best } = yield* L.branch("select", function*() {
+  const { value } = yield* L.branch("select", function*() {
     yield* L.clear()
     yield* L.declareLanguageModel("select")
     yield* L.user`
@@ -26,9 +26,7 @@ export function* refine(input: string) {
 
       ${JSON.stringify(variants)}
     `
-    return yield* L.object({
-      best: L.enum("a", "b", "c"),
-    })
+    return yield* L.wrapper(L.enum("a", "b", "c"))
   })
-  return variants[best]
+  return variants[value]
 }

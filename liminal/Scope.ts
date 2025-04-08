@@ -114,6 +114,6 @@ function fork(this: Scope, type: ChildScopeType, subpath: Array<JSONKey>): Child
 function event(this: ChildScope, event: LEvent): void {
   this.handler?.({
     scope: this.path,
-    event,
+    ...event,
   })
 }
