@@ -3,7 +3,7 @@ import { Action } from "../Action.ts"
 import type { Actor } from "../Actor.ts"
 import type { ToolCalled } from "../events/ToolCalled.ts"
 import type { ToolEnabled } from "../events/ToolEnabled.ts"
-import type { MakeSpec, Spec } from "../Spec.ts"
+import type { MakeSpec } from "../Spec.ts"
 import { Tool, type ToolImplementation, type ToolResult } from "../Tool.ts"
 import type { JSONKey } from "../util/JSONKey.ts"
 import type { JSONObject } from "../util/JSONObject.ts"
@@ -11,22 +11,20 @@ import { JSONSchemaMemo } from "../util/JSONSchemaMemo.ts"
 import type { PromiseOr } from "../util/PromiseOr.ts"
 import { disableTool } from "./disableTool.ts"
 
-export interface enableTool<K extends JSONKey, A, S extends Spec> extends
-  Action<
-    "enable_tool",
-    MakeSpec<{
-      Event: ToolEnabled<K> | ToolCalled<K, A>
-      Child: [S] extends [never] ? never : [K, S]
-    }>
-  >
-{}
-
 export function enableTool<K extends JSONKey, A, R extends PromiseOr<ToolResult>>(
   key: K,
   description: string,
   params: StandardSchemaV1<JSONObject, A>,
   implementation: (params: A) => R,
-): Generator<enableTool<K, A, never>, Generator<disableTool<K>, void>>
+): Generator<
+  Action<
+    "enable_tool",
+    MakeSpec<{
+      Event: ToolEnabled<K> | ToolCalled<K, A>
+    }>
+  >,
+  Generator<disableTool<K>, void>
+>
 export function enableTool<
   K extends JSONKey,
   A,
@@ -37,7 +35,17 @@ export function enableTool<
   description: string,
   params: StandardSchemaV1<JSONObject, A>,
   implementation: (params: A) => Actor<Y, R>,
-): Generator<enableTool<K, A, Y[""]>, Generator<disableTool<K>, void>>
+): Generator<
+  Action<
+    "enable_tool",
+    MakeSpec<{
+      Event: ToolEnabled<K> | ToolCalled<K, A>
+      Child: [K, Y[""]]
+      Entry: Y[""]["Entry"]
+    }>
+  >,
+  Generator<disableTool<K>, void>
+>
 export function* enableTool(
   key: JSONKey,
   description: string,
