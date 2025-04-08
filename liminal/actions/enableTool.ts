@@ -2,7 +2,6 @@ import type { StandardSchemaV1 } from "@standard-schema/spec"
 import { Action } from "../Action.ts"
 import type { Actor } from "../Actor.ts"
 import type { ToolCalled } from "../events/ToolCalled.ts"
-import type { ToolDisabled } from "../events/ToolDisabled.ts"
 import type { ToolEnabled } from "../events/ToolEnabled.ts"
 import type { MakeSpec } from "../Spec.ts"
 import { Tool, type ToolImplementation, type ToolResult } from "../Tool.ts"
@@ -24,15 +23,7 @@ export function enableTool<K extends JSONKey, A, R extends PromiseOr<ToolResult>
       Event: ToolEnabled<K> | ToolCalled<K, A>
     }>
   >,
-  Generator<
-    Action<
-      "disable_tool",
-      MakeSpec<{
-        Event: ToolDisabled<K>
-      }>
-    >,
-    void
-  >
+  Generator<disableTool<K>, void>
 >
 export function enableTool<
   K extends JSONKey,
@@ -53,15 +44,7 @@ export function enableTool<
       Entry: Y[""]["Entry"]
     }>
   >,
-  Generator<
-    Action<
-      "disable_tool",
-      MakeSpec<{
-        Event: ToolDisabled<K>
-      }>
-    >,
-    void
-  >
+  Generator<disableTool<K>, void>
 >
 export function* enableTool(
   key: JSONKey,

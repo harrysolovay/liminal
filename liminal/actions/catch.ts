@@ -5,16 +5,22 @@ import type { JSONKey } from "../util/JSONKey.ts"
 import type { Result } from "../util/Result.ts"
 import { unwrapDeferred } from "../util/unwrapDeferred.ts"
 
-function* catch_<K extends JSONKey, Y extends Action, T>(
-  key: K,
-  actorLike: ActorLike<Y, T>,
-): Generator<
+export { catch_ as catch }
+
+export interface catch_<K extends JSONKey, Y extends Action, _T> extends
   Action<
     "catch",
     MakeSpec<{
       Child: [K, Y[""]]
     }>
-  >,
+  >
+{}
+
+function* catch_<K extends JSONKey, Y extends Action, T>(
+  key: K,
+  actorLike: ActorLike<Y, T>,
+): Generator<
+  catch_<K, Y, T>,
   Result<T, Y[""]["Throw"]>
 > {
   return yield Action("catch", async (scope) => {
@@ -34,4 +40,3 @@ function* catch_<K extends JSONKey, Y extends Action, T>(
   })
 }
 Object.defineProperty(catch_, "name", { value: "catch" })
-export { catch_ as catch }

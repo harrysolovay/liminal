@@ -6,15 +6,18 @@ import type { MakeSpec } from "../Spec.ts"
 import type { JSONObject } from "../util/JSONObject.ts"
 import type { JSONValue } from "../util/JSONValue.ts"
 
-export function* infer<T extends JSONValue = string>(type?: StandardSchemaV1<JSONObject, T>): Generator<
+export { infer_ as infer }
+
+interface infer_<_T> extends
   Action<
     "infer",
     MakeSpec<{
       Event: InferenceRequested | Inferred
     }>
-  >,
-  T
-> {
+  >
+{}
+
+function* infer_<T extends JSONValue = string>(type?: StandardSchemaV1<JSONObject, T>): Generator<infer_<T>> {
   return yield Action("infer", async (scope) => {
     scope.event({
       type: "inference_requested",
@@ -30,3 +33,4 @@ export function* infer<T extends JSONValue = string>(type?: StandardSchemaV1<JSO
     }
   })
 }
+Object.defineProperty(infer_, "name", { value: "infer" })

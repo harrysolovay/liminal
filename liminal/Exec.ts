@@ -1,15 +1,15 @@
 import type { Action } from "./Action.ts"
 import type { Actor } from "./Actor.ts"
 import type { RunInfer } from "./adapters.ts"
-import type { EventHandler } from "./EventHandler.ts"
-import type { EventResolved, ExtractEventScope } from "./EventScope.ts"
+import type { EventHandler } from "./events/EventHandler.ts"
+import type { ExtractResolvedEvent, ResolvedEvent } from "./events/ResolvedEvent.ts"
 import { RootScope, type Scope } from "./Scope.ts"
 import type { FromEntries } from "./util/FromEntries.ts"
 import type { JSONKey } from "./util/JSONKey.ts"
 
 export interface Exec<Y extends Action = Action, T = any> {
   (
-    handler?: EventHandler<Extract<ExtractEventScope<Y[""]> & {}, EventResolved>>,
+    handler?: EventHandler<Extract<ExtractResolvedEvent<Y[""]> & {}, ResolvedEvent>>,
     options?: ExecOptions,
   ): Promise<T>
 }

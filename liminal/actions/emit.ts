@@ -4,18 +4,14 @@ import type { MakeSpec } from "../Spec.ts"
 import type { JSONKey } from "../util/JSONKey.ts"
 import type { JSONValue } from "../util/JSONValue.ts"
 
+export interface emit<K extends JSONKey, V extends JSONValue | undefined>
+  extends Action<"emit", MakeSpec<{ Event: Emitted<K, V> }>>
+{}
+
 export function* emit<K extends JSONKey, V extends JSONValue | undefined = undefined>(
   key: K,
   value: V = undefined as never,
-): Generator<
-  Action<
-    "emit",
-    MakeSpec<{
-      Event: Emitted<K, V>
-    }>
-  >,
-  undefined
-> {
+): Generator<emit<K, V>, undefined> {
   return yield Action("emit", (scope) => {
     scope.event({
       type: "emitted",

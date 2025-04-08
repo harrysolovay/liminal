@@ -3,15 +3,9 @@ import type { MessageRemoved } from "../events/MessageRemoved.ts"
 import type { Message } from "../Message.ts"
 import type { MakeSpec } from "../Spec.ts"
 
-export function* removeMessage(message: Message): Generator<
-  Action<
-    "remove_message",
-    MakeSpec<{
-      Event: MessageRemoved
-    }>
-  >,
-  void
-> {
+export interface removeMessage extends Action<"remove_message", MakeSpec<{ Event: MessageRemoved }>> {}
+
+export function* removeMessage(message: Message): Generator<removeMessage, void> {
   yield Action("remove_message", (scope) => {
     scope.event({
       type: "message_removed",

@@ -2,15 +2,11 @@ import { Action } from "../Action.ts"
 import type { MakeSpec } from "../Spec.ts"
 import type { EnsureNarrow } from "../util/EnsureNarrow.ts"
 
-function* throw_<V>(value: V, ...[_error]: EnsureNarrow<V>): Generator<
-  Action<
-    "throw",
-    MakeSpec<{
-      Throw: V
-    }>
-  >,
-  never
-> {
+export { throw_ as throw }
+
+interface throw_<V> extends Action<"throw", MakeSpec<{ Throw: V }>> {}
+
+function* throw_<V>(value: V, ...[_error]: EnsureNarrow<V>): Generator<throw_<V>, never> {
   return (yield Action("throw", (scope) => {
     return {
       ...scope,
@@ -20,4 +16,3 @@ function* throw_<V>(value: V, ...[_error]: EnsureNarrow<V>): Generator<
   })) as never
 }
 Object.defineProperty(throw_, "name", { value: "throw" })
-export { throw_ as throw }
