@@ -1,13 +1,10 @@
 import type { AssertTrue, IsExact } from "conditional-type-checks"
-import type { ActorLike } from "../Actor.ts"
 import type { Emitted } from "../events/Emitted.ts"
 import type { ToolCalled } from "../events/ToolCalled.ts"
 import type { ToolDisabled } from "../events/ToolDisabled.ts"
 import type { ToolEnabled } from "../events/ToolEnabled.ts"
 import * as L from "../L.ts"
-import type { MakeSpec } from "../Spec.ts"
 import { ActorAssertions } from "../testing/ActorAssertions.ts"
-import type { Expand } from "../util/Expand.ts"
 import { emit } from "./emit.ts"
 import { enableTool } from "./enableTool.ts"
 
@@ -21,24 +18,28 @@ const arrowTool = L.enableTool("Tool", "", P, (params) => {
   type _ = [AssertTrue<IsExact<typeof params, P>>]
 })
 
-ActorAssertions(arrowTool).assertSpec<
-  MakeSpec<{
-    Event:
-      | ToolEnabled<"Tool">
-      | ToolCalled<"Tool", {
-        a: string
-        b: string
-      }>
-  }>
->()
+ActorAssertions(arrowTool).assertSpec<{
+  Event:
+    | ToolEnabled<"Tool">
+    | ToolCalled<"Tool", {
+      a: string
+      b: string
+    }>
+  Child: never
+  Throw: never
+  Entry: never
+  Value: never
+}>()
 
 function* _0() {
   const detach = yield* arrowTool
-  ActorAssertions(detach).assertSpec<
-    MakeSpec<{
-      Event: ToolDisabled<"Tool">
-    }>
-  >()
+  ActorAssertions(detach).assertSpec<{
+    Event: ToolDisabled<"Tool">
+    Child: never
+    Throw: never
+    Entry: never
+    Value: never
+  }>()
 }
 
 const genTool = enableTool("tool-key", "", P, function*(params) {
@@ -47,29 +48,24 @@ const genTool = enableTool("tool-key", "", P, function*(params) {
   return ""
 })
 
-ActorAssertions(genTool).assertSpec<
-  MakeSpec<{
-    Event:
-      | ToolEnabled<"tool-key">
-      | ToolCalled<"tool-key", {
-        a: string
-        b: string
-      }>
-    Child: [
-      "tool-key",
-      MakeSpec<{
-        Event: Emitted<"Test", {}>
-      }>,
-    ]
+ActorAssertions(genTool).assertSpec<{
+  Event:
+    | ToolEnabled<"tool-key">
+    | ToolCalled<"tool-key", {
+      a: string
+      b: string
+    }>
+  Child: ["tool-key", {
+    Event: Emitted<"Test", {}>
+    Child: never
+    Throw: never
     Entry: never
-  }>
->()
-
-const g = L.branch("fork-key", {
-  *"arm-key"() {
-    yield* arrowTool
-  },
-})
+    Value: never
+  }]
+  Throw: never
+  Entry: never
+  Value: never
+}>()
 
 function* parent() {
   yield* L.enableTool("parent-tool", "", P, () => {})
@@ -81,35 +77,39 @@ function* parent() {
 }
 
 ActorAssertions(parent).assertSpec<
-  | MakeSpec<
-    {
-      Event:
-        | ToolEnabled<"parent-tool">
-        | ToolCalled<"parent-tool", {
-          a: string
-          b: string
-        }>
-    }
-  >
-  | MakeSpec<{
+  {
+    Event:
+      | ToolEnabled<"parent-tool">
+      | ToolCalled<"parent-tool", {
+        a: string
+        b: string
+      }>
+    Child: never
+    Throw: never
+    Entry: never
+    Value: never
+  } | {
     Event: never
-    Child: [
-      "fork-key",
-      MakeSpec<{
-        Child: [
-          "arm-key",
-          MakeSpec<{
-            Event:
-              | ToolEnabled<"Tool">
-              | ToolCalled<"Tool", {
-                a: string
-                b: string
-              }>
-            Child: never
-          }>,
-        ]
+    Child: ["fork-key", {
+      Event: never
+      Child: ["arm-key", {
+        Event:
+          | ToolEnabled<"Tool">
+          | ToolCalled<"Tool", {
+            a: string
+            b: string
+          }>
+        Child: never
+        Throw: never
         Entry: never
-      }>,
-    ]
-  }>
+        Value: never
+      }]
+      Throw: never
+      Entry: never
+      Value: never
+    }]
+    Throw: never
+    Entry: never
+    Value: never
+  }
 >()

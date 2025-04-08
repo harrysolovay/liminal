@@ -1,23 +1,9 @@
 import { Action } from "../Action.ts"
 import type { Actor, ActorLike, ActorLikeArray, ActorLikeRecord, ActorLikesT, ActorLikeY } from "../Actor.ts"
 import type { ActorLikes } from "../Actor.ts"
-import type { MakeSpec, Spec } from "../Spec.ts"
+import type { MakeSpec } from "../Spec.ts"
 import type { JSONKey } from "../util/JSONKey.ts"
 import { unwrapDeferred } from "../util/unwrapDeferred.ts"
-
-export interface branch<
-  K extends JSONKey,
-  ChildSpec extends Spec,
-  Entry extends Spec["Entry"],
-> extends
-  Action<
-    "branch",
-    MakeSpec<{
-      Child: [K, ChildSpec]
-      Entry: Entry
-    }>
-  >
-{}
 
 export function branch<
   K extends JSONKey,
@@ -26,30 +12,49 @@ export function branch<
 >(
   key: K,
   actorLike: ActorLike<Y, T>,
-): Generator<branch<K, Y[""], Y[""]["Entry"]>, T>
+): Generator<
+  Action<
+    "branch",
+    MakeSpec<{
+      Child: [K, Y[""]]
+      Entry: Y[""]["Entry"]
+    }>
+  >,
+  T
+>
 export function branch<K extends JSONKey, const A extends ActorLikeArray>(name: K, actorLikeArray: A): Generator<
-  branch<
-    K,
-    {
-      [L in keyof A]: MakeSpec<{
-        Child: [L, ActorLikeY<A[L]>[""]]
-        Entry: ActorLikeY<A[L]>[""]["Entry"]
-      }>
-    }[keyof A],
-    ActorLikeY<A[number]>[""]["Entry"]
+  Action<
+    "branch",
+    MakeSpec<{
+      Child: [
+        K,
+        {
+          [L in keyof A]: MakeSpec<{
+            Child: [L, ActorLikeY<A[L]>[""]]
+            Entry: ActorLikeY<A[L]>[""]["Entry"]
+          }>
+        }[keyof A],
+      ]
+      Entry: ActorLikeY<A[number]>[""]["Entry"]
+    }>
   >,
   ActorLikesT<A>
 >
 export function branch<K extends JSONKey, A extends ActorLikeRecord>(name: K, actorLikeRecord: A): Generator<
-  branch<
-    K,
-    {
-      [L in Exclude<keyof A, symbol>]: MakeSpec<{
-        Child: [L, ActorLikeY<A[L]>[""]]
-        Entry: ActorLikeY<A[L]>[""]["Entry"]
-      }>
-    }[Exclude<keyof A, symbol>],
-    ActorLikeY<A[keyof A]>[""]["Entry"]
+  Action<
+    "branch",
+    MakeSpec<{
+      Child: [
+        K,
+        {
+          [L in Exclude<keyof A, symbol>]: MakeSpec<{
+            Child: [L, ActorLikeY<A[L]>[""]]
+            Entry: ActorLikeY<A[L]>[""]["Entry"]
+          }>
+        }[Exclude<keyof A, symbol>],
+      ]
+      Entry: ActorLikeY<A[keyof A]>[""]["Entry"]
+    }>
   >,
   ActorLikesT<A>
 >

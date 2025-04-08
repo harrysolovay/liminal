@@ -6,14 +6,11 @@ import type { Result } from "../util/Result.ts"
 import { unwrapDeferred } from "../util/unwrapDeferred.ts"
 
 export { catch_ as catch }
-
-export interface catch_<K extends JSONKey, S extends Spec> extends Action<"catch", MakeSpec<{ Child: [K, S] }>> {}
-
 function* catch_<K extends JSONKey, Y extends Action, T>(
   key: K,
   actorLike: ActorLike<Y, T>,
 ): Generator<
-  catch_<K, Y[""]>,
+  Action<"catch", MakeSpec<{ Child: [K, Y[""]] }>>,
   Result<T, Y[""]["Throw"]>
 > {
   return yield Action("catch", async (scope) => {
