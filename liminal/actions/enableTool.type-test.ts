@@ -1,4 +1,5 @@
 import type { AssertTrue, IsExact } from "conditional-type-checks"
+import type { ActorLike } from "../Actor.ts"
 import type { Emitted } from "../events/Emitted.ts"
 import type { ToolCalled } from "../events/ToolCalled.ts"
 import type { ToolDisabled } from "../events/ToolDisabled.ts"
@@ -6,6 +7,7 @@ import type { ToolEnabled } from "../events/ToolEnabled.ts"
 import * as L from "../L.ts"
 import type { MakeSpec } from "../Spec.ts"
 import { ActorAssertions } from "../testing/ActorAssertions.ts"
+import type { Expand } from "../util/Expand.ts"
 import { emit } from "./emit.ts"
 import { enableTool } from "./enableTool.ts"
 
@@ -79,15 +81,18 @@ function* parent() {
 }
 
 ActorAssertions(parent).assertSpec<
+  | MakeSpec<
+    {
+      Event:
+        | ToolEnabled<"parent-tool">
+        | ToolCalled<"parent-tool", {
+          a: string
+          b: string
+        }>
+    }
+  >
   | MakeSpec<{
-    Event:
-      | ToolEnabled<"parent-tool">
-      | ToolCalled<"parent-tool", {
-        a: string
-        b: string
-      }>
-  }>
-  | MakeSpec<{
+    Event: never
     Child: [
       "fork-key",
       MakeSpec<{
@@ -100,11 +105,11 @@ ActorAssertions(parent).assertSpec<
                 a: string
                 b: string
               }>
+            Child: never
           }>,
         ]
         Entry: never
       }>,
     ]
-    Entry: never
   }>
 >()
