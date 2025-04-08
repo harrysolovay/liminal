@@ -1,6 +1,7 @@
 import { mkdir, writeFile } from "node:fs/promises"
 import { type ParsedPath, relative, resolve } from "node:path"
 import type { LEvent } from "../events/LEvent.ts"
+import type { EventScope } from "../EventScope.ts"
 
 export async function WriteHandler({
   stateDir,
@@ -13,26 +14,26 @@ export async function WriteHandler({
   parsedPath: ParsedPath
   startTime: number
   configDir: string
-}): Promise<(event: LEvent) => Promise<void>> {
+}): Promise<(event: EventScope) => Promise<void>> {
   const destDir = resolve(stateDir, relative(configDir, parsedPath.dir), parsedPath.name, startTime.toString())
   try {
     await mkdir(destDir, { recursive: true })
   } catch (_e: unknown) {}
   let i = 0
-  return async (event: LEvent) => {
-    const key = `${i++}${eventPath(event)}.json`
-    const destPath = resolve(destDir, key)
-    await writeFile(destPath, JSON.stringify(event, null, 2), "utf-8")
+  return async (_event: LEvent) => {
+    // const key = `${i++}${eventPath(event)}.json`
+    // const destPath = resolve(destDir, key)
+    // await writeFile(destPath, JSON.stringify(event, null, 2), "utf-8")
   }
 }
 
-function eventPath(event: LEvent) {
-  let path = ""
-  let current = event
-  while (current.type === "propagated") {
-    path += `__${current.scopeType}_${current.scope}`
-    current = current.event
-  }
-  path += `__${current.type}`
-  return path
-}
+// function eventPath(event: LEvent) {
+//   let path = ""
+//   let current = event
+//   while (current.type === "propagated") {
+//     path += `__${current.scopeType}_${current.scope}`
+//     current = current.event
+//   }
+//   path += `__${current.type}`
+//   return path
+// }

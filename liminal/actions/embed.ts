@@ -1,12 +1,13 @@
 import { Action } from "../Action.ts"
-import type { EmbeddedEvent } from "../events/EmbeddedEvent.ts"
-import type { EmbeddingRequestedEvent } from "../events/EmbeddingRequestedEvent.ts"
+import type { Embedded } from "../events/Embedded.ts"
+import type { EmbeddingRequested } from "../events/EmbeddingRequested.ts"
 import { assert } from "../util/assert.ts"
 
 export function* embed(value: string): Generator<
   Action<"embed", {
+    Event: EmbeddingRequested | Embedded
+    Child: never
     Entry: never
-    Event: EmbeddingRequestedEvent | EmbeddedEvent
     Throw: never
   }>,
   Array<number>

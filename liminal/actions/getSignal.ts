@@ -2,8 +2,9 @@ import { Action } from "../Action.ts"
 
 export function* getSignal(): Generator<
   Action<"get_signal", {
-    Entry: never
     Event: never
+    Child: never
+    Entry: never
     Throw: never
   }>,
   AbortSignal

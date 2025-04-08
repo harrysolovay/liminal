@@ -1,5 +1,5 @@
 import { Action } from "../Action.ts"
-import type { EmittedEvent } from "../events/EmittedEvent.ts"
+import type { Emitted } from "../events/Emitted.ts"
 import type { JSONKey } from "../util/JSONKey.ts"
 import type { JSONValue } from "../util/JSONValue.ts"
 
@@ -8,8 +8,9 @@ export function* emit<K extends JSONKey, V extends JSONValue | undefined = undef
   value: V = undefined as never,
 ): Generator<
   Action<"emit", {
+    Event: Emitted<K, V>
+    Child: never
     Entry: never
-    Event: EmittedEvent<K, V>
     Throw: never
   }>,
   undefined

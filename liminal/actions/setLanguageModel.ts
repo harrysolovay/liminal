@@ -1,15 +1,16 @@
 import { Action } from "../Action.ts"
 import type { RunInfer } from "../adapters.ts"
-import type { LanguageModelSetEvent } from "../events/LanguageModelSetEvent.ts"
+import type { LanguageModelSet } from "../events/LanguageModelSet.ts"
 import type { JSONKey } from "../util/JSONKey.ts"
 
 export function* setLanguageModel<K extends JSONKey>(
-  key: K,
+  modelKey: K,
   runInfer: RunInfer,
 ): Generator<
   Action<"set_language_model", {
+    Event: LanguageModelSet<K>
+    Child: never
     Entry: never
-    Event: LanguageModelSetEvent<K>
     Throw: never
   }>,
   void
@@ -17,7 +18,7 @@ export function* setLanguageModel<K extends JSONKey>(
   return yield Action("set_language_model", (scope) => {
     scope.event({
       type: "language_model_set",
-      key,
+      modelKey,
     })
     return {
       ...scope,

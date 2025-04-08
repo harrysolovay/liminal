@@ -3,7 +3,7 @@ import { L } from "liminal"
 const QUERY = "I'd like a refund please."
 
 export default function*() {
-  const classification = yield* L.fork("classify", function*() {
+  const classification = yield* L.branch("classify", function*() {
     yield* L.clear()
     yield* L.system`
       Classify this supplied customer query:
@@ -21,7 +21,7 @@ export default function*() {
       complexity: L.enum("simple", "complex"),
     })
   })
-  const response = yield* L.fork("handle", function*() {
+  const response = yield* L.branch("handle", function*() {
     yield* L.clear()
     yield* L.system(USE_CLASSIFICATION_AGENT_PROMPTS[classification.type])
     if (classification.complexity === "complex") {

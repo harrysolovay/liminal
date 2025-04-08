@@ -30,7 +30,7 @@ export function AILanguageModel(model: LanguageModelV1): RunInfer {
       .all(
         scope.tools.values().map(async (tool) => {
           return [
-            tool.key,
+            tool.toolKey,
             aiTool({
               type: "function",
               description: tool.description,

@@ -1,6 +1,6 @@
 import type { EventBase } from "./_EventBase.ts"
 
-export interface EmbeddedEvent extends EventBase<"embedded"> {
+export interface Embedded extends EventBase<"embedded"> {
   value: string
   embedding: Array<number>
 }

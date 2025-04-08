@@ -1,4 +1,3 @@
-import type { LEvent } from "./events/LEvent.ts"
-import type { ReturnedEvent } from "./events/ReturnedEvent.ts"
+import type { EventScope } from "./EventScope.ts"
 
-export type EventHandler<E extends LEvent = LEvent, T = any> = (event: E | ReturnedEvent<T>) => any
+export type EventHandler<E extends EventScope = EventScope> = (event: E) => any

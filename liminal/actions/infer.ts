@@ -1,14 +1,15 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
 import { Action } from "../Action.ts"
-import type { InferenceRequestedEvent } from "../events/InferenceRequestedEvent.ts"
-import type { InferredEvent } from "../events/InferredEvent.ts"
+import type { InferenceRequested } from "../events/InferenceRequested.ts"
+import type { Inferred } from "../events/Inferred.ts"
 import type { JSONObject } from "../util/JSONObject.ts"
 import type { JSONValue } from "../util/JSONValue.ts"
 
 export function infer(): Generator<
   Action<"infer", {
+    Event: InferenceRequested | Inferred<string>
+    Child: never
     Entry: never
-    Event: InferenceRequestedEvent | InferredEvent<string>
     Throw: never
   }>,
   string
@@ -17,8 +18,9 @@ export function infer<O extends JSONValue>(
   type: StandardSchemaV1<JSONObject, O>,
 ): Generator<
   Action<"infer", {
+    Event: InferenceRequested | Inferred<O>
+    Child: never
     Entry: never
-    Event: InferenceRequestedEvent | InferredEvent<O>
     Throw: never
   }>,
   O

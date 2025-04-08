@@ -1,10 +1,9 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
 import { Action } from "../Action.ts"
 import type { Actor } from "../Actor.ts"
-import type { ChildEvent } from "../events/ChildEvent.ts"
-import type { ToolCalledEvent } from "../events/ToolCalledEvent.ts"
-import type { ToolDisabledEvent } from "../events/ToolDisabledEvent.ts"
-import type { ToolEnabledEvent } from "../events/ToolEnabledEvent.ts"
+import type { ToolCalled } from "../events/ToolCalled.ts"
+import type { ToolDisabled } from "../events/ToolDisabled.ts"
+import type { ToolEnabled } from "../events/ToolEnabled.ts"
 import { Tool, type ToolImplementation, type ToolResult } from "../Tool.ts"
 import type { JSONKey } from "../util/JSONKey.ts"
 import type { JSONObject } from "../util/JSONObject.ts"
@@ -19,14 +18,16 @@ export function enableTool<K extends JSONKey, A, R extends PromiseOr<ToolResult>
   implementation: (params: A) => R,
 ): Generator<
   Action<"enable_tool", {
+    Event: ToolEnabled<K> | ToolCalled<K, A>
+    Child: never
     Entry: never
-    Event: ToolEnabledEvent<K> | ChildEvent<"tool", K, ToolCalledEvent<K, A>, Awaited<R>>
     Throw: never
   }>,
   Generator<
     Action<"disable_tool", {
+      Event: ToolDisabled<K>
+      Child: never
       Entry: never
-      Event: ToolDisabledEvent<K>
       Throw: never
     }>,
     void
@@ -36,7 +37,7 @@ export function enableTool<
   K extends JSONKey,
   A,
   Y extends Action,
-  R extends PromiseOr<ToolResult>,
+  R extends ToolResult,
 >(
   key: K,
   description: string,
@@ -44,21 +45,16 @@ export function enableTool<
   implementation: (params: A) => Actor<Y, R>,
 ): Generator<
   Action<"enable_tool", {
-    Entry: Extract<Y, Action>[""]["Entry"]
-    Event:
-      | ToolEnabledEvent<K>
-      | ChildEvent<
-        "tool",
-        K,
-        ToolCalledEvent<K, A> | Extract<Y, Action>[""]["Event"],
-        Awaited<R>
-      >
+    Event: ToolEnabled<K> | ToolCalled<K, A>
+    Child: [K, Y[""]]
+    Entry: Y[""]["Entry"]
     Throw: never
   }>,
   Generator<
     Action<"disable_tool", {
+      Event: ToolDisabled<K>
+      Child: never
       Entry: never
-      Event: ToolDisabledEvent<K>
       Throw: never
     }>,
     void
@@ -73,12 +69,12 @@ export function* enableTool(
   return yield Action("enable_tool", async (scope) => {
     scope.event({
       type: "tool_enabled",
-      key,
       description,
       schema: await JSONSchemaMemo(params),
+      tool: key,
     })
     const tool = Tool({
-      key,
+      toolKey: key,
       description,
       params,
       implementation,

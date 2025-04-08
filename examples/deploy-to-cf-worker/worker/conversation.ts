@@ -4,7 +4,7 @@ export function* refine(input: string) {
   yield* L.user(input)
   yield* L.infer()
   yield* L.user`Rewrite it in whatever way you think best.`
-  const variants = yield* L.fork("variants", {
+  const variants = yield* L.branch("variants", {
     *a() {
       yield* L.declareLanguageModel("a")
       return yield* L.infer()
@@ -18,7 +18,7 @@ export function* refine(input: string) {
       return yield* L.infer()
     },
   })
-  const { best } = yield* L.fork("select", function*() {
+  const { best } = yield* L.branch("select", function*() {
     yield* L.clear()
     yield* L.declareLanguageModel("select")
     yield* L.user`

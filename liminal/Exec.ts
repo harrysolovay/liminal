@@ -1,14 +1,15 @@
 import type { Action } from "./Action.ts"
-import type { Actor, ActorLike } from "./Actor.ts"
+import type { Actor } from "./Actor.ts"
 import type { RunInfer } from "./adapters.ts"
 import type { EventHandler } from "./EventHandler.ts"
+import type { ExtractEventScope } from "./EventScope.ts"
 import { RootScope, type Scope } from "./Scope.ts"
 import type { FromEntries } from "./util/FromEntries.ts"
 import type { JSONKey } from "./util/JSONKey.ts"
 
 export interface Exec<Y extends Action = Action, T = any> {
   (
-    handler?: EventHandler<Y[""]["Event"], T>,
+    handler?: EventHandler<ExtractEventScope<Y[""]> & {}>,
     options?: ExecOptions,
   ): Promise<T>
 }
@@ -41,7 +42,7 @@ export function Exec<Y extends Action, T>(
 ): Exec<Y, T> {
   // TODO: consider `Result` type.
   return async (handler, options) => {
-    let scope: Scope = RootScope(config.default, config.args, handler, options?.signal)
+    let scope: Scope = RootScope(config.default, config.args, handler as never, options?.signal)
     scope = await scope.reduce(createActor())
     const { signal: { aborted, reason } } = scope.controller
     if (aborted) {

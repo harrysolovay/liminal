@@ -11,12 +11,13 @@ export default function*() {
   yield* L.infer()
   let i = 0
   while (i < 5) {
-    const userReply = yield* L.fork("infer-user-reply", function*() {
+    const userReply = yield* L.branch("infer-user-reply", function*() {
       yield* L.user`Please reply to the last message on my behalf.`
       return yield* L.infer()
     })
     yield* L.user(userReply)
     yield* L.infer()
+    i++
   }
   yield* L.user`Please summarize the key points from our conversation.`
   return yield* L.infer()

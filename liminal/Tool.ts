@@ -10,7 +10,7 @@ import type { JSONValue } from "./util/JSONValue.ts"
 import type { PromiseOr } from "./util/PromiseOr.ts"
 
 export interface ToolConfig {
-  key: JSONKey
+  toolKey: JSONKey
   description: string
   params: StandardSchemaV1<JSONObject, any>
   implementation: ToolImplementation
@@ -37,8 +37,8 @@ function executor(this: Tool, scope: Scope): ToolExecutor {
   return async (args) => {
     scope.event({
       type: "tool_called",
-      tool: this.key,
       args,
+      tool: this.toolKey,
     })
     const parsed = await this.params["~standard"].validate(args)
     assert(!parsed.issues)
@@ -47,7 +47,7 @@ function executor(this: Tool, scope: Scope): ToolExecutor {
     if (isJSONValue(initial)) {
       return { value: initial }
     }
-    const fork = scope.fork("tool", this.key)
+    const fork = scope.fork("tool", [this.toolKey])
     const reduced = await fork.reduce(initial as Actor)
     return { value: reduced.value }
   }

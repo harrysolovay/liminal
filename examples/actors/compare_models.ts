@@ -4,7 +4,7 @@ export default function*() {
   yield* L.user`Write a rap about type-level programming in TypeScript`
   yield* L.infer()
   yield* L.user`Rewrite it in whatever way you think best.`
-  const variants = yield* L.fork("variants", {
+  const variants = yield* L.branch("variants", {
     *a() {
       yield* L.declareLanguageModel("one")
       return yield* L.infer()
@@ -18,7 +18,7 @@ export default function*() {
       return yield* L.infer()
     },
   })
-  const { value } = yield* L.fork("best", function*() {
+  const { value } = yield* L.branch("best", function*() {
     yield* L.clear()
     yield* L.declareLanguageModel("arbiter")
     yield* L.user`

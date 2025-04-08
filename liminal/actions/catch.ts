@@ -1,6 +1,5 @@
 import { Action } from "../Action.ts"
 import type { ActorLike } from "../Actor.ts"
-import type { ChildEvent } from "../events/ChildEvent.ts"
 import type { JSONKey } from "../util/JSONKey.ts"
 import type { Result } from "../util/Result.ts"
 import { unwrapDeferred } from "../util/unwrapDeferred.ts"
@@ -10,14 +9,15 @@ function* catch_<K extends JSONKey, Y extends Action, T>(
   actorLike: ActorLike<Y, T>,
 ): Generator<
   Action<"catch", {
-    Entry: Y[""]["Entry"]
-    Event: ChildEvent<"catch", K, Y[""]["Event"], T>
+    Event: never
+    Child: [K, Y[""]]
+    Entry: never
     Throw: never
   }>,
-  Result<T, Y[""]["Throw"]>
+  Result<T, any /*Y[""]["Throw"]*/>
 > {
   return yield Action("catch", async (scope) => {
-    const catchScope = scope.fork("catch", key)
+    const catchScope = scope.fork("catch", [key])
     try {
       const { value } = await catchScope.reduce(unwrapDeferred(actorLike))
       return {

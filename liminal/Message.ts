@@ -1,16 +1,36 @@
-export type Message = SystemMessage | UserMessage | AssistantMessage | ToolMessage
+export type Message = Messages[keyof Messages]
+export type Messages = {
+  system: SystemMessage
+  user: UserMessage
+  assistant: AssistantMessage
+  tool: ToolMessage
+}
 
-export interface AssistantMessage extends MessageBase<"assistant", AssistantContent> {}
+export interface SystemMessage extends MessageBase<"system"> {}
+export interface UserMessage extends MessageBase<"user"> {}
+export interface AssistantMessage extends MessageBase<"assistant"> {}
+export interface ToolMessage extends MessageBase<"tool"> {}
+
+interface MessageBase<R extends MessageRole> {
+  readonly role: R
+  readonly content: MessageContents[R]
+}
+
+export type MessageRole = "system" | "user" | "assistant" | "tool"
+
+export type MessageContents = {
+  system: string
+  user: UserContent
+  assistant: AssistantContent
+  tool: ToolContent
+}
+
 export type AssistantContent =
   | string
   | ReadonlyArray<TextPart | FilePart | ReasoningPart | RedactedReasoningPart | ToolCallPart>
 
-export interface SystemMessage extends MessageBase<"system", string> {}
-
-export interface UserMessage extends MessageBase<"user", UserContent> {}
 export type UserContent = string | Array<TextPart | ImagePart | FilePart>
 
-export interface ToolMessage extends MessageBase<"tool", ToolContent> {}
 export type ToolContent = Array<ToolContentPart>
 export interface ToolContentPart {
   readonly type: "tool-result"
@@ -71,9 +91,4 @@ export interface ImagePart {
   readonly type: "image"
   readonly image: DataContent | URL
   readonly mimeType?: string
-}
-
-interface MessageBase<R extends string, C> {
-  readonly role: R
-  readonly content: C
 }

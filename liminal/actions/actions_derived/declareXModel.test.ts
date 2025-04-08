@@ -8,7 +8,7 @@ describe.skip("Model", () => {
   it("generates the expected event sequence", async () => {
     const scope = await Exec(function*() {
       yield* L.declareLanguageModel("secondary")
-      yield* L.fork("fork-key", function*() {
+      yield* L.branch("fork-key", function*() {
         yield* L.declareLanguageModel("child_a")
         yield* L.declareEmbeddingModel("child_b")
       })
