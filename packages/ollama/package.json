@@ -12,7 +12,7 @@
     ".": "./dist/index.js"
   },
   "peerDependencies": {
-    "liminal": "^0.1.0",
+    "liminal": "^0.1.1",
     "ollama": "^0.5.14"
   }
 }
