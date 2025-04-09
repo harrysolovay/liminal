@@ -16,6 +16,6 @@
   },
   "peerDependencies": {
     "ai": "^4.1.61",
-    "liminal": "workspace:*"
+    "liminal": "^0.1.0"
   }
 }
