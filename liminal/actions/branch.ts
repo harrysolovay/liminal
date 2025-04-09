@@ -1,5 +1,13 @@
 import { Action } from "../Action.ts"
-import type { Actor, ActorLike, ActorLikeArray, ActorLikeRecord, ActorLikesT, ActorLikeY } from "../Actor.ts"
+import type {
+  Actor,
+  ActorLike,
+  ActorLikeArray,
+  ActorLikeRecord,
+  ActorLikesT,
+  ActorLikeT,
+  ActorLikeY,
+} from "../Actor.ts"
 import type { ActorLikes } from "../Actor.ts"
 import type { Spec } from "../Spec.ts"
 import type { JSONKey } from "../util/JSONKey.ts"
@@ -16,7 +24,7 @@ export function branch<
   Action<
     "branch",
     Spec.Make<{
-      Child: [K, Y[""]]
+      Child: [Y[""]] extends [never] ? never : [K, Y[""]]
       Entry: Y[""]["Entry"]
       Value: T
     }>
@@ -33,11 +41,11 @@ export function branch<K extends JSONKey, const A extends ActorLikeArray>(name: 
           [L in keyof A]: Spec.Make<{
             Child: [L, ActorLikeY<A[L]>[""]]
             Entry: ActorLikeY<A[L]>[""]["Entry"]
+            Value: ActorLikeT<A[L]>
           }>
         }[keyof A],
       ]
       Entry: ActorLikeY<A[number]>[""]["Entry"]
-      Value: ActorLikesT<A>
     }>
   >,
   ActorLikesT<A>
@@ -52,11 +60,11 @@ export function branch<K extends JSONKey, A extends ActorLikeRecord>(name: K, ac
           [L in Exclude<keyof A, symbol>]: Spec.Make<{
             Child: [L, ActorLikeY<A[L]>[""]]
             Entry: ActorLikeY<A[L]>[""]["Entry"]
+            Value: ActorLikeT<A[L]>
           }>
         }[Exclude<keyof A, symbol>],
       ]
       Entry: ActorLikeY<A[keyof A]>[""]["Entry"]
-      Value: ActorLikesT<A>
     }>
   >,
   ActorLikesT<A>
@@ -67,6 +75,10 @@ export function* branch(key: JSONKey, implementation: ActorLike | ActorLikes): G
       const branchScope = scope.fork("branch", [key])
       const actor = unwrapDeferred(implementation as ActorLike)
       const { value } = await branchScope.reduce(actor)
+      branchScope.event({
+        type: "returned",
+        value,
+      })
       return {
         ...scope,
         nextArg: value,
@@ -79,6 +91,10 @@ export function* branch(key: JSONKey, implementation: ActorLike | ActorLikes): G
       const branchArmScope = scope.fork("branch_arm", [key, armKey])
       const actor = unwrapDeferred(implementation[armKey as never]) as Actor
       const { value } = await branchArmScope.reduce(actor)
+      branchArmScope.event({
+        type: "returned",
+        value,
+      })
       return value
     }))
     const value = Array.isArray(implementation)

@@ -3,6 +3,7 @@ import type { Embedded } from "./Embedded.ts"
 import type { EmbeddingModelSet } from "./EmbeddingModelSet.ts"
 import type { EmbeddingRequested } from "./EmbeddingRequested.ts"
 import type { Emitted } from "./Emitted.ts"
+import type { Forked } from "./Forked.ts"
 import type { InferenceRequested } from "./InferenceRequested.ts"
 import type { Inferred } from "./Inferred.ts"
 import type { LanguageModelSet } from "./LanguageModelSet.ts"
@@ -32,3 +33,4 @@ export type LEvent =
   | ToolEnabled
   | Aborted
   | MessageRemoved
+  | Forked

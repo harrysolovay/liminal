@@ -1,13 +1,16 @@
 import { type _, is_ } from "../_.ts"
-import type { PathLike } from "../PathLike.ts"
+import type { Path, PathLike } from "../PathLike.ts"
 import type { Expand } from "../util/Expand.ts"
 import type { JSONKey } from "../util/JSONKey.ts"
 import type { EventResolved } from "./EventResolved.ts"
 
-export function isWithinSubscope<E extends EventResolved, const P extends PathLike.Make<Subscope<E["scope"]>>>(
+export function isScopeDescendantEvent<
+  E extends EventResolved,
+  const P extends PathLike.FromPath<Subscope<E["scope"]>>,
+>(
   event: E,
   path: P,
-): event is Expand<Extract<E, { scope: Subscope.Select<E["scope"], PathLike.ToPath<P>> }>> {
+): event is Expand<Extract<E, { scope: Subscope.Select<E["scope"], Path.FromPathLike<P>> }>> {
   for (let i = 0; i < path.length; i++) {
     const currentMatchKey = path[i]!
     const currentActualKey = event.scope[i]!

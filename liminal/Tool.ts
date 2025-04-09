@@ -42,13 +42,17 @@ function executor(this: Tool, scope: Scope): ToolExecutor {
     })
     const parsed = await this.params["~standard"].validate(args)
     assert(!parsed.issues)
-    const { value } = parsed
-    const initial = await this.implementation(value)
+    const { value: transformed } = parsed
+    const initial = await this.implementation(transformed)
     if (isJSONValue(initial)) {
       return { value: initial }
     }
     const fork = scope.fork("tool", [this.toolKey])
-    const reduced = await fork.reduce(initial as Actor)
-    return { value: reduced.value }
+    const { value } = await fork.reduce(initial as Actor)
+    fork.event({
+      type: "returned",
+      value,
+    })
+    return { value }
   }
 }

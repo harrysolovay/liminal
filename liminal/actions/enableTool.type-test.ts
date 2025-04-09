@@ -1,4 +1,5 @@
 import type { AssertTrue, IsExact } from "conditional-type-checks"
+import type { ActorLike } from "../Actor.ts"
 import type { Emitted } from "../events/Emitted.ts"
 import type { ToolCalled } from "../events/ToolCalled.ts"
 import type { ToolDisabled } from "../events/ToolDisabled.ts"
@@ -44,7 +45,7 @@ function* _0() {
 
 const genTool = enableTool("tool-key", "", P, function*(params) {
   type _ = [AssertTrue<IsExact<typeof params, P>>]
-  yield* emit("Test", {})
+  yield* emit("Test")
   return ""
 })
 
@@ -56,7 +57,7 @@ ActorAssertions(genTool).assertSpec<{
       b: string
     }>
   Child: ["tool-key", {
-    Event: Emitted<"Test", {}>
+    Event: Emitted<"Test">
     Child: never
     Throw: never
     Entry: never
@@ -75,6 +76,8 @@ function* parent() {
     },
   })
 }
+
+type g = typeof parent extends ActorLike<infer Y> ? Y[""] : never
 
 ActorAssertions(parent).assertSpec<
   {
@@ -106,12 +109,10 @@ ActorAssertions(parent).assertSpec<
       }]
       Throw: never
       Entry: never
-      Value: never
+      Value: void
     }]
     Throw: never
     Entry: never
-    Value: {
-      "arm-key": void
-    }
+    Value: never
   }
 >()

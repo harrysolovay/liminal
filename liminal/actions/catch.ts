@@ -23,6 +23,10 @@ function* catch_<K extends JSONKey, Y extends Action, T>(
     const catchScope = scope.fork("catch", [key])
     try {
       const { value } = await catchScope.reduce(unwrapDeferred(actorLike))
+      catchScope.event({
+        type: "returned",
+        value,
+      })
       return {
         ...scope,
         nextArg: { value },

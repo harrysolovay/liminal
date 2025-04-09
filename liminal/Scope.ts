@@ -78,10 +78,6 @@ async function reduce(this: Scope, actor: Actor): Promise<Scope> {
       current = await actor.next(scope.nextArg)
     }
     value = current.value
-    this.event({
-      type: "returned",
-      value,
-    })
   } catch (thrown: unknown) {
     scope.controller.abort(thrown)
   }
@@ -93,7 +89,7 @@ async function reduce(this: Scope, actor: Actor): Promise<Scope> {
 }
 
 function fork(this: Scope, type: ChildScopeType, subpath: Array<JSONKey>): ChildScope {
-  return {
+  const f: ChildScope = {
     type,
     controller: this.controller,
     args: this.args,
@@ -109,6 +105,8 @@ function fork(this: Scope, type: ChildScopeType, subpath: Array<JSONKey>): Child
     fork,
     event,
   }
+  f.event({ type: "forked" })
+  return f
 }
 
 function event(this: ChildScope, event: LEvent): void {

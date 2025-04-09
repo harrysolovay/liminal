@@ -52,6 +52,10 @@ export function Exec<Y extends Action, T>(
       })
       throw reason
     }
+    scope.event({
+      type: "returned",
+      value: scope.value,
+    })
     return scope.value
   }
 }

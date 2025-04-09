@@ -1,18 +1,30 @@
-import { Exec, isWithinScope, isWithinSubscope, L } from "liminal"
+import { type ActorLike, Exec, isScopeChildEvent, isScopeDescendantEvent, L } from "liminal"
 
 const exec = Exec(g, {
   default: null!,
 })
 
 exec((event) => {
-  if (event.type === "emitted" && event.key === "event-f") {
+  if (isScopeChildEvent(event, [])) {
+    event.type // no `branched`
+  }
+  if (event.type === "emitted") {
+    event.value
+  }
+  if (isScopeChildEvent(event, ["child-a", "child-d", "e"])) {}
+  if (isScopeChildEvent(event, [L._, L._])) {
     event.scope
   }
-  if (isWithinScope(event, [L._, L._])) {
+  if (isScopeDescendantEvent(event, ["child-a", L._, "f"])) {
     event.scope
   }
-  if (isWithinSubscope(event, ["child-a", L._, "f"])) {
+  if (isScopeDescendantEvent(event, ["child-a", "child-d"])) {
     event.scope
+  }
+  if (isScopeChildEvent(event, ["child-a", "child-d", "e"])) {
+    if (event.type === "returned") {
+      event.value
+    }
   }
 })
 
@@ -42,9 +54,9 @@ export default function* g() {
       },
       *f() {
         yield* L.embed("something")
-        yield* L.emit("event-f")
+        // yield* L.emit("event-f")
         yield* L.branch("child-g", function*() {
-          yield* L.emit("event-g")
+          // yield* L.emit("event-g")
         })
       },
     })
