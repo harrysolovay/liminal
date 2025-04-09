@@ -25,7 +25,7 @@ export default function*() {
     yield* L.clear()
     yield* L.system(USE_CLASSIFICATION_AGENT_PROMPTS[classification.type])
     if (classification.complexity === "complex") {
-      yield* L.declareLanguageModel("reasoning")
+      yield* L.declareModel("reasoning")
     }
     return yield* L.infer()
   })

@@ -1,5 +1,5 @@
 import { assistant } from "../actions/actions_derived/messages.ts"
-import type { RunInfer } from "../adapters.ts"
+import type { LanguageModel } from "../Model.ts"
 import type { JSONValue } from "../util/JSONValue.ts"
 
 export interface TestLanguageModelConfig {
@@ -15,15 +15,18 @@ export const defaultTestLanguageModelConfig: TestLanguageModelConfig = {
 export function TestLanguageModel({
   getObject,
   getText,
-}: TestLanguageModelConfig = defaultTestLanguageModelConfig): RunInfer {
-  return async function*(type) {
-    if (type) {
-      const object = getObject()
-      yield* assistant`${JSON.stringify(object)}`
-      return object
-    }
-    const text = getText()
-    yield* assistant`${text}`
-    return text
+}: TestLanguageModelConfig = defaultTestLanguageModelConfig): LanguageModel {
+  return {
+    type: "language",
+    async *infer(type) {
+      if (type) {
+        const object = getObject()
+        yield* assistant`${JSON.stringify(object)}`
+        return object
+      }
+      const text = getText()
+      yield* assistant`${text}`
+      return text
+    },
   }
 }

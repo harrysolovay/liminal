@@ -7,48 +7,51 @@ import {
   tool as aiTool,
   type ToolSet,
 } from "ai"
-import { _util, L, type Message, type RunInfer } from "liminal"
+import { _util, L, type LanguageModel, type Message } from "liminal"
 
-export function AILanguageModel(model: LanguageModelV1): RunInfer {
-  return async function*(type) {
-    const messages = yield* L.getMessages()
-    const coreMessages = messages.map(toCoreMessage)
-    if (type) {
-      const schema = await _util.JSONSchemaMemo(type)
-      let { object } = await generateObject({
+export function AILanguageModel(model: LanguageModelV1): LanguageModel {
+  return {
+    type: "language",
+    async *infer(type) {
+      const messages = yield* L.getMessages()
+      const coreMessages = messages.map(toCoreMessage)
+      if (type) {
+        const schema = await _util.JSONSchemaMemo(type)
+        let { object } = await generateObject({
+          model,
+          messages: coreMessages,
+          schema: jsonSchema(schema),
+        })
+        yield* L.assistant(JSON.stringify(object, null, 2))
+        const validateResult = await type["~standard"].validate(object)
+        _util.assert(!validateResult.issues)
+        return validateResult.value
+      }
+      const scope = yield* L.getScope()
+      const aiTools: ToolSet = await Promise
+        .all(
+          scope.tools.values().map(async (tool) =>
+            [
+              tool.toolKey,
+              aiTool({
+                type: "function",
+                description: tool.description,
+                parameters: jsonSchema(await _util.JSONSchemaMemo(tool.params)),
+                execute: tool.executor(scope),
+              }),
+            ] as const
+          ),
+        )
+        .then(Object.fromEntries)
+      const { text } = await generateText({
         model,
         messages: coreMessages,
-        schema: jsonSchema(schema),
+        tools: aiTools,
+        maxSteps: Infinity,
       })
-      yield* L.assistant(JSON.stringify(object, null, 2))
-      const validateResult = await type["~standard"].validate(object)
-      _util.assert(!validateResult.issues)
-      return validateResult.value
-    }
-    const scope = yield* L.getScope()
-    const aiTools: ToolSet = await Promise
-      .all(
-        scope.tools.values().map(async (tool) =>
-          [
-            tool.toolKey,
-            aiTool({
-              type: "function",
-              description: tool.description,
-              parameters: jsonSchema(await _util.JSONSchemaMemo(tool.params)),
-              execute: tool.executor(scope),
-            }),
-          ] as const
-        ),
-      )
-      .then(Object.fromEntries)
-    const { text } = await generateText({
-      model,
-      messages: coreMessages,
-      tools: aiTools,
-      maxSteps: Infinity,
-    })
-    yield* L.assistant(text)
-    return text
+      yield* L.assistant(text)
+      return text
+    },
   }
 }
 

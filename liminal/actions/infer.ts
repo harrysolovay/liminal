@@ -17,12 +17,13 @@ interface infer_<_T> extends
   >
 {}
 
-function* infer_<T extends JSONValue = string>(type?: StandardSchemaV1<JSONObject, T>): Generator<infer_<T>> {
+function* infer_<T extends JSONValue = string>(type?: StandardSchemaV1<JSONObject, T>): Generator<infer_<T>, T> {
   return yield Action("infer", async (scope) => {
     scope.event({
       type: "inference_requested",
     })
-    scope = await scope.reduce(scope.runInfer(type))
+    const model = scope.languageModels.values().next().value!
+    scope = await scope.reduce(model.infer(type))
     scope.event({
       type: "inferred",
       value: scope.value,

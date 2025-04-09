@@ -6,21 +6,21 @@ export default function*() {
   yield* L.user`Rewrite it in whatever way you think best.`
   const variants = yield* L.branch("variants", {
     *a() {
-      yield* L.declareLanguageModel("one")
+      yield* L.declareModel("one")
       return yield* L.infer()
     },
     *b() {
-      yield* L.declareLanguageModel("two")
+      yield* L.declareModel("two")
       return yield* L.infer()
     },
     *c() {
-      yield* L.declareLanguageModel("three")
+      yield* L.declareModel("three")
       return yield* L.infer()
     },
   })
   const { value } = yield* L.branch("best", function*() {
     yield* L.clear()
-    yield* L.declareLanguageModel("arbiter")
+    yield* L.declareModel("arbiter")
     yield* L.user`
       Out of the following variants, which is your favorite?:
 

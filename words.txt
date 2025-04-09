@@ -12,6 +12,7 @@ metaarray
 metaatom
 metaobject
 metatype
+metatypes
 multimodel
 nullary
 ollama

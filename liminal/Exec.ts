@@ -1,8 +1,8 @@
 import type { Action } from "./Action.ts"
 import type { Actor } from "./Actor.ts"
-import type { RunInfer } from "./adapters.ts"
 import type { EventHandler } from "./events/EventHandler.ts"
 import type { EventResolved, ExtractEventResolved } from "./events/EventResolved.ts"
+import type { LanguageModel, Model } from "./Model.ts"
 import { RootScope, type Scope } from "./Scope.ts"
 import type { FromEntries } from "./util/FromEntries.ts"
 import type { JSONKey } from "./util/JSONKey.ts"
@@ -15,7 +15,7 @@ export interface Exec<Y extends Action = Action, T = any> {
 }
 
 export interface ExecConfig {
-  default: RunInfer
+  default: LanguageModel
   args?: Record<JSONKey, any>
 }
 
@@ -25,7 +25,7 @@ export interface ExecOptions {
 
 export type ExtractExecConfig<Y extends Action> =
   & {
-    default: RunInfer
+    default: LanguageModel
   }
   & (
     [Y[""]["Entry"]] extends [never] ? {
