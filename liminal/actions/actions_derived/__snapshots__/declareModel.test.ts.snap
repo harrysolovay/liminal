@@ -1,0 +1,78 @@
+// Bun Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Model generates the expected event sequence 1`] = `
+"[
+  {
+    "scope": [],
+    "type": "model_pushed",
+    "modelKey": "secondary",
+    "modelType": "language"
+  },
+  {
+    "scope": [
+      "fork-key"
+    ],
+    "type": "forked"
+  },
+  {
+    "scope": [
+      "fork-key"
+    ],
+    "type": "model_pushed",
+    "modelKey": "child_a",
+    "modelType": "language"
+  },
+  {
+    "scope": [
+      "fork-key"
+    ],
+    "type": "model_pushed",
+    "modelKey": "child_b",
+    "modelType": "embedding"
+  },
+  {
+    "scope": [
+      "fork-key"
+    ],
+    "type": "model_removed",
+    "modelKey": "child_a",
+    "modelType": "language"
+  },
+  {
+    "scope": [
+      "fork-key"
+    ],
+    "type": "model_removed",
+    "modelKey": "child_b",
+    "modelType": "embedding"
+  },
+  {
+    "scope": [
+      "fork-key"
+    ],
+    "type": "returned"
+  },
+  {
+    "scope": [],
+    "type": "model_pushed",
+    "modelKey": "tertiary",
+    "modelType": "embedding"
+  },
+  {
+    "scope": [],
+    "type": "model_removed",
+    "modelKey": "secondary",
+    "modelType": "language"
+  },
+  {
+    "scope": [],
+    "type": "model_removed",
+    "modelKey": "tertiary",
+    "modelType": "embedding"
+  },
+  {
+    "scope": [],
+    "type": "returned"
+  }
+]"
+`;

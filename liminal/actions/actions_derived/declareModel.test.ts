@@ -9,12 +9,16 @@ describe("Model", () => {
   it("generates the expected event sequence", async () => {
     const events: Array<LEvent> = []
     await Exec(function*() {
-      yield* L.declareLanguageModel("secondary")
+      const a = yield* L.declareModel("secondary")
       yield* L.branch("fork-key", function*() {
-        yield* L.declareLanguageModel("child_a")
-        yield* L.declareEmbeddingModel("child_b")
+        const b = yield* L.declareModel("child_a")
+        const c = yield* L.declareModel("child_b")
+        yield* b
+        yield* c
       })
-      yield* L.declareEmbeddingModel("tertiary")
+      const c = yield* L.declareModel("tertiary")
+      yield* a
+      yield* c
     }, {
       default: TestLanguageModel(),
       args: {

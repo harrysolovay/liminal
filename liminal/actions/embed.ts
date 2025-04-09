@@ -8,12 +8,13 @@ export interface embed extends Action<"embed", Spec.Make<{ Event: EmbeddingReque
 
 export function* embed(value: string): Generator<embed, Array<number>> {
   return yield Action("embed", async (scope) => {
-    assert(scope.runEmbed)
+    const model = scope.embeddingModels.values().next().value
+    assert(model)
     scope.event({
       type: "embedding_requested",
       value,
     })
-    const embedding = await scope.runEmbed(value)
+    const embedding = await model.embed(value)
     scope.event({
       type: "embedded",
       value,

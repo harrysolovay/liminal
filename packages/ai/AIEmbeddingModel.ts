@@ -1,9 +1,12 @@
-import { embed, type EmbeddingModel } from "ai"
-import { _util, type L, type RunEmbed } from "liminal"
+import { embed, type EmbeddingModel as AIEmbeddingModel } from "ai"
+import { _util, type EmbeddingModel, type L } from "liminal"
 
-export function AIEmbeddingModel(model: EmbeddingModel<any>): RunEmbed {
-  return async (value) => {
-    const { embedding } = await embed({ model, value })
-    return embedding
+export function AIEmbeddingModel(model: AIEmbeddingModel<any>): EmbeddingModel {
+  return {
+    type: "embedding",
+    async embed(value) {
+      const { embedding } = await embed({ model, value })
+      return embedding
+    },
   }
 }

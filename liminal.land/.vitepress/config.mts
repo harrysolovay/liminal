@@ -64,9 +64,11 @@ export default defineConfig({
         link: "/",
         items: [
           { text: "Getting Started", link: "/getting_started" },
+          { text: "Lifecycle", link: "/lifecycle.md" },
           {
             text: "Rationale",
             base: "/rationale",
+            collapsed: true,
             items: [
               { text: "Implicit Message Buffers", link: "/implicit_message_buffers" },
               { text: "Decoupling Conversations From Models", link: "/decoupling_conversations_from_models" },
@@ -78,62 +80,110 @@ export default defineConfig({
         ],
       },
       {
+        text: "Actors",
+        link: "/actors",
+        items: [
+          { text: "Messages", link: "/messages.md" },
+          { text: "Actions", link: "/actions.md" },
+          { text: "Requirements", link: "/requirements.md" },
+          { text: "Scopes", link: "/scopes.md" },
+          { text: "Events", link: "/events.md" },
+        ],
+      },
+      {
         text: "Actions",
-        base: "/action",
-        link: "/",
+        link: "/actions",
         items: [
-          { text: "Model Declaration", link: "/declare-model" },
-          { text: "Messages", link: "/message" },
-          { text: "Inference", link: "/infer" },
-          { text: "Embedding", link: "/embed" },
-          { text: "Tool Calling", link: "/enable-tool" },
-          { text: "Custom Events", link: "/emit" },
+          {
+            text: `${code("Message")} Actions`,
+            collapsed: true,
+            items: [
+              {
+                text: code("appendMessage"),
+                link: "",
+                items: [
+                  { text: code("system"), link: "" },
+                  { text: code("user"), link: "" },
+                  { text: code("assistant"), link: "" },
+                ],
+              },
+              { text: code("getMessages"), link: "" },
+              { text: code("setMessages"), link: "/emit" },
+            ],
+          },
+          { text: code("declareModel"), link: "" },
+          { text: code("infer"), link: "/infer" },
+          { text: code("embed"), link: "/embed" },
+          { text: code("emit"), link: "/emit" },
+          { text: code("branch"), link: "/emit" },
+          { text: code("enableTool"), link: "/enable-tool" },
+          {
+            text: "Error Handling",
+            collapsed: true,
+            items: [
+              { text: code("getSignal"), link: "/emit" },
+              { text: code("throw"), link: "/emit" },
+              { text: code("catch"), link: "/emit" },
+              { text: code("abort"), link: "/emit" },
+            ],
+          },
+          {
+            text: "XYZ",
+            collapsed: true,
+            items: [
+              { text: code("declareArg"), link: "/enable-tool" },
+              { text: code("await"), link: "/emit" },
+              { text: code("getTools"), link: "/emit" },
+              { text: code("setLanguageModel"), link: "/emit" },
+              { text: code("setEmbeddingModel"), link: "/emit" },
+              { text: code("disableTool"), link: "/enable-tool" },
+            ],
+          },
         ],
       },
       {
-        text: "Scope",
-        link: "/",
-        base: "/scope",
+        text: "Spectators",
+        link: "/spectator",
         items: [
-          { text: "Contexts", link: "/context" },
-          { text: "Forks", link: "/fork" },
+          { text: "Exec", link: "/exec.md" },
+          { text: "Event Handling", link: "/event_handling.md" },
+          { text: "Client", link: "/client.md" },
         ],
       },
-      // {
-      //   text: "Runtime Types",
-      //   base: "/runtime-types",
-      //   collapsed: true,
-      //   link: "/",
-      //   items: [
-      //     { text: "Descriptions", link: "/descriptions" },
-      //     { text: "Intrinsic", link: "/intrinsics" },
-      //     { text: "Utility", link: "/utility" },
-      //     { text: "Recursion", link: "/recursion" },
-      //     { text: "Meta", link: "/meta" },
-      //     { text: "Visitor", link: "/visitor" },
-      //     { text: "Pins", link: "/pins" },
-      //   ],
-      // },
       {
-        text: "Adapters",
-        base: "/adapters",
-        collapsed: false,
+        text: "Runtime Types",
+        base: "/runtime-types",
+        collapsed: true,
+        link: "/",
+        items: [
+          { text: "Intrinsics", link: "/intrinsics" },
+          { text: "JSON Schema", link: "/json_schema" },
+          { text: "Utility Types", link: "/utility_types" },
+          { text: "Recursive Types", link: "/recursive types" },
+          { text: "Metatypes", link: "/metatypes" },
+          { text: "Type Visitors", link: "/visitor" },
+        ],
+      },
+      {
+        text: "Model Adapters",
+        base: "/model_adapters",
+        collapsed: true,
         link: "/",
         items: [
           { text: "AI SDK (Vercel)", link: "/ai" },
           { text: "Ollama", link: "/ollama" },
         ],
       },
-      {
-        text: "Testing",
-        base: "/testing",
-        collapsed: false,
-        items: [
-          { text: "ActorAssertions", link: "/actor-assertions" },
-          { text: "TestLanguageModel", link: "/test-language-model" },
-          { text: "TestEmbeddingModel", link: "/test-embedding-model" },
-        ],
-      },
+      // {
+      //   text: "Testing",
+      //   base: "/testing",
+      //   collapsed: false,
+      //   items: [
+      //     { text: "ActorAssertions", link: "/actor-assertions" },
+      //     { text: "TestLanguageModel", link: "/test-language-model" },
+      //     { text: "TestEmbeddingModel", link: "/test-embedding-model" },
+      //   ],
+      // },
     ],
     footer: {
       message:
@@ -154,3 +204,7 @@ export default defineConfig({
     return head
   },
 })
+
+function code(text: string): string {
+  return `<code>${text}</code>`
+}

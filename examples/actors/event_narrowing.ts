@@ -1,10 +1,15 @@
-import { type ActorLike, Exec, isScopeChildEvent, isScopeDescendantEvent, L } from "liminal"
+import { Exec, isScopeChildEvent, isScopeDescendantEvent, L } from "liminal"
 
 const exec = Exec(g, {
   default: null!,
 })
 
 exec((event) => {
+  if (isScopeChildEvent(event, ["child-a", "child-b", "child-c"])) {
+    if (event.type === "emitted") {
+      event.value
+    }
+  }
   if (isScopeChildEvent(event, [])) {
     event.type // no `branched`
   }
@@ -45,7 +50,11 @@ export default function* g() {
       })
       yield* L.emit("event-b")
       yield* L.branch("child-c", function*() {
-        yield* L.emit("event-c")
+        yield* L.emit({
+          some: {
+            data: "HERE",
+          },
+        })
       })
       return g
     })

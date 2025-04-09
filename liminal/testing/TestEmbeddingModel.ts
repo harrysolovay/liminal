@@ -1,15 +1,18 @@
-import type { RunEmbed } from "../adapters.ts"
+import type { EmbeddingModel } from "../Model.ts"
 
 export interface TestEmbeddingModelConfig {
-  getEmbedding: () => Array<number>
+  getEmbedding: () => Promise<Array<number>>
 }
 
 export const defaultTestingEmbeddingModelConfig: TestEmbeddingModelConfig = {
-  getEmbedding: () => [],
+  getEmbedding: () => Promise.resolve([]),
 }
 
 export function TestEmbeddingModel({
   getEmbedding,
-}: TestEmbeddingModelConfig = defaultTestingEmbeddingModelConfig): RunEmbed {
-  return async () => getEmbedding()
+}: TestEmbeddingModelConfig = defaultTestingEmbeddingModelConfig): EmbeddingModel {
+  return {
+    type: "embedding",
+    embed: getEmbedding,
+  }
 }

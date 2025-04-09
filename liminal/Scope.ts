@@ -1,9 +1,9 @@
 import type { Action } from "./Action.ts"
 import type { Actor } from "./Actor.ts"
-import type { RunEmbed, RunInfer } from "./adapters.ts"
 import type { EventHandler } from "./events/EventHandler.ts"
 import type { LEvent } from "./events/LEvent.ts"
 import type { Message } from "./Message.ts"
+import type { EmbeddingModel, LanguageModel } from "./Model.ts"
 import type { Tool } from "./Tool.ts"
 import type { JSONKey } from "./util/JSONKey.ts"
 
@@ -28,8 +28,8 @@ export interface ScopeBase<Type extends ScopeType> {
   readonly nextArg?: any
   readonly value: any
   readonly thrown?: any
-  readonly runInfer: RunInfer
-  readonly runEmbed?: RunEmbed
+  readonly languageModels: Set<LanguageModel>
+  readonly embeddingModels: Set<EmbeddingModel>
   readonly handler?: EventHandler
 
   reduce(actor: Actor): Promise<Scope>
@@ -38,7 +38,7 @@ export interface ScopeBase<Type extends ScopeType> {
 }
 
 export function RootScope(
-  runInfer: RunInfer,
+  defaultLanguageModel: LanguageModel,
   args?: Record<JSONKey, any>,
   handler: EventHandler = () => {},
   signal?: AbortSignal,
@@ -55,7 +55,8 @@ export function RootScope(
     tools: new Set(),
     value: undefined,
     path: [],
-    runInfer,
+    languageModels: new Set([defaultLanguageModel]),
+    embeddingModels: new Set(),
     reduce,
     fork,
     handler,
@@ -95,8 +96,8 @@ function fork(this: Scope, type: ChildScopeType, subpath: Array<JSONKey>): Child
     args: this.args,
     messages: new Set(this.messages),
     tools: new Set(),
-    runInfer: this.runInfer,
-    runEmbed: this.runEmbed,
+    languageModels: new Set(this.languageModels),
+    embeddingModels: new Set(this.embeddingModels),
     handler: this.handler,
     path: [...this.path, ...subpath],
     parent: this,
