@@ -31,6 +31,8 @@ export interface ScopeBase<Type extends ScopeType> {
   readonly languageModels: Set<LanguageModel>
   readonly embeddingModels: Set<EmbeddingModel>
   readonly handler?: EventHandler
+  readonly childForkCounts: Record<JSONKey, number>
+  readonly index: number
 
   reduce(actor: Actor): Promise<Scope>
   fork(source: ChildScopeType, subpath: Array<JSONKey>): Scope
@@ -57,6 +59,8 @@ export function RootScope(
     path: [],
     languageModels: new Set([defaultLanguageModel]),
     embeddingModels: new Set(),
+    childForkCounts: {},
+    index: 0,
     reduce,
     fork,
     handler,
@@ -90,6 +94,14 @@ async function reduce(this: Scope, actor: Actor): Promise<Scope> {
 }
 
 function fork(this: Scope, type: ChildScopeType, subpath: Array<JSONKey>): ChildScope {
+  const subpathStr = subpath.join(" ")
+  let index = this.childForkCounts[subpathStr]
+  if (typeof index === "number") {
+    this.childForkCounts[subpathStr]! += 1
+  } else {
+    index = 0
+    this.childForkCounts[subpathStr] = 1
+  }
   const f: ChildScope = {
     type,
     controller: this.controller,
@@ -98,10 +110,12 @@ function fork(this: Scope, type: ChildScopeType, subpath: Array<JSONKey>): Child
     tools: new Set(),
     languageModels: new Set(this.languageModels),
     embeddingModels: new Set(this.embeddingModels),
+    childForkCounts: {},
     handler: this.handler,
     path: [...this.path, ...subpath],
     parent: this,
     value: undefined,
+    index,
     reduce,
     fork,
     event,
@@ -113,6 +127,7 @@ function fork(this: Scope, type: ChildScopeType, subpath: Array<JSONKey>): Child
 function event(this: ChildScope, event: LEvent): void {
   this.handler?.({
     scope: this.path,
+    index: this.index,
     ...event,
   })
 }
