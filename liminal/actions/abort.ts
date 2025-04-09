@@ -1,13 +1,12 @@
 import { Action } from "../Action.ts"
-import type { AbortedEvent } from "../events/AbortedEvent.ts"
+import type { Aborted } from "../events/Aborted.ts"
+import type { Spec } from "../Spec.ts"
 import type { EnsureNarrow } from "../util/EnsureNarrow.ts"
 
+export interface abort<V> extends Action<"abort", Spec.Make<{ Event: Aborted<V> }>> {}
+
 export function* abort<V>(reason: V, ...[_error]: EnsureNarrow<V>): Generator<
-  Action<"abort", {
-    Entry: never
-    Event: AbortedEvent<V>
-    Throw: never
-  }>,
+  abort<V>,
   never
 > {
   return (yield (Action("abort", (scope) => {

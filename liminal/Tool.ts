@@ -9,18 +9,18 @@ import type { JSONObject } from "./util/JSONObject.ts"
 import type { JSONValue } from "./util/JSONValue.ts"
 import type { PromiseOr } from "./util/PromiseOr.ts"
 
-export interface ToolConfig {
-  key: JSONKey
+export interface ToolConfig<K extends JSONKey = JSONKey> {
+  toolKey: K
   description: string
   params: StandardSchemaV1<JSONObject, any>
   implementation: ToolImplementation
 }
 
-export interface Tool extends ToolConfig {
+export interface Tool<K extends JSONKey = JSONKey> extends ToolConfig<K> {
   executor: (scope: Scope) => ToolExecutor
 }
 
-export function Tool(config: ToolConfig): Tool {
+export function Tool<K extends JSONKey>(config: ToolConfig<K>): Tool<K> {
   return {
     ...config,
     executor,
@@ -37,18 +37,22 @@ function executor(this: Tool, scope: Scope): ToolExecutor {
   return async (args) => {
     scope.event({
       type: "tool_called",
-      tool: this.key,
       args,
+      tool: this.toolKey,
     })
     const parsed = await this.params["~standard"].validate(args)
     assert(!parsed.issues)
-    const { value } = parsed
-    const initial = await this.implementation(value)
+    const { value: transformed } = parsed
+    const initial = await this.implementation(transformed)
     if (isJSONValue(initial)) {
       return { value: initial }
     }
-    const fork = scope.fork("tool", this.key)
-    const reduced = await fork.reduce(initial as Actor)
-    return { value: reduced.value }
+    const fork = scope.fork("tool", [this.toolKey])
+    const { value } = await fork.reduce(initial as Actor)
+    fork.event({
+      type: "returned",
+      value,
+    })
+    return { value }
   }
 }

@@ -1,25 +1,22 @@
 import { Action } from "../Action.ts"
-import type { MessageAppendedEvent } from "../events/MessageAppendedEvent.ts"
-import type { MessageRemovedEvent } from "../events/MessageRemovedEvent.ts"
-import type { Message } from "../Message.ts"
+import type { MessageAppended } from "../events/MessageAppended.ts"
+import type { Message, MessageContents, MessageRole, Messages } from "../Message.ts"
+import type { Spec } from "../Spec.ts"
 import { removeMessage } from "./removeMessage.ts"
 
-export function* appendMessage<M extends Message>(message: M): Generator<
-  Action<"append_message", {
-    Entry: never
-    Event: MessageAppendedEvent<M>
-    Throw: never
-  }>,
-  Generator<
-    Action<"remove_message", {
-      Entry: never
-      Event: MessageRemovedEvent
-      Throw: never
-    }>,
-    void
-  >
-> {
+export interface appendMessage<M extends Message>
+  extends Action<"append_message", Spec.Make<{ Event: MessageAppended<M> }>>
+{}
+
+export function* appendMessage<R extends MessageRole>(
+  role: R,
+  content: MessageContents[R],
+): Generator<appendMessage<Messages[R]>, Generator<removeMessage, void>> {
   return yield Action("append_message", (scope) => {
+    const message = {
+      role,
+      content,
+    } as Messages[R] // <-- why isn't this inferred?
     scope.event({
       type: "message_appended",
       message,

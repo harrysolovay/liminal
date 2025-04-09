@@ -21,6 +21,7 @@ pgvector
 rootable
 shikijs
 solovay
+subscope
 supabase
 tmpfs
 tsdocs

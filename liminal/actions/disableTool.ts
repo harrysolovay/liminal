@@ -1,11 +1,19 @@
 import { Action } from "../Action.ts"
+import type { ToolDisabled } from "../events/ToolDisabled.ts"
+import type { Spec } from "../Spec.ts"
 import type { Tool } from "../Tool.ts"
+import type { JSONKey } from "../util/JSONKey.ts"
 
-export function* disableTool(tool: Tool): Generator<Action<"disable_tool", never>, void> {
+export interface disableTool<K extends JSONKey> extends Action<"disable_tool", Spec.Make<{ Event: ToolDisabled<K> }>> {}
+
+export function* disableTool<K extends JSONKey>(tool: Tool<K>): Generator<
+  disableTool<K>,
+  void
+> {
   yield Action("disable_tool", (scope) => {
     scope.event({
       type: "tool_disabled",
-      tool: tool.key,
+      tool: tool.toolKey,
     })
     const tools = new Set(scope.tools)
     tools.delete(tool)

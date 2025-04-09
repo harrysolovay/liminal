@@ -1,7 +1,7 @@
 import { L } from "liminal"
 
 export default function*() {
-  const result = yield* L.catch("attempt", mayThrow)
+  const result = yield* L.catch("attempt-key", mayThrow)
   if (result.thrown) {
     console.log("Threw the following value:", result.thrown)
   } else {
@@ -11,7 +11,7 @@ export default function*() {
 
 function* mayThrow() {
   try {
-    externalExample()
+    return externalExample()
   } catch (thrown: unknown) {
     if (thrown instanceof RandomError) {
       return yield* L.throw(thrown)

@@ -1,7 +1,7 @@
 import type { Action } from "./Action.ts"
 import type { Actor } from "./Actor.ts"
 import type { RunEmbed, RunInfer } from "./adapters.ts"
-import type { EventHandler } from "./EventHandler.ts"
+import type { EventHandler } from "./events/EventHandler.ts"
 import type { LEvent } from "./events/LEvent.ts"
 import type { Message } from "./Message.ts"
 import type { Tool } from "./Tool.ts"
@@ -12,15 +12,15 @@ export type Scope = RootScope | ChildScope
 export interface RootScope extends ScopeBase<RootScopeType> {}
 export interface ChildScope extends ScopeBase<ChildScopeType> {
   readonly parent: Scope
-  readonly key: JSONKey
 }
 
 export type RootScopeType = "root"
-export type ChildScopeType = "catch" | "tool" | "fork" | "fork_arm" | "set_messages"
+export type ChildScopeType = "catch" | "tool" | "branch" | "branch_arm" | "set_messages"
 export type ScopeType = RootScopeType | ChildScopeType
 
 export interface ScopeBase<Type extends ScopeType> {
   readonly type: Type
+  readonly path: Array<JSONKey>
   readonly args?: Record<JSONKey, any>
   readonly controller: AbortController
   readonly messages: Set<Message>
@@ -30,16 +30,17 @@ export interface ScopeBase<Type extends ScopeType> {
   readonly thrown?: any
   readonly runInfer: RunInfer
   readonly runEmbed?: RunEmbed
+  readonly handler?: EventHandler
 
-  reduce(this: Scope, actor: Actor): Promise<Scope>
-  fork(source: ChildScopeType, key: JSONKey): Scope
+  reduce(actor: Actor): Promise<Scope>
+  fork(source: ChildScopeType, subpath: Array<JSONKey>): Scope
   event(event: LEvent): void
 }
 
 export function RootScope(
   runInfer: RunInfer,
   args?: Record<JSONKey, any>,
-  event: EventHandler = () => {},
+  handler: EventHandler = () => {},
   signal?: AbortSignal,
 ): RootScope {
   const controller = new AbortController()
@@ -53,9 +54,11 @@ export function RootScope(
     messages: new Set(),
     tools: new Set(),
     value: undefined,
+    path: [],
     runInfer,
     reduce,
     fork,
+    handler,
     event,
   }
 }
@@ -75,10 +78,6 @@ async function reduce(this: Scope, actor: Actor): Promise<Scope> {
       current = await actor.next(scope.nextArg)
     }
     value = current.value
-    this.event({
-      type: "returned",
-      value,
-    })
   } catch (thrown: unknown) {
     scope.controller.abort(thrown)
   }
@@ -89,8 +88,8 @@ async function reduce(this: Scope, actor: Actor): Promise<Scope> {
   }
 }
 
-function fork(this: Scope, type: ChildScopeType, key: JSONKey): ChildScope {
-  return {
+function fork(this: Scope, type: ChildScopeType, subpath: Array<JSONKey>): ChildScope {
+  const f: ChildScope = {
     type,
     controller: this.controller,
     args: this.args,
@@ -98,20 +97,21 @@ function fork(this: Scope, type: ChildScopeType, key: JSONKey): ChildScope {
     tools: new Set(),
     runInfer: this.runInfer,
     runEmbed: this.runEmbed,
-    key,
+    handler: this.handler,
+    path: [...this.path, ...subpath],
     parent: this,
     value: undefined,
     reduce,
     fork,
     event,
   }
+  f.event({ type: "forked" })
+  return f
 }
 
 function event(this: ChildScope, event: LEvent): void {
-  this.parent.event({
-    type: "propagated",
-    scopeType: this.type,
-    scope: this.key,
-    event,
+  this.handler?.({
+    scope: this.path,
+    ...event,
   })
 }

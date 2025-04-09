@@ -6,7 +6,7 @@ export default async function*() {
   const code = await readFile(fileURLToPath(import.meta.url), "utf-8")
   yield* L.system`You are a technical lead summarizing multiple code reviews. Review the supplied code.`
   yield* L.user(code)
-  const reviews = L.fork("reviews", { security, performance, maintainability })
+  const reviews = L.branch("reviews", { security, performance, maintainability })
   yield* L.user(JSON.stringify(Object.values(reviews), null, 2))
   yield* L.user`You are a technical lead summarizing multiple code reviews.`
   const summary = yield* L.infer()

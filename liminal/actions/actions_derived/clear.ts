@@ -1,15 +1,6 @@
-import type { Action } from "../../Action.ts"
 import { setMessages } from "../../actions/setMessages.ts"
-import type { MessagesSetEvent } from "../../events/MessagesSetEvent.ts"
-import type { Message } from "../../Message.ts"
+import type { MessagesSet } from "../../events/MessagesSet.ts"
 
-export function clear(): Generator<
-  Action<"set_messages", {
-    Entry: never
-    Event: MessagesSetEvent
-    Throw: never
-  }>,
-  Array<Message>
-> {
+export function clear() {
   return setMessages(() => [])
 }

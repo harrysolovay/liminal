@@ -1,29 +1,23 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
 import { Action } from "../Action.ts"
-import type { InferenceRequestedEvent } from "../events/InferenceRequestedEvent.ts"
-import type { InferredEvent } from "../events/InferredEvent.ts"
+import type { InferenceRequested } from "../events/InferenceRequested.ts"
+import type { Inferred } from "../events/Inferred.ts"
+import type { Spec } from "../Spec.ts"
 import type { JSONObject } from "../util/JSONObject.ts"
 import type { JSONValue } from "../util/JSONValue.ts"
 
-export function infer(): Generator<
-  Action<"infer", {
-    Entry: never
-    Event: InferenceRequestedEvent | InferredEvent<string>
-    Throw: never
-  }>,
-  string
->
-export function infer<O extends JSONValue>(
-  type: StandardSchemaV1<JSONObject, O>,
-): Generator<
-  Action<"infer", {
-    Entry: never
-    Event: InferenceRequestedEvent | InferredEvent<O>
-    Throw: never
-  }>,
-  O
->
-export function* infer(type?: StandardSchemaV1<JSONObject>): Generator<Action<"infer">, any> {
+export { infer_ as infer }
+
+interface infer_<_T> extends
+  Action<
+    "infer",
+    Spec.Make<{
+      Event: InferenceRequested | Inferred
+    }>
+  >
+{}
+
+function* infer_<T extends JSONValue = string>(type?: StandardSchemaV1<JSONObject, T>): Generator<infer_<T>> {
   return yield Action("infer", async (scope) => {
     scope.event({
       type: "inference_requested",
@@ -39,3 +33,4 @@ export function* infer(type?: StandardSchemaV1<JSONObject>): Generator<Action<"i
     }
   })
 }
+Object.defineProperty(infer_, "name", { value: "infer" })

@@ -1,20 +1,21 @@
 import { Action } from "../Action.ts"
 import type { RunEmbed } from "../adapters.ts"
-import type { EmbeddingModelSetEvent } from "../events/EmbeddingModelSetEvent.ts"
+import type { EmbeddingModelSet } from "../events/EmbeddingModelSet.ts"
+import type { Spec } from "../Spec.ts"
 import type { JSONKey } from "../util/JSONKey.ts"
 
-export function* setEmbeddingModel<K extends JSONKey>(key: K, runEmbed: RunEmbed): Generator<
-  Action<"set_embedding_model", {
-    Entry: never
-    Event: EmbeddingModelSetEvent<K>
-    Throw: never
-  }>,
-  void
-> {
+export interface setEmbeddingModel<K extends JSONKey>
+  extends Action<"set_embedding_model", Spec.Make<{ Event: EmbeddingModelSet<K> }>>
+{}
+
+export function* setEmbeddingModel<K extends JSONKey>(
+  modelKey: K,
+  runEmbed: RunEmbed,
+): Generator<setEmbeddingModel<K>, void> {
   return yield Action("set_embedding_model", (scope) => {
     scope.event({
       type: "embedding_model_set",
-      key,
+      modelKey,
     })
     return {
       ...scope,

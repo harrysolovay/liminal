@@ -1,10 +1,9 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
 import { Action } from "../Action.ts"
 import type { Actor } from "../Actor.ts"
-import type { ChildEvent } from "../events/ChildEvent.ts"
-import type { ToolCalledEvent } from "../events/ToolCalledEvent.ts"
-import type { ToolDisabledEvent } from "../events/ToolDisabledEvent.ts"
-import type { ToolEnabledEvent } from "../events/ToolEnabledEvent.ts"
+import type { ToolCalled } from "../events/ToolCalled.ts"
+import type { ToolEnabled } from "../events/ToolEnabled.ts"
+import type { Spec } from "../Spec.ts"
 import { Tool, type ToolImplementation, type ToolResult } from "../Tool.ts"
 import type { JSONKey } from "../util/JSONKey.ts"
 import type { JSONObject } from "../util/JSONObject.ts"
@@ -12,57 +11,41 @@ import { JSONSchemaMemo } from "../util/JSONSchemaMemo.ts"
 import type { PromiseOr } from "../util/PromiseOr.ts"
 import { disableTool } from "./disableTool.ts"
 
-export function enableTool<K extends JSONKey, A, R extends PromiseOr<ToolResult>>(
+export function enableTool<K extends JSONKey, A>(
   key: K,
   description: string,
   params: StandardSchemaV1<JSONObject, A>,
-  implementation: (params: A) => R,
+  implementation: (params: A) => PromiseOr<ToolResult>,
 ): Generator<
-  Action<"enable_tool", {
-    Entry: never
-    Event: ToolEnabledEvent<K> | ChildEvent<"tool", K, ToolCalledEvent<K, A>, Awaited<R>>
-    Throw: never
-  }>,
-  Generator<
-    Action<"disable_tool", {
-      Entry: never
-      Event: ToolDisabledEvent<K>
-      Throw: never
-    }>,
-    void
-  >
+  Action<
+    "enable_tool",
+    Spec.Make<{
+      Event: ToolEnabled<K> | ToolCalled<K, A>
+    }>
+  >,
+  Generator<disableTool<K>, void>
 >
 export function enableTool<
   K extends JSONKey,
   A,
   Y extends Action,
-  R extends PromiseOr<ToolResult>,
+  T extends ToolResult,
 >(
   key: K,
   description: string,
   params: StandardSchemaV1<JSONObject, A>,
-  implementation: (params: A) => Actor<Y, R>,
+  implementation: (params: A) => Actor<Y, T>,
 ): Generator<
-  Action<"enable_tool", {
-    Entry: Extract<Y, Action>[""]["Entry"]
-    Event:
-      | ToolEnabledEvent<K>
-      | ChildEvent<
-        "tool",
-        K,
-        ToolCalledEvent<K, A> | Extract<Y, Action>[""]["Event"],
-        Awaited<R>
-      >
-    Throw: never
-  }>,
-  Generator<
-    Action<"disable_tool", {
-      Entry: never
-      Event: ToolDisabledEvent<K>
-      Throw: never
-    }>,
-    void
-  >
+  Action<
+    "enable_tool",
+    Spec.Make<{
+      Event: ToolEnabled<K> | ToolCalled<K, A>
+      Child: [K, Y[""]]
+      Entry: Y[""]["Entry"]
+      Value: T
+    }>
+  >,
+  Generator<disableTool<K>, void>
 >
 export function* enableTool(
   key: JSONKey,
@@ -73,12 +56,12 @@ export function* enableTool(
   return yield Action("enable_tool", async (scope) => {
     scope.event({
       type: "tool_enabled",
-      key,
       description,
       schema: await JSONSchemaMemo(params),
+      tool: key,
     })
     const tool = Tool({
-      key,
+      toolKey: key,
       description,
       params,
       implementation,

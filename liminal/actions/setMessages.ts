@@ -1,8 +1,8 @@
 import { Action } from "../Action.ts"
 import type { Actor } from "../Actor.ts"
-import type { ChildEvent } from "../events/ChildEvent.ts"
-import type { MessagesSetEvent } from "../events/MessagesSetEvent.ts"
+import type { MessagesSet } from "../events/MessagesSet.ts"
 import type { Message } from "../Message.ts"
+import type { Spec } from "../Spec.ts"
 import { isPropertyKey } from "../util/isPropertyKey.ts"
 import type { JSONKey } from "../util/JSONKey.ts"
 import type { PromiseOr } from "../util/PromiseOr.ts"
@@ -10,22 +10,27 @@ import type { PromiseOr } from "../util/PromiseOr.ts"
 export function setMessages(
   setter: (messages: Array<Message>) => PromiseOr<Array<Message>>,
 ): Generator<
-  Action<"set_messages", {
-    Entry: never
-    Event: MessagesSetEvent
-    Throw: never
-  }>,
+  Action<
+    "set_messages",
+    Spec.Make<{
+      Event: MessagesSet
+    }>
+  >,
   Array<Message>
 >
 export function setMessages<K extends JSONKey, Y extends Action>(
   key: K,
   setter: (messages: Array<Message>) => Actor<Y, Array<Message>>,
 ): Generator<
-  Action<"set_messages", {
-    Entry: Y[""]["Entry"]
-    Event: MessagesSetEvent | ChildEvent<"set_messages", K, Y[""]["Event"], Array<Message>>
-    Throw: never
-  }>,
+  Action<
+    "set_messages",
+    Spec.Make<{
+      Event: MessagesSet
+      Child: [K, Y[""]]
+      Entry: Y[""]["Entry"]
+      Value: Array<Message>
+    }>
+  >,
   Array<Message>
 >
 export function* setMessages(
@@ -34,9 +39,13 @@ export function* setMessages(
 ): Generator<Action<"set_messages">, Array<Message>> {
   return yield Action("set_messages", async (scope) => {
     if (isPropertyKey(setterOrKey)) {
-      const setterScope = scope.fork("set_messages", setterOrKey)
+      const setterScope = scope.fork("set_messages", [setterOrKey])
       const reduced = await setterScope.reduce(maybeSetter!([...scope.messages]))
       const { value } = reduced
+      setterScope.event({
+        type: "returned",
+        value,
+      })
       setterScope.event({
         type: "messages_set",
         messages: value,

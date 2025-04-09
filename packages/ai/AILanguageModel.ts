@@ -28,9 +28,9 @@ export function AILanguageModel(model: LanguageModelV1): RunInfer {
     const scope = yield* L.getScope()
     const aiTools: ToolSet = await Promise
       .all(
-        scope.tools.values().map(async (tool) => {
-          return [
-            tool.key,
+        scope.tools.values().map(async (tool) =>
+          [
+            tool.toolKey,
             aiTool({
               type: "function",
               description: tool.description,
@@ -38,7 +38,7 @@ export function AILanguageModel(model: LanguageModelV1): RunInfer {
               execute: tool.executor(scope),
             }),
           ] as const
-        }),
+        ),
       )
       .then(Object.fromEntries)
     const { text } = await generateText({

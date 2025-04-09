@@ -1,10 +1,12 @@
 import type { Type } from "./Type.js"
 
 export class TypeContext {
-  constructor(
-    readonly root: Type,
-    readonly ids: Map<Type, string> = new Map(),
-  ) {}
+  root: Type
+  ids: Map<Type, string>
+  constructor(root: Type, ids: Map<Type, string> = new Map()) {
+    this.root = root
+    this.ids = ids
+  }
 
   id(type: Type): string {
     let id = this.ids.get(type)

@@ -1,18 +1,9 @@
-import type { Action } from "../../Action.ts"
-import { arg } from "../../actions/arg.ts"
 import { setLanguageModel } from "../../actions/setLanguageModel.ts"
 import type { RunInfer } from "../../adapters.ts"
-import type { LanguageModelSetEvent } from "../../events/LanguageModelSetEvent.ts"
 import type { JSONKey } from "../../util/JSONKey.ts"
+import { declareArg } from "../declareArg.ts"
 
-export function* declareLanguageModel<K extends JSONKey>(key: K): Generator<
-  Action<"arg" | "set_language_model", {
-    Entry: [K, RunInfer]
-    Event: LanguageModelSetEvent<K>
-    Throw: never
-  }>,
-  void
-> {
-  const runInfer = yield* arg(key)<RunInfer>()
+export function* declareLanguageModel<K extends JSONKey>(key: K) {
+  const runInfer = yield* declareArg(key)<RunInfer>()
   return yield* setLanguageModel(key, runInfer)
 }

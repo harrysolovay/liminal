@@ -10,7 +10,7 @@ export default function*() {
     files: L.array(FileInfo),
     estimatedComplexity: L.enum("create", "medium", "high"),
   })
-  const fileChanges = yield* L.fork(
+  const fileChanges = yield* L.branch(
     "group-key",
     implementationPlan.files.map((file) => implement(FEAT, file)),
   )
