@@ -7,9 +7,6 @@
   "references": [
     {
       "path": "../../packages/ollama"
-    },
-    {
-      "path": "../../packages/drizzle"
     }
   ]
 }

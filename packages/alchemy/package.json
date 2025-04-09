@@ -1,12 +1,18 @@
 {
   "name": "liminal-alchemy",
   "private": true,
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/harrysolovay/liminal.git",
+    "directory": "packages/alchemy"
+  },
   "type": "module",
   "exports": {
     ".": "./dist/index.js"
   },
   "peerDependencies": {
     "alchemy": "^0.2.3",
-    "liminal": "workspace:*"
+    "liminal": "^0.1.0"
   }
 }

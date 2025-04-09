@@ -3,6 +3,7 @@ bunx
 cspotcode
 dotenvx
 dprint
+eventsource
 fuzzystrmatch
 inferencing
 inheritables

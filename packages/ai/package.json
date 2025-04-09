@@ -1,12 +1,21 @@
 {
   "name": "liminal-ai",
-  "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
+  "version": "0.0.0",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/harrysolovay/liminal.git",
+    "directory": "packages/ai"
+  },
   "type": "module",
   "exports": {
     ".": "./dist/index.js"
   },
   "peerDependencies": {
     "ai": "^4.1.61",
-    "liminal": "workspace:*"
+    "liminal": "^0.1.0"
   }
 }
