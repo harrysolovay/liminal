@@ -64,9 +64,11 @@ export default defineConfig({
         link: "/",
         items: [
           { text: "Getting Started", link: "/getting_started" },
+          { text: "Lifecycle", link: "/lifecycle.md" },
           {
             text: "Rationale",
             base: "/rationale",
+            collapsed: true,
             items: [
               { text: "Implicit Message Buffers", link: "/implicit_message_buffers" },
               { text: "Decoupling Conversations From Models", link: "/decoupling_conversations_from_models" },
@@ -78,25 +80,33 @@ export default defineConfig({
         ],
       },
       {
-        text: "Actions",
-        base: "/action",
-        link: "/",
+        text: "Actors",
+        link: "/actors",
         items: [
-          { text: "Model Declaration", link: "/declare-model" },
-          { text: "Messages", link: "/message" },
-          { text: "Inference", link: "/infer" },
-          { text: "Embedding", link: "/embed" },
-          { text: "Tool Calling", link: "/enable-tool" },
-          { text: "Custom Events", link: "/emit" },
+          { text: "Messages", link: "/messages.md" },
+          { text: "Actions", link: "/actions.md" },
+          { text: "Requirements", link: "/requirements.md" },
+          { text: "Scopes", link: "/scopes.md" },
+          { text: "Events", link: "/events.md" },
         ],
       },
       {
-        text: "Scope",
-        link: "/",
-        base: "/scope",
+        text: "Actions",
+        link: "/actions",
         items: [
-          { text: "Contexts", link: "/context" },
-          { text: "Forks", link: "/fork" },
+          { text: `${code("system")} | ${code("user")}`, link: "" },
+          { text: code("infer"), link: "/infer" },
+          { text: "embed", link: "/embed" },
+          { text: `${code("enableTool")} | ${code("disableTool")}`, link: "/enable-tool" },
+          { text: code("emit"), link: "/emit" },
+          { text: code("abort"), link: "/emit" },
+        ],
+      },
+      {
+        text: "Executors",
+        link: "/executors.md",
+        items: [
+          { text: "Event Handling", link: "/event_handling.md" },
         ],
       },
       // {
@@ -115,25 +125,25 @@ export default defineConfig({
       //   ],
       // },
       {
-        text: "Adapters",
-        base: "/adapters",
-        collapsed: false,
+        text: "Model Adapters",
+        base: "/model_adapters",
+        collapsed: true,
         link: "/",
         items: [
           { text: "AI SDK (Vercel)", link: "/ai" },
           { text: "Ollama", link: "/ollama" },
         ],
       },
-      {
-        text: "Testing",
-        base: "/testing",
-        collapsed: false,
-        items: [
-          { text: "ActorAssertions", link: "/actor-assertions" },
-          { text: "TestLanguageModel", link: "/test-language-model" },
-          { text: "TestEmbeddingModel", link: "/test-embedding-model" },
-        ],
-      },
+      // {
+      //   text: "Testing",
+      //   base: "/testing",
+      //   collapsed: false,
+      //   items: [
+      //     { text: "ActorAssertions", link: "/actor-assertions" },
+      //     { text: "TestLanguageModel", link: "/test-language-model" },
+      //     { text: "TestEmbeddingModel", link: "/test-embedding-model" },
+      //   ],
+      // },
     ],
     footer: {
       message:
@@ -154,3 +164,7 @@ export default defineConfig({
     return head
   },
 })
+
+function code(text: string): string {
+  return `<code>${text}</code>`
+}
