@@ -13,7 +13,7 @@ export interface pushModel<K extends JSONKey, M extends ModelType>
 export function* pushModel<K extends JSONKey, M extends Model>(
   modelKey: K,
   model: M,
-): Generator<pushModel<K, M["type"]>, removeModel<K, M["type"]>> {
+): Generator<pushModel<K, M["type"]>, Generator<removeModel<K, M["type"]>, void>> {
   return yield Action("remove_model", (scope) => {
     scope.event({
       type: "model_pushed",
