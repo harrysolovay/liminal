@@ -11,7 +11,11 @@ exec((event) => {
   if (event.type === "emitted") {
     event.value
   }
-  if (isScopeChildEvent(event, ["child-a", "child-d", "e"])) {}
+  if (isScopeChildEvent(event, ["child-a", "child-d", "f", "child-g"])) {
+    if (event.type === "emitted") {
+      event
+    }
+  }
   if (isScopeChildEvent(event, [L._, L._])) {
     event.scope
   }
@@ -54,9 +58,11 @@ export default function* g() {
       },
       *f() {
         yield* L.embed("something")
-        // yield* L.emit("event-f")
+        yield* L.emit("event-f")
         yield* L.branch("child-g", function*() {
-          // yield* L.emit("event-g")
+          yield* L.emit({
+            another: "event-g",
+          })
         })
       },
     })
