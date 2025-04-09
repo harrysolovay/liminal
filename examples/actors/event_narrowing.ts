@@ -5,6 +5,9 @@ const exec = Exec(g, {
 })
 
 exec((event) => {
+  if (isScopeChildEvent(event, [])) {
+    event
+  }
   if (isScopeChildEvent(event, ["child-a", "child-b", "child-c"])) {
     if (event.type === "emitted") {
       event.value
@@ -12,6 +15,9 @@ exec((event) => {
   }
   if (isScopeChildEvent(event, [])) {
     event.type // no `branched`
+    if (event.type === "returned") {
+      event.value
+    }
   }
   if (event.type === "emitted") {
     event.value

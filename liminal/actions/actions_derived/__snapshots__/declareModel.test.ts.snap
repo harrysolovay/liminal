@@ -4,6 +4,7 @@ exports[`Model generates the expected event sequence 1`] = `
 "[
   {
     "scope": [],
+    "index": 0,
     "type": "model_pushed",
     "modelKey": "secondary",
     "modelType": "language"
@@ -12,12 +13,14 @@ exports[`Model generates the expected event sequence 1`] = `
     "scope": [
       "fork-key"
     ],
+    "index": 0,
     "type": "forked"
   },
   {
     "scope": [
       "fork-key"
     ],
+    "index": 0,
     "type": "model_pushed",
     "modelKey": "child_a",
     "modelType": "language"
@@ -26,6 +29,7 @@ exports[`Model generates the expected event sequence 1`] = `
     "scope": [
       "fork-key"
     ],
+    "index": 0,
     "type": "model_pushed",
     "modelKey": "child_b",
     "modelType": "embedding"
@@ -34,6 +38,7 @@ exports[`Model generates the expected event sequence 1`] = `
     "scope": [
       "fork-key"
     ],
+    "index": 0,
     "type": "model_removed",
     "modelKey": "child_a",
     "modelType": "language"
@@ -42,6 +47,7 @@ exports[`Model generates the expected event sequence 1`] = `
     "scope": [
       "fork-key"
     ],
+    "index": 0,
     "type": "model_removed",
     "modelKey": "child_b",
     "modelType": "embedding"
@@ -50,28 +56,33 @@ exports[`Model generates the expected event sequence 1`] = `
     "scope": [
       "fork-key"
     ],
+    "index": 0,
     "type": "returned"
   },
   {
     "scope": [],
+    "index": 0,
     "type": "model_pushed",
     "modelKey": "tertiary",
     "modelType": "embedding"
   },
   {
     "scope": [],
+    "index": 0,
     "type": "model_removed",
     "modelKey": "secondary",
     "modelType": "language"
   },
   {
     "scope": [],
+    "index": 0,
     "type": "model_removed",
     "modelKey": "tertiary",
     "modelType": "embedding"
   },
   {
     "scope": [],
+    "index": 0,
     "type": "returned"
   }
 ]"
