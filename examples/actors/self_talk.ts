@@ -10,7 +10,7 @@ export default function*() {
   yield* L.user`Great, please teach something interesting about this choice of subtopic.`
   yield* L.infer()
   let i = 0
-  while (i < 2) {
+  while (i < 3) {
     const userReply = yield* L.branch("infer-user-reply", function*() {
       yield* L.user`Please reply to the last message on my behalf.`
       return yield* L.infer()
