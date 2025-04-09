@@ -64,7 +64,7 @@ ActorAssertions(genTool).assertSpec<{
   }]
   Throw: never
   Entry: never
-  Value: never
+  Value: string
 }>()
 
 function* parent() {
@@ -110,6 +110,8 @@ ActorAssertions(parent).assertSpec<
     }]
     Throw: never
     Entry: never
-    Value: never
+    Value: {
+      "arm-key": void
+    }
   }
 >()

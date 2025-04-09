@@ -6,6 +6,7 @@ export interface Action<K extends string = string, S extends Spec = Spec> {
   "": S
   type: K
   [ActionKey]: true
+  trace: string
   reducer(this: this, scope: Scope): PromiseOr<Scope>
 }
 
@@ -15,6 +16,7 @@ export function Action<K extends string, S extends Spec>(type: K, reducer: Actio
   return ({
     type,
     [ActionKey]: true,
+    trace: new Error().stack!,
     reducer,
   } satisfies Omit<Action<K, S>, "">) as never
 }

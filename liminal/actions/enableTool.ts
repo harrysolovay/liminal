@@ -3,7 +3,7 @@ import { Action } from "../Action.ts"
 import type { Actor } from "../Actor.ts"
 import type { ToolCalled } from "../events/ToolCalled.ts"
 import type { ToolEnabled } from "../events/ToolEnabled.ts"
-import type { MakeSpec } from "../Spec.ts"
+import type { Spec } from "../Spec.ts"
 import { Tool, type ToolImplementation, type ToolResult } from "../Tool.ts"
 import type { JSONKey } from "../util/JSONKey.ts"
 import type { JSONObject } from "../util/JSONObject.ts"
@@ -11,15 +11,15 @@ import { JSONSchemaMemo } from "../util/JSONSchemaMemo.ts"
 import type { PromiseOr } from "../util/PromiseOr.ts"
 import { disableTool } from "./disableTool.ts"
 
-export function enableTool<K extends JSONKey, A, R extends PromiseOr<ToolResult>>(
+export function enableTool<K extends JSONKey, A>(
   key: K,
   description: string,
   params: StandardSchemaV1<JSONObject, A>,
-  implementation: (params: A) => R,
+  implementation: (params: A) => PromiseOr<ToolResult>,
 ): Generator<
   Action<
     "enable_tool",
-    MakeSpec<{
+    Spec.Make<{
       Event: ToolEnabled<K> | ToolCalled<K, A>
     }>
   >,
@@ -29,19 +29,20 @@ export function enableTool<
   K extends JSONKey,
   A,
   Y extends Action,
-  R extends ToolResult,
+  T extends ToolResult,
 >(
   key: K,
   description: string,
   params: StandardSchemaV1<JSONObject, A>,
-  implementation: (params: A) => Actor<Y, R>,
+  implementation: (params: A) => Actor<Y, T>,
 ): Generator<
   Action<
     "enable_tool",
-    MakeSpec<{
+    Spec.Make<{
       Event: ToolEnabled<K> | ToolCalled<K, A>
       Child: [K, Y[""]]
       Entry: Y[""]["Entry"]
+      Value: T
     }>
   >,
   Generator<disableTool<K>, void>

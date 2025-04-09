@@ -1,11 +1,11 @@
 import { Action } from "../Action.ts"
 import type { MessageAppended } from "../events/MessageAppended.ts"
 import type { Message, MessageContents, MessageRole, Messages } from "../Message.ts"
-import type { MakeSpec } from "../Spec.ts"
+import type { Spec } from "../Spec.ts"
 import { removeMessage } from "./removeMessage.ts"
 
 export interface appendMessage<M extends Message>
-  extends Action<"append_message", MakeSpec<{ Event: MessageAppended<M> }>>
+  extends Action<"append_message", Spec.Make<{ Event: MessageAppended<M> }>>
 {}
 
 export function* appendMessage<R extends MessageRole>(

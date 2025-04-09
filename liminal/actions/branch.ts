@@ -1,7 +1,7 @@
 import { Action } from "../Action.ts"
 import type { Actor, ActorLike, ActorLikeArray, ActorLikeRecord, ActorLikesT, ActorLikeY } from "../Actor.ts"
 import type { ActorLikes } from "../Actor.ts"
-import type { MakeSpec } from "../Spec.ts"
+import type { Spec } from "../Spec.ts"
 import type { JSONKey } from "../util/JSONKey.ts"
 import { unwrapDeferred } from "../util/unwrapDeferred.ts"
 
@@ -15,9 +15,10 @@ export function branch<
 ): Generator<
   Action<
     "branch",
-    MakeSpec<{
+    Spec.Make<{
       Child: [K, Y[""]]
       Entry: Y[""]["Entry"]
+      Value: T
     }>
   >,
   T
@@ -25,17 +26,18 @@ export function branch<
 export function branch<K extends JSONKey, const A extends ActorLikeArray>(name: K, actorLikeArray: A): Generator<
   Action<
     "branch",
-    MakeSpec<{
+    Spec.Make<{
       Child: [
         K,
         {
-          [L in keyof A]: MakeSpec<{
+          [L in keyof A]: Spec.Make<{
             Child: [L, ActorLikeY<A[L]>[""]]
             Entry: ActorLikeY<A[L]>[""]["Entry"]
           }>
         }[keyof A],
       ]
       Entry: ActorLikeY<A[number]>[""]["Entry"]
+      Value: ActorLikesT<A>
     }>
   >,
   ActorLikesT<A>
@@ -43,17 +45,18 @@ export function branch<K extends JSONKey, const A extends ActorLikeArray>(name: 
 export function branch<K extends JSONKey, A extends ActorLikeRecord>(name: K, actorLikeRecord: A): Generator<
   Action<
     "branch",
-    MakeSpec<{
+    Spec.Make<{
       Child: [
         K,
         {
-          [L in Exclude<keyof A, symbol>]: MakeSpec<{
+          [L in Exclude<keyof A, symbol>]: Spec.Make<{
             Child: [L, ActorLikeY<A[L]>[""]]
             Entry: ActorLikeY<A[L]>[""]["Entry"]
           }>
         }[Exclude<keyof A, symbol>],
       ]
       Entry: ActorLikeY<A[keyof A]>[""]["Entry"]
+      Value: ActorLikesT<A>
     }>
   >,
   ActorLikesT<A>

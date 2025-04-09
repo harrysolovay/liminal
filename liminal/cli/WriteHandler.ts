@@ -1,6 +1,6 @@
 import { mkdir, writeFile } from "node:fs/promises"
 import { type ParsedPath, relative, resolve } from "node:path"
-import type { ResolvedEvent } from "../events/ResolvedEvent.ts"
+import type { EventResolved } from "../events/EventResolved.ts"
 
 export async function WriteHandler({
   stateDir,
@@ -13,7 +13,7 @@ export async function WriteHandler({
   parsedPath: ParsedPath
   startTime: number
   configDir: string
-}): Promise<(event: ResolvedEvent) => Promise<void>> {
+}): Promise<(event: EventResolved) => Promise<void>> {
   const destDir = resolve(stateDir, relative(configDir, parsedPath.dir), parsedPath.name, startTime.toString())
   let ensureDir: undefined | PromiseWithResolvers<void>
   let i = 0

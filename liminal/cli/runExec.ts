@@ -1,6 +1,6 @@
 import { dirname, isAbsolute, parse, resolve } from "node:path"
 import { parseArgs, type ParseArgsConfig } from "node:util"
-import { type Actor, Exec, L, type LEvent, type LiminalConfig, type ResolvedEvent } from "../index.ts"
+import { type Actor, type EventResolved, Exec, L, type LEvent, type LiminalConfig } from "../index.ts"
 import type { CliCtx } from "./cli_common.ts"
 import { WriteHandler } from "./WriteHandler.ts"
 
@@ -54,7 +54,7 @@ export async function runExec(ctx: CliCtx, args: Array<string>) {
       stateDir: typeof config.write === "string" ? config.write : ".liminal",
     })
     : undefined
-  const printHandlerOrNoop = config.silent ? undefined : (event: ResolvedEvent) => console.log(event)
+  const printHandlerOrNoop = config.silent ? undefined : (event: EventResolved) => console.log(event)
   const exec = Exec(actorLike, {
     default: config.default,
     args: config.args!,

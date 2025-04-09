@@ -2,7 +2,7 @@ import { Action } from "../Action.ts"
 import type { Actor } from "../Actor.ts"
 import type { MessagesSet } from "../events/MessagesSet.ts"
 import type { Message } from "../Message.ts"
-import type { MakeSpec } from "../Spec.ts"
+import type { Spec } from "../Spec.ts"
 import { isPropertyKey } from "../util/isPropertyKey.ts"
 import type { JSONKey } from "../util/JSONKey.ts"
 import type { PromiseOr } from "../util/PromiseOr.ts"
@@ -12,7 +12,7 @@ export function setMessages(
 ): Generator<
   Action<
     "set_messages",
-    MakeSpec<{
+    Spec.Make<{
       Event: MessagesSet
     }>
   >,
@@ -24,10 +24,11 @@ export function setMessages<K extends JSONKey, Y extends Action>(
 ): Generator<
   Action<
     "set_messages",
-    MakeSpec<{
+    Spec.Make<{
       Event: MessagesSet
       Child: [K, Y[""]]
       Entry: Y[""]["Entry"]
+      Value: Array<Message>
     }>
   >,
   Array<Message>

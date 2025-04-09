@@ -8,21 +8,25 @@ import type { Type } from "./Type.ts"
 import { TypeVisitor } from "./TypeVisitor.ts"
 
 export type AssertDiagnostics = Array<Diagnostic>
-export class Diagnostic {
-  constructor(
-    readonly path: AssertPath,
-    readonly type: Type,
-    readonly error: unknown,
-  ) {}
 
-  message() {
-    return this.error instanceof Error ? this.error.message : JSON.stringify(this.error)
+export type Diagnostic = ReturnType<typeof Diagnostic>
+export function Diagnostic(path: AssertPath, type: Type, error: unknown) {
+  return {
+    path,
+    type,
+    error,
+    message,
+    formatPath,
   }
 
-  formatPath() {
+  function message() {
+    return error instanceof Error ? error.message : JSON.stringify(error)
+  }
+
+  function formatPath() {
     let formatted = ""
-    for (let i = 0; i < this.path.length; i++) {
-      const key = this.path[i]!
+    for (let i = 0; i < path.length; i++) {
+      const key = path[i]!
       if (typeof key === "string") {
         try {
           const int = parseInt(key)
@@ -41,6 +45,7 @@ export class Diagnostic {
     return formatted
   }
 }
+
 export type AssertPath = Array<JSONKey>
 
 // Possibly: `nullUnionFieldsAsOptional?: boolean`
@@ -51,19 +56,24 @@ export function AssertDiagnostics<T extends JSONValue, J extends JSONType>(
   type: Type<T, J>,
   value: unknown,
 ): Array<Diagnostic> {
-  const state = new ValueVisitorState()
+  const state = ValueVisitorState()
   visit([config, false], type)(value, state)
   return state.diagnostics
 }
 
-class ValueVisitorState {
-  constructor(
-    readonly diagnostics: Array<Diagnostic> = [],
-    readonly path: Array<number | string> = [],
-  ) {}
+type ValueVisitorState = ReturnType<typeof ValueVisitorState>
+function ValueVisitorState(
+  diagnostics: Array<Diagnostic> = [],
+  path: Array<number | string> = [],
+) {
+  return {
+    diagnostics,
+    path,
+    next,
+  }
 
-  new(key?: JSONKey) {
-    return new ValueVisitorState(this.diagnostics, [...this.path, ...key !== undefined ? [key] : []])
+  function next(key?: JSONKey) {
+    return ValueVisitorState(diagnostics, [...path, ...key !== undefined ? [key] : []])
   }
 }
 
@@ -74,7 +84,7 @@ const visit: TypeVisitor<AssertDiagnosticsConfig, (value: unknown, vState: Value
         try {
           next(tState, type)(value, vState)
         } catch (error) {
-          vState.diagnostics.push(new Diagnostic(vState.path, type, error))
+          vState.diagnostics.push(Diagnostic(vState.path, type, error))
         }
       }
     },
@@ -112,7 +122,7 @@ const visit: TypeVisitor<AssertDiagnosticsConfig, (value: unknown, vState: Value
       const visitElement = visit(tState, element)
       return (value, vState) => {
         assert(Array.isArray(value))
-        value.forEach((e, i) => visitElement(e, vState.new(i)))
+        value.forEach((e, i) => visitElement(e, vState.next(i)))
       }
     },
     enum(_tState, _type, ...values) {
@@ -124,7 +134,7 @@ const visit: TypeVisitor<AssertDiagnosticsConfig, (value: unknown, vState: Value
     _union(tState, _type, ...members) {
       return (value, vState) => {
         assert(members.some((member) => {
-          const memberState = vState.new()
+          const memberState = vState.next()
           visit(tState, member)(value, memberState)
           return !memberState.diagnostics.length
         }))
@@ -162,7 +172,7 @@ function visitField(
   assert(key in value)
   const childValue = value[key as never]
   assert(childValue !== undefined)
-  visit(tState, type)(childValue, vState.new(key))
+  visit(tState, type)(childValue, vState.next(key))
 }
 
 // TODO: serialize signature

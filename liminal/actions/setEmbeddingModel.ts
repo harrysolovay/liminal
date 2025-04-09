@@ -1,11 +1,11 @@
 import { Action } from "../Action.ts"
 import type { RunEmbed } from "../adapters.ts"
 import type { EmbeddingModelSet } from "../events/EmbeddingModelSet.ts"
-import type { MakeSpec } from "../Spec.ts"
+import type { Spec } from "../Spec.ts"
 import type { JSONKey } from "../util/JSONKey.ts"
 
 export interface setEmbeddingModel<K extends JSONKey>
-  extends Action<"set_embedding_model", MakeSpec<{ Event: EmbeddingModelSet<K> }>>
+  extends Action<"set_embedding_model", Spec.Make<{ Event: EmbeddingModelSet<K> }>>
 {}
 
 export function* setEmbeddingModel<K extends JSONKey>(

@@ -1,6 +1,6 @@
 import { Action } from "../Action.ts"
 import type { ActorLike } from "../Actor.ts"
-import type { MakeSpec, Spec } from "../Spec.ts"
+import type { Spec } from "../Spec.ts"
 import type { JSONKey } from "../util/JSONKey.ts"
 import type { Result } from "../util/Result.ts"
 import { unwrapDeferred } from "../util/unwrapDeferred.ts"
@@ -10,7 +10,13 @@ function* catch_<K extends JSONKey, Y extends Action, T>(
   key: K,
   actorLike: ActorLike<Y, T>,
 ): Generator<
-  Action<"catch", MakeSpec<{ Child: [K, Y[""]] }>>,
+  Action<
+    "catch",
+    Spec.Make<{
+      Child: [K, Y[""]]
+      Value: T
+    }>
+  >,
   Result<T, Y[""]["Throw"]>
 > {
   return yield Action("catch", async (scope) => {

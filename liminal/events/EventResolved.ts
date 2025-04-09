@@ -4,14 +4,14 @@ import type { JSONKey } from "../util/JSONKey.ts"
 import type { LEvent } from "./LEvent.ts"
 import type { Returned } from "./Returned.ts"
 
-export type ResolvedEvent = LEvent & {
+export type EventResolved = LEvent & {
   scope: Array<JSONKey>
 }
 
-export type ExtractResolvedEvent<S extends Spec, P extends Array<JSONKey> = []> =
+export type ExtractEventResolved<S extends Spec, P extends Array<JSONKey> = []> =
   | ([S["Event"]] extends [never] ? never : Expand<{ scope: P } & S["Event"]>)
   | ([S["Child"]] extends [infer C extends [JSONKey, Spec]] ? {
-      [L in C[0]]: ExtractResolvedEvent<Extract<C, [L, Spec]>[1], [...P, L]>
+      [L in C[0]]: ExtractEventResolved<Extract<C, [L, Spec]>[1], [...P, L]>
     }[C[0]]
     : never)
-  | ([S["Value"]] extends [never] ? never : Returned<S["Value"]>)
+  | ([S["Value"]] extends [never] ? never : Expand<{ scope: P } & Returned<S["Value"]>>)

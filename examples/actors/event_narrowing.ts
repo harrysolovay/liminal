@@ -1,4 +1,4 @@
-import { Exec, L } from "liminal"
+import { Exec, isWithinScope, isWithinSubscope, L } from "liminal"
 
 const exec = Exec(g, {
   default: null!,
@@ -6,7 +6,13 @@ const exec = Exec(g, {
 
 exec((event) => {
   if (event.type === "emitted" && event.key === "event-f") {
-    event.scope // see how it narrows.
+    event.scope
+  }
+  if (isWithinScope(event, [L._, L._])) {
+    event.scope
+  }
+  if (isWithinSubscope(event, ["child-a", L._, "f"])) {
+    event.scope
   }
 })
 
@@ -18,19 +24,21 @@ export default function* g() {
   yield* L.branch("child-a", function*() {
     yield* L.emit("event-a")
     yield* L.branch("child-b", function*() {
-      yield* L.object({
+      const g = yield* L.object({
         something: L.string,
       })
       yield* L.emit("event-b")
       yield* L.branch("child-c", function*() {
         yield* L.emit("event-c")
       })
+      return g
     })
     yield* L.emit("another-event")
     yield* L.branch("child-d", {
       *e() {
         yield* L.emit("event-e")
         yield* L.branch("child-e", function*() {})
+        return "hello"
       },
       *f() {
         yield* L.embed("something")

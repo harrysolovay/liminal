@@ -1,11 +1,11 @@
 import { Action } from "../Action.ts"
 import type { Emitted } from "../events/Emitted.ts"
-import type { MakeSpec } from "../Spec.ts"
+import type { Spec } from "../Spec.ts"
 import type { JSONKey } from "../util/JSONKey.ts"
 import type { JSONValue } from "../util/JSONValue.ts"
 
 export interface emit<K extends JSONKey, V extends JSONValue | undefined>
-  extends Action<"emit", MakeSpec<{ Event: Emitted<K, V> }>>
+  extends Action<"emit", Spec.Make<{ Event: Emitted<K, V> }>>
 {}
 
 export function* emit<K extends JSONKey, V extends JSONValue | undefined = undefined>(

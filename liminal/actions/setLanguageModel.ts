@@ -1,11 +1,11 @@
 import { Action } from "../Action.ts"
 import type { RunInfer } from "../adapters.ts"
 import type { LanguageModelSet } from "../events/LanguageModelSet.ts"
-import type { MakeSpec } from "../Spec.ts"
+import type { Spec } from "../Spec.ts"
 import type { JSONKey } from "../util/JSONKey.ts"
 
 export interface setLanguageModel<K extends JSONKey>
-  extends Action<"set_language_model", MakeSpec<{ Event: LanguageModelSet<K> }>>
+  extends Action<"set_language_model", Spec.Make<{ Event: LanguageModelSet<K> }>>
 {}
 
 export function* setLanguageModel<K extends JSONKey>(

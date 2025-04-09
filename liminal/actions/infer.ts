@@ -2,7 +2,7 @@ import type { StandardSchemaV1 } from "@standard-schema/spec"
 import { Action } from "../Action.ts"
 import type { InferenceRequested } from "../events/InferenceRequested.ts"
 import type { Inferred } from "../events/Inferred.ts"
-import type { MakeSpec } from "../Spec.ts"
+import type { Spec } from "../Spec.ts"
 import type { JSONObject } from "../util/JSONObject.ts"
 import type { JSONValue } from "../util/JSONValue.ts"
 
@@ -11,7 +11,7 @@ export { infer_ as infer }
 interface infer_<_T> extends
   Action<
     "infer",
-    MakeSpec<{
+    Spec.Make<{
       Event: InferenceRequested | Inferred
     }>
   >
