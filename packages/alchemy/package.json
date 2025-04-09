@@ -1,7 +1,6 @@
 {
   "name": "liminal-alchemy",
   "private": true,
-  "version": "0.0.0",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -14,6 +13,6 @@
   },
   "peerDependencies": {
     "alchemy": "^0.2.3",
-    "liminal": "workspace:*"
+    "liminal": "^0.1.0"
   }
 }

@@ -6,8 +6,8 @@
     "@ai-sdk/openai": "^1.2.5",
     "ai": "^4.1.61",
     "arktype": "^2.1.9",
-    "liminal": "workspace:*",
-    "liminal-ai": "workspace:*",
+    "liminal": "^0.1.0",
+    "liminal-ai": "^0.0.0:*",
     "liminal-common": "workspace:*"
   },
   "devDependencies": {

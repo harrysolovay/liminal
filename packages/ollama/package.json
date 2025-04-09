@@ -1,7 +1,6 @@
 {
   "name": "liminal-ollama",
   "private": true,
-  "version": "0.0.0",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -13,7 +12,7 @@
     ".": "./dist/index.js"
   },
   "peerDependencies": {
-    "liminal": "workspace:*",
+    "liminal": "^0.1.0",
     "ollama": "^0.5.14"
   }
 }

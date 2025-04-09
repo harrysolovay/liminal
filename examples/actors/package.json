@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "liminal": "workspace:*",
+    "liminal": "^0.1.0",
     "mathjs": "^14.3.1"
   }
 }

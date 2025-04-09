@@ -5,6 +5,6 @@
     ".": "./dist/index.js"
   },
   "dependencies": {
-    "liminal": "workspace:*"
+    "liminal": "^0.1.0"
   }
 }
