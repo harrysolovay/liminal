@@ -10,7 +10,7 @@
     "@types/markdown-it-footnote": "^3.0.4",
     "arktype": "^2.1.15",
     "effect": "^3.14.2",
-    "liminal": "^0.1.1",
+    "liminal": "^0.5.0",
     "markdown-it-footnote": "^4.0.0",
     "valibot": "^1.0.0",
     "vitepress": "^1.5.0",

@@ -16,6 +16,6 @@
   },
   "peerDependencies": {
     "ai": "^4.1.61",
-    "liminal": "^0.1.1"
+    "liminal": "^0.5.0"
   }
 }
