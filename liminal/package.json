@@ -1,9 +1,17 @@
 {
   "name": "liminal",
-  "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/harrysolovay/liminal.git",
+    "directory": "liminal"
+  },
   "type": "module",
   "description": "Liminal is a model-agnostic library for conversation state management.",
-  "version": "0.1.0",
   "bin": {
     "liminal": "./dist/cli/main.js"
   },

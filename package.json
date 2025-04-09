@@ -7,10 +7,12 @@
     "watch": "tsc -b -w",
     "liminal": "dotenvx run -- liminal",
     "liminal.land": "bun run --filter liminal.land vitepress",
-    "example:vite-react-app": "bun run --filter=liminal-example-vite-react-app dev"
+    "example:vite-react-app": "bun run --filter=liminal-example-vite-react-app dev",
+    "changeset": "changeset"
   },
   "devDependencies": {
     "@ai-sdk/openai": "^1.2.5",
+    "@changesets/cli": "^2.28.1",
     "@dotenvx/dotenvx": "^1.39.1",
     "@types/bun": "^1.2.8",
     "@types/node": "^22.13.16",

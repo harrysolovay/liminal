@@ -32,9 +32,6 @@
       "path": "./packages/ollama"
     },
     {
-      "path": "./packages/drizzle"
-    },
-    {
       "path": "./tsconfig.root.json"
     }
   ]
