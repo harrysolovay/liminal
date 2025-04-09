@@ -25,5 +25,5 @@
     "https://plugins.dprint.dev/json-0.20.0.wasm",
     "https://plugins.dprint.dev/g-plane/malva-v0.11.2.wasm"
   ],
-  "excludes": ["CHANGELOG.md"]
+  "excludes": [".changeset/*.md", "CHANGELOG.md"]
 }
