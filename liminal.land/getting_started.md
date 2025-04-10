@@ -4,8 +4,7 @@
 
 `actor.ts`
 
-```ts twoslash
-// ---cut---
+```ts
 import { L } from "liminal"
 
 export default function*() {
