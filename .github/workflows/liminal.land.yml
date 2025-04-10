@@ -20,7 +20,8 @@ jobs:
         with:
           bun-version: latest
       - uses: actions/configure-pages@v4
-      - run: bun i && bun liminal.land build
+      - run: bun i
+      - run: bun liminal.land build
       - uses: actions/upload-pages-artifact@v3
         with:
           path: .vitepress/dist
