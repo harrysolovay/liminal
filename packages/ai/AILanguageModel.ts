@@ -14,7 +14,7 @@ export function AILanguageModel(model: LanguageModelV1): LanguageModel {
     type: "language",
     async *infer(type) {
       const messages = yield* L.messages
-      const coreMessages = [...messages.values().map(toCoreMessage)]
+      const coreMessages = [...messages].map(toCoreMessage)
       if (type) {
         const schema = await _util.JSONSchemaMemo(type)
         let { object } = await generateObject({

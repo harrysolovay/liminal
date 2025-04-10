@@ -20,7 +20,7 @@ export function setMessages(
 >
 export function setMessages<K extends JSONKey, Y extends Action>(
   key: K,
-  createSetterAgent: (messages: Array<Message>) => Agent<Y, Array<Message>>,
+  createSetterAgent: (messages: Array<Message>) => Agent<Y, void>,
 ): Generator<
   Action<
     "set_messages",
@@ -35,28 +35,24 @@ export function setMessages<K extends JSONKey, Y extends Action>(
 >
 export function* setMessages(
   setterOrKey: JSONKey | ((messages: Array<Message>) => PromiseOr<Array<Message>>),
-  maybeSetter?: (messages: Array<Message>) => Agent<Action, Array<Message>>,
+  maybeSetter?: (messages: Array<Message>) => Agent<Action, void>,
 ): Generator<Action<"set_messages">, Array<Message>> {
   return yield Action("set_messages", async (scope) => {
     if (isPropertyKey(setterOrKey)) {
       const setterScope = scope.fork("set_messages", [setterOrKey])
       const reduced = await setterScope.reduce(maybeSetter!([...scope.messages]))
-      const { value } = reduced
-      setterScope.event({
-        type: "returned",
-        value,
-      })
+      const { messages } = reduced
       setterScope.event({
         type: "messages_set",
-        messages: value,
+        messages: [...messages],
       })
       return {
         ...scope,
-        messages: value,
+        messages,
         nextArg: scope.messages,
       }
     }
-    const messages = await setterOrKey([...scope.messages])
+    const messages = new Set(await setterOrKey([...scope.messages]))
     return {
       ...scope,
       messages,

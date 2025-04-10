@@ -1,4 +1,4 @@
-# Messages
+# Liminal Messages
 
 There are four kinds of Messages.
 
@@ -22,3 +22,92 @@ function* G() {
 > Note: this example does not showcase the creation of `AssistantMessage` nor
 > `ToolMessage`, as these should never be explicitly yielded outside a
 > `RunInfer` implementation.
+
+## Read Messages
+
+```ts
+function* g() {
+  const messages = yield* L.messages
+}
+```
+
+## Append a System Message
+
+```ts
+function* g() {
+  yield* L.system`Message A.`
+  yield* L.system("Message B.")
+}
+```
+
+## Append a User Message
+
+```ts
+function* g() {
+  yield* L.user`Message A.`
+  yield* L.user("Message B.")
+}
+```
+
+## Set Messages
+
+### Set Messages Via Function
+
+```ts
+function* g() {
+  // Synchronously.
+  yield* L.messages((messages) => [...newMessages])
+  // Asynchronously.
+  yield* L.messages((messages) => Promise.resolve([...newMessages]))
+}
+```
+
+### Set Messages Via Agent-like
+
+```ts
+function* g() {
+  yield* L.messages("setter-scope-key", function*(messages) {
+    // This is an isolated scope.
+    // Yield directives as you see fit to create a new message state.
+    // For example:
+    yield* L
+      .user`Great conversation so far. Can you please summarize the key points for me?`
+    const summary = yield* L.infer
+    yield* L.clear()
+    yield* L.user`
+      The following is a summary of the current conversation.
+
+      ---
+
+      ${summary}
+    `
+  })
+}
+```
+
+```ts
+declare function messagesSetter(
+  message: Set<Message>,
+): Set<Message> | Promise<Set<Message>>
+
+function* g() {
+  yield* L.messages(messagesSetter)
+}
+```
+
+## Append an Assistant Message
+
+```ts
+function* g() {
+  yield* L.assistant`Message A.`
+  yield* L.assistant("Message B.")
+}
+```
+
+## Append a Tool Message
+
+```ts
+function* g() {
+  yield* L.appendMessage("tool", toolMessage)
+}
+```
