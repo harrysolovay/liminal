@@ -1,6 +1,6 @@
 import { dirname, isAbsolute, parse, resolve } from "node:path"
 import { parseArgs, type ParseArgsConfig } from "node:util"
-import { type Agent, type EventResolved, Exec, L, type LiminalConfig } from "../index.ts"
+import { type Agent, type EventResolved, exec, L, type LiminalConfig } from "../index.ts"
 import type { CliCtx } from "./cli_common.ts"
 import { WriteHandler } from "./WriteHandler.ts"
 
@@ -60,14 +60,13 @@ export async function runExec(ctx: CliCtx, args: Array<string>) {
     })
     : undefined
   const printHandlerOrNoop = config.silent ? undefined : (event: EventResolved) => console.log(event)
-  const exec = Exec(agentLike, {
+  await exec(agentLike, {
     default: config.default,
     args: config.args!,
-  })
-  await exec((event) => {
-    printHandlerOrNoop?.(event)
-    writeHandlerOrNoop?.(event)
-  }, {
+    handler(event) {
+      printHandlerOrNoop?.(event)
+      writeHandlerOrNoop?.(event)
+    },
     signal: ctx.ctl.signal,
   })
 }

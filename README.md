@@ -40,7 +40,7 @@ inference.
 `conversation.ts`
 
 ```ts
-import { Exec, L } from "liminal"
+import { exec, L } from "liminal"
 
 export default function*() {
   yield* L.declareLanguageModel("reasoning")
@@ -88,14 +88,12 @@ import { AILanguageModel } from "liminal-ai"
 // From before.
 import conversation from "./conversation.ts"
 
-const exec = Exec(Conversation, {
+const result = await exec(Conversation, {
   default: AILanguageModel(openai("gpt-4o-mini")),
   bind: {
     reasoning: AILanguageModel(openai("o3-mini")),
   },
 })
-
-const result = await exec()
 
 result satisfies Array<string>
 ```

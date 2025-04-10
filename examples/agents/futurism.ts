@@ -1,12 +1,13 @@
 import { openai } from "@ai-sdk/openai"
-import { Exec, L } from "liminal"
+import { exec, L } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
-await Exec(futureTech, {
+await exec(futureTech, {
   default: AILanguageModel(openai("gpt-4o-mini", {
     structuredOutputs: true,
   })),
-})(console.log)
+  handler: console.log,
+})
 
 function* futureTech() {
   yield* L.system`You are an expert in the domain of technological futurism.`

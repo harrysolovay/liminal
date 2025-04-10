@@ -2,6 +2,7 @@ import type { Action } from "./Action.ts"
 import type { Agent } from "./Agent.ts"
 import type { EventHandler } from "./events/EventHandler.ts"
 import type { LEvent } from "./events/LEvent.ts"
+import type { ExecConfig } from "./Exec.ts"
 import type { Message } from "./Message.ts"
 import type { EmbeddingModel, LanguageModel } from "./Model.ts"
 import type { Tool } from "./Tool.ts"
@@ -49,12 +50,12 @@ export interface Section {
   messages: Set<Message>
 }
 
-export function RootScope(
-  defaultLanguageModel: LanguageModel,
-  args?: Record<JSONKey, any>,
-  handler: EventHandler = () => {},
-  signal?: AbortSignal,
-): RootScope {
+export function RootScope({
+  signal,
+  args,
+  handler,
+  default: defaultLanguageModel,
+}: ExecConfig): RootScope {
   const controller = new AbortController()
   signal?.addEventListener("abort", () => {
     controller.abort()

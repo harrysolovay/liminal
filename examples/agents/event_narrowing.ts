@@ -1,51 +1,50 @@
-import { Exec, isScopeChildEvent, isScopeDescendantEvent, L } from "liminal"
+import { exec, isScopeChildEvent, isScopeDescendantEvent, L } from "liminal"
 
-const exec = Exec(g, {
+await exec(g, {
   default: null!,
-})
-
-exec((event) => {
-  if (isScopeChildEvent(event, ["child-a", "child-b", "child-c"])) {
-    event
-  }
-  if (isScopeChildEvent(event, ["child-a", "child-d", "f"])) {
-    if (event.type === "returned") {
-      event.value
-    }
-  }
-  if (isScopeChildEvent(event, ["child-a", "child-b", "child-c"])) {
-    if (event.type === "emitted") {
-      event.value
-    }
-  }
-  if (isScopeChildEvent(event, [])) {
-    event.type // no `branched`
-    if (event.type === "returned") {
-      event.value
-    }
-  }
-  if (event.type === "emitted") {
-    event.value
-  }
-  if (isScopeChildEvent(event, ["child-a", "child-d", "f", "child-g"])) {
-    if (event.type === "emitted") {
+  handler(event) {
+    if (isScopeChildEvent(event, ["child-a", "child-b", "child-c"])) {
       event
     }
-  }
-  if (isScopeChildEvent(event, [L._, L._])) {
-    event.scope
-  }
-  if (isScopeDescendantEvent(event, ["child-a", L._, "f"])) {
-    event.scope
-  }
-  if (isScopeDescendantEvent(event, ["child-a", "child-d"])) {
-    event.scope
-  }
-  if (isScopeChildEvent(event, ["child-a", "child-d", "e"])) {
-    if (event.type === "returned") {
+    if (isScopeChildEvent(event, ["child-a", "child-d", "f"])) {
+      if (event.type === "returned") {
+        event.value
+      }
+    }
+    if (isScopeChildEvent(event, ["child-a", "child-b", "child-c"])) {
+      if (event.type === "emitted") {
+        event.value
+      }
+    }
+    if (isScopeChildEvent(event, [])) {
+      event.type // no `branched`
+      if (event.type === "returned") {
+        event.value
+      }
+    }
+    if (event.type === "emitted") {
       event.value
     }
-  }
+    if (isScopeChildEvent(event, ["child-a", "child-d", "f", "child-g"])) {
+      if (event.type === "emitted") {
+        event
+      }
+    }
+    if (isScopeChildEvent(event, [L._, L._])) {
+      event.scope
+    }
+    if (isScopeDescendantEvent(event, ["child-a", L._, "f"])) {
+      event.scope
+    }
+    if (isScopeDescendantEvent(event, ["child-a", "child-d"])) {
+      event.scope
+    }
+    if (isScopeChildEvent(event, ["child-a", "child-d", "e"])) {
+      if (event.type === "returned") {
+        event.value
+      }
+    }
+  },
 })
 
 export default function* g() {

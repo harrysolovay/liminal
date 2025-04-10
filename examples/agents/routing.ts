@@ -21,6 +21,7 @@ export default function*() {
       complexity: L.enum("simple", "complex"),
     })
   })
+  console.log(yield* L.messages)
   const response = yield* L.branch("handle", function*() {
     yield* L.clear()
     yield* L.system(USE_CLASSIFICATION_AGENT_PROMPTS[classification.type])

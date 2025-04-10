@@ -6,34 +6,32 @@ import type { Spec } from "../Spec.ts"
 import { isPropertyKey } from "../util/isPropertyKey.ts"
 import type { JSONKey } from "../util/JSONKey.ts"
 import type { PromiseOr } from "../util/PromiseOr.ts"
+import { type getScope, scope } from "./scope.ts"
 
-export function setMessages(
-  setter: (messages: Array<Message>) => PromiseOr<Array<Message>>,
-): Generator<
-  Action<
-    "set_messages",
-    Spec.Make<{
-      Event: MessagesSet
-    }>
-  >,
-  Array<Message>
->
-export function setMessages<K extends JSONKey, Y extends Action>(
-  key: K,
-  createSetterAgent: (messages: Array<Message>) => Agent<Y, void>,
-): Generator<
-  Action<
-    "set_messages",
-    Spec.Make<{
-      Event: MessagesSet
-      Child: [K, Y[""]]
-      Entry: Y[""]["Entry"]
-      Value: Array<Message>
-    }>
-  >,
-  Array<Message>
->
-export function* setMessages(
+interface messages extends Iterable<getScope, Set<Message>> {
+  (
+    setter: (messages: Array<Message>) => PromiseOr<Array<Message>>,
+  ): Generator<Action<"set_messages", Spec.Make<{ Event: MessagesSet }>>, Array<Message>>
+  <K extends JSONKey, Y extends Action>(
+    key: K,
+    setter: (messages: Array<Message>) => Agent<Y, void>,
+  ): Generator<
+    Action<
+      "set_messages",
+      Spec.Make<{ Event: MessagesSet; Child: [K, Y[""]]; Entry: Y[""]["Entry"]; Value: Array<Message> }>
+    >,
+    Array<Message>
+  >
+}
+
+export const messages: messages = Object.assign(messages_, {
+  *[Symbol.iterator]() {
+    const scope_ = yield* scope
+    return scope_.messages
+  },
+}) as never
+
+function* messages_(
   setterOrKey: JSONKey | ((messages: Array<Message>) => PromiseOr<Array<Message>>),
   maybeSetter?: (messages: Array<Message>) => Agent<Action, void>,
 ): Generator<Action<"set_messages">, Array<Message>> {
@@ -60,3 +58,4 @@ export function* setMessages(
     }
   })
 }
+Object.defineProperty(messages_, "name", { value: "messages" })
