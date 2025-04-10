@@ -1,11 +1,10 @@
 import { transformerTwoslash } from "@shikijs/vitepress-twoslash"
-import { _util } from "liminal"
 import footnotePlugin from "markdown-it-footnote"
 import { defineConfig, HeadConfig } from "vitepress"
 import packageJson from "../../liminal/package.json" with { type: "json" }
 
 // cspell:disable
-const GOOGLE_ANALYTICS = _util.dedent`
+const GOOGLE_ANALYTICS = `
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
