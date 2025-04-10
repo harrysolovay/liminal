@@ -6,6 +6,7 @@
     "@ai-sdk/openai": "^1.3.9",
     "liminal": "workspace:*",
     "liminal-ai": "workspace:*",
+    "liminal-ollama": "workspace:*",
     "mathjs": "^14.3.1"
   }
 }

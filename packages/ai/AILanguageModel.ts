@@ -12,6 +12,7 @@ import { _util, L, type LanguageModel, type Message } from "liminal"
 export function AILanguageModel(model: LanguageModelV1): LanguageModel {
   return {
     type: "language",
+    vendor: "vercel_ai_sdk",
     async *infer(type) {
       const messages = yield* L.messages
       const coreMessages = [...messages].map(toCoreMessage)

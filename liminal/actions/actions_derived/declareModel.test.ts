@@ -9,14 +9,14 @@ describe("Model", () => {
   it("generates the expected event sequence", async () => {
     const events: Array<LEvent> = []
     await exec(function*() {
-      const a = yield* L.declareModel("secondary")
+      const a = yield* L.declareModel("secondary", "language")
       yield* L.branch("fork-key", function*() {
-        const b = yield* L.declareModel("child_a")
-        const c = yield* L.declareModel("child_b")
+        const b = yield* L.declareModel("child_a", "language")
+        const c = yield* L.declareModel("child_b", "embedding")
         yield* b
         yield* c
       })
-      const c = yield* L.declareModel("tertiary")
+      const c = yield* L.declareModel("tertiary", "embedding")
       yield* a
       yield* c
     }, {

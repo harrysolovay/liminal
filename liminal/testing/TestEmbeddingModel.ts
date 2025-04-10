@@ -13,6 +13,7 @@ export function TestEmbeddingModel({
 }: TestEmbeddingModelConfig = defaultTestingEmbeddingModelConfig): EmbeddingModel {
   return {
     type: "embedding",
+    vendor: "liminal_testing",
     embed: getEmbedding,
   }
 }

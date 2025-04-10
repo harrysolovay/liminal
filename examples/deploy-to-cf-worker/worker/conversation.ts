@@ -6,21 +6,21 @@ export function* refine(input: string) {
   yield* L.user`Rewrite it in whatever way you think best.`
   const variants = yield* L.branch("variants", {
     *a() {
-      yield* L.declareModel("a")
+      yield* L.declareModel("a", "language")
       return yield* L.infer
     },
     *b() {
-      yield* L.declareModel("b")
+      yield* L.declareModel("b", "language")
       return yield* L.infer
     },
     *c() {
-      yield* L.declareModel("c")
+      yield* L.declareModel("c", "language")
       return yield* L.infer
     },
   })
   const { value } = yield* L.branch("select", function*() {
     yield* L.clear()
-    yield* L.declareModel("select")
+    yield* L.declareModel("select", "language")
     yield* L.user`
       Out of the following variants, which is your favorite?:
 

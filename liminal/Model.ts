@@ -15,6 +15,12 @@ export interface EmbeddingModel extends ModelBase<"embedding"> {
 
 interface ModelBase<K extends ModelType> {
   type: K
+  vendor: string
 }
 
 export type ModelType = "language" | "embedding"
+
+export type Models = {
+  language: LanguageModel
+  embedding: EmbeddingModel
+}

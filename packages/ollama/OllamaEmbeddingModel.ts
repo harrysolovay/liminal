@@ -1,27 +1,16 @@
-// import { _util, type EmbeddingModelAdapter } from "liminal"
-// import { Ollama } from "ollama"
+import { _util, type EmbeddingModel } from "liminal"
+import type { Ollama } from "ollama"
 
-// export function OllamaEmbeddingModel(ollama: Ollama, model: string): EmbeddingModelAdapter {
-//   return {
-//     type: "Embedding",
-//     reduceEmbedding: async (scope, action) => {
-//       scope.events.emit({
-//         type: "embedding_requested",
-//         value: action.value,
-//       })
-//       const { embeddings } = await ollama.embed({
-//         model,
-//         input: action.value,
-//       })
-//       const embedding = embeddings[0]! // TODO
-//       scope.events.emit({
-//         type: "embedded",
-//         value: action.value,
-//         embedding,
-//       })
-//       return scope.spread({
-//         next: embedding,
-//       })
-//     },
-//   }
-// }
+export function OllamaEmbeddingModel(ollama: Ollama, model: string): EmbeddingModel {
+  return {
+    type: "embedding",
+    vendor: "ollama",
+    embed: async (value) => {
+      const { embeddings } = await ollama.embed({
+        model,
+        input: value,
+      })
+      return embeddings[0]!
+    },
+  }
+}

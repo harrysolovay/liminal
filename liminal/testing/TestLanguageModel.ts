@@ -18,6 +18,7 @@ export function TestLanguageModel({
 }: TestLanguageModelConfig = defaultTestLanguageModelConfig): LanguageModel {
   return {
     type: "language",
+    vendor: "liminal_testing",
     async *infer(type) {
       if (type) {
         const object = getObject()
