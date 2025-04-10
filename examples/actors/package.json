@@ -4,8 +4,8 @@
   "type": "module",
   "dependencies": {
     "@ai-sdk/openai": "^1.3.9",
-    "liminal": "^0.5.1",
-    "liminal-ai": "^0.0.2",
+    "liminal": "workspace:*",
+    "liminal-ai": "workspace:*",
     "mathjs": "^14.3.1"
   }
 }
