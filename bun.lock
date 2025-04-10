@@ -22,7 +22,9 @@
     "examples/actors": {
       "name": "liminal-example-actors",
       "dependencies": {
-        "liminal": "^0.5.0",
+        "@ai-sdk/openai": "^1.3.9",
+        "liminal": "^0.5.1",
+        "liminal-ai": "^0.0.2",
         "mathjs": "^14.3.1",
       },
     },
@@ -74,7 +76,7 @@
     },
     "liminal": {
       "name": "liminal",
-      "version": "0.5.0",
+      "version": "0.5.1",
       "bin": {
         "liminal": "./dist/cli/main.js",
       },
@@ -105,10 +107,10 @@
     },
     "packages/ai": {
       "name": "liminal-ai",
-      "version": "0.0.1",
+      "version": "0.0.2",
       "peerDependencies": {
         "ai": "^4.1.61",
-        "liminal": "^0.5.0",
+        "liminal": "^0.5.1",
       },
     },
     "packages/alchemy": {

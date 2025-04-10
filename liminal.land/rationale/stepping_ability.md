@@ -1,3 +1,3 @@
-# Step Comparison
+# Stepping
 
 Comparing model behavior, step by step.

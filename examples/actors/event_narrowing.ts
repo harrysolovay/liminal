@@ -5,8 +5,13 @@ const exec = Exec(g, {
 })
 
 exec((event) => {
-  if (isScopeChildEvent(event, [])) {
+  if (isScopeChildEvent(event, ["child-a", "child-b", "child-c"])) {
     event
+  }
+  if (isScopeChildEvent(event, ["child-a", "child-d", "f"])) {
+    if (event.type === "returned") {
+      event.value
+    }
   }
   if (isScopeChildEvent(event, ["child-a", "child-b", "child-c"])) {
     if (event.type === "emitted") {
