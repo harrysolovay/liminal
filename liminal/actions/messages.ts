@@ -9,6 +9,7 @@ import type { PromiseOr } from "../util/PromiseOr.ts"
 import { type getScope, scope } from "./scope.ts"
 
 interface messages extends Iterable<getScope, Set<Message>> {
+  (messages: Array<Message>): Generator<Action<"set_messages", Spec.Make<{ Event: MessagesSet }>>, Array<Message>>
   (
     setter: (messages: Array<Message>) => PromiseOr<Array<Message>>,
   ): Generator<Action<"set_messages", Spec.Make<{ Event: MessagesSet }>>, Array<Message>>
@@ -50,7 +51,7 @@ function* messages_(
         nextArg: scope.messages,
       }
     }
-    const messages = new Set(await setterOrKey([...scope.messages]))
+    const messages = new Set(Array.isArray(setterOrKey) ? setterOrKey : await setterOrKey([...scope.messages]))
     return {
       ...scope,
       messages,
