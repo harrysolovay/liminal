@@ -1,4 +1,8 @@
-Prefer installing dependencies via bun's CLI instead of directly writing to `package.json`s.
+---
+description: Overview of considerations relating to testing.
+globs: 
+alwaysApply: false
+---
 
 ```bash
 # Run all tests

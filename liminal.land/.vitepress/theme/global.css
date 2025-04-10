@@ -97,8 +97,11 @@
   line-height: 36px !important;
 }
 
-html.dark .VPFeatures img {
+html .VPFeatures img {
   width: 36px;
   height: 36px;
+}
+
+html.dark .VPFeatures img {
   filter: brightness(0) invert(1);
 }

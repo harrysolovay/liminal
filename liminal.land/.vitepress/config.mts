@@ -68,9 +68,9 @@ export default defineConfig({
             ],
           },
           { text: "Declarations", link: "/declarations" },
-          { text: "Tools", link: "/tools" },
           { text: "Scopes", link: "/scopes" },
           { text: "Events", link: "/events" },
+          { text: "Tool Calling", link: "/tool_calling" },
         ],
       },
       {
@@ -79,8 +79,6 @@ export default defineConfig({
         items: [
           { text: "Exec", link: "/exec" },
           { text: "Matching Events", link: "/matching_events.md" },
-          { text: "Hosts", link: "/hosts.md" },
-          { text: "Client", link: "/client.md" },
         ],
       },
       {

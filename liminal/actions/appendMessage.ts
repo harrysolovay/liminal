@@ -5,7 +5,7 @@ import type { Message, MessageContents, MessageRole, Messages } from "../Message
 import type { Spec } from "../Spec.ts"
 import { peekLast } from "../util/peekLast.ts"
 
-export interface appendMessage<M extends Message>
+export interface appendMessage<M extends Message = Message>
   extends Action<"append_message", Spec.Make<{ Event: MessageAppended<M> }>>
 {}
 
