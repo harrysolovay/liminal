@@ -24,7 +24,7 @@ jobs:
       - run: bun liminal.land build
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: .vitepress/dist
+          path: liminal.land/.vitepress/dist
   deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 1
