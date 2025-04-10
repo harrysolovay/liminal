@@ -1,16 +1,22 @@
-import { getScope } from "../getScope.ts"
+import { scope } from "../scope.ts"
 
-export function* tools() {
-  const scope = yield* getScope()
-  return scope.tools
+export const tools = {
+  *[Symbol.iterator]() {
+    const scope_ = yield* scope
+    return scope_.tools
+  },
 }
 
-export function* signal() {
-  const scope = yield* getScope()
-  return scope.controller.signal
+export const signal = {
+  *[Symbol.iterator]() {
+    const scope_ = yield* scope
+    return scope_.controller.signal
+  },
 }
 
-export function* messages() {
-  const scope = yield* getScope()
-  return scope.messages
+export const messages = {
+  *[Symbol.iterator]() {
+    const scope_ = yield* scope
+    return scope_.messages
+  },
 }
