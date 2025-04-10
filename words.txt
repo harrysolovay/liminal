@@ -1,5 +1,7 @@
+agentic
 arktype
 bunx
+codegen
 cspotcode
 dotenvx
 dprint
@@ -9,12 +11,13 @@ inferencing
 inheritables
 initdb
 llms
+metaagents
 metaarray
 metaatom
 metaobject
 metatype
 metatypes
-multimodel
+metatyping
 nullary
 ollama
 ossp

@@ -7,11 +7,9 @@ import { RootScope, type Scope } from "./Scope.ts"
 import type { FromEntries } from "./util/FromEntries.ts"
 import type { JSONKey } from "./util/JSONKey.ts"
 
-export interface Exec<Y extends Action = Action, T = any> {
+export interface Exec<Y extends Action, T> {
   (
-    handler?: EventHandler<
-      Extract<ExtractEventResolved<Y[""]> & {}, EventResolved>
-    >,
+    handler?: EventHandler<Extract<ExtractEventResolved<Y[""]> & {}, EventResolved>>,
     options?: ExecOptions,
   ): Promise<T>
 }

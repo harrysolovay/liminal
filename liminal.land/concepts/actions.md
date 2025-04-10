@@ -1,4 +1,4 @@
-# Action
+# Actions
 
 Actions are the means by which we update and access state about a given scope.
 

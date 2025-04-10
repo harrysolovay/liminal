@@ -5,7 +5,7 @@ export type Path = Array<JSONKey>
 export declare namespace Path {
   export type FromPathLike<P extends PathLike> = Extract<
     {
-      [K in keyof P]: P[K] extends _ ? JSONKey : P[K]
+      [K in keyof P]: P[K] extends JSONKey ? P[K] : JSONKey
     },
     Path
   >

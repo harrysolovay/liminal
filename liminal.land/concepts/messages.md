@@ -1,4 +1,4 @@
-# Message
+# Messages
 
 There are four kinds of Messages.
 
