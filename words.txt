@@ -7,11 +7,11 @@ dotenvx
 dprint
 eventsource
 fuzzystrmatch
+iconoir
 inferencing
 inheritables
 initdb
 llms
-metaagents
 metaarray
 metaatom
 metaobject

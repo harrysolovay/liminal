@@ -3,9 +3,9 @@ layout: home
 title: Liminal
 hero:
   name: Liminal
-  text: Agent swarms in TypeScript
+  text: Agents in TypeScript
   image: /liminal_puzzle.png
-  tagline: Primitives for composing model-agnostic agents and metaagents using generator functions.
+  tagline: Primitives for composing model-agnostic agents and meta agents using generator functions.
   actions:
     - theme: brand
       text: Getting Started
@@ -14,15 +14,15 @@ hero:
       text: npx liminal init
 features:
   - icon:
-      src: /model.png
+      src: /iconoir--planet.svg
     title: Decoupling From Models
     details: Create reusable conversation patterns, which can be shared without vendor lock-in.
   - icon:
-      src: /mirror.png
+      src: /iconoir--chat-bubble-check.svg
     title: Message Lists, Simplified
     details: Manage conversations through implicit message buffers, blended into function control flow.
   - icon:
-      src: /types.png
+      src: /iconoir--text-magnifying-glass.svg
     title: Infer Static Event Types
     details: Infer the static types of the events emitted from within an agent and its descendants.
 ---
