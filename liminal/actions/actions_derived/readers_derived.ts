@@ -13,10 +13,3 @@ export const signal = {
     return scope_.controller.signal
   },
 }
-
-export const messages = {
-  *[Symbol.iterator]() {
-    const scope_ = yield* scope
-    return scope_.messages
-  },
-}

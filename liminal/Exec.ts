@@ -7,25 +7,18 @@ import { RootScope, type Scope } from "./Scope.ts"
 import type { FromEntries } from "./util/FromEntries.ts"
 import type { JSONKey } from "./util/JSONKey.ts"
 
-export interface Exec<Y extends Action, T> {
-  (
-    handler?: EventHandler<Extract<ExtractEventResolved<Y[""]> & {}, EventResolved>>,
-    options?: ExecOptions,
-  ): Promise<T>
-}
-
 export interface ExecConfig {
   default: LanguageModel
   args?: Record<JSONKey, any>
-}
-
-export interface ExecOptions {
   signal?: AbortSignal
+  handler?: EventHandler
 }
 
 export type ExtractExecConfig<Y extends Action> =
   & {
     default: LanguageModel
+    signal?: AbortSignal
+    handler?: EventHandler<Extract<ExtractEventResolved<Y[""]> & {}, EventResolved>>
   }
   & (
     [Y[""]["Entry"]] extends [never] ? {
@@ -36,26 +29,23 @@ export type ExtractExecConfig<Y extends Action> =
       }
   )
 
-export function Exec<Y extends Action, T>(
+export async function exec<Y extends Action, T>(
   createAgent: () => Agent<Y, T>,
   config: ExtractExecConfig<Y>,
-): Exec<Y, T> {
-  // TODO: consider `Result` type.
-  return async (handler, options) => {
-    let scope: Scope = RootScope(config.default, config.args, handler as never, options?.signal)
-    scope = await scope.reduce(createAgent())
-    const { signal: { aborted, reason } } = scope.controller
-    if (aborted) {
-      scope.event({
-        type: "aborted",
-        reason,
-      })
-      throw reason
-    }
+): Promise<T> {
+  let scope: Scope = RootScope(config as never)
+  scope = await scope.reduce(createAgent())
+  const { signal: { aborted, reason } } = scope.controller
+  if (aborted) {
     scope.event({
-      type: "returned",
-      value: scope.value,
+      type: "aborted",
+      reason,
     })
-    return scope.value
+    throw reason
   }
+  scope.event({
+    type: "returned",
+    value: scope.value,
+  })
+  return scope.value
 }

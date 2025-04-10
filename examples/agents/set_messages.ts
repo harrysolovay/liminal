@@ -5,7 +5,7 @@ export default function*() {
   yield* L.user`Ipsum.`
   yield* L.infer
   const before = yield* L.messages
-  yield* L.setMessages((_messages) => [])
+  yield* L.messages((_messages) => [])
   const after = yield* L.messages
   return { before, after }
 }
