@@ -9,7 +9,7 @@ export default async function*() {
   const reviews = L.branch("reviews", { security, performance, maintainability })
   yield* L.user(JSON.stringify(Object.values(reviews), null, 2))
   yield* L.user`You are a technical lead summarizing multiple code reviews.`
-  const summary = yield* L.infer()
+  const summary = yield* L.infer
   return { reviews, summary }
 }
 

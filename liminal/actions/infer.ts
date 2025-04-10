@@ -18,7 +18,19 @@ interface infer_<_T> extends
   >
 {}
 
-function* infer_<T extends JSONValue = string>(type?: StandardSchemaV1<JSONObject, T>): Generator<infer_<T>, T> {
+const infer_ = Object.assign(
+  function* infer_<T extends JSONValue>(type: StandardSchemaV1<JSONObject, T>): Generator<infer_<T>, T> {
+    return yield* impl(type)
+  },
+  {
+    *[Symbol.iterator](): Iterator<infer_<string>, string> {
+      return yield* impl()
+    },
+  },
+)
+Object.defineProperty(infer_, "name", { value: "infer" })
+
+function* impl(type?: StandardSchemaV1<JSONObject, any>): Generator<infer_<any>, any> {
   return yield Action("infer", async (scope) => {
     scope.event({
       type: "inference_requested",
@@ -35,4 +47,3 @@ function* infer_<T extends JSONValue = string>(type?: StandardSchemaV1<JSONObjec
     }
   })
 }
-Object.defineProperty(infer_, "name", { value: "infer" })

@@ -20,7 +20,7 @@ export function setMessages(
 >
 export function setMessages<K extends JSONKey, Y extends Action>(
   key: K,
-  setter: (messages: Array<Message>) => Agent<Y, Array<Message>>,
+  createSetterAgent: (messages: Array<Message>) => Agent<Y, Array<Message>>,
 ): Generator<
   Action<
     "set_messages",

@@ -4,7 +4,7 @@ export default function*() {
   yield* L.user`Please tell me some goofy dad jokes.`
   let i = 0
   while (i < 10) {
-    yield* L.infer()
+    yield* L.infer
     i++
   }
 }

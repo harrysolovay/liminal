@@ -13,8 +13,8 @@
         "typescript": "^5.8.3",
       },
     },
-    "examples/actors": {
-      "name": "liminal-example-actors",
+    "examples/agents": {
+      "name": "liminal-example-agents",
       "dependencies": {
         "@ai-sdk/openai": "^1.3.9",
         "liminal": "workspace:*",
@@ -1111,7 +1111,7 @@
 
     "liminal-alchemy": ["liminal-alchemy@workspace:packages/alchemy"],
 
-    "liminal-example-actors": ["liminal-example-actors@workspace:examples/actors"],
+    "liminal-example-agents": ["liminal-example-agents@workspace:examples/agents"],
 
     "liminal-example-deploy-to-cf-worker": ["liminal-example-deploy-to-cf-worker@workspace:examples/deploy-to-cf-worker"],
 

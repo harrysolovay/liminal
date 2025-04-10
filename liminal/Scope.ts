@@ -15,7 +15,7 @@ export interface ChildScope extends ScopeBase<ChildScopeType> {
 }
 
 export type RootScopeType = "root"
-export type ChildScopeType = "catch" | "tool" | "branch" | "branch_arm" | "set_messages" | "section"
+export type ChildScopeType = "catch" | "tool" | "branch" | "branch_arm" | "set_messages" | "run_section"
 export type ScopeType = RootScopeType | ChildScopeType
 
 export interface ScopeBase<Type extends ScopeType> {
@@ -36,7 +36,11 @@ export interface ScopeBase<Type extends ScopeType> {
   readonly sections: Set<Section>
 
   reduce(agent: Agent): Promise<Scope>
-  fork(source: ChildScopeType, subpath: Array<JSONKey>): Scope
+  fork(
+    source: ChildScopeType,
+    subpath: Array<JSONKey>,
+    overrides?: Partial<ChildScope>,
+  ): Scope
   event(event: LEvent): void
 }
 
@@ -100,7 +104,12 @@ async function reduce(this: Scope, agent: Agent): Promise<Scope> {
   }
 }
 
-function fork(this: Scope, type: ChildScopeType, subpath: Array<JSONKey>): ChildScope {
+function fork(
+  this: Scope,
+  type: ChildScopeType,
+  subpath: Array<JSONKey>,
+  overrides?: Partial<ChildScope>,
+): ChildScope {
   const subpathStr = subpath.join(" ")
   let index = this.childForkCounts[subpathStr]
   if (typeof index === "number") {
@@ -127,6 +136,7 @@ function fork(this: Scope, type: ChildScopeType, subpath: Array<JSONKey>): Child
     reduce,
     fork,
     event,
+    ...overrides ?? {},
   }
   f.event({ type: "forked" })
   return f

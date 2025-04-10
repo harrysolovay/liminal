@@ -11,6 +11,7 @@ import type { MessagesSet } from "./MessagesSet.ts"
 import type { ModelPushed } from "./ModelPushed.ts"
 import type { ModelRemoved } from "./ModelRemoved.ts"
 import type { Returned } from "./Returned.ts"
+import type { SectionCleared } from "./SectionCleared.ts"
 import type { Sectioned } from "./Sectioned.ts"
 import type { Threw } from "./Threw.ts"
 import type { ToolCalled } from "./ToolCalled.ts"
@@ -36,3 +37,4 @@ export type LEvent =
   | ModelPushed
   | ModelRemoved
   | Sectioned
+  | SectionCleared

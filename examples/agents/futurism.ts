@@ -14,7 +14,7 @@ function* futureTech() {
   yield* L
     .user`Teach me about a hypothetical technology that may come into existence within the century.`
 
-  const technology = yield* L.infer()
+  const technology = yield* L.infer
 
   yield* L
     .user`In what ways might it transform music, medicine and paleontology?`
