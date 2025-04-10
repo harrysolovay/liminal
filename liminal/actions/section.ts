@@ -2,6 +2,7 @@ import { Action } from "../Action.ts"
 import type { Agent, AgentLike } from "../Agent.ts"
 import type { SectionCleared } from "../events/SectionCleared.ts"
 import type { Sectioned } from "../events/Sectioned.ts"
+import type { Message } from "../Message.ts"
 import type { Section } from "../Scope.ts"
 import type { Spec } from "../Spec.ts"
 import type { JSONKey } from "../util/JSONKey.ts"
@@ -11,6 +12,7 @@ export interface section<K extends JSONKey> extends Action<"section", Spec.Make<
 
 export interface SectionHandle<K extends JSONKey> {
   clear: Generator<Action<"clear_section", Spec.Make<{ Event: SectionCleared<K> }>>, void>
+  getMessages: () => Generator<Action<"get_section_messages", never>, Set<Message>>
 
   <L extends JSONKey, Y extends Action, T>(key: L, agentLike: AgentLike<Y, T>): Generator<
     Action<
@@ -67,22 +69,35 @@ export function* section<K extends JSONKey>(sectionKey: K): Generator<section<K>
           })
         },
         {
-          clear: (function*(): Generator<Action<"clear_section", Spec.Make<{ Event: SectionCleared<K> }>>, void> {
-            return yield Action("clear_section", (scope) => {
-              const sections = new Set(scope.sections)
-              sections.delete(section)
-              const messages = new Set(scope.messages)
-              section.messages.forEach((message) => {
-                messages.delete(message)
-              })
-              return {
-                ...scope,
-                nextArg: undefined,
-                sections,
-                messages,
-              }
-            })
+          getMessages: (function*(): Generator<Action<"get_section_messages", never>, Set<Message>> {
+            return yield Action("get_section_messages", (scope) => ({
+              ...scope,
+              nextArg: new Set(section.messages),
+            }))
           })(),
+        },
+        {
+          clear:
+            (function*(): Generator<Action<"clear_section", Spec.Make<{ Event: SectionCleared<K> }>>, Set<Message>> {
+              return yield Action("clear_section", (scope) => {
+                const sections = new Set(scope.sections)
+                sections.delete(section)
+                const messages = new Set(scope.messages)
+                section.messages.forEach((message) => {
+                  messages.delete(message)
+                })
+                scope.event({
+                  type: "section_cleared",
+                  sectionKey,
+                })
+                return {
+                  ...scope,
+                  nextArg: messages,
+                  sections,
+                  messages,
+                }
+              })
+            })(),
         },
       ),
     }
