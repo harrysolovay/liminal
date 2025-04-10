@@ -1,4 +1,3 @@
-import type { MessageRemoved } from "../../events/MessageRemoved.ts"
 import type { AssistantContent, UserContent } from "../../Message.ts"
 import { normalizeTaggableArgs, type TaggableArgs } from "../../util/Taggable.ts"
 import { appendMessage } from "../appendMessage.ts"
