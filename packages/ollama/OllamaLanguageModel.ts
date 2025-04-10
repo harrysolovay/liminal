@@ -1,4 +1,4 @@
-import { _util, type JSONKey, L, type LanguageModel, type Message, Tool, type ToolExecutor } from "liminal"
+import { _util, type JSONKey, L, type LanguageModel, type Message, Tool } from "liminal"
 import type { Message as OllamaMessage, Ollama, Tool as OllamaTool } from "ollama"
 
 export function OllamaLanguageModel(ollama: Ollama, model: string): LanguageModel {

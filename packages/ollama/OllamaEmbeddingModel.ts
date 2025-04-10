@@ -1,5 +1,5 @@
 import { _util, type EmbeddingModel } from "liminal"
-import { Ollama } from "ollama"
+import type { Ollama } from "ollama"
 
 export function OllamaEmbeddingModel(ollama: Ollama, model: string): EmbeddingModel {
   return {
