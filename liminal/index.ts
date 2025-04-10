@@ -1,6 +1,6 @@
 export * from "./Action.ts"
 export * from "./actions/appendMessage.ts"
-export * from "./Actor.ts"
+export * from "./Agent.ts"
 export * from "./events/Aborted.ts"
 export * from "./events/Embedded.ts"
 export * from "./events/EmbeddingRequested.ts"

@@ -51,7 +51,7 @@ exec((event) => {
 export default function* g() {
   yield* L.user`Tell me a joke.`
   yield* L.assistant`Tell me a joke.`
-  yield* L.infer()
+  yield* L.infer
   yield* L.emit("event-root")
   yield* L.branch("child-a", function*() {
     yield* L.emit("event-a")
@@ -88,5 +88,5 @@ export default function* g() {
     })
   })
   yield* L.user`Where can I stay there, what can I do there, how do I get there?`
-  return yield* L.infer()
+  return yield* L.infer
 }

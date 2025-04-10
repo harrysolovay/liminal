@@ -10,7 +10,7 @@ import type { JSONObjectType } from "./object.ts"
 import { toJSON } from "./toJSON.ts"
 import { type Type, TypeKey, type TypeMembers } from "./Type.ts"
 
-export function declareType<X extends Type>(
+export function makeType<X extends Type>(
   declaration: () => X | ((...args: any) => X),
   args?: Array<unknown>,
   descriptions: Array<string> = [],
@@ -22,6 +22,7 @@ export function declareType<X extends Type>(
       declaration,
       args,
       descriptions,
+      trace: new Error().stack,
       description() {
         return descriptions.join("\n")
       },
@@ -61,7 +62,7 @@ export function declareType<X extends Type>(
   function Type(template: TemplateStringsArray, ...substitutions: Array<string>): X
   function Type(...values: Array<Falsy | string>): X
   function Type(e0: TemplateStringsArray | Falsy | string, ...eRest: Array<Falsy | string>): X {
-    return declareType(declaration, args, [
+    return makeType(declaration, args, [
       ...descriptions,
       ...isTemplateStringsArray(e0)
         ? [applyTemplateWithIndentation(e0, ...eRest)]

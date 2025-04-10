@@ -33,6 +33,7 @@ export interface TypeMembers<T extends JSONValue, J extends JSONType> extends St
   declaration: () => Type<T, J> | ((...args: any) => Type<T, J>)
   args?: Array<any>
   descriptions: Array<string>
+  trace: string | undefined
   description(): string
   toJSON(): JSONRootType<J>
   assert(value: unknown): T

@@ -16,7 +16,7 @@ export default function*() {
     `
   }
   yield* L.user`Now that we've refined the destination criteria, please provide a single recommendation.`
-  yield* L.infer()
+  yield* L.infer
   yield* L.user`Where can I stay there, what can I do there, how do I get there?`
-  return yield* L.infer()
+  return yield* L.infer
 }

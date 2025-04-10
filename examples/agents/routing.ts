@@ -27,7 +27,7 @@ export default function*() {
     if (classification.complexity === "complex") {
       yield* L.declareModel("reasoning")
     }
-    return yield* L.infer()
+    return yield* L.infer
   })
   return { classification, response }
 }

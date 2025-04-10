@@ -8,10 +8,7 @@
       "path": "./liminal.land"
     },
     {
-      "path": "./common"
-    },
-    {
-      "path": "./examples/actors"
+      "path": "./examples/agents"
     },
     {
       "path": "./examples/deploy-to-cf-worker"

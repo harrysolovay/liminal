@@ -3,7 +3,7 @@ import { Hono } from "hono"
 import { streamSSE } from "hono/streaming"
 import { Exec } from "liminal"
 import { AILanguageModel } from "liminal-ai"
-import { actor } from "./actor.ts"
+import agent from "./agent.ts"
 import { PORT } from "./constants.ts"
 
 export const app = new Hono().get("/sse", (c) => {
@@ -12,7 +12,7 @@ export const app = new Hono().get("/sse", (c) => {
     stream.onAbort(() => {
       ctl.abort()
     })
-    const exec = Exec(actor, {
+    const exec = Exec(agent, {
       default: AILanguageModel(openai("gpt-4o-mini")),
     })
     exec((event) => {

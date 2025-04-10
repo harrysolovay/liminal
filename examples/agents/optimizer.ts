@@ -11,7 +11,7 @@ export default function*() {
 
     ${TEXT}
   `
-  let currentTranslation = yield* L.infer()
+  let currentTranslation = yield* L.infer
   let iterations = 0
   const MAX_ITERATIONS = 3
   while (iterations < MAX_ITERATIONS) {
@@ -52,7 +52,7 @@ export default function*() {
       Original: ${TEXT}
       Current Translation: ${currentTranslation}
     `
-    currentTranslation = yield* L.infer()
+    currentTranslation = yield* L.infer
     iterations += 1
   }
   return {

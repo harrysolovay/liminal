@@ -1,14 +1,5 @@
 import { Action } from "../Action.ts"
-import type {
-  Actor,
-  ActorLike,
-  ActorLikeArray,
-  ActorLikeRecord,
-  ActorLikesT,
-  ActorLikeT,
-  ActorLikeY,
-} from "../Actor.ts"
-import type { ActorLikes } from "../Actor.ts"
+import type { Agent, AgentLike, AgentLikeT, AgentLikeY } from "../Agent.ts"
 import type { Spec } from "../Spec.ts"
 import type { JSONKey } from "../util/JSONKey.ts"
 import { unwrapDeferred } from "../util/unwrapDeferred.ts"
@@ -19,7 +10,7 @@ export function branch<
   T,
 >(
   key: K,
-  actorLike: ActorLike<Y, T>,
+  agentLike: AgentLike<Y, T>,
 ): Generator<
   Action<
     "branch",
@@ -31,7 +22,7 @@ export function branch<
   >,
   T
 >
-export function branch<K extends JSONKey, const A extends ActorLikeArray>(name: K, actorLikeArray: A): Generator<
+export function branch<K extends JSONKey, const A extends Array<AgentLike>>(name: K, agentLikes: A): Generator<
   Action<
     "branch",
     Spec.Make<{
@@ -39,18 +30,18 @@ export function branch<K extends JSONKey, const A extends ActorLikeArray>(name: 
         K,
         {
           [L in keyof A]: Spec.Make<{
-            Child: [L, ActorLikeY<A[L]>[""]]
-            Entry: ActorLikeY<A[L]>[""]["Entry"]
-            Value: ActorLikeT<A[L]>
+            Child: [L, AgentLikeY<A[L]>[""]]
+            Entry: AgentLikeY<A[L]>[""]["Entry"]
+            Value: AgentLikeT<A[L]>
           }>
         }[keyof A],
       ]
-      Entry: ActorLikeY<A[number]>[""]["Entry"]
+      Entry: AgentLikeY<A[number]>[""]["Entry"]
     }>
   >,
-  ActorLikesT<A>
+  AgentLikesT<A>
 >
-export function branch<K extends JSONKey, A extends ActorLikeRecord>(name: K, actorLikeRecord: A): Generator<
+export function branch<K extends JSONKey, A extends Record<JSONKey, AgentLike>>(name: K, agentLikes: A): Generator<
   Action<
     "branch",
     Spec.Make<{
@@ -58,23 +49,23 @@ export function branch<K extends JSONKey, A extends ActorLikeRecord>(name: K, ac
         K,
         {
           [L in Exclude<keyof A, symbol>]: Spec.Make<{
-            Child: [L, ActorLikeY<A[L]>[""]]
-            Entry: ActorLikeY<A[L]>[""]["Entry"]
-            Value: ActorLikeT<A[L]>
+            Child: [L, AgentLikeY<A[L]>[""]]
+            Entry: AgentLikeY<A[L]>[""]["Entry"]
+            Value: AgentLikeT<A[L]>
           }>
         }[Exclude<keyof A, symbol>],
       ]
-      Entry: ActorLikeY<A[keyof A]>[""]["Entry"]
+      Entry: AgentLikeY<A[keyof A]>[""]["Entry"]
     }>
   >,
-  ActorLikesT<A>
+  AgentLikesT<A>
 >
-export function* branch(key: JSONKey, implementation: ActorLike | ActorLikes): Generator<Action<"branch">, any> {
+export function* branch(key: JSONKey, a1: AgentLike | AgentLikes): Generator<Action<"branch">, any> {
   return yield Action("branch", async (scope) => {
-    if (typeof implementation === "function") {
+    if (typeof a1 === "function") {
       const branchScope = scope.fork("branch", [key])
-      const actor = unwrapDeferred(implementation as ActorLike)
-      const { value } = await branchScope.reduce(actor)
+      const agent = unwrapDeferred(a1 as AgentLike)
+      const { value } = await branchScope.reduce(agent)
       branchScope.event({
         type: "returned",
         value,
@@ -84,20 +75,20 @@ export function* branch(key: JSONKey, implementation: ActorLike | ActorLikes): G
         nextArg: value,
       }
     }
-    const armKeys = Array.isArray(implementation)
-      ? Array.from({ length: implementation.length }, (_0, i) => i)
-      : Reflect.ownKeys(implementation) as Array<string>
+    const armKeys = Array.isArray(a1)
+      ? Array.from({ length: a1.length }, (_0, i) => i)
+      : Reflect.ownKeys(a1) as Array<string>
     const values = await Promise.all(armKeys.map(async (armKey) => {
       const branchArmScope = scope.fork("branch_arm", [key, armKey])
-      const actor = unwrapDeferred(implementation[armKey as never]) as Actor
-      const { value } = await branchArmScope.reduce(actor)
+      const agent = unwrapDeferred(a1[armKey as never]) as Agent
+      const { value } = await branchArmScope.reduce(agent)
       branchArmScope.event({
         type: "returned",
         value,
       })
       return value
     }))
-    const value = Array.isArray(implementation)
+    const value = Array.isArray(a1)
       ? values
       : Object.fromEntries(armKeys.map((key, i) => [key, values[i]]))
     return {
@@ -106,3 +97,10 @@ export function* branch(key: JSONKey, implementation: ActorLike | ActorLikes): G
     }
   })
 }
+
+export type AgentLikes = Array<AgentLike> | Record<JSONKey, AgentLike>
+export type AgentLikesT<A extends AgentLikes> =
+  & {
+    -readonly [K in keyof A]: A[K] extends AgentLike<Action, infer T> ? T : never
+  }
+  & {}

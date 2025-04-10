@@ -1,7 +1,7 @@
 import type { JSONKey } from "../util/JSONKey.ts"
-import { declareType } from "./declareType.ts"
 import type { JSONType } from "./JSONType.ts"
 import type { JSONTypeBase } from "./JSONTypeBase.ts"
+import { makeType } from "./makeType.ts"
 import { type Type } from "./Type.ts"
 import { normalizeTypeLikes, type NormalizeTypeLikesJ, type NormalizeTypeLikesT, type TypeLikes } from "./TypeLike.ts"
 
@@ -12,7 +12,7 @@ export function object<const F extends TypeLikes>(
 }
 
 export function _object(fields: ObjectFields): Type {
-  return declareType(() => _object, [fields])
+  return makeType(() => _object, [fields])
 }
 
 export interface JSONObjectType<F extends Record<JSONKey, JSONType> = any> extends JSONTypeBase {
