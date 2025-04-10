@@ -1,12 +1,12 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
 import type { Action } from "./Action.ts"
-import type { Actor } from "./Actor.ts"
+import type { Agent } from "./Agent.ts"
 import type { JSONObject } from "./util/JSONObject.ts"
 
 export type Model = LanguageModel | EmbeddingModel
 
 export interface LanguageModel extends ModelBase<"language"> {
-  infer: (type: StandardSchemaV1<JSONObject, any> | undefined) => Actor<Action, any>
+  infer: (type: StandardSchemaV1<JSONObject, any> | undefined) => Agent<Action, any>
 }
 
 export interface EmbeddingModel extends ModelBase<"embedding"> {

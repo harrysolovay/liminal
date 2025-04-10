@@ -1,11 +1,11 @@
 import type { AssertTrue, IsExact } from "conditional-type-checks"
-import type { ActorLike } from "../Actor.ts"
+import type { AgentLike } from "../Agent.ts"
 import type { Emitted } from "../events/Emitted.ts"
 import type { ToolCalled } from "../events/ToolCalled.ts"
 import type { ToolDisabled } from "../events/ToolDisabled.ts"
 import type { ToolEnabled } from "../events/ToolEnabled.ts"
 import * as L from "../L.ts"
-import { ActorAssertions } from "../testing/ActorAssertions.ts"
+import { AgentAssertions } from "../testing/AgentAssertions.ts"
 import { emit } from "./emit.ts"
 import { enableTool } from "./enableTool.ts"
 
@@ -19,7 +19,7 @@ const arrowTool = L.enableTool("Tool", "", P, (params) => {
   type _ = [AssertTrue<IsExact<typeof params, P>>]
 })
 
-ActorAssertions(arrowTool).assertSpec<{
+AgentAssertions(arrowTool).assertSpec<{
   Event:
     | ToolEnabled<"Tool">
     | ToolCalled<"Tool", {
@@ -34,7 +34,7 @@ ActorAssertions(arrowTool).assertSpec<{
 
 function* _0() {
   const detach = yield* arrowTool
-  ActorAssertions(detach).assertSpec<{
+  AgentAssertions(detach).assertSpec<{
     Event: ToolDisabled<"Tool">
     Child: never
     Throw: never
@@ -49,7 +49,7 @@ const genTool = enableTool("tool-key", "", P, function*(params) {
   return ""
 })
 
-ActorAssertions(genTool).assertSpec<{
+AgentAssertions(genTool).assertSpec<{
   Event:
     | ToolEnabled<"tool-key">
     | ToolCalled<"tool-key", {
@@ -77,9 +77,9 @@ function* parent() {
   })
 }
 
-type g = typeof parent extends ActorLike<infer Y> ? Y[""] : never
+type g = typeof parent extends AgentLike<infer Y> ? Y[""] : never
 
-ActorAssertions(parent).assertSpec<
+AgentAssertions(parent).assertSpec<
   {
     Event:
       | ToolEnabled<"parent-tool">

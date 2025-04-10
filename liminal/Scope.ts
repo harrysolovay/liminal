@@ -1,5 +1,5 @@
 import type { Action } from "./Action.ts"
-import type { Actor } from "./Actor.ts"
+import type { Agent } from "./Agent.ts"
 import type { EventHandler } from "./events/EventHandler.ts"
 import type { LEvent } from "./events/LEvent.ts"
 import type { Message } from "./Message.ts"
@@ -15,7 +15,7 @@ export interface ChildScope extends ScopeBase<ChildScopeType> {
 }
 
 export type RootScopeType = "root"
-export type ChildScopeType = "catch" | "tool" | "branch" | "branch_arm" | "set_messages"
+export type ChildScopeType = "catch" | "tool" | "branch" | "branch_arm" | "set_messages" | "section"
 export type ScopeType = RootScopeType | ChildScopeType
 
 export interface ScopeBase<Type extends ScopeType> {
@@ -33,10 +33,16 @@ export interface ScopeBase<Type extends ScopeType> {
   readonly handler?: EventHandler
   readonly childForkCounts: Record<JSONKey, number>
   readonly index: number
+  readonly sections: Set<Section>
 
-  reduce(actor: Actor): Promise<Scope>
+  reduce(agent: Agent): Promise<Scope>
   fork(source: ChildScopeType, subpath: Array<JSONKey>): Scope
   event(event: LEvent): void
+}
+
+export interface Section {
+  sectionKey: JSONKey
+  messages: Set<Message>
 }
 
 export function RootScope(
@@ -60,6 +66,7 @@ export function RootScope(
     languageModels: new Set([defaultLanguageModel]),
     embeddingModels: new Set(),
     childForkCounts: {},
+    sections: new Set(),
     index: 0,
     reduce,
     fork,
@@ -68,19 +75,19 @@ export function RootScope(
   }
 }
 
-async function reduce(this: Scope, actor: Actor): Promise<Scope> {
+async function reduce(this: Scope, agent: Agent): Promise<Scope> {
   const { signal } = this.controller
   let scope = { ...this }
   if (signal.aborted) return scope
   let value: unknown
   try {
-    let current = await actor.next()
+    let current = await agent.next()
     while (!current.done) {
       const { value } = current
       if (signal.aborted) return scope
       scope = await (value as Action).reducer(scope)
       if (signal.aborted) return scope
-      current = await actor.next(scope.nextArg)
+      current = await agent.next(scope.nextArg)
     }
     value = current.value
   } catch (thrown: unknown) {
@@ -116,6 +123,7 @@ function fork(this: Scope, type: ChildScopeType, subpath: Array<JSONKey>): Child
     parent: this,
     value: undefined,
     index,
+    sections: new Set(this.sections),
     reduce,
     fork,
     event,

@@ -9,7 +9,12 @@ const args = process.argv.slice(2)
 const command = L.enum("exec").assert(args.shift())
 const ctl = new AbortController()
 
-const cliCtx: CliCtx = { ctl }
+const cliCtx: CliCtx = {
+  ctl,
+  error(message) { // TODO
+    throw new Error(message)
+  },
+}
 
 switch (command) {
   case "exec": {

@@ -1,5 +1,5 @@
 import { Action } from "../Action.ts"
-import type { Actor } from "../Actor.ts"
+import type { Agent } from "../Agent.ts"
 import type { MessagesSet } from "../events/MessagesSet.ts"
 import type { Message } from "../Message.ts"
 import type { Spec } from "../Spec.ts"
@@ -20,7 +20,7 @@ export function setMessages(
 >
 export function setMessages<K extends JSONKey, Y extends Action>(
   key: K,
-  setter: (messages: Array<Message>) => Actor<Y, Array<Message>>,
+  setter: (messages: Array<Message>) => Agent<Y, Array<Message>>,
 ): Generator<
   Action<
     "set_messages",
@@ -35,7 +35,7 @@ export function setMessages<K extends JSONKey, Y extends Action>(
 >
 export function* setMessages(
   setterOrKey: JSONKey | ((messages: Array<Message>) => PromiseOr<Array<Message>>),
-  maybeSetter?: (messages: Array<Message>) => Actor<Action, Array<Message>>,
+  maybeSetter?: (messages: Array<Message>) => Agent<Action, Array<Message>>,
 ): Generator<Action<"set_messages">, Array<Message>> {
   return yield Action("set_messages", async (scope) => {
     if (isPropertyKey(setterOrKey)) {

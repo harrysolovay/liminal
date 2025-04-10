@@ -1,6 +1,6 @@
-import { declareType } from "./declareType.ts"
 import type { JSONType } from "./JSONType.ts"
 import type { JSONTypeBase } from "./JSONTypeBase.ts"
+import { makeType } from "./makeType.ts"
 import type { Type } from "./Type.ts"
 import { normalizeTypeLike, type NormalizeTypeLikeJ, type NormalizeTypeLikeT, type TypeLike } from "./TypeLike.ts"
 
@@ -11,7 +11,7 @@ export function union<const M extends Array<TypeLike>>(
 }
 
 export function _union(...members: Array<Type>): Type {
-  return declareType(() => _union, members)
+  return makeType(() => _union, members)
 }
 
 export interface JSONUnionType<M extends JSONType = any> extends JSONTypeBase {

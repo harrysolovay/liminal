@@ -1,6 +1,6 @@
 import { dirname, isAbsolute, parse, resolve } from "node:path"
 import { parseArgs, type ParseArgsConfig } from "node:util"
-import { type Actor, type EventResolved, Exec, L, type LEvent, type LiminalConfig } from "../index.ts"
+import { type Agent, type EventResolved, Exec, L, type LiminalConfig } from "../index.ts"
 import type { CliCtx } from "./cli_common.ts"
 import { WriteHandler } from "./WriteHandler.ts"
 
@@ -32,18 +32,23 @@ export async function runExec(ctx: CliCtx, args: Array<string>) {
   const configPathResolved = resolve(configPath)
   const configDir = dirname(configPathResolved)
   const config = await import(configPathResolved).then(({ default: default_ }) => default_ as LiminalConfig)
-  const actorPathInitial = L.string.assert(positionals[0])
-  let actorPathResolved: string
-  if (isAbsolute(actorPathInitial)) {
-    actorPathResolved = actorPathInitial
+  const agentPathInitial = L.string.assert(positionals[0])
+  let agentPathResolved: string
+  if (isAbsolute(agentPathInitial)) {
+    agentPathResolved = agentPathInitial
   } else {
-    actorPathResolved = resolve(configDir, ...config.actors ? [config.actors] : [], actorPathInitial)
+    agentPathResolved = resolve(configDir, ...config.agents ? [config.agents] : [], agentPathInitial)
   }
-  if (!actorPathResolved.endsWith(".ts")) {
-    actorPathResolved = `${actorPathResolved}.ts`
+  if (!agentPathResolved.endsWith(".ts")) {
+    agentPathResolved = `${agentPathResolved}.ts`
   }
-  const parsedPath = parse(actorPathResolved)
-  const actorLike = await import(actorPathResolved).then(({ default: default_ }) => default_ as () => Actor)
+  const parsedPath = parse(agentPathResolved)
+  let agentLike: () => Agent
+  try {
+    agentLike = await import(agentPathResolved).then(({ default: default_ }) => default_ as () => Agent)
+  } catch (_e: unknown) {
+    ctx.error(`Could not fine agent file at "${agentPathResolved}".`)
+  }
   const startTime = Date.now()
   const writeHandlerOrNoop = config.write
     ? await WriteHandler({
@@ -55,7 +60,7 @@ export async function runExec(ctx: CliCtx, args: Array<string>) {
     })
     : undefined
   const printHandlerOrNoop = config.silent ? undefined : (event: EventResolved) => console.log(event)
-  const exec = Exec(actorLike, {
+  const exec = Exec(agentLike, {
     default: config.default,
     args: config.args!,
   })

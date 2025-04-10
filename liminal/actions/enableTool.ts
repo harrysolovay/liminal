@@ -1,6 +1,6 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
 import { Action } from "../Action.ts"
-import type { Actor } from "../Actor.ts"
+import type { Agent } from "../Agent.ts"
 import type { ToolCalled } from "../events/ToolCalled.ts"
 import type { ToolEnabled } from "../events/ToolEnabled.ts"
 import type { Spec } from "../Spec.ts"
@@ -34,7 +34,7 @@ export function enableTool<
   key: K,
   description: string,
   params: StandardSchemaV1<JSONObject, A>,
-  implementation: (params: A) => Actor<Y, T>,
+  implementation: (params: A) => Agent<Y, T>,
 ): Generator<
   Action<
     "enable_tool",

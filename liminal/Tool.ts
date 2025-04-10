@@ -1,6 +1,6 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec"
 import type { Action } from "./Action.ts"
-import type { Actor } from "./Actor.ts"
+import type { Agent } from "./Agent.ts"
 import type { Scope } from "./Scope.ts"
 import { assert } from "./util/assert.ts"
 import { isJSONValue } from "./util/isJSONValue.ts"
@@ -27,7 +27,7 @@ export function Tool<K extends JSONKey>(config: ToolConfig<K>): Tool<K> {
   }
 }
 
-export type ToolImplementation = (params: any) => Actor<Action, ToolResult> | PromiseOr<ToolResult>
+export type ToolImplementation = (params: any) => Agent<Action, ToolResult> | PromiseOr<ToolResult>
 
 export type ToolExecutor = (args: any) => Promise<JSONValue>
 
@@ -48,7 +48,7 @@ function executor(this: Tool, scope: Scope): ToolExecutor {
       return { value: initial }
     }
     const fork = scope.fork("tool", [this.toolKey])
-    const { value } = await fork.reduce(initial as Actor)
+    const { value } = await fork.reduce(initial as Agent)
     fork.event({
       type: "returned",
       value,

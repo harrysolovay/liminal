@@ -1,5 +1,5 @@
 import type { Action } from "./Action.ts"
-import type { Actor } from "./Actor.ts"
+import type { Agent } from "./Agent.ts"
 import type { EventHandler } from "./events/EventHandler.ts"
 import type { EventResolved, ExtractEventResolved } from "./events/EventResolved.ts"
 import type { LanguageModel } from "./Model.ts"
@@ -37,13 +37,13 @@ export type ExtractExecConfig<Y extends Action> =
   )
 
 export function Exec<Y extends Action, T>(
-  createActor: () => Actor<Y, T>,
+  createAgent: () => Agent<Y, T>,
   config: ExtractExecConfig<Y>,
 ): Exec<Y, T> {
   // TODO: consider `Result` type.
   return async (handler, options) => {
     let scope: Scope = RootScope(config.default, config.args, handler as never, options?.signal)
-    scope = await scope.reduce(createActor())
+    scope = await scope.reduce(createAgent())
     const { signal: { aborted, reason } } = scope.controller
     if (aborted) {
       scope.event({

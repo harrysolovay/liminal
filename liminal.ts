@@ -3,7 +3,7 @@ import type { LiminalConfig } from "liminal"
 import { AILanguageModel } from "liminal-ai"
 
 export default {
-  actors: "examples/actors",
+  agents: "examples/agents",
   default: AILanguageModel(openai("gpt-4o-mini", {
     structuredOutputs: true,
   })),

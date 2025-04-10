@@ -1,12 +1,19 @@
 import alchemy from "alchemy"
 import { Worker } from "alchemy/cloudflare"
-import { env } from "liminal-common"
+import { L } from "liminal"
 // @ts-ignore
 import { argv } from "node:process"
 // @ts-ignore
 import { fileURLToPath } from "node:url"
+// @ts-ignore
+import { env as env_ } from "node:process"
 
-await using _ = alchemy("liminal:liminal-example-deploy-to-cf-worker", {
+export const env = L.object({
+  OPENAI_API_KEY: L.string,
+  STAGE: L.enum("dev", "prod"),
+}).assert(env_)
+
+const app = await alchemy("liminal:liminal-example-deploy-to-cf-worker", {
   stage: env.STAGE,
   phase: argv.includes("--destroy") ? "destroy" : "up",
   password: (globalThis as never as {
@@ -26,3 +33,5 @@ export const worker = await Worker("liminal-exec-worker", {
     external: ["@valibot/to-json-schema"],
   },
 })
+
+await app.finalize()

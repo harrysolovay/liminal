@@ -5,6 +5,7 @@ import type { Inferred } from "../events/Inferred.ts"
 import type { Spec } from "../Spec.ts"
 import type { JSONObject } from "../util/JSONObject.ts"
 import type { JSONValue } from "../util/JSONValue.ts"
+import { peekLast } from "../util/peekLast.ts"
 
 export { infer_ as infer }
 
@@ -22,7 +23,7 @@ function* infer_<T extends JSONValue = string>(type?: StandardSchemaV1<JSONObjec
     scope.event({
       type: "inference_requested",
     })
-    const model = scope.languageModels.values().next().value!
+    const model = peekLast(scope.languageModels)!
     scope = await scope.reduce(model.infer(type))
     scope.event({
       type: "inferred",

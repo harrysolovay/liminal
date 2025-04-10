@@ -1,5 +1,5 @@
 {
-  "name": "liminal-example-actors",
+  "name": "liminal-example-agents",
   "private": true,
   "type": "module",
   "dependencies": {
