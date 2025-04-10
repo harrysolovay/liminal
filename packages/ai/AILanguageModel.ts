@@ -13,8 +13,8 @@ export function AILanguageModel(model: LanguageModelV1): LanguageModel {
   return {
     type: "language",
     async *infer(type) {
-      const messages = yield* L.getMessages()
-      const coreMessages = messages.map(toCoreMessage)
+      const messages = yield* L.messages
+      const coreMessages = [...messages.values().map(toCoreMessage)]
       if (type) {
         const schema = await _util.JSONSchemaMemo(type)
         let { object } = await generateObject({
@@ -27,7 +27,7 @@ export function AILanguageModel(model: LanguageModelV1): LanguageModel {
         _util.assert(!validateResult.issues)
         return validateResult.value
       }
-      const scope = yield* L.getScope()
+      const scope = yield* L.scope
       const aiTools: ToolSet = await Promise
         .all(
           scope.tools.values().map(async (tool) =>
