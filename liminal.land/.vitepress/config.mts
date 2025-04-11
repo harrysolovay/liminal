@@ -60,22 +60,16 @@ export default defineConfig({
         items: [
           { text: "Actions", link: "/actions" },
           { text: "Messages", link: "/messages" },
-          {
-            text: "Generation",
-            items: [
-              { text: "Inferencing", link: "/inferencing" },
-              { text: "Embedding", link: "/embedding" },
-              { text: "Metatyping", link: "/metatyping" },
-            ],
-          },
+          { text: "References", link: "/references" },
+          { text: "Generation", link: "/generation" },
           { text: "Declarations", link: "/declarations" },
-          { text: "Scopes", link: "/scopes" },
           { text: "Events", link: "/events" },
-          { text: "Tool Calling", link: "/tool_calling" },
+          { text: "Tools", link: "/tools" },
+          { text: "Branches", link: "/branches" },
         ],
       },
       {
-        text: "Model Adapters",
+        text: "Adapters",
         base: "/adapters",
         items: [
           { text: "AI SDK (Vercel)", link: "/ai_sdk" },

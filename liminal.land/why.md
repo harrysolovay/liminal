@@ -109,14 +109,13 @@ async function* g() {
 Create and reuse patterns such as iterative refinement loops.
 
 ```ts
-function* refine(input: string) {
+function* refine(content: string) {
   let i = 0
-  let current = input
   while (i < 5) {
-    yield* L.user`Improve the following text: ${current}`
-    current = yield* L.infer
+    yield* L.user`Improve the following text: ${content}`
+    content = yield* L.infer
   }
-  return current
+  return content
 }
 ```
 

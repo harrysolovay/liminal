@@ -1,5 +1,27 @@
 # Liminal Actions
 
+- `Message`
+- `MessagesSlice`
+
+- `messages`
+- `message`
+  - `system`
+  - `user`
+  - `assistant`
+  - `tool`
+
+- `message.to(end)`
+
+- `tool`
+
+- `all`
+- `race`
+
+- `await`
+- `throw`
+- `catch`
+- `abort`
+
 Actions are the means by which we update and access state about a given scope.
 
 ## `yield*`able Factories
