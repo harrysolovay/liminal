@@ -1,4 +1,4 @@
-# What is Liminal?
+# Why Liminal?
 
 ## Agent Definition
 

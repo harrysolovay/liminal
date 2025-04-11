@@ -50,7 +50,7 @@ export default defineConfig({
         text: "Overview",
         items: [
           { text: "Getting Started", link: "/getting_started" },
-          { text: "What is Liminal?", link: "/what" },
+          { text: "Why Liminal?", link: "/why" },
           { text: "Examples", link: "/examples" },
         ],
       },
