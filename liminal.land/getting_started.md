@@ -2,6 +2,10 @@
 
 ## Installation
 
+## Creating Agents
+
+## Agent Capabilities
+
 `actor.ts`
 
 ```ts

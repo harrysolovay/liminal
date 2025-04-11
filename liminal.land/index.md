@@ -5,7 +5,7 @@ hero:
   name: Liminal
   text: Agents in TypeScript
   image: /liminal_puzzle.png
-  tagline: Primitives for composing model-agnostic agents and meta agents using generator functions.
+  tagline: Primitives for composing model-agnostic agents and meta agents using TypeScript generator functions.
   actions:
     - theme: brand
       text: Getting Started
