@@ -1,23 +1,29 @@
 # What is Liminal?
 
-## Agent Descriptions
+## Defining Agents
 
-Liminal provides the `L` namespace, which contains factories and values that
-describe agent behavior.
+Liminal provides model-agnostic building blocks that describe the behavior of
+agents. For example:
 
 ```ts
-L.model // Used to change the current model mid-conversation.
-L.infer // Used to trigger a completion.
-L.embed // Used to get the vector embedding of a string.
+// Change the current model mid-conversation.
+L.model("key")
+
+// Trigger a completion.
+L.infer
+
+// Get a vector embedding.
+L.embed(value)
 ```
 
-## Agent Composition
+## Conversation Management
 
-Liminal actions can be yielded from iterator protocol objects (such as
-generators).
+As we yield these building blocks, Liminal maintains an underlying conversation.
+This allows us to reason about the progression of the conversation as part of
+standard function control flow.
 
 ```ts
-function* g() {
+function* agent() {
   // Append a system message.
   yield* L.system`Be very specific.`
 
@@ -28,11 +34,6 @@ function* g() {
   const answer = yield* L.infer
 }
 ```
-
-## Conversation Management
-
-When we execute a Liminal agent, its underlying conversation is tracked by
-liminal.
 
 ```json
 [
@@ -51,17 +52,49 @@ liminal.
 ]
 ```
 
+## Model Interoperability
+
+Models are never hard-coded into Liminal agents. Instead, we specify keys.
+
+```ts
+function* g() {
+  yield* L.infer
+  yield* L.model("mini")
+  yield* L.infer
+  yield* L.model("reasoning")
+  yield* L.infer
+}
+```
+
+Only upon execution do we mind a model to these keys.
+
+```ts
+declare const modelA: LanguageModel
+declare const modelB: LanguageModel
+declare const modelC: LanguageModel
+
+exec(g, {
+  default: modelA,
+  apply: {
+    mini: modelB,
+    reasoning: modelC,
+  },
+})
+```
+
 ## Standard JavaScript
 
-Liminal agents can colocate ordinary JavaScript code with action yields.
-Standard control flow such as imperative loops and async/await is perfectly
-valid.
+Liminal agents are standard JavaScript objects that implement the iterator
+protocol (arrays, iterators, iterables, generators).
+
+Iterating can trigger ordinary JavaScript code, such as while loops and promise
+execution.
 
 ```ts
 async function* g() {
   yield* L.system`...`
 
-  const item = await db.getItem({/* ... */})
+  const item = await db.getItem()
 
   while (Math.random() < .9) {
     yield* L.infer
@@ -71,10 +104,9 @@ async function* g() {
 }
 ```
 
-## Composable
+## Agent Composition
 
-We can use generators to create and reuse complex patterns such as iterative
-refinement loops.
+Create and reuse patterns such as iterative refinement loops.
 
 ```ts
 function* refine(input: string) {
@@ -88,18 +120,26 @@ function* refine(input: string) {
 }
 ```
 
-## Standard-type Compatible
+## Structured Outputs
 
-We can provide common standard types to get typed structured output.
+Liminal allows you to yield various
+[standard schema](https://standardschema.dev/) runtime types to get completions
+as typed structured output.
+
+> [!TIP]
+> Supported libraries include zod, arktype, effect/schema, typebox and
+> [Liminal runtime types](./runtime_types/index.md).
 
 ```ts
+import { z } from "zod"
+
 function* g() {
-  const b = yield* L.infer(z.object({
+  const value = yield* z.object({
     first: L.string,
     second: L.string,
-  }))
+  })
 
-  b satisfies {
+  value satisfies {
     first: string
     second: string
   }

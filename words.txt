@@ -23,6 +23,7 @@ ollama
 ossp
 pglite
 pgvector
+rica
 rootable
 shikijs
 solovay
@@ -31,6 +32,7 @@ supabase
 tmpfs
 tsdocs
 twoslash
+typebox
 valibot
 vitepress
 vtype
