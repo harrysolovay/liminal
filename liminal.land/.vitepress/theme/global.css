@@ -9,7 +9,9 @@
 }
 
 :root {
+  --vp-font-family-mono: "Inconsolata", monospace;
   --vp-home-hero-name-color: transparent;
+  --vp-code-font-size: 1em;
   --vp-home-hero-name-background: -webkit-linear-gradient(
     120deg,
     #bd34fe 30%,
