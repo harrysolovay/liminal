@@ -75,24 +75,11 @@ export default defineConfig({
         ],
       },
       {
-        text: "Consumers",
-        base: "/consumers",
+        text: "Model Adapters",
+        base: "/adapters",
         items: [
-          { text: "Exec", link: "/exec" },
-          { text: "Matching Events", link: "/matching_events.md" },
-        ],
-      },
-      {
-        text: "Runtime Types",
-        base: "/runtime_types",
-        link: "/",
-        collapsed: true,
-        items: [
-          { text: "Intrinsics", link: "/intrinsics" },
-          { text: "JSON Schema", link: "/json_schema" },
-          { text: "Utility Types", link: "/utility_types" },
-          { text: "Recursive Types", link: "/recursive_types" },
-          { text: "Type Visitors", link: "/type_visitors" },
+          { text: "AI SDK (Vercel)", link: "/ai_sdk" },
+          { text: "Ollama", link: "/ollama" },
         ],
       },
       {
@@ -106,12 +93,16 @@ export default defineConfig({
         ],
       },
       {
-        text: "Model Adapters",
-        base: "/model_adapters",
+        text: "Runtime Types",
+        base: "/runtime_types",
+        link: "/",
         collapsed: true,
         items: [
-          { text: "AI SDK (Vercel)", link: "/ai" },
-          // { text: "Ollama", link: "/ollama" },
+          { text: "Intrinsics", link: "/intrinsics" },
+          { text: "JSON Schema", link: "/json_schema" },
+          { text: "Utility Types", link: "/utility_types" },
+          { text: "Recursive Types", link: "/recursive_types" },
+          { text: "Type Visitors", link: "/type_visitors" },
         ],
       },
       {

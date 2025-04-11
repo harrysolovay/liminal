@@ -1,6 +1,6 @@
 # What is Liminal?
 
-## Defining Agents
+## Agent Definition
 
 Liminal provides model-agnostic building blocks that describe the behavior of
 agents. For example:
@@ -120,7 +120,7 @@ function* refine(input: string) {
 }
 ```
 
-## Structured Outputs
+## Structured Output
 
 Liminal allows you to yield various
 [standard schema](https://standardschema.dev/) runtime types to get completions
@@ -146,7 +146,7 @@ function* g() {
 }
 ```
 
-## An Agent Runtime
+## Runtime
 
 We pass the Agent (a JavaScript iterator protocol objects) to `exec`, which runs
 it and returns the final value if any.
@@ -159,7 +159,7 @@ await exec(g, {
 declare const defaultModel: LanguageModel
 ```
 
-## A Means of Observing Agents
+## Observability
 
 Within agents, we can emit events that contain arbitrary data. This enables us
 to then listen for those events throughout agent execution.
@@ -179,7 +179,7 @@ exec(g, {
 })
 ```
 
-## Agent Orchestration
+## Agent Hierarchies
 
 Liminal simplifies conversational branching and parallel agents.
 
