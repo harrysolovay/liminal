@@ -1,7 +1,7 @@
 # Getting Started
 
 > [!TIP]
-> Read "[What is Liminal?](./what.md)" to get an overview of Liminal's core
+> Read "[Why Liminal?](./why.md)" to get an overview of Liminal's core
 > objectives and surface area.
 
 ## Installation
@@ -32,7 +32,7 @@ yarn add liminal
 
 :::
 
-## First Agent
+## First Steps
 
 Let's consider a function that validates an input from a form. Our initial
 implementation may look as follows.
@@ -88,7 +88,7 @@ create the message than its manual rules-based counterpart.
 "john@example..com" → "Your email contains consecutive dots which aren't allowed in a valid address."
 ```
 
-## Difference in Calling
+## Instantiating Agents
 
 When we want to call `validateEmail`, we use `exec`, and specify the desired
 model.
@@ -113,22 +113,24 @@ export function validationEndpoint(request: Request) {
 }
 ```
 
-## Agents Explained
+> [!TIP]
+> We can observe events emitted during agent execution.
+> [Execution documentation here](./concepts/execution.md).
 
-Agents in Liminal follow a consistent pattern:
+## Agent-like
 
-1. We model agents as iterator protocol objects (usually generators) which
-
-`yield` actions.
+"Agents" in Liminal are defined as mere iterator protocol objects (usually
+generators) which yield actions. For example, we yield `infer` to get a
+completion from the underlying model.
 
 ```ts
 function* agent() {
-  yield* L.infer // or any other action
+  yield* L.infer
 }
 ```
 
-2. We yield actions that update execution state, such as the conversation
-   message list.
+We can yield actions to signal to the agent runtime how to update state, such as
+the conversation message list.
 
 <!-- dprint-ignore -->
 ```ts
@@ -136,13 +138,28 @@ function* agent() {
 yield* L.system`A`
 
 // Append a user message.
-yield* L.user`A`
+yield* L.user`B`
 ```
 
-3. Utilize "next" values (specific to each action).
+These two yields result in the following two messages being appended to the
+conversation being tracked by the executor.
 
-> [!TIP]
-> This is how we implement prompt-chaining in Liminal.
+```json
+[
+  {
+    "role": "system",
+    "content": "A"
+  },
+  {
+    "role": "user",
+    "content": "B"
+  }
+]
+```
+
+Actions often return action-specific "next" values. For example, `infer` returns
+a next value of `string` or a specified structured output type. This is how we
+implement prompt-chaining.
 
 ```ts
 import { L } from "liminal"
@@ -155,8 +172,9 @@ export default function*() {
   const subtopic = yield* L.infer
 
   // Base the next user message on how the model responded.
-  yield* L
-    .user`Explain three ways ${subtopic} might impact everyday life by 2030.`
+  yield* L.user`
+    Explain three ways ${subtopic} might impact everyday life by 2030.
+  `
 
   // Capture the final response for the return value.
   const impacts = yield* L.infer
@@ -166,10 +184,9 @@ export default function*() {
 }
 ```
 
----
-
-This approach enables agents that guide conversations with dynamic, contextual
-prompts and return structured data for integration with your program.
+By combining actions and their results within iterator objects, we model agents
+that guide conversations with dynamic, contextual prompts and return structured
+data for straight-forward integration.
 
 ## Composition
 
@@ -183,13 +200,7 @@ import { L } from "liminal"
 
 function* refine(content: string, iterations = 3) {
   for (let i = iterations; i < iterations.length; i++) {
-    yield* L.user`
-      Refine the following content.
-
-      ---
-
-      ${content}
-    `
+    yield* L.user`Refine the following content: ${content}`
     content = yield* L.infer
   }
   return content
@@ -202,20 +213,50 @@ with each iteration building on the previous response.
 Let's flatten this agent into another agent.
 
 ```ts{4}
-function* parent() {
+function* consumer() {
   yield* L.user`Write an itinerary for a family vacation in Costa Rica!`
   const itinerary = yield* L.infer
   const refined = yield* refine(itinerary)
 }
 ```
 
-To isolate the refinement loop's conversation / prevent it from polluting the
-outer conversation, we can simply wrap our `refine` call with `L.branch`.
+## Conversation Isolation
+
+In the example above, the actions yielded within `refine` are applied to
+`consumer`. To isolate the refinement loop's conversation / prevent it from
+polluting the outer conversation, we can simply wrap our `refine` call with
+`L.branch`.
 
 ```ts{4}
 function* parent() {
   yield* L.user`Write an itinerary for a family vacation in Costa Rica!`
   const itinerary = yield* L.infer
   const refined = yield* L.branch(refine(itinerary))
+}
+```
+
+## Parallel Agents
+
+To execute multiple agents in parallel, we can pass an array or record of
+iterator protocol objects into `L.branch`.
+
+In the following example, we create two branches, each executing the refinement
+loop with a different model.
+
+```ts{5-14}
+function* parent() {
+  yield* L.user`Write an itinerary for a family vacation in Costa Rica!`
+  const itinerary = yield* L.infer
+
+  const { a, b } = yield* L.branch({
+    *a() {
+      yield* L.model("model-a")
+      return yield* refine(itinerary)
+    },
+    *b() {
+      yield* L.model("model-b")
+      return yield* refine(itinerary)
+    },
+  })
 }
 ```
