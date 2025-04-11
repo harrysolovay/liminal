@@ -1,7 +1,7 @@
 # Getting Started
 
 > [!TIP]
-> Read "[What is Liminal?](./what.md)" to get an overview of Liminal's core
+> Read "[Why Liminal?](./why.md)" to get an overview of Liminal's core
 > objectives and surface area.
 
 ## Installation
