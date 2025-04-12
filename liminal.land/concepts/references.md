@@ -1,3 +1,0 @@
-# Liminal References
-
-## Forgetting

@@ -37,6 +37,7 @@ export default defineConfig({
     ["script", {}, GOOGLE_ANALYTICS],
   ],
   themeConfig: {
+    externalLinkIcon: true,
     editLink: {
       pattern: "https://github.com/harrysolovay/liminal/edit/main/docs/:path",
     },
@@ -47,11 +48,14 @@ export default defineConfig({
     search: { provider: "local" },
     sidebar: [
       {
-        text: "Overview",
         items: [
           { text: "Getting Started", link: "/getting_started" },
           { text: "Why Liminal?", link: "/why" },
-          { text: "Examples", link: "/examples" },
+          {
+            text: "Examples",
+            link: "https://github.com/harrysolovay/liminal/tree/main/examples/agents",
+            target: "blank",
+          },
         ],
       },
       {
@@ -60,7 +64,7 @@ export default defineConfig({
         items: [
           { text: "Actions", link: "/actions" },
           { text: "Messages", link: "/messages" },
-          { text: "References", link: "/references" },
+          { text: "Handles", link: "/handles" },
           { text: "Generation", link: "/generation" },
           { text: "Declarations", link: "/declarations" },
           { text: "Events", link: "/events" },
@@ -71,6 +75,7 @@ export default defineConfig({
       {
         text: "Adapters",
         base: "/adapters",
+        link: "/",
         items: [
           { text: "AI SDK (Vercel)", link: "/ai_sdk" },
           { text: "Ollama", link: "/ollama" },
@@ -81,7 +86,7 @@ export default defineConfig({
         collapsed: true,
         base: "/error_handling",
         items: [
-          { text: "Agent Signal", link: "/agent_signal" },
+          { text: "Signals", link: "/signals" },
           { text: "Throw & Catch", link: "/throw_catch" },
           { text: "Aborting", link: "/aborting" },
         ],

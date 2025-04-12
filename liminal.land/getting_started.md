@@ -1,9 +1,5 @@
 # Getting Started
 
-> [!TIP]
-> Read "[Why Liminal?](./why.md)" to get an overview of Liminal's core
-> objectives and surface area.
-
 ## Installation
 
 Install Liminal with your package manager of choice.
