@@ -50,7 +50,7 @@ export function AILanguageModel(model: LanguageModelV1): LanguageModel {
         model,
         messages: coreMessages,
         tools: aiTools,
-        maxSteps: Infinity,
+        maxSteps: Infinity, // TODO: remove this
       })
       yield* L.assistant(text)
       return text

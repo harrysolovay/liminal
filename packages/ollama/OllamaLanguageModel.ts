@@ -19,7 +19,12 @@ export function OllamaLanguageModel(ollama: Ollama, model: string): LanguageMode
         yield* L.assistant(JSON.stringify(message, null, 2))
         yield* toolLoop(ollama, model, message, callbacks)
         yield* L.assistant(message.content)
-        return JSON.parse(message.content)
+        const parsed = JSON.parse(message.content)
+        // TODO: re-enable this
+        // const validateResult = await type["~standard"].validate(parsed)
+        // _util.assert(!validateResult.issues)
+        // return validateResult.value
+        return parsed
       }
       const { message } = await ollama.chat({
         model,
