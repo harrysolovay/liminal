@@ -32,10 +32,11 @@ export function makeType<X extends Type>(
         validate: (value) => {
           const diagnostics = AssertDiagnostics({}, type as never, value)
           if (diagnostics.length) {
+            console.log(diagnostics)
             return {
-              issues: diagnostics.map(({ path, error }): StandardSchemaV1.Issue => ({
-                path,
-                message: JSON.stringify(error),
+              issues: diagnostics.map((diagnostic): StandardSchemaV1.Issue => ({
+                path: diagnostic.path,
+                message: diagnostic.message(),
               })),
             }
           }

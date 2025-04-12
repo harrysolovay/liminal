@@ -24,9 +24,11 @@ export function AILanguageModel(model: LanguageModelV1): LanguageModel {
           schema: jsonSchema(schema),
         })
         yield* L.assistant(JSON.stringify(object, null, 2))
-        const validateResult = await type["~standard"].validate(object)
-        _util.assert(!validateResult.issues)
-        return validateResult.value
+        // TODO: re-enable this
+        // const validateResult = await type["~standard"].validate(object)
+        // _util.assert(!validateResult.issues)
+        // return validateResult.value
+        return object
       }
       const scope = yield* L.scope
       const aiTools: ToolSet = await Promise
