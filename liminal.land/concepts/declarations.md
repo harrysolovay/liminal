@@ -1,31 +1,31 @@
-# Liminal Declarations
-
-## When To Use
+# Liminal Declaration
 
 ## Model Declaration
 
-In order to avoid coupling a conversation to a model, we declare the usage of a
-model.
+Models are never hard-coded into Liminal agents. Instead, we specify keys.
 
 ```ts
-import { apply, declareLanguageModel } from "liminal"
-
-function* G() {
-  yield* declareLanguageModel("my-model")
-  // ...
-}
+const g = L.f(L.string, function*(value) {
+  yield* L.infer
+  yield* L.model("mini")
+  yield* L.infer
+  yield* L.model("reasoning")
+  yield* L.infer
+})
 ```
 
-Only upon executing the conversation do we provide the actual model
-implementation.
+Only upon execution do we mind a model to these keys.
 
 ```ts
-// ...
+declare const root: LanguageModel
+declare const mini: LanguageModel
+declare const reasoning: LanguageModel
 
-import { openai } from "@ai-sdk/openai"
-import { AILanguageModel } from "liminal-ai"
-
-apply(G, {
-  "my-model": AILanguageModel(openai("gpt-4o-mini")),
-}).exec()
+const exec = await g()
+  .run(root, { mini, reasoning })
+  .on((event) => {
+    console.log(event)
+  })
 ```
+
+## Host Declaration

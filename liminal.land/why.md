@@ -35,6 +35,8 @@ function* agent() {
 }
 ```
 
+When executed, the resulting message state will look similar to the following.
+
 ```json
 [
   {
@@ -66,19 +68,16 @@ function* g() {
 }
 ```
 
-Only upon execution do we mind a model to these keys.
+Only upon execution do we bind models to these keys.
 
 ```ts
-declare const modelA: LanguageModel
-declare const modelB: LanguageModel
-declare const modelC: LanguageModel
+declare const root: LanguageModel
+declare const mini: LanguageModel
+declare const reasoning: LanguageModel
 
-exec(g, {
-  default: modelA,
-  apply: {
-    mini: modelB,
-    reasoning: modelC,
-  },
+const result = await exec(g, root, {
+  mini,
+  reasoning,
 })
 ```
 
@@ -109,14 +108,13 @@ async function* g() {
 Create and reuse patterns such as iterative refinement loops.
 
 ```ts
-function* refine(input: string) {
+function* refine(content: string) {
   let i = 0
-  let current = input
   while (i < 5) {
-    yield* L.user`Improve the following text: ${current}`
-    current = yield* L.infer
+    yield* L.user`Improve the following text: ${content}`
+    content = yield* L.infer
   }
-  return current
+  return content
 }
 ```
 
