@@ -72,7 +72,7 @@
     },
     "liminal": {
       "name": "liminal",
-      "version": "0.5.1",
+      "version": "0.5.2",
       "bin": {
         "liminal": "./dist/cli/main.js",
       },
@@ -105,10 +105,10 @@
     },
     "packages/ai": {
       "name": "liminal-ai",
-      "version": "0.0.2",
+      "version": "0.0.3",
       "peerDependencies": {
         "ai": "^4.1.61",
-        "liminal": "^0.5.1",
+        "liminal": "^0.5.2",
       },
     },
     "packages/alchemy": {
@@ -120,7 +120,7 @@
     },
     "packages/ollama": {
       "name": "liminal-ollama",
-      "version": "0.0.0",
+      "version": "0.0.1",
       "peerDependencies": {
         "liminal": "^0.5.1",
         "ollama": "^0.5.14",

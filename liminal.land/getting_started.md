@@ -1,4 +1,8 @@
-# Getting Started
+---
+prev: false
+---
+
+# Getting Started <Badge type="warning" text="beta" />
 
 ## Installation
 
@@ -108,10 +112,6 @@ export function validationEndpoint(request: Request) {
   // ...
 }
 ```
-
-> [!TIP]
-> We can observe events emitted during agent execution.
-> [Execution documentation here](./concepts/execution.md).
 
 ## Agent-like
 

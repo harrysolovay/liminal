@@ -19,6 +19,7 @@ export default defineConfig({
     codeTransformers: [transformerTwoslash()],
     theme: { light: "light-plus", dark: "dracula" },
     config: (md) => md.use(footnotePlugin),
+    lineNumbers: true,
   },
   sitemap: { hostname: "http://liminal.land" },
   lastUpdated: true,
@@ -48,73 +49,79 @@ export default defineConfig({
     search: { provider: "local" },
     sidebar: [
       {
+        text: "The Awesome List",
+        link: "https://raw.githubusercontent.com/harrysolovay/liminal/refs/heads/main/AWESOME.md",
+        target: "blank",
+      },
+      {
+        text: "llms.txt",
+        link: "https://raw.githubusercontent.com/harrysolovay/liminal/refs/heads/main/llms.txt",
+        target: "blank",
+      },
+      {
+        text: "Introduction",
         items: [
           { text: "Getting Started", link: "/getting_started" },
           { text: "Why Liminal?", link: "/why" },
-          {
-            text: "Examples",
-            link: "https://github.com/harrysolovay/liminal/tree/main/examples/agents",
-            target: "blank",
-          },
+          { text: "Liminal Agents", link: "/agents" },
+          { text: "Runtime", link: "/runtime" },
         ],
       },
       {
-        text: "Concepts",
-        base: "/concepts",
+        text: "Agents",
         items: [
-          { text: "Actions", link: "/actions" },
+          { text: "Models", link: "/models" },
           { text: "Messages", link: "/messages" },
-          { text: "Handles", link: "/handles" },
-          { text: "Generation", link: "/generation" },
-          { text: "Declarations", link: "/declarations" },
+          { text: "Replies", link: "/replies" },
+          { text: "Streams", link: "/streams" },
+          { text: "Branches", link: "/branches" },
           { text: "Events", link: "/events" },
           { text: "Tools", link: "/tools" },
-          { text: "Branches", link: "/branches" },
         ],
       },
       {
-        text: "Adapters",
-        base: "/adapters",
-        link: "/",
+        text: "Reliability",
         items: [
-          { text: "AI SDK (Vercel)", link: "/ai_sdk" },
-          { text: "Ollama", link: "/ollama" },
+          { text: "Error-recovery", link: "/error-recovery" },
+          { text: "Testing", link: "/testing" },
         ],
       },
       {
-        text: "Error Handling",
-        collapsed: true,
-        base: "/error_handling",
-        items: [
-          { text: "Signals", link: "/signals" },
-          { text: "Throw & Catch", link: "/throw_catch" },
-          { text: "Aborting", link: "/aborting" },
-        ],
-      },
-      {
-        text: "Runtime Types",
-        base: "/runtime_types",
-        link: "/",
+        text: "Integration",
+        base: "/integration",
         collapsed: true,
         items: [
+          { text: "Persistence", link: "/persistence" },
+          { text: "Websockets", link: "/websockets" },
+          { text: "Server-side Events", link: "/server-side_events" },
+          { text: "React Hooks", link: "/react_hooks" },
+        ],
+      },
+      {
+        text: "Models Adapters",
+        base: "/model_adapters",
+        collapsed: true,
+        items: [
+          { text: "Anthropic", link: "/anthropic" },
+          { text: "OpenAI", link: "/openai" },
+          { text: "xAI", link: "/xai" },
+          { text: "ollama", link: "/ollama" },
+          { text: "Google Generative AI", link: "/google_gen_ai" },
+          { text: "AI SDK", link: "/ai-sdk" },
+          { text: "DeepSeek", link: "/deepseek" },
+        ],
+      },
+      {
+        text: "Liminal Types",
+        base: "/liminal_types",
+        collapsed: true,
+        items: [
+          { text: "Preface", link: "/preface" },
           { text: "Intrinsics", link: "/intrinsics" },
-          { text: "JSON Schema", link: "/json_schema" },
-          { text: "Utility Types", link: "/utility_types" },
-          { text: "Recursive Types", link: "/recursive_types" },
-          { text: "Type Visitors", link: "/type_visitors" },
-        ],
-      },
-      {
-        text: "Rationale",
-        base: "/rationale",
-        collapsed: true,
-        items: [
-          { text: "Implicit Message Buffers", link: "/implicit_message_buffers" },
-          { text: "Decoupling Conversations From Models", link: "/decoupling_conversations_from_models" },
-          { text: "Type-safe Observability", link: "/type-safe_observability" },
-          { text: "Eliminating Boilerplate", link: "/eliminating_boilerplate" },
-          { text: "LLM-first Runtime Types", link: "/llm-first_runtime_types" },
-          { text: "Stepping Ability", link: "/stepping_ability" },
+          { text: "Utilities", link: "/utilities" },
+          { text: "Metatypes", link: "/metatypes" },
+          { text: "Transforms", link: "/transforms" },
+          { text: "Visitor API", link: "/visitor_api" },
         ],
       },
     ],
@@ -127,18 +134,14 @@ export default defineConfig({
 
     head.push(["meta", { property: "og:type", content: "website" }])
     head.push(["meta", { property: "og:title", content: title }])
-    head.push(["meta", { property: "og:description", content: description }])
     head.push(["meta", { property: "og:image", content: image }])
+    head.push(["meta", { property: "og:description", content: description }])
 
-    head.push(["meta", { name: "twitter:card", content: "summary_large_image" }])
-    head.push(["meta", { name: "twitter:image", content: image }])
     head.push(["meta", { name: "twitter:title", content: title }])
+    head.push(["meta", { name: "twitter:image", content: image }])
     head.push(["meta", { name: "twitter:description", content: description }])
+    head.push(["meta", { name: "twitter:card", content: "summary_large_image" }])
 
     return head
   },
 })
-
-function code(text: string): string {
-  return `<code>${text}</code>`
-}

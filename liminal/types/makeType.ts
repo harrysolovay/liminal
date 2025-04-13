@@ -12,7 +12,7 @@ import { type Type, TypeKey, type TypeMembers } from "./Type.ts"
 
 export function makeType<X extends Type>(
   declaration: () => X | ((...args: any) => X),
-  args?: Array<unknown>,
+  args?: Array<any>,
   descriptions: Array<string> = [],
 ): X {
   const type = Object.assign(

@@ -6,8 +6,8 @@
     "build": "tsc -b",
     "watch": "tsc -b -w",
     "liminal": "dotenvx run -- liminal",
-    "liminal.land": "bun run --filter liminal.land vitepress",
-    "example:vite-react-app": "bun run --filter=liminal-example-vite-react-app dev",
+    "liminal.land": "bun run --filter liminal.land --elide-lines 0 vitepress",
+    "example:vite-react-app": "bun run --filter=liminal-example-vite-react-app --elide-lines 0 dev",
     "lint": "eslint -c eslint.json .",
     "changeset": "changeset"
   },

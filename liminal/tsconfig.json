@@ -4,5 +4,5 @@
     "noEmit": false,
     "outDir": "dist"
   },
-  "include": ["."]
+  "include": [".", "../liminal-types/JSONValue.ts"]
 }

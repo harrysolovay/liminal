@@ -14,7 +14,7 @@ export function OllamaLanguageModel(ollama: Ollama, model: string): LanguageMode
           model,
           messages,
           format: schema,
-          tools: ollamaTools,
+          ...ollamaTools && { tools: ollamaTools },
         })
         yield* L.assistant(JSON.stringify(message, null, 2))
         yield* toolLoop(ollama, model, message, callbacks)
@@ -29,7 +29,7 @@ export function OllamaLanguageModel(ollama: Ollama, model: string): LanguageMode
       const { message } = await ollama.chat({
         model,
         messages,
-        tools: ollamaTools,
+        ...ollamaTools && { tools: ollamaTools },
       })
       yield* toolLoop(ollama, model, message, callbacks)
       yield* L.assistant(message.content)

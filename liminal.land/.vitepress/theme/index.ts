@@ -6,7 +6,7 @@ import "./global.css"
 
 export default {
   extends: Theme,
-  enhanceApp(ctx) {
-    ctx.app.use(TwoslashFloatingVue)
+  enhanceApp({ app }) {
+    app.use(TwoslashFloatingVue)
   },
 } satisfies ThemeConfig
