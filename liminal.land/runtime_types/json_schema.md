@@ -1,1 +1,0 @@
-# Liminal JSON Schema

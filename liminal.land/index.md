@@ -40,7 +40,13 @@ features:
 import { onMounted } from 'vue'
 
 onMounted(() => {
-  const element = document.querySelector('a.VPButton.medium.alt');
+  const heading = document.querySelector(".heading .name")
+  const betaBadge = document.createElement("span")
+  heading.style += ";display: flex; align-items: start;"
+  betaBadge.textContent = " (Beta)"
+  betaBadge.style = "font-size: 36px;"
+  heading.appendChild(betaBadge)
+  const element = document.querySelector("a.VPButton.medium.alt");
   element.addEventListener('click', function() {
     navigator.clipboard
       .writeText("npx liminal init")

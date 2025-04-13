@@ -3,6 +3,7 @@ arktype
 bunx
 codegen
 cspotcode
+deepseek
 dotenvx
 dprint
 eventsource

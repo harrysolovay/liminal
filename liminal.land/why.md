@@ -1,4 +1,4 @@
-# Why Liminal?
+# Why Liminal? <Badge type="warning" text="beta" />
 
 ## Agent Definition
 
@@ -126,7 +126,7 @@ as typed structured output.
 
 > [!TIP]
 > Supported libraries include zod, arktype, effect/schema, typebox and
-> [Liminal runtime types](./runtime_types/index.md).
+> [Liminal runtime types](./liminal_types/preface.md).
 
 ```ts
 import { z } from "zod"
