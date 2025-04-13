@@ -60,6 +60,7 @@ Models are never hard-coded into Liminal agents. Instead, we specify keys.
 
 ```ts
 function* g() {
+  yield* L.model("initial")
   yield* L.infer
   yield* L.model("mini")
   yield* L.infer
@@ -71,11 +72,12 @@ function* g() {
 Only upon execution do we bind models to these keys.
 
 ```ts
-declare const root: LanguageModel
+declare const initial: LanguageModel
 declare const mini: LanguageModel
 declare const reasoning: LanguageModel
 
-const result = await exec(g, root, {
+const result = await exec(g, {
+  initial,
   mini,
   reasoning,
 })
@@ -96,7 +98,7 @@ async function* g() {
   const item = await db.getItem()
 
   while (Math.random() < .9) {
-    yield* L.infer
+    yield* L.reply
   }
 
   // ...
@@ -112,7 +114,7 @@ function* refine(content: string) {
   let i = 0
   while (i < 5) {
     yield* L.user`Improve the following text: ${content}`
-    content = yield* L.infer
+    content = yield* L.reply
   }
   return content
 }

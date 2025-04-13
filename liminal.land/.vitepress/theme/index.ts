@@ -1,6 +1,7 @@
 import TwoslashFloatingVue from "@shikijs/vitepress-twoslash/client"
 import Theme from "vitepress/theme-without-fonts"
 import "@shikijs/vitepress-twoslash/style.css"
+import "markdown-it-steps/style.css"
 import type { Theme as ThemeConfig } from "vitepress"
 import "./global.css"
 

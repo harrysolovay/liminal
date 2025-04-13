@@ -1,5 +1,6 @@
 import { transformerTwoslash } from "@shikijs/vitepress-twoslash"
 import footnotePlugin from "markdown-it-footnote"
+import markdownSteps from "markdown-it-steps"
 import { defineConfig, HeadConfig } from "vitepress"
 import packageJson from "../../liminal/package.json" with { type: "json" }
 
@@ -18,8 +19,10 @@ export default defineConfig({
   markdown: {
     codeTransformers: [transformerTwoslash()],
     theme: { light: "light-plus", dark: "dracula" },
-    config: (md) => md.use(footnotePlugin),
-    lineNumbers: true,
+    config: (md) => {
+      md.use(markdownSteps)
+      md.use(footnotePlugin)
+    },
   },
   sitemap: { hostname: "http://liminal.land" },
   lastUpdated: true,
@@ -49,7 +52,7 @@ export default defineConfig({
     search: { provider: "local" },
     sidebar: [
       {
-        text: "The Awesome List",
+        text: "Examples",
         link: "https://raw.githubusercontent.com/harrysolovay/liminal/refs/heads/main/AWESOME.md",
         target: "blank",
       },
@@ -61,8 +64,8 @@ export default defineConfig({
       {
         text: "Introduction",
         items: [
-          { text: "Getting Started", link: "/getting_started" },
           { text: "Why Liminal?", link: "/why" },
+          { text: "Getting Started", link: "/getting_started" },
           { text: "Liminal Agents", link: "/agents" },
           { text: "Runtime", link: "/runtime" },
         ],
