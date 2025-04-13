@@ -6,7 +6,7 @@ type Prettify<T> =
   & { [K in keyof T]: T[K] }
   & {}
 
-interface UsageError<Message> {}
+interface UsageError<Message, Found = never> {}
 
 /**
  * L.messages types, which can be mapped back into storage into a database
@@ -214,9 +214,10 @@ type TagRecordValues<T extends Record<string, Tag<any>>> = Prettify<
  *   fast: L.tag<LanguageModel>`A model that goes fast, is cheap, but has a short context window`,
  * })
  */
-export const require: <T extends Record<string, Tag<any>>>(tags: T) => LYields<
-  OneKey<T> extends never ? UsageError<"Must require only one thing at a time"> : TagRecordValues<T>[keyof T]
-> = internal.require
+export const require: <T extends Record<string, Tag<any>>>(
+  tags: T,
+) => OneKey<T> extends never ? UsageError<"Must require only one key at a time", { keys: keyof T }>
+  : LYields<TagRecordValues<T>[keyof T]> = internal.require
 
 type OneKey<T extends Record<string, unknown>> = Values<{ [P in keyof T as keyof T extends P ? P : never]: T[P] }>
 type Values<T extends Record<string, unknown>> = T[keyof T]
@@ -228,6 +229,10 @@ expectNever<OneKey<{ a: 1; b: 2 }>>()
 expectNever<OneKey<{ fast: Tag<{}>; slow: Tag<{}> }>>()
 expectNever<OneKey<{ fast: Tag<{}>; slow: Tag<{ a: 1 }> }>>()
 
+class AILanguageModel {}
+
 function* agent() {
-  const value = yield* require({ fast: tag<HTMLElement>`hello` })
+  const value: AILanguageModel = yield* require({ fast: tag<AILanguageModel>`hello` })
+  // @ts-expect-error
+  const error = yield* require({ fast: tag<1>`hello`, slow: tag<2>`hello` })
 }
