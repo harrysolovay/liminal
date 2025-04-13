@@ -72,7 +72,7 @@ export default defineConfig({
         items: [
           { text: "Models", link: "/models" },
           { text: "Messages", link: "/messages" },
-          { text: "Replies", link: "/Replies" },
+          { text: "Replies", link: "/replies" },
           { text: "Streams", link: "/streams" },
           { text: "Branches", link: "/branches" },
           { text: "Events", link: "/events" },
@@ -82,7 +82,7 @@ export default defineConfig({
       {
         text: "Reliability",
         items: [
-          { text: "Error Recovery", link: "/error-recovery" },
+          { text: "Error-recovery", link: "/error-recovery" },
           { text: "Testing", link: "/testing" },
         ],
       },
