@@ -51,10 +51,9 @@ function* g() {
 
 ```ts
 function* g() {
-  yield* L.$system`Message A.`
-  yield* L.$user`Message A.`
-  yield* L.$assistant`Message A.`
-  yield* L.$tool`Message A.`
+  yield* L.system`Message A.`
+  yield* L.user`Message A.`
+  yield* L.assistant`Message A.`
 }
 ```
 
