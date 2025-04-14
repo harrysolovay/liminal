@@ -29,7 +29,7 @@ Assistant message and appended to the message list. This can be circumvented by
 isolating within a branch.
 
 ```ts
-function* g() {
+async function* g() {
   for await (const chunk of yield* L.branch(L.stream())) {
     // ...
   }

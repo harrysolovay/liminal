@@ -31,47 +31,24 @@ L.user`User message here.`
 L.messages
 ```
 
-### Directive Immutability
-
-Directives are immutable descriptions of intended stateful operations.
-
 ### Intrinsic Directives
 
-The following are Liminal's intrinsic directives.
+The following are Liminal's intrinsic directives. They are covered in greater
+depth in later sections of this documentation.
 
-| Factory      | Description                                                                              | Returns               |
-| ------------ | ---------------------------------------------------------------------------------------- | --------------------- |
-| `L.messages` | Get an immutable snapshot of the current agent messages list.                            | `Set<Message>`        |
-| `L.message`  | Append a message to the conversation.                                                    | `Message`             |
-| `L.reply`    | Trigger a completion with the current model and append it to the conversation.           | `AssistantMessage<T>` |
-| `L.stream`   | Stream a completion with the current model and append the aggregate to the conversation. | `AssistantMessage<T>` |
-| `L.model`    | Declare a key to which the executor can bind a model.                                    | `Model`               |
-| `L.tool`     | Enable a tool for use by the agent.                                                      | `Tool`                |
-| `L.event`    | Emit some arbitrary data for use by observers of the agent.                              | `void`                |
-| `L.branch`   | Create one or more agents, each with an isolated copy of the current conversation.       | `BranchResult<A>`     |
-| `L.catch`    | Execute an agent-like and capture either the resulting value or any throws.              | `CatchResult<T>`      |
-
-### Derived Directives
-
-Liminal also provides several convenient derivations, which combine/produce
-intrinsic directives under-the-hood.
-
-| Action        | Description                                          | Returns            |
-| ------------- | ---------------------------------------------------- | ------------------ |
-| `L.user`      | Append a user-role message to the conversation.      | `UserMessage`      |
-| `L.system`    | Append a system-role message to the conversation     | `SystemMessage`    |
-| `L.assistant` | Append an assistant-role message to the conversation | `AssistantMessage` |
-
-These derivations help cut down on the boilerplate of common calls/patterns. For
-example:
-
-```diff
-- L.({
--   role: "user",
--   message: "User message here.",
-- })
-+ L.user`User message here.`
-```
+| Factory       | Description                                                                              | Returns                                          |
+| ------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| `L.model`     | Declare a key to which the executor can bind a model.                                    | `Model`                                          |
+| `L.messages`  | Get an immutable snapshot of the current agent message list.                             | `Set<Message>`                                   |
+| `L.system`    | Append a system-role message to the conversation                                         | `SystemMessage`                                  |
+| `L.user`      | Append a user-role message to the conversation.                                          | `UserMessage`                                    |
+| `L.assistant` | Append an assistant-role message to the conversation                                     | `AssistantMessage`                               |
+| `L.reply`     | Trigger a completion with the current model and append it to the conversation.           | `[T, AssistantMessage]`                          |
+| `L.stream`    | Stream a completion with the current model and append the aggregate to the conversation. | `[ReadableStream<T>, Promise<AssistantMessage>]` |
+| `L.branch`    | Create one or more agents, each with an isolated copy of the current conversation.       | `BranchResult<A>`                                |
+| `L.tool`      | Enable a tool for use by the agent.                                                      | `Tool`                                           |
+| `L.event`     | Emit some arbitrary data for use by observers of the agent.                              | `void`                                           |
+| `L.catch`     | Execute an agent-like and capture either the resulting value or any throws.              | `CatchResult<T>`                                 |
 
 ## Agent-like Values
 
