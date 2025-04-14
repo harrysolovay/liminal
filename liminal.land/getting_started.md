@@ -91,21 +91,27 @@ export function validationEndpoint(request: Request) {
 
 ## Agentic Behavior
 
-In this example, we imbue the `validateEmail` function with agentic
-capabilities, merely by appending an asterisk to the `function` keyword.
+In this example, we imbue the `validateEmail` function with agentic capabilities
+by (A) appending an asterisk to the `function` keyword and later (B) calling it
+with Liminal's `exec` function.
 
 ```diff
 - export function validateEmail(email: string) {
 + export function* validateEmail(email: string) {
-```
 
-We can yield messages, LLM replies and other useful directives (see
-[core directives here](./agents.md#intrinsic-directives)).
+// ...
+
+- const result = await validateEmail(email)
++ const result = await exec(validateEmail(email), {
++   default: AILanguageModel(openai("gpt-3.5-turbo")),
++ })
+```
 
 ## Expected Results
 
-When `exec`uted, our `validateEmail` agent will now use the language model to
-deduce the validation error message.
+When we call `exec` with our `validateEmail` agent, we expect everything to be
+the same except that we use a language model to generate the validation error
+message.
 
 ```txt
 "john..doe@example" → "Your email is missing the top-level domain (like .com or .org) after 'example'."
@@ -118,3 +124,8 @@ deduce the validation error message.
 ```txt
 "john@example..com" → "Your email contains consecutive dots which aren't allowed in a valid address."
 ```
+
+## Next Steps
+
+In the next section, we dive deep into what makes something an "agent" in
+Liminal.

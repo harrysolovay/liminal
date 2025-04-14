@@ -9,11 +9,11 @@ agents. For example:
 // Change the current model mid-conversation.
 L.model("key")
 
-// Trigger a completion.
-L.infer
+// Append a user message to the message buffer.
+L.user`User message here.`
 
-// Get a vector embedding.
-L.embed(value)
+// Trigger a completion.
+L.reply
 ```
 
 ## Conversation Management
@@ -30,8 +30,8 @@ function* agent() {
   // Append a user message.
   yield* L.user`Answer my question.`
 
-  // Get a completion, append as an assistant message.
-  const answer = yield* L.infer
+  // Get a reply from the model, append as an assistant message.
+  const answer = yield* L.reply
 }
 ```
 
@@ -85,8 +85,8 @@ const result = await exec(g, {
 
 ## Standard JavaScript
 
-Liminal agents are standard JavaScript objects that implement the iterator
-protocol (arrays, iterators, iterables, generators).
+Liminal agents are JavaScript objects that implement the iterator protocol (such
+as arrays, iterators and generators).
 
 Iterating can trigger ordinary JavaScript code, such as while loops and promise
 execution.
@@ -107,7 +107,8 @@ async function* g() {
 
 ## Agent Composition
 
-Create and reuse patterns such as iterative refinement loops.
+Because agents are mere iterator protocol objects, it's easy to create and reuse
+patterns such as iterative refinement loops.
 
 ```ts
 function* refine(content: string) {
@@ -122,9 +123,8 @@ function* refine(content: string) {
 
 ## Structured Output
 
-Liminal allows you to yield various
-[standard schema](https://standardschema.dev/) runtime types to get completions
-as typed structured output.
+Liminal allows you to use various [standard schema](https://standardschema.dev/)
+types to ensure replies conform to the specified shape.
 
 > [!TIP]
 > Supported libraries include zod, arktype, effect/schema, typebox and
@@ -134,35 +134,22 @@ as typed structured output.
 import { z } from "zod"
 
 function* g() {
-  const value = yield* z.object({
-    first: L.string,
-    second: L.string,
-  })
+  const result = yield* L.reply(
+    z.object({
+      value: z.string,
+    }),
+  )
 
-  value satisfies {
-    first: string
-    second: string
+  result satisfies {
+    value: string
   }
 }
 ```
 
-## Runtime
-
-We pass the Agent (a JavaScript iterator protocol objects) to `exec`, which runs
-it and returns the final value if any.
-
-```ts
-await exec(g, {
-  default: defaultModel,
-})
-
-declare const defaultModel: LanguageModel
-```
-
 ## Observability
 
-Within agents, we can emit events that contain arbitrary data. This enables us
-to then listen for those events throughout agent execution.
+Within agents, we can yield events that contain arbitrary data. This enables us
+to then listen for those events during the agent's runtime.
 
 ```ts
 function* g() {
@@ -200,5 +187,12 @@ function* g() {
       yield* L.user`Child agent B`
     },
   })
+
+  // Does not have the message yielded in agent `a` nor `b`.
 }
 ```
+
+## Next Steps
+
+In the next section we cover Liminal's installation and a basic example of its
+usage.
