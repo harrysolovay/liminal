@@ -85,7 +85,7 @@ function toTsType(ctx: ToTsTypeContext, schema: JSON.Schema): string {
         return toTsObjectType(ctx, schema)
       }
     }
-    return toTsLiteralUnionType(ctx, schema)
+    // return toTsLiteralUnionType(ctx, schema)
   } else {
     return "any"
   }
@@ -124,27 +124,27 @@ function toTsUnionType(ctx: ToTsTypeContext, schema: JSON.SchemaAnyOf | JSON.Sch
   return result
 }
 
-function toTsLiteralUnionType(ctx: ToTsTypeContext, schema: JSON.SchemaTypeUnion): string {
-  let result = "(\n"
-  for (let i = 0; i < schema.type.length; i++) {
-    const current = schema.type[i]!
-    switch (current) {
-      case "string": {
-        if ("enum" in schema) {
-          for (let j = 0; j < schema.enum.length; j++) {
-            result += `| "${schema.enum[j]}"`
-          }
-        } else {
-          result += `"string"\n`
-        }
-        break
-      }
-      default: {
-        result += `| ${current}\n`
-        break
-      }
-    }
-  }
-  result += "\n)"
-  return result
-}
+// function toTsLiteralUnionType(ctx: ToTsTypeContext, schema: JSON.Schem): string {
+//   let result = "(\n"
+//   for (let i = 0; i < schema.type.length; i++) {
+//     const current = schema.type[i]!
+//     switch (current) {
+//       case "string": {
+//         if ("enum" in schema) {
+//           for (let j = 0; j < schema.enum.length; j++) {
+//             result += `| "${schema.enum[j]}"`
+//           }
+//         } else {
+//           result += `"string"\n`
+//         }
+//         break
+//       }
+//       default: {
+//         result += `| ${current}\n`
+//         break
+//       }
+//     }
+//   }
+//   result += "\n)"
+//   return result
+// }
