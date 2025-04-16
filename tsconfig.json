@@ -1,35 +1,17 @@
 {
   "files": [],
   "references": [
-    {
-      "path": "./liminal"
-    },
-    {
-      "path": "./liminal.land"
-    },
-    {
-      "path": "./examples/agents"
-    },
-    {
-      "path": "./examples/deploy-to-cf-worker"
-    },
-    {
-      "path": "./examples/hono"
-    },
-    {
-      "path": "./examples/vite-react-app"
-    },
-    {
-      "path": "./packages/ai"
-    },
-    {
-      "path": "./packages/alchemy"
-    },
-    {
-      "path": "./packages/ollama"
-    },
-    {
-      "path": "./tsconfig.root.json"
-    }
+    { "path": "./examples/agents" },
+    { "path": "./examples/deploy-to-cf-worker" },
+    { "path": "./examples/hono" },
+    { "path": "./examples/vite-react-app" },
+    { "path": "./experiments" },
+    { "path": "./liminal" },
+    { "path": "./liminal.land" },
+    { "path": "./liminal_next" },
+    { "path": "./packages/ai" },
+    { "path": "./packages/alchemy" },
+    { "path": "./packages/ollama" },
+    { "path": "./tsconfig.root.json" }
   ]
 }

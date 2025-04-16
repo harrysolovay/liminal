@@ -1,0 +1,6 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+- Prefer `Array<T>` over `T[]` when writing array types in TypeScript.

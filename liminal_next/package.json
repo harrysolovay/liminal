@@ -1,0 +1,8 @@
+{
+  "name": "liminal_next",
+  "private": true,
+  "type": "module",
+  "peerDependenciesMeta": {
+    "conditional-type-checks": { "optional": true }
+  }
+}

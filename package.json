@@ -1,7 +1,7 @@
 {
   "private": true,
   "type": "module",
-  "workspaces": ["examples/*", "liminal", "liminal.land", "packages/*"],
+  "workspaces": ["examples/*", "liminal", "liminal.land", "liminal_next", "packages/*"],
   "scripts": {
     "build": "tsc -b",
     "watch": "tsc -b -w",

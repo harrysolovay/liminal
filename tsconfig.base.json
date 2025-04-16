@@ -2,7 +2,6 @@
   "compilerOptions": {
     "composite": true,
     "declaration": true,
-    "erasableSyntaxOnly": true,
     "esModuleInterop": true,
     "exactOptionalPropertyTypes": true,
     "forceConsistentCasingInFileNames": true,
