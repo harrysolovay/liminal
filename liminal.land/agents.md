@@ -36,19 +36,23 @@ L.messages
 The following are Liminal's intrinsic directives. They are covered in greater
 depth in later sections of this documentation.
 
-| Factory       | Description                                                                              | Returns                                          |
-| ------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------ |
-| `L.model`     | Declare a key to which the executor can bind a model.                                    | `Model`                                          |
-| `L.messages`  | Get an immutable snapshot of the current agent message list.                             | `Set<Message>`                                   |
-| `L.system`    | Append a system-role message to the conversation                                         | `SystemMessage`                                  |
-| `L.user`      | Append a user-role message to the conversation.                                          | `UserMessage`                                    |
-| `L.assistant` | Append an assistant-role message to the conversation                                     | `AssistantMessage`                               |
-| `L.reply`     | Trigger a completion with the current model and append it to the conversation.           | `[T, AssistantMessage]`                          |
-| `L.stream`    | Stream a completion with the current model and append the aggregate to the conversation. | `[ReadableStream<T>, Promise<AssistantMessage>]` |
-| `L.branch`    | Create one or more agents, each with an isolated copy of the current conversation.       | `BranchResult<A>`                                |
-| `L.tool`      | Enable a tool for use by the agent.                                                      | `Tool`                                           |
-| `L.event`     | Emit some arbitrary data for use by observers of the agent.                              | `void`                                           |
-| `L.catch`     | Execute an agent-like and capture either the resulting value or any throws.              | `CatchResult<T>`                                 |
+| Factory       | Description                                                                                 | Returns           |
+| ------------- | ------------------------------------------------------------------------------------------- | ----------------- |
+| `L.focus`     | Push a new subject to the subject stack.                                                    | `Model`           |
+| `L.snapshot`  | Get an immutable snapshot of the current conversation.                                      | `Snapshot`        |
+| `L.messages`  | Retrieve all messages (potentially filtered with selectable types such as slices and tags). | `Array<Message>`  |
+| `L.system`    | Append a system-role message to the message list.                                           | `void`            |
+| `L.user`      | Append a user-role message to the message list.                                             | `void`            |
+| `L.assistant` | Append an assistant-role message to the message list.                                       | `void`            |
+| `L.reply`     | Trigger a completion with the current model and append it to the message list.              | `T`               |
+| `L.stream`    | Stream a completion with the current model and append the aggregate to the message list.    | `LStream<T>`      |
+| `L.mark`      | Conceptually similar to a bookmark.                                                         | `Mark`            |
+| `L.call`      | TODO.                                                                                       | `Mark`            |
+| `L.tag`       | Create a tag with which to group messages.                                                  | `Tag`             |
+| `L.branch`    | Create one or more agents, each with an isolated copy of the current conversation.          | `BranchResult<A>` |
+| `L.tool`      | Enable a tool for use by the agent.                                                         | `Tool`            |
+| `L.event`     | Emit some arbitrary data for use by observers of the agent.                                 | `void`            |
+| `L.catch`     | Execute an agent-like and capture either the resulting value or any throws.                 | `CatchResult<T>`  |
 
 ## Agent-like Values
 
@@ -56,11 +60,11 @@ Agents can take the form of iterators and iterables, such as generators, sets
 and arrays.
 
 ```ts
-type AgentLikeValue =
-  | Iterator<Action>
-  | AsyncIterator<Action>
-  | Iterable<Action>
-  | AsyncIterable<Action>
+type Agent<Y extends Rune, T> =
+  | Iterator<Y, T>
+  | AsyncIterator<Y, T>
+  | Iterable<Y, T>
+  | AsyncIterable<Y, T>
 ```
 
 Agents can also take the form of nullary functions which return the
@@ -192,7 +196,7 @@ agent-like objects into `L.branch`.
 
 In the following example, we create two branches, each executing the refinement
 loop with a different model. Each child agent––`a` and `b`––have their own
-isolated state (inheriting a copy of the parent's message list at the point of
+isolated state (inheriting a copy of the parent's messages at the point of
 branch creation).
 
 ```ts{5-14}

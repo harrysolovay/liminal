@@ -30,6 +30,9 @@ shikijs
 solovay
 subscope
 supabase
+supersegment
+supersegments
+supersets
 tmpfs
 tsdocs
 twoslash

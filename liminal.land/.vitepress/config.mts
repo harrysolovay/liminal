@@ -76,6 +76,7 @@ export default defineConfig({
           { text: "Models", link: "/models" },
           { text: "Messages", link: "/messages" },
           { text: "Replies", link: "/replies" },
+          { text: "Segments", link: "/segments" },
           { text: "Streams", link: "/streams" },
           { text: "Branches", link: "/branches" },
           { text: "Events", link: "/events" },

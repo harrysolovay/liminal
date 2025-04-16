@@ -4,6 +4,7 @@ import {
   generateText,
   jsonSchema,
   type LanguageModelV1,
+  streamObject,
   tool as aiTool,
   type ToolSet,
 } from "ai"

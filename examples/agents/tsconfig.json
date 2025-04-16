@@ -1,12 +1,13 @@
 {
   "extends": "../../tsconfig.base",
-  "compilerOptions": {
-    "noEmit": true
-  },
+  "compilerOptions": {},
   "include": ["."],
   "references": [
     {
       "path": "../../liminal"
+    },
+    {
+      "path": "../../packages/ai"
     }
   ]
 }
