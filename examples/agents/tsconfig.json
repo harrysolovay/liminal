@@ -5,6 +5,9 @@
   "references": [
     {
       "path": "../../liminal"
+    },
+    {
+      "path": "../../packages/ai"
     }
   ]
 }
