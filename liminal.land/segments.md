@@ -1,14 +1,15 @@
 # Segments
 
-A core tenet of Liminal is to never directly manipulate message lists.
-Additionally, we try to avoid direct message retrieval. It is difficult to
-reason about message lists. Meanwhile, it's easy to reason about discrete
-moments within a conversation.
+A core tenet of Liminal is to never directly manipulate message lists. We even
+try to avoid direct message retrieval. When working with agent hierarchies, each
+with their own list of messages, it becomes increasingly difficult to reason
+about lists of messages. Meanwhile, it's easy to reason about discrete moments
+within a conversation.
 
-However, we need a way of tracking, visiting and manipulating moments and
+All this being said, we need a way to track, visit and manipulate moments and
 regions of our conversation. Enter: **Segments**.
 
-## Segments Overview
+## Example Use Case
 
 Let's say we're building an agent to coordinate a game of Dungeons and Dragons.
 The agent may want to segment messages by player.
@@ -31,9 +32,12 @@ function* g() {
 }
 ```
 
-We can also clear the conversation of all messages of the given segment. For
-example, if the player "Allie" violates the agent's code of conduct, it can
-remove all messages of the `allie` segment.
+The segment also gives us a means of manipulating the message list underlying
+the agent.
+
+For example: if the player "Allie" violates the agent's code of conduct, it may
+choose to remove her from the game and clear itself of all messages of the
+`allie` segment.
 
 ```ts
 function* g() {
@@ -63,22 +67,23 @@ function* g() {
 
 #### Mark Ranges
 
-Any two marks can be used to create a segment.
+We can use any two marks to create a segment that describes all messages between
+them.
 
 ```ts
 const segment = start.to(end)
 ```
 
-The direction does not matter. Either of the following will produce semantically
-identical segments. In the following example, `a` and `b` represent the same
-segment.
+The chronology direction does not matter. In the following example, `a` and `b`
+represent the same segment.
 
 ```ts
 const a = start.to(end)
 const b = end.to(start)
 ```
 
-Every mark has a `leading` and `trailing` property, both of which are segments.
+Every mark has a `leading` and `trailing` property, both of which are segments
+describing all leading and trailing messages respectively.
 
 ```ts
 function* g() {
@@ -93,13 +98,14 @@ function* g() {
 
 ### Tags
 
+While marks allow us to create segments from discrete slices of the
+conversation, tags allow us to create segments from discontinuous messages.
+
 #### Creating Tags
 
-We may not want to select a discrete slice of the conversation, but rather tag
-specific, possibly-discontinuous messages.
-
-Tag creation has no effect on the agent's state and can occur outside the agent
-source.
+Tag creation has no effect on the agent's state; it can occur outside the agent
+source. This makes it easy to centralize tags in a single file such as a
+`tags.ts`.
 
 ```ts
 const myTag = L.tag("Optional description here.")
@@ -119,11 +125,21 @@ The `tag` method can accept multiple tags.
 
 ```ts
 function* g() {
-  yield* L.user`Message A`.tag(tagA, tagB, tagC)
+  yield* L.user`Message B`.tag(tagA, tagB, tagC)
 }
 ```
 
-#### Creating Tag Segments
+It can also accept falsy values, incase you want to conditionally tag a message.
+
+```ts
+declare const condition: boolean
+
+function* g() {
+  yield* L.user`Message C`.tag(condition && myTag)
+}
+```
+
+#### Tag Segments
 
 The creation of segments also has no effect on the agent's state, so we can
 define it outside the agent source.
@@ -134,7 +150,7 @@ const segment = L.segment(tagA, tagB, tagC)
 
 ### "Supersegments"
 
-Segments can be composed into supersets or "supersegments."
+Segments can be composed into supersets like so:
 
 ```ts
 const abc = L.segment(
@@ -144,11 +160,10 @@ const abc = L.segment(
 )
 ```
 
-## Mark Range Example
+## Closing Example
 
-To sum up this chapter, let's look at the following example in which we use
-marks to denote (and ultimately clear messages between) the start and end of an
-iterative refinement loop.
+Let's look at the following example in which we use marks to denote (and
+ultimately clear messages between) the start and end of a refinement loop.
 
 ```ts
 function* g() {
