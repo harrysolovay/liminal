@@ -86,7 +86,7 @@ export default defineConfig({
       {
         text: "Reliability",
         items: [
-          { text: "Error-recovery", link: "/error-recovery" },
+          { text: "Catching Errors", link: "/catching_errors" },
           { text: "Testing", link: "/testing" },
         ],
       },

@@ -1,4 +1,4 @@
-import type { AgentSource } from "../AgentSource.ts"
+import type { AgentBehavior } from "../Behavior.ts"
 import type { LEvent } from "../LEvent/LEvent.ts"
 import type { Catch } from "../Rune/Catch.ts"
 import type { Rune } from "../Rune/Rune.ts"
@@ -18,4 +18,4 @@ export type CatchResult<T> = {
 }
 
 /** Execute the agent and capture either the result value or any throws. */
-declare function catch_<Y extends Rune, T>(source: DeferredOr<AgentSource<Y, T>>): catch_<T, Y["event"]>
+declare function catch_<Y extends Rune, T>(source: DeferredOr<AgentBehavior<Y, T>>): catch_<T, Y["event"]>

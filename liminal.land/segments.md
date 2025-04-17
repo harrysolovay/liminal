@@ -1,18 +1,15 @@
 # Segments
 
-A core tenet of Liminal is to never directly manipulate message lists. We even
-try to avoid direct message retrieval. When working with agent hierarchies, each
-with their own list of messages, it becomes increasingly difficult to reason
-about lists of messages. Meanwhile, it's easy to reason about discrete moments
-within a conversation.
+A core tenet of Liminal is to never directly read or mutate the message list
+underlying an agent. When working with agent hierarchies—each agent with its own
+list of messages—it becomes increasingly difficult to reason about message
+lists. Instead, we reason about _segments_, which group messages into meaningful
+units as required by the use case.
 
-All this being said, we need a way to track, visit and manipulate moments and
-regions of our conversation. Enter: **Segments**.
+## Brief Example
 
-## Example Use Case
-
-Let's say we're building an agent to coordinate a game of Dungeons and Dragons.
-The agent may want to segment messages by player.
+Suppose we're building an agent to coordinate a game of Dungeons and Dragons.
+The agent may want to segment messages by player:
 
 ```ts
 declare const allie: Segment
@@ -20,9 +17,8 @@ declare const billy: Segment
 declare const carol: Segment
 ```
 
-Whenever our agent needs to make a decision about a given player, it can create
-a child agent that solely contains messages from the given player's segment. For
-example:
+Whenever our agent needs to make a decision about a specific player, it can
+create a child agent that contains only the messages from that player's segment:
 
 ```ts
 function* g() {
@@ -32,12 +28,10 @@ function* g() {
 }
 ```
 
-The segment also gives us a means of manipulating the message list underlying
-the agent.
-
-For example: if the player "Allie" violates the agent's code of conduct, it may
-choose to remove her from the game and clear itself of all messages of the
-`allie` segment.
+Segments also give us a means of manipulating the message list underlying the
+agent. For example, if the player "Allie" violates the agent's code of conduct,
+the agent may choose to remove her from the game and clear all messages
+associated with the `allie` segment:
 
 ```ts
 function* g() {
@@ -49,7 +43,7 @@ function* g() {
 
 ### Marks
 
-Marks are references to specific points in the agent's conversation.
+Marks are references to specific points in the agent's conversation:
 
 ```ts
 function* g() {
@@ -65,75 +59,65 @@ function* g() {
 }
 ```
 
-#### Mark Ranges
+#### Range Segments
 
-We can use any two marks to create a segment that describes all messages between
-them.
+Any two marks can define a segment that includes all messages between them:
 
 ```ts
 const segment = start.to(end)
 ```
 
-The chronology direction does not matter. In the following example, `a` and `b`
-represent the same segment.
+The direction of chronology does not matter:
 
 ```ts
 const a = start.to(end)
-const b = end.to(start)
+const b = end.to(start) // a and b represent the same segment
 ```
 
-Every mark has a `leading` and `trailing` property, both of which are segments
-describing all leading and trailing messages respectively.
+Each mark includes its `leading` and `trailing` segments:
 
 ```ts
 function* g() {
   yield* L.user`A`
-
   const mid = yield* L.mark
-  const { leading, trailing } = mid
-
+  const {
+    leading, // Includes all messages before `mid`.
+    trailing, // Includes all messages after `mid`.
+  } = mid
   yield* L.user`B`
 }
 ```
 
 ### Tags
 
-While marks allow us to create segments from discrete slices of the
-conversation, tags allow us to create segments from discontinuous messages.
-
-#### Creating Tags
-
-Tag creation has no effect on the agent's state; it can occur outside the agent
-source. This makes it easy to centralize tags in a single file such as a
-`tags.ts`.
+While marks create segments from contiguous ranges of messages, tags allow the
+grouping of discontinuous messages.
 
 ```ts
 const myTag = L.tag("Optional description here.")
 ```
 
+> [!TIP]
+> Tag creation does not affect agent state and can occur outside the agent
+> source. This enables us to––for instance––centralize all tags in a `tag.ts`
+> file.
+
 #### Tagging Messages
 
-Within the agent source, we can tag specific messages like so:
+Within the agent source, tag specific messages like so:
 
 ```ts
+// Apply a single tag.
 function* g() {
   yield* L.user`Message A`.tag(myTag)
 }
-```
 
-The `tag` method can accept multiple tags.
-
-```ts
+// Apply multiple tags.
 function* g() {
   yield* L.user`Message B`.tag(tagA, tagB, tagC)
 }
-```
 
-It can also accept falsy values, incase you want to conditionally tag a message.
-
-```ts
-declare const condition: boolean
-
+// Conditionally apply a tag.
 function* g() {
   yield* L.user`Message C`.tag(condition && myTag)
 }
@@ -141,45 +125,69 @@ function* g() {
 
 #### Tag Segments
 
-The creation of segments also has no effect on the agent's state, so we can
-define it outside the agent source.
+Tags are themselves segments and can be directly yielded.
 
 ```ts
-const segment = L.segment(tagA, tagB, tagC)
+function* g() {
+  yield* myTag(function*() {
+    // Agent solely contains `myTag` messages.
+  })
+}
 ```
 
-### "Supersegments"
-
-Segments can be composed into supersets like so:
+We can combine tags and segments into new segments using `L.union`.
 
 ```ts
-const abc = L.segment(
-  segmentA,
-  segmentB,
-  segmentC,
-)
+const union = L.union(myTag, mySegment, ...more)
+```
+
+When resolved at runtime, the union's messages will be ordered chronologically,
+regardless of the order in which the tags or segments are provided.
+
+We can create a segment that describes the intersection of segments or tags.
+
+```ts
+const intersection = L.intersect(myTag, mySegment, ...more)
+```
+
+We can create a segment that describes the subtraction of a set of tags or
+segments from a target segment.
+
+The following gives us a new segment representing messages in `segmentA` but not
+in `tagA` nor `segmentB`.
+
+```ts
+const difference = segmentA.subtract(tagA, segmentB)
+```
+
+For the symmetric difference, we can use the `L.difference` factory as follows.
+
+```ts
+const ab = L.difference(abc, myTag)
 ```
 
 ## Closing Example
 
-Let's look at the following example in which we use marks to denote (and
-ultimately clear messages between) the start and end of a refinement loop.
+Consider an agent using marks to encapsulate a refinement loop:
 
 ```ts
 function* g() {
   const requirementsStart = yield* L.mark
 
-  let requirements = prompt("Please describe the initial requirements")!
+  let requirements = prompt("Please describe the initial requirements")
   yield* L
     .system`Your job is to assist me in refining the following requirements.`
-  yield* L.user`Here are the initial requirements.`
+
   while (true) {
     yield* L.user`Latest requirements: ${requirements}`
     yield* L.user`Is there anything that I should clarify? If so, what?`
+
     const clarifyingQuestion = yield* L.reply(
       L.option(L.string`The clarifying question.`),
     )
+
     if (!clarifyingQuestion) break
+
     const clarification = prompt(clarifyingQuestion)
     yield* L
       .user`Please update the requirements description with the following clarification: ${clarification}`
@@ -192,11 +200,7 @@ function* g() {
 }
 ```
 
-Once the refinement loop breaks, `requirements` will contain the optimized set
-of requirements. Our agent no longer necessarily benefits from having all of
-those messages related to requirement clarification. Moreover, the initial
-`system` message no longer applies. We can clear out the unwanted messages like
-so:
+Once the loop exits, the agent can clear all messages from the refinement phase:
 
 ```ts
 function* g() {
@@ -205,3 +209,7 @@ function* g() {
   yield* requirementsStart.to(requirementsEnd).clear()
 }
 ```
+
+This helps ensure the agent's state remains relevant and uncluttered.
+Additionally, it removes the system message that applied solely to the
+refinement phase.
