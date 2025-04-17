@@ -52,7 +52,7 @@ message may be confused about why their submission is invalid.
 Let's turn our function into a Liminal agent and infer a helpful validation
 message.
 
-```ts {3,5-6}
+```ts {3,5-7}
 import { L } from "liminal"
 
 export function* validateEmail(email: string) {
