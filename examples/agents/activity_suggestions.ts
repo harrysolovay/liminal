@@ -1,7 +1,8 @@
-import { L } from "liminal"
+import { L as T } from "liminal"
+import { L } from "liminal_next"
 
 export default function*() {
-  yield* L.declareModel("gemma3", "language")
+  // yield* L.model(openai("gpt-4o-mini"))
   yield* L.system`When you are asked a question, answer without asking for clarification.`
   yield* L.user`I'm planning a trip to florida and want a suggestion for a fun activity.`
   let i = 0
@@ -14,10 +15,10 @@ export default function*() {
   console.log(activities)
 }
 
-const Activity = L.object({
-  title: L.string,
-  description: L.string,
-  location: L.string,
-  estimatedCostUSD: L.option(L.number),
-  forWhom: L.string`Description of the kind of person that would enjoy this activity.`,
+const Activity = T.object({
+  title: T.string,
+  description: T.string,
+  location: T.string,
+  estimatedCostUSD: T.option(T.number),
+  forWhom: T.string`Description of the kind of person that would enjoy this activity.`,
 })

@@ -1,8 +1,28 @@
-import type { AppendMessage } from "../Rune/AppendMessage.ts"
+import type { JSONValue } from "liminal-shapes"
+import type { AppendMessage } from "../runes/AppendMessage.ts"
+import type { Infer } from "../runes/Infer.ts"
+import type { Schema } from "../Schema.ts"
+import { _append } from "./_append.ts"
 import type { LBase } from "./_LBase.ts"
+import { infer_ } from "./infer.ts"
 
-export interface assistant extends LBase<AppendMessage, void> {}
+export interface assistant extends LBase<Infer | AppendMessage, string> {
+  <T extends JSONValue>(schema: Schema<T>): LBase<Infer | AppendMessage, T>
+}
 
-/** Append an assistant message to the agent's message list. */
-export declare function assistant(template: TemplateStringsArray, ...substitutions: Array<string>): assistant
-export declare function assistant(content: string): assistant
+export const assistant: assistant = Object.assign(
+  <T extends JSONValue>(schema: Schema<T>) => ({
+    *[Symbol.iterator](): Generator<Infer | AppendMessage, T> {
+      const inference = yield* infer_(schema)
+      yield* _append("assistant", JSON.stringify(inference, null, 2))
+      return inference
+    },
+  }),
+  {
+    *[Symbol.iterator](): Generator<Infer | AppendMessage, string> {
+      const inferred = yield* infer_
+      yield* _append("assistant", inferred)
+      return inferred
+    },
+  },
+)

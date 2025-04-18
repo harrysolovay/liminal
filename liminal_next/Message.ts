@@ -1,4 +1,6 @@
-export type Message = {
-  role: "system" | "user" | "assistant"
+export interface Message {
+  role: MessageRole
   content: string
 }
+
+export type MessageRole = "system" | "user" | "assistant"

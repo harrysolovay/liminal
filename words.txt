@@ -26,6 +26,7 @@ pglite
 pgvector
 rica
 rootable
+runics
 shikijs
 solovay
 subscope

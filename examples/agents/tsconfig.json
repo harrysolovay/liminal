@@ -7,6 +7,9 @@
       "path": "../../liminal"
     },
     {
+      "path": "../../liminal_next"
+    },
+    {
       "path": "../../packages/ai"
     }
   ]

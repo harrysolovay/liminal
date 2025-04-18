@@ -21,6 +21,7 @@
         "liminal": "workspace:*",
         "liminal-ai": "workspace:*",
         "liminal-ollama": "workspace:*",
+        "liminal_next": "workspace:*",
         "mathjs": "^14.3.1",
       },
     },
@@ -70,6 +71,9 @@
         "vite": "^6.2.0",
       },
     },
+    "experiments": {
+      "name": "liminal-experiments",
+    },
     "liminal": {
       "name": "liminal",
       "version": "0.5.2",
@@ -86,6 +90,31 @@
       "optionalPeers": [
         "conditional-type-checks",
       ],
+    },
+    "liminal-client": {
+      "name": "liminal-client",
+      "version": "0.0.0",
+      "devDependencies": {
+        "yaml": "^2.7.1",
+      },
+      "peerDependencies": {
+        "liminal-util": "^0.0.0",
+      },
+    },
+    "liminal-shapes": {
+      "name": "liminal-shapes",
+      "version": "0.0.0",
+      "peerDependencies": {
+        "conditional-type-checks": "^1.0.6",
+        "liminal-util": "^0.0.0",
+      },
+    },
+    "liminal-util": {
+      "name": "liminal-util",
+      "version": "0.0.0",
+      "peerDependencies": {
+        "conditional-type-checks": "^1.0.6",
+      },
     },
     "liminal.land": {
       "name": "liminal.land",
@@ -106,6 +135,15 @@
     },
     "liminal_next": {
       "name": "liminal_next",
+      "dependencies": {
+        "liminal-shapes": "^0.0.0",
+      },
+      "peerDependencies": {
+        "conditional-type-checks": "^1.0.6",
+      },
+      "optionalPeers": [
+        "conditional-type-checks",
+      ],
     },
     "packages/ai": {
       "name": "liminal-ai",
@@ -126,7 +164,7 @@
       "name": "liminal-ollama",
       "version": "0.0.1",
       "peerDependencies": {
-        "liminal": "^0.5.1",
+        "liminal": "^0.5.2",
         "ollama": "^0.5.14",
       },
     },
@@ -1120,6 +1158,8 @@
 
     "liminal-alchemy": ["liminal-alchemy@workspace:packages/alchemy"],
 
+    "liminal-client": ["liminal-client@workspace:liminal-client"],
+
     "liminal-example-agents": ["liminal-example-agents@workspace:examples/agents"],
 
     "liminal-example-deploy-to-cf-worker": ["liminal-example-deploy-to-cf-worker@workspace:examples/deploy-to-cf-worker"],
@@ -1128,7 +1168,13 @@
 
     "liminal-example-vite-react-app": ["liminal-example-vite-react-app@workspace:examples/vite-react-app"],
 
+    "liminal-experiments": ["liminal-experiments@workspace:experiments"],
+
     "liminal-ollama": ["liminal-ollama@workspace:packages/ollama"],
+
+    "liminal-shapes": ["liminal-shapes@workspace:liminal-shapes"],
+
+    "liminal-util": ["liminal-util@workspace:liminal-util"],
 
     "liminal.land": ["liminal.land@workspace:liminal.land"],
 

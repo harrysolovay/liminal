@@ -7,6 +7,7 @@
     "liminal": "workspace:*",
     "liminal-ai": "workspace:*",
     "liminal-ollama": "workspace:*",
+    "liminal_next": "workspace:*",
     "mathjs": "^14.3.1"
   }
 }

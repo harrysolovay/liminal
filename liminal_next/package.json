@@ -2,6 +2,12 @@
   "name": "liminal_next",
   "private": true,
   "type": "module",
+  "dependencies": {
+    "liminal-shapes": "^0.0.0"
+  },
+  "peerDependencies": {
+    "conditional-type-checks": "^1.0.6"
+  },
   "peerDependenciesMeta": {
     "conditional-type-checks": { "optional": true }
   }

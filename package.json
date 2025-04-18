@@ -1,8 +1,19 @@
 {
   "private": true,
   "type": "module",
-  "workspaces": ["examples/*", "liminal", "liminal.land", "liminal_next", "packages/*"],
+  "workspaces": [
+    "examples/*",
+    "experiments",
+    "liminal",
+    "liminal-client",
+    "liminal-shapes",
+    "liminal-util",
+    "liminal.land",
+    "liminal_next",
+    "packages/*"
+  ],
   "scripts": {
+    "codegen": "bun ./liminal-client/_typegen.ts && dprint fmt",
     "build": "tsc -b",
     "watch": "tsc -b -w",
     "liminal": "dotenvx run -- liminal",
