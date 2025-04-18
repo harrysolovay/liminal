@@ -7,15 +7,13 @@
     { "path": "./examples/vite-react-app" },
     { "path": "./experiments" },
     { "path": "./liminal" },
-    { "path": "./liminal-client" },
-    { "path": "./liminal-shapes" },
+    { "path": "./liminal-schema" },
     { "path": "./liminal-util" },
     { "path": "./liminal.land" },
     { "path": "./liminal_next" },
     { "path": "./packages/ai" },
     { "path": "./packages/alchemy" },
     { "path": "./packages/ollama" },
-    { "path": "./tasks" },
     { "path": "./tsconfig.root.json" }
   ]
 }

@@ -1,8 +1,0 @@
-{
-  "extends": "../tsconfig.base",
-  "include": ["."],
-  "references": [
-    { "path": "../liminal-shapes" },
-    { "path": "../liminal-util" }
-  ]
-}

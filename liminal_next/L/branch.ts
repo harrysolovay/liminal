@@ -2,9 +2,8 @@ import type { LEvent } from "../events/LEvent.ts"
 import type { Propagated } from "../events/Propagated.ts"
 import type { Branch } from "../runes/Branch.ts"
 import type { Runic, RunicCollection } from "../Runic.ts"
-import type { LBase } from "./_LBase.ts"
 
-export interface branch<T, E extends LEvent> extends LBase<Branch<E>, T> {}
+export interface branch<T, E extends LEvent> extends Iterable<Branch<E>, T> {}
 
 /** Create child agents with isolated copies of the current agent's models and messages. */
 export declare function branch<X extends Runic>(runic: X): branch<Runic.T<X>, Runic.E<X>>

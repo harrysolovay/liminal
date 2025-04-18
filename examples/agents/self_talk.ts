@@ -13,12 +13,12 @@ export default function*() {
   while (i < 3) {
     const reply = yield* L.branch(function*() {
       yield* L.user`Please reply to the last message on my behalf.`
-      return yield* L.infer
+      return yield* L.assistant
     })
     yield* L.user(reply)
     yield* L.assistant
     i++
   }
   yield* L.user`Please summarize the key points from our conversation.`
-  return yield* L.infer
+  return yield* L.assistant
 }

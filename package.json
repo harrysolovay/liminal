@@ -5,20 +5,17 @@
     "examples/*",
     "experiments",
     "liminal",
-    "liminal-client",
-    "liminal-shapes",
+    "liminal-schema",
     "liminal-util",
     "liminal.land",
     "liminal_next",
     "packages/*"
   ],
   "scripts": {
-    "codegen": "bun ./liminal-client/_typegen.ts && dprint fmt",
     "build": "tsc -b",
     "watch": "tsc -b -w",
     "liminal": "dotenvx run -- liminal",
     "liminal.land": "bun run --filter liminal.land vitepress",
-    "example:vite-react-app": "bun run --filter=liminal-example-vite-react-app --elide-lines 0 dev",
     "lint": "eslint -c eslint.json .",
     "changeset": "changeset"
   },

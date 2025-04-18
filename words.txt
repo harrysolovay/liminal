@@ -12,6 +12,7 @@ iconoir
 inferencing
 inheritables
 initdb
+ljson
 llms
 metaarray
 metaatom
@@ -19,6 +20,7 @@ metaobject
 metatype
 metatypes
 metatyping
+moderations
 nullary
 ollama
 ossp
