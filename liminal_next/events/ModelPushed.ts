@@ -1,7 +1,7 @@
-import type { Adapter } from "../Provider.ts"
-import type { Reference } from "../Reference.ts"
-import type { LEventBase } from "./_LEventBase.ts"
+import type { Model } from "../Model.ts"
+// import type { Reference } from "../Reference.ts"
 
-export interface ModelPushed extends LEventBase<"model_pushed"> {
-  model: Reference<Adapter>
+export interface ModelPushed {
+  type: "model_pushed"
+  // model: Reference<ModelAdapter>
 }

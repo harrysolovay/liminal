@@ -1,16 +1,17 @@
 import { assert } from "liminal-util"
-import type { Provider } from "../Provider.ts"
+import { env } from "node:process"
+import type { Model } from "../Model.ts"
 
 export type OpenAIModel = "gpt-4o" | "gpt-4o-mini" | "gpt-3.5-turbo"
 
-export function openai(model: OpenAIModel): Provider {
+export function openai(model: OpenAIModel): Model {
   return {
     async resolve(messages, schema) {
       const response = await fetch(RESPONSES_ENDPOINT, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+          Authorization: `Bearer ${env.OPENAI_API_KEY}`,
         },
         body: JSON.stringify({
           model,

@@ -1,6 +1,6 @@
-import { L } from "liminal_next"
+import { Agent, L } from "liminal_next"
 
-export default function*() {
+export default Agent(function*() {
   yield* L.system`
     When an instruction is given, don't ask any follow-up questions.
     Just reply to the best of your ability given the information you have.
@@ -11,14 +11,19 @@ export default function*() {
   yield* L.assistant
   let i = 0
   while (i < 3) {
-    const reply = yield* L.branch(function*() {
-      yield* L.user`Please reply to the last message on my behalf.`
-      return yield* L.assistant
-    })
-    yield* L.user(reply)
+    const { messages, models } = yield* L.reflect
+    const child = yield* L.agent(
+      function*() {
+        yield* L.user`Please reply to the last message on my behalf.`
+        return yield* L.assistant
+      },
+      { messages, models },
+    )
+    const [e0] = yield* L.join(child)
+    yield* L.user(e0)
     yield* L.assistant
     i++
   }
   yield* L.user`Please summarize the key points from our conversation.`
   return yield* L.assistant
-}
+})

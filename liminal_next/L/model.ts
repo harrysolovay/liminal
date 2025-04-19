@@ -1,7 +1,6 @@
-import type { Adapter } from "../Provider.ts"
-import type { Reference } from "../Reference.ts"
+import type { Model } from "../Model.ts"
 import type { PushModel } from "../runes/PushModel.ts"
 
-export interface model extends Iterable<PushModel, Reference<Adapter>> {}
+export interface model extends Iterable<PushModel, void> {}
 
-export declare function model(adapter: Adapter): model
+export declare function model(adapter: Model): model

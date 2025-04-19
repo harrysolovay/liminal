@@ -1,6 +1,6 @@
 import type { JSONValue } from "liminal-schema"
-import type { LEventBase } from "./_LEventBase.ts"
 
-export interface Inferred extends LEventBase<"inferred"> {
+export interface Inferred {
+  type: "inferred"
   value: JSONValue
 }

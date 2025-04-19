@@ -8,13 +8,13 @@ export type RuneIterable<Y extends Rune = Rune, T = any> = Iterable<Y, T> | Asyn
 
 export type Runic<Y extends Rune = Rune, T = any> = DeferredOr<RuneIterator<Y, T> | RuneIterable<Y, T>>
 export declare namespace Runic {
-  export type E<S extends Runic> = Extract<
-    S extends RuneIterator ? S
-      : S extends RuneIterable<infer Y extends Rune> ? Y["event"]
-      : S extends (() => RuneIterator<infer Y extends Rune>) ? Y["event"]
-      : S extends (() => RuneIterable<infer Y extends Rune>) ? Y["event"]
+  export type Y<S extends Runic> = Extract<
+    S extends RuneIterator<infer Y> ? Y
+      : S extends RuneIterable<infer Y extends Rune> ? Y
+      : S extends (() => RuneIterator<infer Y extends Rune>) ? Y
+      : S extends (() => RuneIterable<infer Y extends Rune>) ? Y
       : never,
-    LEvent
+    Rune
   >
 
   export type T<S extends Runic> = S extends RuneIterator ? S
@@ -29,15 +29,15 @@ export declare namespace RunicCollection {
   export type T<S extends RunicCollection> = { -readonly [K in keyof S]: Runic.T<Extract<S[K], Runic>> }
 }
 
-export function normalizeRunic(behavior: Runic): RuneIterator {
-  if ("next" in behavior) {
-    return behavior
-  } else if (Symbol.iterator in behavior) {
-    return behavior[Symbol.iterator]()
-  } else if (Symbol.asyncIterator in behavior) {
-    return behavior[Symbol.asyncIterator]()
+export function normalizeRunic(runic: Runic): RuneIterator {
+  if ("next" in runic) {
+    return runic
+  } else if (Symbol.iterator in runic) {
+    return runic[Symbol.iterator]()
+  } else if (Symbol.asyncIterator in runic) {
+    return runic[Symbol.asyncIterator]()
   }
-  const unwrapped = behavior()
+  const unwrapped = runic()
   if ("next" in unwrapped) {
     return unwrapped
   } else if (Symbol.iterator in unwrapped) {
