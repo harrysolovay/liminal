@@ -4,7 +4,8 @@
   "type": "module",
   "peerDependencies": {
     "conditional-type-checks": "^1.0.6",
-    "liminal-schema": "^0.0.0"
+    "liminal-schema": "^0.0.0",
+    "liminal-util": "^0.0.0"
   },
   "peerDependenciesMeta": {
     "conditional-type-checks": { "optional": true }

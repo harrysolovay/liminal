@@ -5,7 +5,7 @@ import type { JSONValue } from "../JSON/JSONValue.ts"
 import type { LSchema } from "../LSchema.ts"
 
 // TODO: extract input type / constrain to `JSONValue`.
-export function fromArktype<O>(arktype: Type<O>): LSchema<O, JSONValue> {
+export function fromArktype<T>(arktype: Type<T>): LSchema<T> {
   const schema = arktype.toJsonSchema()
   assertLSchema(schema)
   return schema as never
