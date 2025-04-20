@@ -1,14 +1,16 @@
-import type { Model } from "./Model.ts"
+import type { Model } from "../Model.ts"
 
 /** An intrusive list for storing `Model`s. */
 export class ModelRegistry {
   declare head?: ModelRegistryNode | undefined
   declare tail?: ModelRegistryNode | undefined
 
-  constructor(initial?: ModelRegistry) {
-    for (let node = initial?.head; node; node = node.next) {
-      this.push(node.model)
+  clone(): ModelRegistry {
+    const clone = new ModelRegistry()
+    for (let node = this?.head; node; node = node.next) {
+      clone.push(node.model)
     }
+    return clone
   }
 
   peek(): Model | undefined {

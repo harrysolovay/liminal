@@ -1,4 +1,5 @@
-import { type Runic } from "./Runic.ts"
+import type { Rune } from "./Rune.ts"
+import type { Runic } from "./Runic.ts"
 
 export interface Fiber<Y = any, T = any> {
   Y: Y
@@ -25,9 +26,9 @@ export type FiberStatus<T> = {
 
 let nextIndex = 0
 
-export function Fiber<X extends Runic>(runic: X): Fiber<Runic.Y<X>, Runic.T<X>> {
+export function Fiber<Y extends Rune, T>(runic: Runic<Y, T>): Fiber<Y, T> {
   const controller = new AbortController()
-  const { promise, resolve, reject } = Promise.withResolvers<Runic.T<X>>()
+  const { promise, resolve, reject } = Promise.withResolvers<T>()
   return {
     index: nextIndex++,
     runic,

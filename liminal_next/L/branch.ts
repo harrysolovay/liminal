@@ -1,20 +1,21 @@
-import { MessageRegistry } from "../MessageRegistry.ts"
-import { ModelRegistry } from "../ModelRegistry.ts"
 import type { Rune } from "../Rune.ts"
-import { normalize, type Runic } from "../Runic.ts"
-import { fiber } from "./fiber.ts"
+import { type Runic, unwrapRunic } from "../Runic.ts"
+import { MessageRegistry } from "../state/MessageRegistry.ts"
+import { ModelRegistry } from "../state/ModelRegistry.ts"
+import { StateMap } from "../StateMap.ts"
+import { fork } from "./fork.ts"
 import { join } from "./join.ts"
-import { state } from "./state.ts"
+import { states } from "./states.ts"
 
-export function* branch<X extends Runic>(_runic: X): Generator<Rune, Runic.T<X>> {
-  const models = yield* state(ModelRegistry)
-  const messages = yield* state(MessageRegistry)
-  const branch = yield* fiber(function*() {
-    yield* state(ModelRegistry, models)
-    yield* state(MessageRegistry, messages)
-    // return yield* normalize(runic)
-  })
-  const [resolved] = yield* join(branch)
-  // return resolved
-  return null!
+export function* branch<Y extends Rune, T>(runic: Runic<Y, T>): Generator<Rune | Y, T> {
+  const [models, messages] = yield* states(ModelRegistry, MessageRegistry)
+  const fiber = yield* fork(
+    unwrapRunic(runic),
+    new StateMap([
+      [ModelRegistry, models.clone()],
+      [MessageRegistry, messages.clone()],
+    ]),
+  )
+  const [resolved] = yield* join(fiber)
+  return resolved
 }
