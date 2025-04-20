@@ -22,5 +22,4 @@ await Agent(function*() {
     yield* L.user`Another please.`
     i++
   }
-  console.log(activities)
-})
+}, { handler: console.log })

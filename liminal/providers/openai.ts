@@ -28,7 +28,6 @@ export function openai(model: OpenAIModel): Model {
         }),
       })
       const result = await response.json()
-      console.log(result)
       assert("output" in result)
       const { output } = result
       const [message] = output

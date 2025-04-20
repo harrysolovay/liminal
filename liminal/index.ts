@@ -1,4 +1,8 @@
 export * from "./Agent.ts"
+export * from "./Fiber.ts"
 export * as L from "./L/L.ts"
 export * from "./Rune.ts"
 export * from "./Runic.ts"
+export * from "./state/MessageRegistry.ts"
+export * from "./state/ModelRegistry.ts"
+export * from "./StateMap.ts"
