@@ -8,7 +8,7 @@ export class ModelRegistry {
   clone(): ModelRegistry {
     const clone = new ModelRegistry()
     for (let node = this?.head; node; node = node.next) {
-      clone.push(node.model)
+      clone.register(node.model)
     }
     return clone
   }
@@ -17,7 +17,7 @@ export class ModelRegistry {
     return this.tail?.model
   }
 
-  push(value: Model): ModelRegistryNode {
+  register(value: Model): ModelRegistryNode {
     const node: ModelRegistryNode = {
       prev: this.tail,
       model: value,

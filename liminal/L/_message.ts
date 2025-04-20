@@ -1,5 +1,5 @@
 import type { MessageRole } from "../Message.ts"
-import type { Rune, StateRune } from "../Rune.ts"
+import type { StateRune } from "../Rune.ts"
 import { MessageRegistry } from "../states/MessageRegistry.ts"
 import { state } from "./state.ts"
 

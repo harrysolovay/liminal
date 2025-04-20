@@ -17,8 +17,7 @@
   },
   "exports": {
     ".": "./dist/index.js",
-    "./testing": "./dist/testing/index.js",
-    "./types": "./dist/types/index.js"
+    "./openai": "./dist/providers/openai.js"
   },
   "dependencies": {
     "standard-json-schema": "^0.1.1"
