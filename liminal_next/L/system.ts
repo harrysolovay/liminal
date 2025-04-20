@@ -1,5 +1,5 @@
+import { isTemplateStringsArray } from "liminal-util"
 import type { Rune } from "../Rune.ts"
-import { isTemplateStringsArray } from "../util/isTemplateStringsArray.ts"
 import { _message } from "./_message.ts"
 
 export function system(template: TemplateStringsArray, ...substitutions: Array<string>): Generator<Rune, void>

@@ -1,7 +1,7 @@
 import type { Rune } from "../Rune.ts"
 import type { StateConstructor } from "../StateMap.ts"
 
-export function* states<CA extends Array<StateConstructor>>(
+export function* state<CA extends Array<StateConstructor>>(
   ...constructors: CA
 ): Generator<Rune, { [I in keyof CA]: InstanceType<CA[I]> }> {
   return yield { type: "states", constructors }

@@ -1,16 +1,16 @@
 import type { Rune } from "../Rune.ts"
-import { type Runic, unwrapRunic } from "../Runic.ts"
-import { MessageRegistry } from "../state/MessageRegistry.ts"
-import { ModelRegistry } from "../state/ModelRegistry.ts"
+import { type Runic, unwrapIterator } from "../Runic.ts"
 import { StateMap } from "../StateMap.ts"
+import { MessageRegistry } from "../states/MessageRegistry.ts"
+import { ModelRegistry } from "../states/ModelRegistry.ts"
 import { fork } from "./fork.ts"
 import { join } from "./join.ts"
-import { states } from "./states.ts"
+import { state } from "./state.ts"
 
 export function* branch<Y extends Rune, T>(runic: Runic<Y, T>): Generator<Rune | Y, T> {
-  const [models, messages] = yield* states(ModelRegistry, MessageRegistry)
+  const [models, messages] = yield* state(ModelRegistry, MessageRegistry)
   const fiber = yield* fork(
-    unwrapRunic(runic),
+    runic,
     new StateMap([
       [ModelRegistry, models.clone()],
       [MessageRegistry, messages.clone()],

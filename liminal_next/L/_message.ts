@@ -1,9 +1,9 @@
 import type { MessageRole } from "../Message.ts"
 import type { Rune } from "../Rune.ts"
-import { MessageRegistry } from "../state/MessageRegistry.ts"
-import { states } from "./states.ts"
+import { MessageRegistry } from "../states/MessageRegistry.ts"
+import { state } from "./state.ts"
 
 export function* _message(role: MessageRole, content: string): Generator<Rune, void> {
-  const [messageRegistry] = yield* states(MessageRegistry)
+  const [messageRegistry] = yield* state(MessageRegistry)
   messageRegistry.append({ role, content })
 }
