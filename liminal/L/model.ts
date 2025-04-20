@@ -3,7 +3,9 @@ import type { StateRune } from "../Rune.ts"
 import { ModelRegistry } from "../states/ModelRegistry.ts"
 import { state } from "./state.ts"
 
-export function* model(model: Model): Generator<StateRune, void> {
+export interface model extends Generator<StateRune, void> {}
+
+export function* model(model: Model): model {
   const [modelRegistry] = yield* state(ModelRegistry)
   modelRegistry.register(model)
 }
