@@ -1,10 +1,8 @@
-import type { Action } from "./Action.ts"
-import type { DeferredOr } from "./util/DeferredOr.ts"
-import type { IteratorLike } from "./util/IteratorLike.ts"
+import type { Rune } from "./Rune.ts"
+import type { Runic } from "./Runic.ts"
 
-export type Agent<Y extends Action = Action, R = any> = IteratorLike<Y, R>
+export interface Agent<Y extends Rune, T> extends PromiseLike<T>, AsyncIterable<Y, T> {}
 
-export type AgentLike<Y extends Action = Action, R = any> = DeferredOr<Agent<Y, R>>
-
-export type AgentLikeY<A extends AgentLike> = A extends AgentLike<infer Y> ? Y : never
-export type AgentLikeT<A extends AgentLike> = A extends AgentLike<Action, infer T> ? T : never
+export function Agent<Y extends Rune, T>(_runic: Runic<Y, T>): Agent<Y, T> {
+  throw 0
+}

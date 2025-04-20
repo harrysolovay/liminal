@@ -14,11 +14,11 @@
   "description": "Runtime types for language models.",
   "exports": {
     ".": "./dist/index.js",
-    "./zod3": "./dist/zod3.js",
-    "./arktype": "./dist/arktype.js",
-    "./effect-schema": "./dist/effect-schema.js",
-    "./typebox": "./dist/typebox.js",
-    "./valibot": "./dist/valibot.js"
+    "./arktype": "./dist/adapters/arktype.js",
+    "./effect-schema": "./dist/adapters/effect-schema.js",
+    "./typebox": "./dist/adapters/typebox.js",
+    "./valibot": "./dist/adapters/valibot.js",
+    "./zod3": "./dist/adapters/zod3.js"
   },
   "peerDependencies": {
     "@standard-schema/spec": "^1.0.0",

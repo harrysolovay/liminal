@@ -1,7 +1,7 @@
-import type { JSONValue } from "../JSON/JSONValue.ts"
+import type { StandardSchemaV1 } from "@standard-schema/spec"
 
-export interface LJSONSchemaString {
+export interface LJSONSchemaString<T = any> extends StandardSchemaV1<string, T> {
   type: "string"
   enum?: Array<string>
-  const?: JSONValue
+  const?: string
 }

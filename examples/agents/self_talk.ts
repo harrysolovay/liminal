@@ -1,4 +1,4 @@
-import { L } from "liminal_next"
+import { L } from "liminal"
 
 export default function*() {
   yield* L.system`

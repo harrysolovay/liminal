@@ -1,6 +1,4 @@
-import { assert } from "liminal-util"
-import { assertJSONSchemaTypeName } from "./JSON/JSONSchemaTypeName.ts"
-import { assertJSONValue } from "./JSON/JSONValue.ts"
+import { assert, JSON } from "liminal-util"
 
 export function assertLSchema(value: unknown): asserts value is object {
   assert(typeof value === "object")
@@ -13,7 +11,7 @@ export function assertLSchema(value: unknown): asserts value is object {
   } else {
     assert("type" in value)
     assert(typeof value.type === "string")
-    assertJSONSchemaTypeName(value.type)
+    JSON.assertTypeName(value.type)
     switch (value.type) {
       case "null":
       case "boolean":
@@ -24,7 +22,7 @@ export function assertLSchema(value: unknown): asserts value is object {
       case "string": {
         assert(!("const" in value && "enum" in value))
         if ("const" in value) {
-          assertJSONValue(value.const)
+          JSON.assertValue(value.const)
         }
         if ("enum" in value) {
           assert(Array.isArray(value.enum))

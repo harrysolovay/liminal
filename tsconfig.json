@@ -10,7 +10,6 @@
     { "path": "./liminal-schema" },
     { "path": "./liminal-util" },
     { "path": "./liminal.land" },
-    { "path": "./liminal_next" },
     { "path": "./packages/ai" },
     { "path": "./packages/alchemy" },
     { "path": "./packages/ollama" },

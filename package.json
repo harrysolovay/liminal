@@ -8,7 +8,6 @@
     "liminal-schema",
     "liminal-util",
     "liminal.land",
-    "liminal_next",
     "packages/*"
   ],
   "scripts": {

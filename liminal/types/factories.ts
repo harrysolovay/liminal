@@ -1,8 +1,0 @@
-export { array } from "./array.ts"
-export { boolean, const, enum, integer, null, number, ref, string } from "./intrinsics.ts"
-export { MetatypeDescriptor, MetatypeRootDescriptor } from "./Metatype/MetatypeDescriptor.ts"
-export { object } from "./object.ts"
-export { option } from "./types_derived/option.ts"
-export { taggedUnion } from "./types_derived/taggedUnion.ts"
-export { wrapper } from "./types_derived/wrapper.ts"
-export { union } from "./union.ts"
