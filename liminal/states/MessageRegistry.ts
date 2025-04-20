@@ -8,6 +8,7 @@ export class MessageRegistry {
   }
 
   append(message: Message) {
+    console.log(message, "\n")
     this.messages.push(message)
   }
 }

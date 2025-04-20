@@ -1,3 +1,1 @@
-import type { EventRune } from "./Rune.ts"
-
-export type Handler = (event: EventRune) => void
+export type Handler = (event: any) => void

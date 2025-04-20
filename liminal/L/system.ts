@@ -1,8 +1,8 @@
 import { isTemplateStringsArray } from "liminal-util"
-import type { StateRune } from "../Rune.ts"
+import type { Rune } from "../Rune.ts"
 import { _message } from "./_message.ts"
 
-export interface system extends Generator<StateRune, void> {}
+export interface system extends Generator<Rune, void> {}
 
 export function system(template: TemplateStringsArray, ...substitutions: Array<string>): system
 export function system(value: string): system

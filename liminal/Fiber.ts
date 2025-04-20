@@ -1,31 +1,19 @@
 import type { Globals } from "./Globals.ts"
 import type { Rune } from "./Rune.ts"
-import { type RuneIterator, type Runic, unwrapIterator } from "./Runic.ts"
-import { Scheduler } from "./Scheduler.ts"
+import { type RuneIterator, type Runic, unwrap } from "./Runic.ts"
 import { StateMap } from "./StateMap.ts"
 
 export interface Fiber<Y = any, T = any> {
   Y: Y
   T: T
   index: number
-  runic: Runic
   iterator: RuneIterator
   signal: AbortSignal
-  promise: Promise<T>
-  status?: FiberStatus<T>
   state: StateMap
   globals: Globals
-  resolve(value: T): void
-  reject(reason?: unknown): void
-  step(nextArg: any): void
-}
-
-export type FiberStatus<T> = {
-  type: "resolved"
-  value: T
-} | {
-  type: "rejected"
-  reason: unknown
+  promise: Promise<T>
+  resolve: (value?: T | PromiseLike<T>) => void
+  reject: (reason?: any) => void
 }
 
 let nextIndex = 0
@@ -36,94 +24,30 @@ export function Fiber<Y extends Rune, T>(
   state: StateMap = new StateMap(),
 ): Fiber<Y, T> {
   const controller = new AbortController()
-  const { promise, resolve, reject } = Promise.withResolvers<T>()
-  const iterator = unwrapIterator(runic)
-
-  return {
+  const iterator = unwrap(runic)
+  const resolvers = Promise.withResolvers<T>()
+  const fiber: Fiber<Y, T> = {
     index: nextIndex++,
-    runic,
     iterator,
     signal: controller.signal,
-    promise,
     state,
     globals,
-    resolve(value) {
-      this.status = {
-        type: "resolved",
-        value,
-      }
-      resolve(value)
-    },
-    reject(reason) {
-      this.status = {
-        type: "rejected",
-        reason,
-      }
-      reject(reason)
-    },
-    step,
+    ...resolvers,
   } satisfies Omit<Fiber<Y, T>, "Y" | "T"> as never
-}
-
-async function step(this: Fiber, nextArg: any) {
-  try {
-    const { iterator } = this
-    const next = await iterator.next(nextArg)
-    if (next.done) {
-      this.resolve(next.value)
-      return
+  queueMicrotask(async () => {
+    let nextArg: any
+    try {
+      let current = await iterator.next(nextArg)
+      while (!current.done) {
+        const { value } = current
+        const nextArg = await value(fiber)
+        current = await iterator.next(nextArg)
+      }
+      resolvers.resolve(current.value)
+    } catch (reason: unknown) {
+      controller.abort(reason)
+      resolvers.reject(reason)
     }
-    const rune = next.value
-    switch (rune.type) {
-      case "fork": {
-        const child = Fiber(this.globals, rune.runic, rune.state)
-        Scheduler.enqueue(() => {
-          child.step(undefined)
-          this.step(child)
-        })
-        break
-      }
-      case "await": {
-        const resolved = await rune.value
-        Scheduler.enqueue(() => {
-          return this.step(resolved)
-        })
-        break
-      }
-      case "event": {
-        this.globals.handler(rune)
-        Scheduler.enqueue(() => {
-          return this.step(undefined)
-        })
-        break
-      }
-      case "join": {
-        try {
-          const results = await Promise.all(rune.fibers.map(({ promise }) => promise))
-          Scheduler.enqueue(() => {
-            this.step(results)
-          })
-          break
-        } catch (reason: unknown) {
-          this.reject(reason)
-          break
-        }
-      }
-      case "state": {
-        Scheduler.enqueue(() => {
-          this.step(rune.constructors.map((constructor) => {
-            let instance = this.state.get(constructor)
-            if (!instance) {
-              instance = new constructor()
-              this.state.set(constructor, instance)
-            }
-            return instance
-          }))
-        })
-        break
-      }
-    }
-  } catch (reason: unknown) {
-    this.reject(reason)
-  }
+  })
+  return fiber
 }

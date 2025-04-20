@@ -16,15 +16,19 @@ export function openai(model: OpenAIModel): Model {
         body: JSON.stringify({
           model,
           input: messages,
-          ...schema
-            ? {
-              type: "json_schema",
-              schema,
-            }
-            : {},
+          ...schema && {
+            text: {
+              format: {
+                type: "json_schema",
+                name: "TODO",
+                schema,
+              },
+            },
+          },
         }),
       })
       const result = await response.json()
+      console.log(result)
       assert("output" in result)
       const { output } = result
       const [message] = output

@@ -1,4 +1,4 @@
-export * from "./assertLSchema.ts"
+export * from "./ensureLSchema.ts"
 export * from "./LJSON/LJSONSchema.ts"
 export * from "./LJSON/LJSONSchemaAnyOf.ts"
 export * from "./LJSON/LJSONSchemaArray.ts"

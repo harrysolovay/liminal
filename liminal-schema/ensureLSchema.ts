@@ -1,12 +1,13 @@
 import { assert, JSON } from "liminal-util"
+import type { LSchema } from "./LSchema"
 
-export function assertLSchema(value: unknown): asserts value is object {
+export function ensureLSchema(value: unknown): LSchema {
   assert(typeof value === "object")
   assert(value !== null)
   if ("anyOf" in value) {
     assert(Array.isArray(value.anyOf))
     value.anyOf.forEach((v) => {
-      assertLSchema(v)
+      ensureLSchema(v)
     })
   } else {
     assert("type" in value)
@@ -34,7 +35,7 @@ export function assertLSchema(value: unknown): asserts value is object {
       }
       case "array": {
         assert("items" in value)
-        assertLSchema(value.items)
+        ensureLSchema(value.items)
         break
       }
       case "object": {
@@ -48,10 +49,14 @@ export function assertLSchema(value: unknown): asserts value is object {
           assert(typeof k === "string")
           assert(k in properties)
         })
-        assert("additionalProperties" in value)
-        assert(value.additionalProperties === false)
-        Object.values(properties).forEach(assertLSchema)
+        if ("additionalProperties" in value) {
+          assert(value.additionalProperties === false)
+        } else {
+          ;(value as any).additionalProperties = false
+        }
+        Object.values(properties).forEach(ensureLSchema)
       }
     }
   }
+  return value as LSchema
 }

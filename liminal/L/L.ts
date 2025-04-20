@@ -1,7 +1,6 @@
 export * from "./_inference.ts"
 export * from "./_message.ts"
 export * from "./assistant.ts"
-export * from "./awaited.ts"
 export * from "./branch.ts"
 export * from "./event.ts"
 export * from "./fork.ts"
