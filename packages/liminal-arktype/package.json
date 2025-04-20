@@ -1,0 +1,21 @@
+{
+  "name": "liminal-arktype",
+  "publishConfig": {
+    "access": "public"
+  },
+  "version": "0.0.0",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/harrysolovay/liminal.git",
+    "directory": "packages/liminal-arktype"
+  },
+  "type": "module",
+  "description": "Transform Arktype runtime types into language-model-compatible JSON schemas.",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "peerDependencies": {
+    "arktype": "^2.1.10"
+  }
+}

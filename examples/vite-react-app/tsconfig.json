@@ -6,7 +6,7 @@
   "include": ["src", "vite.config.ts"],
   "references": [
     {
-      "path": "../../packages/ollama"
+      "path": "../../packages/liminal-ollama"
     }
   ]
 }

@@ -7,12 +7,15 @@
     { "path": "./examples/vite-react-app" },
     { "path": "./experiments" },
     { "path": "./liminal" },
-    { "path": "./liminal-schema" },
-    { "path": "./liminal-util" },
     { "path": "./liminal.land" },
-    { "path": "./packages/ai" },
-    { "path": "./packages/alchemy" },
-    { "path": "./packages/ollama" },
+    { "path": "./packages/liminal-ai" },
+    { "path": "./packages/liminal-alchemy" },
+    { "path": "./packages/liminal-arktype" },
+    { "path": "./packages/liminal-effect" },
+    { "path": "./packages/liminal-ollama" },
+    { "path": "./packages/liminal-openai" },
+    { "path": "./packages/liminal-valibot" },
+    { "path": "./packages/liminal-zod3" },
     { "path": "./tsconfig.root.json" }
   ]
 }

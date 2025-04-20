@@ -1,15 +1,5 @@
 {
   "extends": "./tsconfig.base",
   "include": ["env.ts", "liminal.ts"],
-  "references": [
-    {
-      "path": "./liminal"
-    },
-    {
-      "path": "./packages/ai"
-    },
-    {
-      "path": "./packages/ollama"
-    }
-  ]
+  "references": [{ "path": "./liminal" }]
 }

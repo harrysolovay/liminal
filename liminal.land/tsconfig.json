@@ -1,13 +1,6 @@
 {
   "extends": "../tsconfig.base",
   "include": ["."],
-  "exclude": ["../.vitepress/cache"],
-  "references": [
-    {
-      "path": "../liminal"
-    },
-    {
-      "path": "../packages/ai"
-    }
-  ]
+  "exclude": [".vitepress/cache"],
+  "references": [{ "path": "../liminal" }]
 }

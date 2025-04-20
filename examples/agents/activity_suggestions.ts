@@ -1,6 +1,6 @@
 import { type } from "arktype"
 import { Agent, L } from "liminal"
-import { fromArktype } from "liminal-schema/arktype"
+import { fromArktype } from "liminal-arktype"
 import { openai } from "liminal/openai"
 
 const Activity = fromArktype(type({
