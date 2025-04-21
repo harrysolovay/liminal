@@ -15,6 +15,10 @@
   "exports": {
     ".": "./dist/index.js"
   },
+  "dependencies": {
+    "liminal-schema": "^0.0.0",
+    "liminal-util": "^0.0.0"
+  },
   "peerDependencies": {
     "zod": "^3.24.2",
     "zod-to-json-schema": "^3.24.5"

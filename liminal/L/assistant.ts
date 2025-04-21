@@ -1,6 +1,6 @@
+import type { SchemaRoot } from "liminal-schema"
+import { LiminalAssertionError } from "liminal-util"
 import type { Rune } from "../Rune.ts"
-import type { SchemaRoot } from "../schema/SchemaRoot.ts"
-import { LiminalAssertionError } from "../util/LiminalAssertionError.ts"
 import { _inference } from "./_inference.ts"
 import { _message } from "./_message.ts"
 import { rune } from "./rune.ts"

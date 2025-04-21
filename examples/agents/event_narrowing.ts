@@ -1,6 +1,6 @@
 import { type } from "arktype"
 import { Agent, L } from "liminal"
-import { fromArktype } from "../../packages/liminal-arktype/fromArktype"
+import { fromArktype } from "liminal-arktype"
 
 await Agent(g, {
   handler(_event) {

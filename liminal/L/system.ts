@@ -1,5 +1,5 @@
+import { isTemplateStringsArray } from "liminal-util"
 import type { Rune } from "../Rune.ts"
-import { isTemplateStringsArray } from "../util/isTemplateStringsArray.ts"
 import { _message } from "./_message.ts"
 
 export interface system extends Generator<Rune, void> {}

@@ -82,7 +82,7 @@
         "liminal": "./dist/cli/main.js",
       },
       "dependencies": {
-        "standard-json-schema": "^0.1.1",
+        "liminal-schema": "^0.0.0",
       },
       "peerDependencies": {
         "@standard-schema/spec": "^1.0.0",
@@ -91,6 +91,21 @@
       "optionalPeers": [
         "conditional-type-checks",
       ],
+    },
+    "liminal-schema": {
+      "name": "liminal-schema",
+      "version": "0.0.0",
+      "peerDependencies": {
+        "@standard-schema/spec": "^1.0.0",
+        "conditional-type-checks": "^1.0.6",
+      },
+      "optionalPeers": [
+        "conditional-type-checks",
+      ],
+    },
+    "liminal-util": {
+      "name": "liminal-util",
+      "version": "0.0.0",
     },
     "liminal.land": {
       "name": "liminal.land",
@@ -127,6 +142,10 @@
     "packages/liminal-arktype": {
       "name": "liminal-arktype",
       "version": "0.0.0",
+      "dependencies": {
+        "liminal-schema": "^0.0.0",
+        "liminal-util": "^0.0.0",
+      },
       "peerDependencies": {
         "arktype": "^2.1.10",
       },
@@ -134,6 +153,10 @@
     "packages/liminal-effect": {
       "name": "liminal-effect",
       "version": "0.0.0",
+      "dependencies": {
+        "liminal-schema": "^0.0.0",
+        "liminal-util": "^0.0.0",
+      },
       "peerDependencies": {
         "effect": "^3.13.12",
       },
@@ -157,6 +180,10 @@
     "packages/liminal-typebox": {
       "name": "liminal-typebox",
       "version": "0.0.0",
+      "dependencies": {
+        "liminal-schema": "^0.0.0",
+        "liminal-util": "^0.0.0",
+      },
       "peerDependencies": {
         "@sinclair/typebox": "^0.34.33",
       },
@@ -164,6 +191,10 @@
     "packages/liminal-valibot": {
       "name": "liminal-valibot",
       "version": "0.0.0",
+      "dependencies": {
+        "liminal-schema": "^0.0.0",
+        "liminal-util": "^0.0.0",
+      },
       "peerDependencies": {
         "valibot": "^1.0.0",
       },
@@ -171,6 +202,10 @@
     "packages/liminal-zod3": {
       "name": "liminal-zod3",
       "version": "0.0.0",
+      "dependencies": {
+        "liminal-schema": "^0.0.0",
+        "liminal-util": "^0.0.0",
+      },
       "peerDependencies": {
         "zod": "^3.24.2",
         "zod-to-json-schema": "^3.24.5",
@@ -1188,7 +1223,11 @@
 
     "liminal-openai": ["liminal-openai@workspace:packages/liminal-openai"],
 
+    "liminal-schema": ["liminal-schema@workspace:liminal-schema"],
+
     "liminal-typebox": ["liminal-typebox@workspace:packages/liminal-typebox"],
+
+    "liminal-util": ["liminal-util@workspace:liminal-util"],
 
     "liminal-valibot": ["liminal-valibot@workspace:packages/liminal-valibot"],
 
@@ -1471,8 +1510,6 @@
     "speakingurl": ["speakingurl@14.0.1", "", {}, "sha512-1POYv7uv2gXoyGFpBCmpDVSNV74IfsWlDW216UPjbWufNf+bSU6GdbDsxdcxtfwb4xlI3yxzOTKClUosxARYrQ=="],
 
     "sprintf-js": ["sprintf-js@1.0.3", "", {}, "sha512-D9cPgkvLlV3t3IzL0D0YLvGA9Ahk4PcvVwUbN0dSGr1aP0Nrt4AEnTUbuGvquEC0mA64Gqt1fzirlRs5ibXx8g=="],
-
-    "standard-json-schema": ["standard-json-schema@0.1.1", "", { "peerDependencies": { "@valibot/to-json-schema": "^1.0.0", "effect": "^3.13.12", "zod-to-json-schema": "^3.24.5" }, "optionalPeers": ["@valibot/to-json-schema", "effect", "zod-to-json-schema"] }, "sha512-CVAdLnqxWOmAtKx1gMwe1ZjTH0y7xN8wggwlUCblIinxN3iHwXtsrir34BkVsCnGrSS9KjAzgq7dWpVsTuXj8A=="],
 
     "string-width": ["string-width@5.1.2", "", { "dependencies": { "eastasianwidth": "^0.2.0", "emoji-regex": "^9.2.2", "strip-ansi": "^7.0.1" } }, "sha512-HnLOCR3vjcY8beoNLtcjZ5/nxn2afmME6lhrDrebokqMap+XbeW8n9TXpPDOqdGK5qcI3oT0GKTW6wC7EMiVqA=="],
 

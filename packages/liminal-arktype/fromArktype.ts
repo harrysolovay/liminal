@@ -1,5 +1,5 @@
 import { Type } from "arktype"
-import { type SchemaRoot, validateSchemaRoot } from "liminal"
+import { type SchemaRoot, validateSchemaRoot } from "liminal-schema"
 
 // TODO: extract input type / constrain to `JSON.Value`.
 export function fromArktype<T>(arktype: Type<T>): SchemaRoot<T> {

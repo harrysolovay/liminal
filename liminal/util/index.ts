@@ -1,5 +1,0 @@
-export * from "./assert.ts"
-export * from "./assert.ts"
-export * from "./isTemplateStringsArray.ts"
-export * from "./JSON/JSONValueObject.ts"
-export * from "./LiminalAssertionError.ts"
