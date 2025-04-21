@@ -9,7 +9,7 @@ export interface Fiber<out Y = any, out T = any> {
   Y: Y
   T: T
   status: FiberStatus<T>
-  index: number
+  fiberId: number
   signal: AbortSignal
   state: StateMap
   globals: Globals
@@ -35,31 +35,31 @@ export interface FiberInfo {
   timestamp: number
 }
 
-let nextIndex = 0
+let nextFiberId = 0
 
 export function Fiber<Y extends Rune, T>(
   globals: Globals,
   runic: Runic<Y, T>,
   state?: StateMap,
 ): Fiber<Y, T> {
-  const index = nextIndex++
-  handler<FiberCreated>({
-    [LEventTag]: "fiber_created",
-  })
   const controller = new AbortController()
-  return {
+  const fiber = {
     status: { type: "untouched" },
-    index,
+    fiberId: nextFiberId++,
     signal: controller.signal,
     state: state ?? new DefaultStateMap(),
     globals,
     run,
     handler,
-  } satisfies Omit<Fiber<Y, T>, "Y" | "T"> as never
+  } satisfies Omit<Fiber<Y, T>, "Y" | "T"> as Fiber<Y, T>
+  fiber.handler<FiberCreated>({
+    [LEventTag]: "fiber_created",
+  })
+  return fiber
 
-  function handler<E>(event: E): void {
+  function handler<E>(this: Fiber<Y, T>, event: E): void {
     globals.handler(event, {
-      fiber: index,
+      fiber: this.fiberId,
       timestamp: Date.now(),
     })
   }
@@ -72,11 +72,14 @@ export function Fiber<Y extends Rune, T>(
     } else if (this.status.type === "rejected") {
       throw this.status.reason
     }
-    handler<FiberStarted>({
+    this.handler<FiberStarted>({
       [LEventTag]: "fiber_started",
     })
     const { promise, resolve, reject } = Promise.withResolvers<T>()
-    this.status = { type: "pending", promise }
+    this.status = {
+      type: "pending",
+      promise,
+    }
     queueMicrotask(async () => {
       const iterator = unwrap(runic)
       let nextArg: any
@@ -88,7 +91,7 @@ export function Fiber<Y extends Rune, T>(
           current = await iterator.next(nextArg)
         }
         const { value } = current
-        handler<FiberResolved>({
+        this.handler<FiberResolved>({
           [LEventTag]: "fiber_resolved",
           value,
         })

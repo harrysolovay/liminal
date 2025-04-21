@@ -4,10 +4,12 @@ import type { Message } from "./Message.ts"
 export type LEvent = InferenceRequested | Inferred | MessageAppended | FiberCreated | FiberStarted | FiberResolved
 
 export interface InferenceRequested extends LEventBase<"inference_requested"> {
+  requestId: number
   schema?: SchemaRoot
 }
 
 export interface Inferred extends LEventBase<"inferred"> {
+  requestId: number
   inference: string
 }
 
