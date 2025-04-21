@@ -1,9 +1,10 @@
 import type { Globals } from "./Globals.ts"
 import type { Rune } from "./Rune.ts"
 import { type Runic, unwrap } from "./Runic.ts"
-import { StateMap } from "./StateMap.ts"
+import { DefaultStateMap } from "./state/DefaultStateMap.ts"
+import { StateMap } from "./state/StateMap.ts"
 
-export interface Fiber<Y = any, T = any> {
+export interface Fiber<out Y = any, out T = any> {
   Y: Y
   T: T
   status: FiberStatus<T>
@@ -32,14 +33,14 @@ let nextIndex = 0
 export function Fiber<Y extends Rune, T>(
   globals: Globals,
   runic: Runic<Y, T>,
-  state: StateMap = new StateMap(),
+  state?: StateMap,
 ): Fiber<Y, T> {
   const controller = new AbortController()
   return {
     status: { type: "untouched" },
     index: nextIndex++,
     signal: controller.signal,
-    state,
+    state: state ?? new DefaultStateMap(),
     globals,
     run,
   } satisfies Omit<Fiber<Y, T>, "Y" | "T"> as never
@@ -60,8 +61,8 @@ export function Fiber<Y extends Rune, T>(
       try {
         let current = await iterator.next(nextArg)
         while (!current.done) {
-          const { value } = current
-          const nextArg = await value.apply(this)
+          const rune = current.value
+          const nextArg = await rune(this)
           current = await iterator.next(nextArg)
         }
         resolve(current.value)

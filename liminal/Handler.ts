@@ -1,1 +1,1 @@
-export type Handler = (event: any) => void
+export type Handler<E = any> = [(event: E) => void][0]

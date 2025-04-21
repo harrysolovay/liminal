@@ -1,7 +1,7 @@
 import { Fiber } from "../Fiber.ts"
 import type { Rune } from "../Rune.ts"
 import type { Runic } from "../Runic.ts"
-import type { StateMap } from "../StateMap.ts"
+import type { StateMap } from "../state/StateMap.ts"
 import { rune } from "./rune.ts"
 
 export interface fork<Y extends Rune, T> extends Generator<Rune<never>, Fiber<Y, T>> {}

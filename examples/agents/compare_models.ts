@@ -2,24 +2,23 @@
 
 // export default function*() {
 //   yield* L.user`Write a rap about type-level programming in TypeScript`
-//   yield* L.infer
+//   yield* L.assistant
 //   yield* L.user`Rewrite it in whatever way you think best.`
-//   const variants = yield* L.branch("variants", {
+//   const variants = yield* L.branch({
 //     *a() {
-//       yield* L.declareModel("one", "language")
-//       return yield* L.infer
+//       // yield* L.declareModel("one", "language")
+//       return yield* L.assistant
 //     },
 //     *b() {
-//       yield* L.declareModel("two", "language")
-//       return yield* L.infer
+//       // yield* L.declareModel("two", "language")
+//       return yield* L.assistant
 //     },
 //     *c() {
-//       yield* L.declareModel("three", "language")
-//       return yield* L.infer
+//       // yield* L.declareModel("three", "language")
+//       return yield* L.assistant
 //     },
 //   })
-//   const { value } = yield* L.branch("best", function*() {
-//     yield* L.clear()
+//   const { value } = yield* L.fork(function*() {
 //     yield* L.declareModel("arbiter", "language")
 //     yield* L.user`
 //       Out of the following variants, which is your favorite?:

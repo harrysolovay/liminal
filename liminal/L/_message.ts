@@ -1,11 +1,11 @@
-import type { MessageRole } from "../Message.ts"
+import type { ContentPart, MessageRole } from "../Message.ts"
 import type { Rune } from "../Rune.ts"
 import { MessageRegistry } from "../state/MessageRegistry.ts"
 import { state } from "./state.ts"
 
 export interface _message extends Generator<Rune<never>, void> {}
 
-export function* _message(role: MessageRole, content: string): _message {
+export function* _message(role: MessageRole, content: Array<ContentPart>): _message {
   const [messageRegistry] = yield* state(MessageRegistry)
   messageRegistry.append({ role, content })
 }

@@ -1,5 +1,5 @@
 import type { Rune } from "../Rune.ts"
-import type { StateConstructor } from "../StateMap.ts"
+import type { StateConstructor } from "../state/StateMap.ts"
 import { rune } from "./rune.ts"
 
 export interface state<CA extends Array<StateConstructor>>
