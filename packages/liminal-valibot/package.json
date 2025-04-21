@@ -1,8 +1,6 @@
 {
   "name": "liminal-valibot",
-  "publishConfig": {
-    "access": "public"
-  },
+  "publishConfig": { "access": "public" },
   "version": "0.0.0",
   "license": "Apache-2.0",
   "repository": {
@@ -11,15 +9,11 @@
     "directory": "packages/liminal-valibot"
   },
   "type": "module",
-  "description": "Transform Valibot runtime types into language-model-compatible JSON schemas.",
-  "exports": {
-    ".": "./dist/index.js"
-  },
-  "dependencies": {
-    "liminal-schema": "^0.0.0",
-    "liminal-util": "^0.0.0"
-  },
+  "sideEffects": true,
+  "exports": { "./register": "./dist/register.js" },
   "peerDependencies": {
+    "liminal-schema": "^0.0.0",
+    "liminal-util": "^0.0.0",
     "valibot": "^1.0.0"
   }
 }

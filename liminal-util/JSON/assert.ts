@@ -1,4 +1,4 @@
-import { assert as assert_ } from "../assert.ts"
+import { assert as assert_ } from "./assert.ts"
 import type { Value } from "./Value.ts"
 
 export function assert(value: unknown): asserts value is Value {

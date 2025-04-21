@@ -1,4 +1,5 @@
 export * from "./Schema.ts"
+export * from "./SchemaAdapterRegistry.ts"
 export * from "./SchemaAnyOf.ts"
 export * from "./SchemaArray.ts"
 export * from "./SchemaBoolean.ts"

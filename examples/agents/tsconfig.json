@@ -13,6 +13,9 @@
       "path": "../../packages/liminal-arktype"
     },
     {
+      "path": "../../packages/liminal-effect"
+    },
+    {
       "path": "../../packages/liminal-openai"
     }
   ]

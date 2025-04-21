@@ -1,8 +1,6 @@
 {
   "name": "liminal-effect",
-  "publishConfig": {
-    "access": "public"
-  },
+  "publishConfig": { "access": "public" },
   "version": "0.0.0",
   "license": "Apache-2.0",
   "repository": {
@@ -11,15 +9,12 @@
     "directory": "packages/liminal-effect"
   },
   "type": "module",
-  "description": "Transform Effect Schema runtime types into language-model-compatible JSON schemas.",
-  "exports": {
-    ".": "./dist/index.js"
-  },
-  "dependencies": {
+  "sideEffects": true,
+  "exports": { "./register": "./dist/register.js" },
+  "peerDependencies": {
+    "@standard-schema/spec": "^1.0.0",
+    "effect": "^3.13.12",
     "liminal-schema": "^0.0.0",
     "liminal-util": "^0.0.0"
-  },
-  "peerDependencies": {
-    "effect": "^3.13.12"
   }
 }

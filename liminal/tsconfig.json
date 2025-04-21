@@ -4,5 +4,9 @@
     "noEmit": false,
     "outDir": "dist"
   },
-  "include": ["."]
+  "include": ["."],
+  "references": [
+    { "path": "../liminal-schema" },
+    { "path": "../liminal-util" }
+  ]
 }

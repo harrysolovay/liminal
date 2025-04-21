@@ -1,6 +1,6 @@
 import { type } from "arktype"
 import { Agent, L } from "liminal"
-import { fromArktype } from "liminal-arktype"
+import "liminal-arktype/register"
 
 await Agent(g, {
   handler(_event, _info) {},
@@ -13,9 +13,9 @@ export default function* g() {
   yield* L.branch(function*() {
     yield* L.emit("event-a")
     yield* L.branch(function*() {
-      const g = yield* L.assistant(fromArktype(type({
+      yield* L.assistant(type({
         something: "string",
-      })))
+      }))
       yield* L.emit("event-b")
       yield* L.branch(function*() {
         yield* L.emit(new Something())
