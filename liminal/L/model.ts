@@ -3,7 +3,7 @@ import type { Rune } from "../Rune.ts"
 import { ModelRegistry } from "../state/ModelRegistry.ts"
 import { state } from "./state.ts"
 
-export interface model extends Generator<Rune, void> {}
+export interface model extends Generator<Rune<never>, void> {}
 
 export function* model(model: Model): model {
   const [modelRegistry] = yield* state(ModelRegistry)

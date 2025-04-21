@@ -5,12 +5,11 @@ import { type Runic, unwrap } from "./Runic.ts"
 import { DefaultStateMap } from "./state/DefaultStateMap.ts"
 import { StateMap } from "./state/StateMap.ts"
 
-export interface Fiber<out Y = any, out T = any> {
-  Y: Y
+export interface Fiber<out T = any> {
   T: T
+  parent: Fiber<any> | undefined
   status: FiberStatus<T>
   fiberId: number
-  signal: AbortSignal
   state: StateMap
   globals: Globals
   run(this: this): Promise<T>
@@ -37,34 +36,37 @@ export interface FiberInfo {
 
 let nextFiberId = 0
 
-export function Fiber<Y extends Rune, T>(
-  globals: Globals,
-  runic: Runic<Y, T>,
-  state?: StateMap,
-): Fiber<Y, T> {
-  const controller = new AbortController()
+export interface FiberConfig<T> {
+  parent?: Fiber<any>
+  globals: Globals
+  runic: Runic<Rune, T>
+  state?: StateMap | undefined
+  signal?: AbortSignal | undefined
+}
+
+export function Fiber<T>(config: FiberConfig<T>): Fiber<T> {
   const fiber = {
+    state: config.state ?? new DefaultStateMap(),
+    globals: config.globals,
+    parent: config.parent,
     status: { type: "untouched" },
     fiberId: nextFiberId++,
-    signal: controller.signal,
-    state: state ?? new DefaultStateMap(),
-    globals,
     run,
     handler,
-  } satisfies Omit<Fiber<Y, T>, "Y" | "T"> as Fiber<Y, T>
+  } satisfies Omit<Fiber<T>, "T"> as Fiber<T>
   fiber.handler<FiberCreated>({
     [LEventTag]: "fiber_created",
   })
   return fiber
 
-  function handler<E>(this: Fiber<Y, T>, event: E): void {
-    globals.handler(event, {
+  function handler<E>(this: Fiber<T>, event: E): void {
+    config.globals.handler(event, {
       fiber: this.fiberId,
       timestamp: Date.now(),
     })
   }
 
-  async function run(this: Fiber<Y, T>): Promise<T> {
+  async function run(this: Fiber<T>): Promise<T> {
     if (this.status.type === "pending") {
       return await this.status.promise
     } else if (this.status.type === "resolved") {
@@ -76,12 +78,22 @@ export function Fiber<Y extends Rune, T>(
       [LEventTag]: "fiber_started",
     })
     const { promise, resolve, reject } = Promise.withResolvers<T>()
+    if (config.signal) {
+      if (config.signal.aborted) {
+        reject(config.signal.reason)
+        return await promise
+      } else {
+        config.signal.addEventListener("abort", () => {
+          reject(config.signal?.reason)
+        })
+      }
+    }
     this.status = {
       type: "pending",
       promise,
     }
     queueMicrotask(async () => {
-      const iterator = unwrap(runic)
+      const iterator = unwrap(config.runic)
       let nextArg: any
       try {
         let current = await iterator.next(nextArg)
@@ -97,7 +109,6 @@ export function Fiber<Y extends Rune, T>(
         })
         resolve(value)
       } catch (reason: unknown) {
-        controller.abort(reason)
         reject(reason)
       }
     })

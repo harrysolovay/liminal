@@ -18,7 +18,7 @@ export function register<T extends RuntimeType>(adapter: SchemaAdapter<T>) {
   registry.add(adapter)
 }
 
-const memo = new Map<RuntimeType, SchemaRoot>()
+const memo = new WeakMap<RuntimeType, SchemaRoot>()
 
 export function toJSONSchema<T extends RuntimeType>(type: T): SchemaRoot {
   let schema = memo.get(type)

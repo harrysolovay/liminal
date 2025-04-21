@@ -5,8 +5,11 @@ import type { SchemaRoot } from "./SchemaRoot.ts"
 export function validateSchemaRoot(value: unknown): SchemaRoot {
   assert(typeof value === "object")
   assert(value !== null)
+  if ("$schema" in value) {
+    delete value.$schema
+  }
   assert("type" in value)
-  assert(typeof value.type === "object")
+  assert(value.type === "object")
   return validateSchema(value) as SchemaRoot
 }
 
