@@ -1,42 +1,37 @@
 import type { Model } from "liminal"
 import { _util } from "liminal"
-import { env } from "node:process"
+import { OpenAI } from "openai"
+import type { ResponsesModel } from "openai/resources.mjs"
+import type { ResponseInputContent, ResponseInputItem } from "openai/resources/responses/responses.js"
 
-export type OpenAIModel = "gpt-4o" | "gpt-4o-mini" | "gpt-3.5-turbo"
-
-export function openai(model: OpenAIModel): Model {
+export function openai(model: ResponsesModel, client: OpenAI = new OpenAI()): Model {
   return {
     async resolve(messages, schema) {
-      const response = await fetch(RESPONSES_ENDPOINT, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${env.OPENAI_API_KEY}`,
-        },
-        body: JSON.stringify({
-          model,
-          input: messages,
-          ...schema && {
-            text: {
-              format: {
-                type: "json_schema",
-                name: "TODO",
-                schema,
-              },
+      const response = await client.responses.create({
+        input: messages.map((m): ResponseInputItem => ({
+          role: m.role,
+          content: m.content.map((c): ResponseInputContent => ({
+            type: m.role === "assistant" ? "output_text" as never : "input_text",
+            text: String(c.part),
+          })),
+        })),
+        model,
+        ...schema && {
+          text: {
+            format: {
+              type: "json_schema",
+              name: "TODO",
+              schema: schema as never as Record<string, unknown>,
             },
           },
-        }),
+        },
       })
-      const result = await response.json()
-      _util.assert("output" in result)
-      const { output } = result
+      const { output } = response
       const [message] = output
-      _util.assert(message)
+      _util.assert(message?.type === "message")
       const [content] = message.content
-      _util.assert(content)
+      _util.assert(content?.type === "output_text")
       return content.text
     },
   }
 }
-
-const RESPONSES_ENDPOINT = "https://api.openai.com/v1/responses"

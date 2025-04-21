@@ -1,5 +1,5 @@
 import type { Globals } from "./Globals.ts"
-import type { FiberCreated, FiberResolved, FiberStarted } from "./LEvent.ts"
+import { type FiberCreated, type FiberResolved, type FiberStarted, LEventTag } from "./LEvent.ts"
 import type { Rune } from "./Rune.ts"
 import { type Runic, unwrap } from "./Runic.ts"
 import { DefaultStateMap } from "./state/DefaultStateMap.ts"
@@ -43,7 +43,9 @@ export function Fiber<Y extends Rune, T>(
   state?: StateMap,
 ): Fiber<Y, T> {
   const index = nextIndex++
-  handler<FiberCreated>({ type: "fiber_created" })
+  handler<FiberCreated>({
+    [LEventTag]: "fiber_created",
+  })
   const controller = new AbortController()
   return {
     status: { type: "untouched" },
@@ -58,7 +60,7 @@ export function Fiber<Y extends Rune, T>(
   function handler<E>(event: E): void {
     globals.handler(event, {
       fiber: index,
-      timestamp: new Date().getMilliseconds(),
+      timestamp: Date.now(),
     })
   }
 
@@ -70,7 +72,9 @@ export function Fiber<Y extends Rune, T>(
     } else if (this.status.type === "rejected") {
       throw this.status.reason
     }
-    handler<FiberStarted>({ type: "fiber_started" })
+    handler<FiberStarted>({
+      [LEventTag]: "fiber_started",
+    })
     const { promise, resolve, reject } = Promise.withResolvers<T>()
     this.status = { type: "pending", promise }
     queueMicrotask(async () => {
@@ -84,7 +88,10 @@ export function Fiber<Y extends Rune, T>(
           current = await iterator.next(nextArg)
         }
         const { value } = current
-        handler<FiberResolved>({ type: "fiber_resolved", value })
+        handler<FiberResolved>({
+          [LEventTag]: "fiber_resolved",
+          value,
+        })
         resolve(value)
       } catch (reason: unknown) {
         controller.abort(reason)

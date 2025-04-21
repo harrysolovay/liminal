@@ -22,5 +22,12 @@ export interface FiberResolved extends LEventBase<"fiber_resolved"> {
 }
 
 interface LEventBase<K extends string> {
-  type: K
+  [LEventTag]: K
+}
+
+export const LEventTag: unique symbol = Symbol.for("liminal/LEvent")
+export type LEventTag = typeof LEventTag
+
+export function isLEvent(value: unknown): value is LEvent {
+  return typeof value === "object" && value !== null && LEventTag in value
 }

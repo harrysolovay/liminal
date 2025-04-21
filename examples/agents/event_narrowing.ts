@@ -1,12 +1,16 @@
 import { type } from "arktype"
-import { Agent, L } from "liminal"
+import { Agent, isLEvent, L } from "liminal"
 import "liminal-arktype/register"
 
 await Agent(g, {
-  handler(_event, _info) {},
+  handler(event, info) {
+    if (isLEvent(event)) {
+      console.log({ event, info })
+    }
+  },
 })
 
-export default function* g() {
+function* g() {
   yield* L.user`Tell me a joke.`
   yield* L.assistant
   yield* L.emit("event-root")

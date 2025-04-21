@@ -16,7 +16,8 @@
     "liminal": "dotenvx run -- liminal",
     "liminal.land": "bun run --filter liminal.land vitepress",
     "lint": "eslint -c eslint.json .",
-    "changeset": "changeset"
+    "changeset": "changeset",
+    "clean": "find . -type d \\( -name dist -o -name node_modules \\) -prune -exec rm -rf {} +"
   },
   "devDependencies": {
     "@ai-sdk/openai": "^1.2.5",

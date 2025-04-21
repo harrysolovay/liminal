@@ -1,6 +1,6 @@
 import type { SchemaRoot } from "liminal-schema"
 import { assert } from "liminal-util"
-import type { LEvent } from "../LEvent.ts"
+import { type InferenceRequested, type LEvent, LEventTag } from "../LEvent.ts"
 import type { Rune } from "../Rune.ts"
 import { MessageRegistry } from "../state/MessageRegistry.ts"
 import { ModelRegistry } from "../state/ModelRegistry.ts"
@@ -12,8 +12,8 @@ export function* _infer(schema?: SchemaRoot): Generator<Rune<LEvent>, string> {
   const [modelRegistry, { messages }] = yield* state(ModelRegistry, MessageRegistry)
   const model = modelRegistry.peek()
   assert(model)
-  yield* emit<LEvent>({
-    type: "inference_requested",
+  yield* emit<InferenceRequested>({
+    [LEventTag]: "inference_requested",
     ...schema && { schema },
   })
   return yield* rune(() => model.resolve(messages, schema))
