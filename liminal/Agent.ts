@@ -1,7 +1,6 @@
 import { Fiber } from "./Fiber.ts"
 import type { Rune } from "./Rune.ts"
 import type { Runic } from "./Runic.ts"
-import { StateMap } from "./StateMap.ts"
 
 export interface Agent<_Y extends Rune, T> extends PromiseLike<T> {}
 
@@ -17,7 +16,6 @@ export function Agent<Y extends Rune, T>(runic: Runic<Y, T>, config?: AgentConfi
           handler: config?.handler ?? (() => {}),
         },
         runic,
-        new StateMap(),
       )
       return root.run().then(onfulfilled, onrejected)
     },

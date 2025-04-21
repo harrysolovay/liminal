@@ -1,0 +1,21 @@
+{
+  "name": "liminal-typebox",
+  "publishConfig": {
+    "access": "public"
+  },
+  "version": "0.0.0",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/harrysolovay/liminal.git",
+    "directory": "packages/liminal-typebox"
+  },
+  "type": "module",
+  "description": "Transform Typebox runtime types into language-model-compatible JSON schemas.",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "peerDependencies": {
+    "@sinclair/typebox": "^0.34.33"
+  }
+}

@@ -14,6 +14,7 @@
     { "path": "./packages/liminal-effect" },
     { "path": "./packages/liminal-ollama" },
     { "path": "./packages/liminal-openai" },
+    { "path": "./packages/liminal-typebox" },
     { "path": "./packages/liminal-valibot" },
     { "path": "./packages/liminal-zod3" },
     { "path": "./tsconfig.root.json" }

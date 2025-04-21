@@ -13,7 +13,7 @@ export default function* g() {
   yield* L.event("event-root")
   yield* L.branch(function*() {
     yield* L.event("event-a")
-    yield* L.branch(function*() {
+    const v = L.branch(function*() {
       const g = yield* L.assistant(fromArktype(type({
         something: "string",
       })))
