@@ -1,19 +1,30 @@
 import type { Globals } from "./Globals.ts"
 import type { Rune } from "./Rune.ts"
-import { type RuneIterator, type Runic, unwrap } from "./Runic.ts"
+import { type Runic, unwrap } from "./Runic.ts"
 import { StateMap } from "./StateMap.ts"
 
 export interface Fiber<Y = any, T = any> {
   Y: Y
   T: T
+  status: FiberStatus<T>
   index: number
-  iterator: RuneIterator
   signal: AbortSignal
   state: StateMap
   globals: Globals
+  run(this: this): Promise<T>
+}
+
+export type FiberStatus<T> = {
+  type: "untouched"
+} | {
+  type: "pending"
   promise: Promise<T>
-  resolve: (value?: T | PromiseLike<T>) => void
-  reject: (reason?: any) => void
+} | {
+  type: "resolved"
+  value: T
+} | {
+  type: "rejected"
+  reason?: unknown
 }
 
 let nextIndex = 0
@@ -24,30 +35,41 @@ export function Fiber<Y extends Rune, T>(
   state: StateMap = new StateMap(),
 ): Fiber<Y, T> {
   const controller = new AbortController()
-  const iterator = unwrap(runic)
-  const resolvers = Promise.withResolvers<T>()
-  const fiber: Fiber<Y, T> = {
+  return {
+    status: { type: "untouched" },
     index: nextIndex++,
-    iterator,
     signal: controller.signal,
     state,
     globals,
-    ...resolvers,
+    run,
   } satisfies Omit<Fiber<Y, T>, "Y" | "T"> as never
-  queueMicrotask(async () => {
-    let nextArg: any
-    try {
-      let current = await iterator.next(nextArg)
-      while (!current.done) {
-        const { value } = current
-        const nextArg = await value(fiber)
-        current = await iterator.next(nextArg)
-      }
-      resolvers.resolve(current.value)
-    } catch (reason: unknown) {
-      controller.abort(reason)
-      resolvers.reject(reason)
+
+  async function run(this: Fiber<Y, T>): Promise<T> {
+    if (this.status.type === "pending") {
+      return await this.status.promise
+    } else if (this.status.type === "resolved") {
+      return this.status.value
+    } else if (this.status.type === "rejected") {
+      throw this.status.reason
     }
-  })
-  return fiber
+    const { promise, resolve, reject } = Promise.withResolvers<T>()
+    this.status = { type: "pending", promise }
+    queueMicrotask(async () => {
+      const iterator = unwrap(runic)
+      let nextArg: any
+      try {
+        let current = await iterator.next(nextArg)
+        while (!current.done) {
+          const { value } = current
+          const nextArg = await value.apply(this)
+          current = await iterator.next(nextArg)
+        }
+        resolve(current.value)
+      } catch (reason: unknown) {
+        controller.abort(reason)
+        reject(reason)
+      }
+    })
+    return await promise
+  }
 }

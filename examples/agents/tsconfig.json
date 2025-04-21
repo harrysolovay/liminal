@@ -11,6 +11,9 @@
     },
     {
       "path": "../../packages/liminal-arktype"
+    },
+    {
+      "path": "../../packages/liminal-openai"
     }
   ]
 }

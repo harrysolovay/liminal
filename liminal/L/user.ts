@@ -2,7 +2,7 @@ import type { Rune } from "../Rune.ts"
 import { isTemplateStringsArray } from "../util/isTemplateStringsArray.ts"
 import { _message } from "./_message.ts"
 
-export interface user extends Generator<Rune, void> {}
+export interface user extends Generator<Rune<never>, void> {}
 
 export function user(template: TemplateStringsArray, ...substitutions: Array<string>): user
 export function user(value: string): user

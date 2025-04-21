@@ -22,6 +22,7 @@
         "liminal": "workspace:*",
         "liminal-ai": "workspace:*",
         "liminal-ollama": "workspace:*",
+        "liminal-openai": "workspace:*",
         "mathjs": "^14.3.1",
       },
     },
@@ -86,18 +87,10 @@
       "peerDependencies": {
         "@standard-schema/spec": "^1.0.0",
         "conditional-type-checks": "^1.0.6",
-        "liminal-util": "^0.0.0",
       },
       "optionalPeers": [
         "conditional-type-checks",
       ],
-    },
-    "liminal-util": {
-      "name": "liminal-util",
-      "version": "0.0.0",
-      "peerDependencies": {
-        "conditional-type-checks": "^1.0.6",
-      },
     },
     "liminal.land": {
       "name": "liminal.land",
@@ -1189,8 +1182,6 @@
     "liminal-ollama": ["liminal-ollama@workspace:packages/liminal-ollama"],
 
     "liminal-openai": ["liminal-openai@workspace:packages/liminal-openai"],
-
-    "liminal-util": ["liminal-util@workspace:liminal-util"],
 
     "liminal-valibot": ["liminal-valibot@workspace:packages/liminal-valibot"],
 

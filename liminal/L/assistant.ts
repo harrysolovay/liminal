@@ -3,17 +3,18 @@ import type { SchemaRoot } from "../schema/SchemaRoot.ts"
 import { LiminalAssertionError } from "../util/LiminalAssertionError.ts"
 import { _inference } from "./_inference.ts"
 import { _message } from "./_message.ts"
+import { rune } from "./rune.ts"
 
-export interface assistant extends Iterable<Rune, string> {
-  <T>(schema: SchemaRoot<T>): Generator<Rune, T>
+export interface assistant extends Iterable<Rune<never>, string> {
+  <T>(schema: SchemaRoot<T>): Generator<Rune<never>, T>
 }
 
 export const assistant: assistant = Object.assign(
-  function*<T>(schema: SchemaRoot<T>): Generator<Rune, T> {
+  function*<T>(schema: SchemaRoot<T>): Generator<Rune<never>, T> {
     const inference = yield* _inference(schema)
     yield* _message("assistant", inference)
     const input = JSON.parse(inference)
-    const result = yield (() => schema["~standard"].validate(input))
+    const result = yield* rune(() => schema["~standard"].validate(input))
     if (result.issues) {
       throw new LiminalAssertionError(JSON.stringify(result.issues, null, 2))
     }

@@ -7,9 +7,9 @@ import { fork } from "./fork.ts"
 import { join } from "./join.ts"
 import { state } from "./state.ts"
 
-export interface branch<_Y extends Rune, T> extends Generator<Rune, T> {}
+export interface branch<Y extends Rune, T> extends Generator<Y, T> {}
 
-export function* branch<Y extends Rune, T>(runic: Runic<Y, T>): branch<Y, T> {
+export function* branch<Y extends Rune, T>(runic: Runic<Y, T>): branch<Y | Rune<never>, T> {
   const [models, messages] = yield* state(ModelRegistry, MessageRegistry)
   const fiber = yield* fork(
     runic,
@@ -18,6 +18,5 @@ export function* branch<Y extends Rune, T>(runic: Runic<Y, T>): branch<Y, T> {
       [MessageRegistry, messages.clone()],
     ]),
   )
-  const [resolved] = yield* join(fiber)
-  return resolved
+  return yield* join(fiber)
 }

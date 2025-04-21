@@ -1,13 +1,13 @@
 import type { Rune } from "../Rune.ts"
+import { rune } from "./rune.ts"
 
-export interface event<_K extends keyof any, _V> extends Generator<Rune, void> {}
+export interface event<E> extends Generator<Rune<E>, void> {}
 
-export function* event<K extends keyof any, V = undefined>(key: K, value: V = undefined as V): event<K, V> {
-  return yield (fiber) => {
+export function* event<E>(event: E): event<E> {
+  return yield* rune((fiber) => {
     fiber.globals.handler({
       type: "event",
-      key,
-      value,
+      event,
     })
-  }
+  })
 }

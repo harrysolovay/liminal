@@ -5,8 +5,8 @@ import { StateMap } from "./StateMap.ts"
 
 export interface Agent<_Y extends Rune, T> extends PromiseLike<T> {}
 
-export interface AgentConfig<_Y extends Rune, _T> {
-  handler: (event: Rune) => void
+export interface AgentConfig<Y extends Rune, _T> {
+  handler: (event: Y extends Rune<infer E> ? E : never) => void
 }
 
 export function Agent<Y extends Rune, T>(runic: Runic<Y, T>, config?: AgentConfig<Y, T>): Agent<Y, T> {
@@ -19,7 +19,7 @@ export function Agent<Y extends Rune, T>(runic: Runic<Y, T>, config?: AgentConfi
         runic,
         new StateMap(),
       )
-      return root.promise.then(onfulfilled, onrejected)
+      return root.run().then(onfulfilled, onrejected)
     },
   }
 }

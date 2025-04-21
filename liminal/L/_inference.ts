@@ -5,7 +5,7 @@ import { ModelRegistry } from "../state/ModelRegistry.ts"
 import { assert } from "../util/assert.ts"
 import { state } from "./state.ts"
 
-export function* _inference(schema?: SchemaRoot): Generator<Rune, string> {
+export function* _inference(schema?: SchemaRoot): Generator<Rune<never>, string> {
   const [modelRegistry, { messages }] = yield* state(ModelRegistry, MessageRegistry)
   const model = modelRegistry.peek()
   assert(model)

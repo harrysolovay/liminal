@@ -1,5 +1,5 @@
 import { Agent, L } from "liminal"
-import { openai } from "liminal/openai"
+import { openai } from "liminal-openai"
 
 await Agent(
   function*() {
