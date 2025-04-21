@@ -1,8 +1,9 @@
 import { isTemplateStringsArray } from "liminal-util"
+import type { LEvent } from "../LEvent.ts"
 import type { Rune } from "../Rune.ts"
 import { _message } from "./_message.ts"
 
-export interface user extends Generator<Rune<never>, void> {}
+export interface user extends Generator<Rune<LEvent>, void> {}
 
 export function user(template: TemplateStringsArray, ...substitutions: Array<string>): user
 export function user(value: string): user

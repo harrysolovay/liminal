@@ -1,16 +1,17 @@
 import type { SchemaRoot } from "liminal-schema"
 import { LiminalAssertionError } from "liminal-util"
+import type { LEvent } from "../LEvent.ts"
 import type { Rune } from "../Rune.ts"
 import { _infer } from "./_infer.ts"
 import { _message } from "./_message.ts"
 import { rune } from "./rune.ts"
 
-export interface assistant extends Iterable<Rune<never>, string> {
-  <T>(schema: SchemaRoot<T>): Generator<Rune<never>, T>
+export interface assistant extends Iterable<Rune<LEvent>, string> {
+  <T>(schema: SchemaRoot<T>): Generator<Rune<LEvent>, T>
 }
 
 export const assistant: assistant = Object.assign(
-  function*<T>(schema: SchemaRoot<T>): Generator<Rune<never>, T> {
+  function*<T>(schema: SchemaRoot<T>): Generator<Rune<LEvent>, T> {
     const inference = yield* _infer(schema)
     yield* _message("assistant", [{ part: inference }])
     const input = JSON.parse(inference)

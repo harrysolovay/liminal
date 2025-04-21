@@ -1,6 +1,5 @@
-import { Fiber } from "./Fiber.ts"
-import type { Handler } from "./Handler.ts"
-import type { Rune } from "./Rune.ts"
+import { Fiber, type FiberInfo } from "./Fiber.ts"
+import type { Rune, RuneKey } from "./Rune.ts"
 import type { Runic } from "./Runic.ts"
 
 export interface Agent<out Y extends Rune, out T> extends PromiseLike<T> {
@@ -23,5 +22,5 @@ export function Agent<Y extends Rune, T>(runic: Runic<Y, T>, config?: AgentConfi
 }
 
 export interface AgentConfig<Y extends Rune, _T> {
-  handler: Handler<Y extends Rune<infer E> ? E : never>
+  handler: (event: Y[RuneKey], info: FiberInfo) => void
 }

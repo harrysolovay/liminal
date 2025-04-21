@@ -83,6 +83,7 @@
       },
       "dependencies": {
         "liminal-schema": "^0.0.0",
+        "liminal-util": "^0.0.0",
       },
       "peerDependencies": {
         "@standard-schema/spec": "^1.0.0",

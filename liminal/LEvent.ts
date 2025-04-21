@@ -1,0 +1,26 @@
+import type { SchemaRoot } from "liminal-schema"
+import type { Message } from "./Message.ts"
+
+export type LEvent = InferenceRequested | Inferred | MessageAppended | FiberCreated | FiberStarted | FiberResolved
+
+export interface InferenceRequested extends LEventBase<"inference_requested"> {
+  schema?: SchemaRoot
+}
+
+export interface Inferred extends LEventBase<"inferred"> {
+  inference: string
+}
+
+export interface MessageAppended extends LEventBase<"message_appended"> {
+  message: Message
+}
+
+export interface FiberCreated extends LEventBase<"fiber_created"> {}
+export interface FiberStarted extends LEventBase<"fiber_started"> {}
+export interface FiberResolved extends LEventBase<"fiber_resolved"> {
+  value: any
+}
+
+interface LEventBase<K extends string> {
+  type: K
+}

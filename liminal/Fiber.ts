@@ -1,4 +1,5 @@
 import type { Globals } from "./Globals.ts"
+import type { FiberCreated, FiberResolved, FiberStarted } from "./LEvent.ts"
 import type { Rune } from "./Rune.ts"
 import { type Runic, unwrap } from "./Runic.ts"
 import { DefaultStateMap } from "./state/DefaultStateMap.ts"
@@ -13,6 +14,7 @@ export interface Fiber<out Y = any, out T = any> {
   state: StateMap
   globals: Globals
   run(this: this): Promise<T>
+  handler<E>(event: E): void
 }
 
 export type FiberStatus<T> = {
@@ -28,6 +30,11 @@ export type FiberStatus<T> = {
   reason?: unknown
 }
 
+export interface FiberInfo {
+  fiber: number
+  timestamp: number
+}
+
 let nextIndex = 0
 
 export function Fiber<Y extends Rune, T>(
@@ -35,15 +42,25 @@ export function Fiber<Y extends Rune, T>(
   runic: Runic<Y, T>,
   state?: StateMap,
 ): Fiber<Y, T> {
+  const index = nextIndex++
+  handler<FiberCreated>({ type: "fiber_created" })
   const controller = new AbortController()
   return {
     status: { type: "untouched" },
-    index: nextIndex++,
+    index,
     signal: controller.signal,
     state: state ?? new DefaultStateMap(),
     globals,
     run,
+    handler,
   } satisfies Omit<Fiber<Y, T>, "Y" | "T"> as never
+
+  function handler<E>(event: E): void {
+    globals.handler(event, {
+      fiber: index,
+      timestamp: new Date().getMilliseconds(),
+    })
+  }
 
   async function run(this: Fiber<Y, T>): Promise<T> {
     if (this.status.type === "pending") {
@@ -53,6 +70,7 @@ export function Fiber<Y extends Rune, T>(
     } else if (this.status.type === "rejected") {
       throw this.status.reason
     }
+    handler<FiberStarted>({ type: "fiber_started" })
     const { promise, resolve, reject } = Promise.withResolvers<T>()
     this.status = { type: "pending", promise }
     queueMicrotask(async () => {
@@ -65,7 +83,9 @@ export function Fiber<Y extends Rune, T>(
           const nextArg = await rune(this)
           current = await iterator.next(nextArg)
         }
-        resolve(current.value)
+        const { value } = current
+        handler<FiberResolved>({ type: "fiber_resolved", value })
+        resolve(value)
       } catch (reason: unknown) {
         controller.abort(reason)
         reject(reason)

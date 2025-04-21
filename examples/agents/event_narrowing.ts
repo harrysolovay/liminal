@@ -3,8 +3,7 @@ import { Agent, L } from "liminal"
 import { fromArktype } from "liminal-arktype"
 
 await Agent(g, {
-  handler(_event) {
-  },
+  handler(_event, _info) {},
 })
 
 export default function* g() {
@@ -13,7 +12,7 @@ export default function* g() {
   yield* L.emit("event-root")
   yield* L.branch(function*() {
     yield* L.emit("event-a")
-    const v = L.branch(function*() {
+    yield* L.branch(function*() {
       const g = yield* L.assistant(fromArktype(type({
         something: "string",
       })))
@@ -29,7 +28,7 @@ export default function* g() {
       yield* L.branch(function*() {})
       return "hello"
     })
-    yield* L.emit("event-f")
+    yield* L.emit(new Something())
     yield* L.emit("event-f")
     yield* L.branch(function*() {
       yield* L.emit("event-g")
@@ -39,4 +38,6 @@ export default function* g() {
   return yield* L.assistant
 }
 
-class Something {}
+class Something {
+  readonly key = "HELLO"
+}
