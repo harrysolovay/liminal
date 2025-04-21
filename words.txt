@@ -2,6 +2,7 @@ agentic
 arktype
 bunx
 codegen
+combinators
 cspotcode
 deepseek
 dotenvx
