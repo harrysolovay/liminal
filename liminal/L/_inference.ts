@@ -1,5 +1,5 @@
 import type { Rune } from "../Rune.ts"
-import type { SchemaRoot } from "../Schema/SchemaRoot.ts"
+import type { SchemaRoot } from "../Schema2/SchemaRoot.ts"
 import { MessageRegistry } from "../state/MessageRegistry.ts"
 import { ModelRegistry } from "../state/ModelRegistry.ts"
 import { assert } from "../util/assert.ts"

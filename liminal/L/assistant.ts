@@ -1,5 +1,5 @@
 import type { Rune } from "../Rune.ts"
-import type { SchemaRoot } from "../Schema/SchemaRoot.ts"
+import type { SchemaRoot } from "../Schema2/SchemaRoot.ts"
 import { LiminalAssertionError } from "../util/LiminalAssertionError.ts"
 import { _inference } from "./_inference.ts"
 import { _message } from "./_message.ts"
