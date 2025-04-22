@@ -3,8 +3,8 @@ import type { Rune, RuneKey } from "./Rune.ts"
 import type { Runic } from "./Runic.ts"
 
 export interface Agent<out T, out E> extends PromiseLike<T> {
-  E: E
   T: T
+  E: E
 }
 
 export function Agent<Y extends Rune, T>(runic: Runic<Y, T>, config?: AgentConfig<Y, T>): Agent<T, Rune.E<Y>> {

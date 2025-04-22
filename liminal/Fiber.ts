@@ -1,7 +1,7 @@
 import type { Globals } from "./Globals.ts"
 import { type FiberCreated, type FiberResolved, type FiberStarted, LEventTag } from "./LEvent.ts"
 import type { Rune } from "./Rune.ts"
-import { type Runic, unwrap } from "./Runic.ts"
+import { Runic } from "./Runic.ts"
 import { DefaultStateMap } from "./state/DefaultStateMap.ts"
 import { StateMap } from "./state/StateMap.ts"
 
@@ -93,7 +93,7 @@ export function Fiber<T>(config: FiberConfig<T>): Fiber<T> {
       promise,
     }
     queueMicrotask(async () => {
-      const iterator = unwrap(config.runic)
+      const iterator = Runic.unwrap(config.runic)
       let nextArg: any
       try {
         let current = await iterator.next(nextArg)

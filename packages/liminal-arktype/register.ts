@@ -1,18 +1,21 @@
 import { type Out, Type } from "arktype"
 import { register } from "liminal-schema"
-import type { json } from "liminal-util"
 
 declare module "liminal-schema" {
-  export interface SchemaAdapterRegistry {
-    [ArktypeTag]: LiminalArktype
+  interface LTypes {
+    [LiminalArktype]: LiminalArktype
+  }
+  interface LStatics<_X> {
+    [LiminalArktype]: (schema: _X) => _X extends LiminalArktype<infer T> ? T : never
   }
 }
 
-export declare const ArktypeTag: unique symbol
+export declare const LiminalArktype: unique symbol
+export type LiminalArktype<O = any> = Type<O> | Type<(In: any) => Out<O>, {}>
 
-export type LiminalArktype = Type<json.ValueObject> | Type<(In: json.ValueObject) => Out<any>>
-
-register<LiminalArktype>({
-  match: (type) => type instanceof Type,
-  toJSON: (type) => type.toJsonSchema(),
+register((type: unknown) => {
+  if (type instanceof Type) {
+    return type.toJsonSchema()
+  }
+  return
 })

@@ -1,3 +1,4 @@
+export * from "liminal-schema/factories"
 export * from "./_infer.ts"
 export * from "./_message.ts"
 export * from "./assistant.ts"

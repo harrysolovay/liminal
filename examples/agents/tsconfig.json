@@ -13,6 +13,9 @@
       "path": "../../packages/liminal-arktype"
     },
     {
+      "path": "../../packages/liminal-zod3"
+    },
+    {
       "path": "../../packages/liminal-effect"
     },
     {

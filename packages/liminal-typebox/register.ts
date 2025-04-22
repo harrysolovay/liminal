@@ -2,16 +2,21 @@ import { Kind, type TSchema } from "@sinclair/typebox"
 import { register } from "liminal-schema"
 
 declare module "liminal-schema" {
-  export interface SchemaAdapterRegistry {
-    [TypeboxTag]: LiminalTypebox
+  interface LTypes {
+    [LiminalTypebox]: LiminalTypebox
+  }
+  interface LStatics<_X> {
+    [LiminalTypebox]: (schema: _X) => _X extends LiminalTypebox<infer T> ? T : never
   }
 }
 
-export declare const TypeboxTag: unique symbol
+export declare const LiminalTypebox: unique symbol
 
-export type LiminalTypebox = TSchema
+export type LiminalTypebox<T = any> = TSchema & { static: T }
 
-register<LiminalTypebox>({
-  match: (type) => typeof type === "object" && type !== null && Kind in type,
-  toJSON: (type) => type,
+register((type) => {
+  if (typeof type === "object" && type !== null && Kind in type) {
+    return type
+  }
+  return
 })

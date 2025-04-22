@@ -13,7 +13,6 @@
   "exports": { "./register": "./dist/register.js" },
   "peerDependencies": {
     "@sinclair/typebox": "^0.34.33",
-    "liminal-schema": "^0.0.0",
-    "liminal-util": "^0.0.0"
+    "liminal-schema": "^0.0.0"
   }
 }

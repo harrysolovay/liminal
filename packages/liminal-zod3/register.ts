@@ -1,19 +1,22 @@
 import { register } from "liminal-schema"
-import type { json } from "liminal-util"
 import { ZodType } from "zod"
 import { zodToJsonSchema } from "zod-to-json-schema"
 
 declare module "liminal-schema" {
-  export interface SchemaAdapterRegistry {
-    [Zod3Tag]: LiminalZod3
+  interface LTypes {
+    [LiminalZod3]: LiminalZod3
+  }
+  interface LStatics<_X> {
+    [LiminalZod3]: (schema: _X) => _X extends LiminalZod3<infer T> ? T : never
   }
 }
 
-export declare const Zod3Tag: unique symbol
+export declare const LiminalZod3: unique symbol
+export type LiminalZod3<T = any> = ZodType<T, any, any>
 
-export type LiminalZod3 = ZodType<any, any, json.ValueObject>
-
-register<LiminalZod3>({
-  match: (type) => type instanceof ZodType,
-  toJSON: (type) => zodToJsonSchema(type),
+register((type) => {
+  if (type instanceof ZodType) {
+    return zodToJsonSchema(type)
+  }
+  return
 })

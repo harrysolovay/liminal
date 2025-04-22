@@ -13,7 +13,8 @@
   "type": "module",
   "description": "Runtime types for and by LLMs.",
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./dist/index.js",
+    "./factories": "./dist/factories/index.js"
   },
   "peerDependencies": {
     "@standard-schema/spec": "^1.0.0",
