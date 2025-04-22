@@ -1,5 +1,15 @@
 # liminal
 
+## 0.5.3
+
+### Patch Changes
+
+- 2d3a717: Complete rewrite of Liminal. Includes new packages for various integrations.
+- Updated dependencies [2d3a717]
+- Updated dependencies [ff04b9f]
+  - liminal-schema@0.0.1
+  - liminal-util@0.0.1
+
 ## 0.5.2
 
 ### Patch Changes

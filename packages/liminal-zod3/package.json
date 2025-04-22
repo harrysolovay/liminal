@@ -1,7 +1,9 @@
 {
   "name": "liminal-zod3",
-  "publishConfig": { "access": "public" },
-  "version": "0.0.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "version": "0.0.1",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -10,10 +12,12 @@
   },
   "type": "module",
   "sideEffects": true,
-  "exports": { "./register": "./dist/register.js" },
+  "exports": {
+    "./register": "./dist/register.js"
+  },
   "peerDependencies": {
-    "liminal-schema": "^0.0.0",
-    "liminal-util": "^0.0.0",
+    "liminal-schema": "^0.0.1",
+    "liminal-util": "^0.0.1",
     "zod": "^3.24.2",
     "zod-to-json-schema": "^3.24.5"
   }

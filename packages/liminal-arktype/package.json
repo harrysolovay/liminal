@@ -1,7 +1,9 @@
 {
   "name": "liminal-arktype",
-  "publishConfig": { "access": "public" },
-  "version": "0.0.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "version": "0.0.1",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -10,9 +12,11 @@
   },
   "type": "module",
   "sideEffects": true,
-  "exports": { "./register": "./dist/register.js" },
+  "exports": {
+    "./register": "./dist/register.js"
+  },
   "peerDependencies": {
     "arktype": "^2.1.10",
-    "liminal-schema": "^0.0.0"
+    "liminal-schema": "^0.0.1"
   }
 }
