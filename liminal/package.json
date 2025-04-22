@@ -11,25 +11,20 @@
     "directory": "liminal"
   },
   "type": "module",
-  "description": "Liminal is a model-agnostic library for conversation state management.",
+  "description": "Primitives for composing model-agnostic agents using TypeScript generator functions.",
   "bin": {
     "liminal": "./dist/cli/main.js"
   },
   "exports": {
-    ".": "./dist/index.js",
-    "./testing": "./dist/testing/index.js",
-    "./types": "./dist/types/index.js"
+    ".": "./dist/index.js"
   },
   "dependencies": {
-    "standard-json-schema": "^0.1.1"
-  },
-  "peerDependencies": {
     "@standard-schema/spec": "^1.0.0",
-    "conditional-type-checks": "^1.0.6"
+    "conditional-type-checks": "^1.0.6",
+    "liminal-schema": "^0.0.0",
+    "liminal-util": "^0.0.0"
   },
   "peerDependenciesMeta": {
-    "conditional-type-checks": {
-      "optional": true
-    }
+    "conditional-type-checks": { "optional": true }
   }
 }

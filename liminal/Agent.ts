@@ -1,10 +1,28 @@
-import type { Action } from "./Action.ts"
-import type { DeferredOr } from "./util/DeferredOr.ts"
-import type { IteratorLike } from "./util/IteratorLike.ts"
+import { Fiber, type FiberInfo } from "./Fiber.ts"
+import type { Rune, RuneKey } from "./Rune.ts"
+import type { Runic } from "./Runic.ts"
 
-export type Agent<Y extends Action = Action, R = any> = IteratorLike<Y, R>
+export interface Agent<out T, out E> extends PromiseLike<T> {
+  T: T
+  E: E
+}
 
-export type AgentLike<Y extends Action = Action, R = any> = DeferredOr<Agent<Y, R>>
+export function Agent<Y extends Rune, T>(runic: Runic<Y, T>, config?: AgentConfig<Y, T>): Agent<T, Rune.E<Y>> {
+  return {
+    then(onfulfilled, onrejected) {
+      const root = Fiber({
+        globals: {
+          handler: config?.handler ?? (() => {}),
+        },
+        runic,
+        signal: config?.signal,
+      })
+      return root.run().then(onfulfilled, onrejected)
+    },
+  } satisfies Omit<Agent<T, Rune.E<Y>>, "E" | "T"> as never
+}
 
-export type AgentLikeY<A extends AgentLike> = A extends AgentLike<infer Y> ? Y : never
-export type AgentLikeT<A extends AgentLike> = A extends AgentLike<Action, infer T> ? T : never
+export interface AgentConfig<Y extends Rune, _T> {
+  handler: (event: Y[RuneKey], info: FiberInfo) => void
+  signal?: AbortSignal
+}

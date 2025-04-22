@@ -1,0 +1,18 @@
+{
+  "name": "liminal-util",
+  "publishConfig": {
+    "access": "public"
+  },
+  "version": "0.0.0",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/harrysolovay/liminal.git",
+    "directory": "liminal-util"
+  },
+  "type": "module",
+  "description": "Utilities used by Liminal and related packages.",
+  "exports": {
+    ".": "./dist/index.js"
+  }
+}

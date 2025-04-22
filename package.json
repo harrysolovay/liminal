@@ -1,15 +1,23 @@
 {
   "private": true,
   "type": "module",
-  "workspaces": ["examples/*", "liminal", "liminal.land", "liminal_next", "packages/*"],
+  "workspaces": [
+    "examples/*",
+    "experiments",
+    "liminal",
+    "liminal-schema",
+    "liminal-util",
+    "liminal.land",
+    "packages/*"
+  ],
   "scripts": {
     "build": "tsc -b",
     "watch": "tsc -b -w",
     "liminal": "dotenvx run -- liminal",
     "liminal.land": "bun run --filter liminal.land vitepress",
-    "example:vite-react-app": "bun run --filter=liminal-example-vite-react-app --elide-lines 0 dev",
     "lint": "eslint -c eslint.json .",
-    "changeset": "changeset"
+    "changeset": "changeset",
+    "clean": "find . -type d \\( -name dist -o -name node_modules \\) -prune -exec rm -rf {} +"
   },
   "devDependencies": {
     "@ai-sdk/openai": "^1.2.5",
@@ -21,5 +29,8 @@
     "conditional-type-checks": "^1.0.6",
     "dprint": "^0.49.1",
     "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "zod": "^3.24.3"
   }
 }

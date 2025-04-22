@@ -1,0 +1,23 @@
+{
+  "name": "liminal-typebox",
+  "publishConfig": {
+    "access": "public"
+  },
+  "version": "0.0.0",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/harrysolovay/liminal.git",
+    "directory": "packages/liminal-typebox"
+  },
+  "type": "module",
+  "sideEffects": true,
+  "exports": {
+    "./register": "./dist/register.js"
+  },
+  "peerDependencies": {
+    "@sinclair/typebox": "^0.34.33",
+    "ajv": "^8.17.1",
+    "liminal-schema": "^0.0.0"
+  }
+}

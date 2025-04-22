@@ -10,7 +10,7 @@
       "path": "../../liminal"
     },
     {
-      "path": "../../packages/ai"
+      "path": "../../packages/liminal-ai"
     }
   ]
 }

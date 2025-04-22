@@ -74,6 +74,12 @@ aforementioned values.
 type AgentLike = AgentLikeValue | (() => AgentLikeValue)
 ```
 
+> Runic Resolution Priority
+>
+> - `Iterator`
+> - `Iterable`
+> - `() => Iterable`
+
 ### Messages
 
 Every agent has a list of messages, which serve as context when it wants to

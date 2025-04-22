@@ -7,7 +7,19 @@
       "path": "../../liminal"
     },
     {
-      "path": "../../packages/ai"
+      "path": "../../packages/liminal-ai"
+    },
+    {
+      "path": "../../packages/liminal-arktype"
+    },
+    {
+      "path": "../../packages/liminal-zod3"
+    },
+    {
+      "path": "../../packages/liminal-effect"
+    },
+    {
+      "path": "../../packages/liminal-openai"
     }
   ]
 }

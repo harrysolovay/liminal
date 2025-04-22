@@ -1,0 +1,23 @@
+{
+  "name": "liminal-valibot",
+  "publishConfig": {
+    "access": "public"
+  },
+  "version": "0.0.0",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/harrysolovay/liminal.git",
+    "directory": "packages/liminal-valibot"
+  },
+  "type": "module",
+  "sideEffects": true,
+  "exports": {
+    "./register": "./dist/register.js"
+  },
+  "peerDependencies": {
+    "@valibot/to-json-schema": "^1.0.0",
+    "liminal-schema": "^0.0.0",
+    "valibot": "^1.0.0"
+  }
+}

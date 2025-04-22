@@ -1,0 +1,26 @@
+{
+  "name": "liminal-schema",
+  "publishConfig": {
+    "access": "public"
+  },
+  "version": "0.0.0",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/harrysolovay/liminal.git",
+    "directory": "liminal-schema"
+  },
+  "type": "module",
+  "description": "Runtime types for and by LLMs.",
+  "exports": {
+    ".": "./dist/index.js",
+    "./factories": "./dist/factories/index.js"
+  },
+  "peerDependencies": {
+    "@standard-schema/spec": "^1.0.0",
+    "conditional-type-checks": "^1.0.6"
+  },
+  "peerDependenciesMeta": {
+    "conditional-type-checks": { "optional": true }
+  }
+}

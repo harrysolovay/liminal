@@ -1,26 +1,13 @@
-import type { StandardSchemaV1 } from "@standard-schema/spec"
-import type { Action } from "./Action.ts"
-import type { Agent } from "./Agent.ts"
-import type { JSONObject } from "./util/JSONObject.ts"
+import type { Schema } from "liminal-schema"
+import type { Message } from "./Message.ts"
 
-export type Model = LanguageModel | EmbeddingModel
-
-export interface LanguageModel extends ModelBase<"language"> {
-  infer: (type: StandardSchemaV1<JSONObject, any> | undefined) => Agent<Action, any>
+export interface Model {
+  resolve(messages: Array<Message>, schema?: Schema): Promise<string>
 }
 
-export interface EmbeddingModel extends ModelBase<"embedding"> {
-  embed: (value: string) => Promise<Array<number>>
-}
-
-interface ModelBase<K extends ModelType> {
-  type: K
-  vendor: string
-}
-
-export type ModelType = "language" | "embedding"
-
-export type Models = {
-  language: LanguageModel
-  embedding: EmbeddingModel
-}
+// export interface ModelCapabilities {
+//   readonly url: boolean
+//   readonly mimes: Set<string>
+//   readonly reasoning: boolean
+//   readonly structures: boolean
+// }

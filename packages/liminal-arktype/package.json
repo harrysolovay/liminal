@@ -1,0 +1,18 @@
+{
+  "name": "liminal-arktype",
+  "publishConfig": { "access": "public" },
+  "version": "0.0.0",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/harrysolovay/liminal.git",
+    "directory": "packages/liminal-arktype"
+  },
+  "type": "module",
+  "sideEffects": true,
+  "exports": { "./register": "./dist/register.js" },
+  "peerDependencies": {
+    "arktype": "^2.1.10",
+    "liminal-schema": "^0.0.0"
+  }
+}
