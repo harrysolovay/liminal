@@ -27,8 +27,9 @@ await Agent(
     let i = 0
     const activities: Array<typeof Activity.infer> = []
     while (i < 5) {
+      // yield* L.assistant()
       const x = yield* L.assistant(Activity)
-      const y = yield* L.assistant(ZodActivity)
+      // const y = yield* L.assistant(ZodActivity)
       activities.push(x)
       yield* L.user`Another please.`
       i++

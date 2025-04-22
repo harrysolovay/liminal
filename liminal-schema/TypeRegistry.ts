@@ -3,7 +3,7 @@ import type { SchemaRoot } from "./SchemaRoot.ts"
 import { validateSchemaRoot } from "./validate.ts"
 
 export interface LTypes {}
-export type LType = LTypes[keyof LTypes]
+export type LType = [LTypes[keyof LTypes]][0]
 
 export interface LStatics<_X extends LType> {}
 export type LStatic<X extends LType> = LStatics<X>[keyof LStatics<X>]

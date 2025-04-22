@@ -82,12 +82,13 @@ export default defineConfig({
         ],
       },
       {
-        text: "Schemas",
-        base: "/schemas",
+        text: "Types",
+        base: "/types",
         items: [
           { text: "Registry", link: "/registry" },
+          { text: "LSchema", link: "/lschema" },
           {
-            text: "Liminal Types",
+            text: "Type Factories",
             collapsed: true,
             items: [
               { text: "Preface", link: "/preface" },
