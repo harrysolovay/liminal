@@ -4,6 +4,7 @@ import "liminal-arktype/register"
 import "liminal-effect/register"
 import "liminal-zod3/register"
 import { type } from "arktype"
+import { z } from "zod"
 
 const Activity = type({
   title: "string",
@@ -11,6 +12,11 @@ const Activity = type({
   location: "string",
   estimatedCostUSD: "number[]",
   forWhom: type("string").describe("Description of the kind of person that would enjoy this activity."),
+})
+
+const ZodActivity = z.object({
+  title: z.string(),
+  description: z.string(),
 })
 
 await Agent(
@@ -21,7 +27,9 @@ await Agent(
     let i = 0
     const activities: Array<typeof Activity.infer> = []
     while (i < 5) {
-      activities.push(yield* L.assistant(Activity))
+      const x = yield* L.assistant(Activity)
+      const y = yield* L.assistant(ZodActivity)
+      activities.push(x)
       yield* L.user`Another please.`
       i++
     }

@@ -1,12 +1,14 @@
 import { Kind, type TSchema } from "@sinclair/typebox"
-import { register } from "liminal-schema"
+import Ajv, { type ValidateFunction } from "ajv"
+import { type LType, register } from "liminal-schema"
+import { assert } from "liminal-util"
 
 declare module "liminal-schema" {
   interface LTypes {
     [LiminalTypebox]: LiminalTypebox
   }
-  interface LStatics<_X> {
-    [LiminalTypebox]: (schema: _X) => _X extends LiminalTypebox<infer T> ? T : never
+  interface LStatics<_X extends LType> {
+    [LiminalTypebox]: _X extends LiminalTypebox<infer T> ? T : never
   }
 }
 
@@ -14,9 +16,23 @@ export declare const LiminalTypebox: unique symbol
 
 export type LiminalTypebox<T = any> = TSchema & { static: T }
 
-register((type) => {
-  if (typeof type === "object" && type !== null && Kind in type) {
+const ajv = new Ajv()
+const validatorsMemo = new WeakMap<TSchema, ValidateFunction>()
+
+register({
+  test(type) {
+    return typeof type === "object" && type !== null && Kind in type
+  },
+  toJSON(type) {
     return type
-  }
-  return
+  },
+  async validate(type, value) {
+    let validate = validatorsMemo.get(type)
+    if (!validate) {
+      validate = ajv.compile(type)
+      validatorsMemo.set(type, validate)
+    }
+    assert(validate(value))
+    return value
+  },
 })

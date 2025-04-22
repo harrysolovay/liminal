@@ -1,27 +1,37 @@
 import { toJsonSchema } from "@valibot/to-json-schema"
-import { register } from "liminal-schema"
-import type { json } from "liminal-util"
+import { type LType, register } from "liminal-schema"
+import { LiminalAssertionError } from "liminal-util"
 import type { BaseIssue, BaseSchema } from "valibot"
 
 declare module "liminal-schema" {
   interface LTypes {
     [LiminalValibot]: LiminalValibot
   }
-  interface LStatics<_X> {
-    [LiminalValibot]: (schema: _X) => _X extends LiminalValibot<infer T> ? T : never
+  interface LStatics<_X extends LType> {
+    [LiminalValibot]: _X extends LiminalValibot<infer T> ? T : never
   }
 }
 
 export declare const LiminalValibot: unique symbol
 
-export type LiminalValibot<T = any> = BaseSchema<T, json.ValueObject, BaseIssue<any>>
+export type LiminalValibot<T = any> = BaseSchema<T, any, BaseIssue<any>>
 
-register((type) => {
-  if (
-    typeof type === "object" && type !== null && (type as any).kind === "schema"
-    && typeof (type as any)["~run"] === "function"
-  ) {
+register({
+  test(type) {
+    return (
+      typeof type === "object" && type !== null && (type as any).kind === "schema"
+      && typeof (type as any)["~run"] === "function"
+    )
+  },
+  toJSON(type) {
     return toJsonSchema(type)
-  }
-  return
+  },
+  async validate(type, value) {
+    const result = await type["~standard"].validate(value)
+    if (result.issues) {
+      throw new LiminalAssertionError(result.issues.map((issue) => issue.message).join("\n"))
+    } else {
+      return result.value
+    }
+  },
 })

@@ -1,6 +1,8 @@
 {
   "name": "liminal-typebox",
-  "publishConfig": { "access": "public" },
+  "publishConfig": {
+    "access": "public"
+  },
   "version": "0.0.0",
   "license": "Apache-2.0",
   "repository": {
@@ -10,9 +12,12 @@
   },
   "type": "module",
   "sideEffects": true,
-  "exports": { "./register": "./dist/register.js" },
+  "exports": {
+    "./register": "./dist/register.js"
+  },
   "peerDependencies": {
     "@sinclair/typebox": "^0.34.33",
+    "ajv": "^8.17.1",
     "liminal-schema": "^0.0.0"
   }
 }

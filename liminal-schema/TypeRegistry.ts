@@ -5,29 +5,39 @@ import { validateSchemaRoot } from "./validate.ts"
 export interface LTypes {}
 export type LType = LTypes[keyof LTypes]
 
-export interface LStatics<_X> {}
-export type LStatic<X extends LType> = ReturnType<LStatics<X>[keyof LStatics<X>]>
+export interface LStatics<_X extends LType> {}
+export type LStatic<X extends LType> = LStatics<X>[keyof LStatics<X>]
 
-export type LTypeAdapter<in X = any> = (type: X) => object | undefined
+export interface LTypeAdapter<in X extends LType = LType> {
+  test(value: unknown): boolean
+  toJSON(type: X): object
+  validate(type: X, value: any): LStatic<X> | Promise<LStatic<X>>
+}
 
 const adapters = new Set<LTypeAdapter>()
 export function register(adapter: LTypeAdapter) {
   adapters.add(adapter)
 }
 
-const schemaMemo = new WeakMap<LType, SchemaRoot>()
-export function toJSONSchema<X extends LType>(type: X): SchemaRoot {
-  let schema = schemaMemo.get(type)
-  if (schema) {
-    return schema
-  }
+export function adapter(type: LType): LTypeAdapter {
   for (const adapter of adapters) {
-    const maybeJSONSchema = adapter(type)
-    if (maybeJSONSchema) {
-      schema = validateSchemaRoot(maybeJSONSchema)
-      schemaMemo.set(type, schema)
-      return schema
+    if (adapter.test(type)) {
+      return adapter
     }
   }
   unreachable()
+}
+
+const schemaMemo = new WeakMap<LType, SchemaRoot>()
+export function toJSONSchema<X extends LType>(type: X): SchemaRoot {
+  let schema = schemaMemo.get(type)
+  if (!schema) {
+    schema = validateSchemaRoot(adapter(type).toJSON(type))
+    schemaMemo.set(type, schema)
+  }
+  return schema
+}
+
+export function validate<X extends LType>(type: X, value: unknown): LStatic<X> | Promise<LStatic<X>> {
+  return adapter(type).validate(type, value)
 }
