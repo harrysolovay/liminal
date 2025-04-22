@@ -1,28 +1,32 @@
 import { Schema as ESchema } from "effect"
 import { make } from "effect/Schema"
-import { type LType, register } from "liminal-schema"
+import { register } from "liminal-schema"
+import { json } from "liminal-util"
 
 declare module "liminal-schema" {
-  interface LTypes {
-    [EffectSchema]: EffectSchema
+  interface LTypes<_T> {
+    [EffectSchema]: EffectSchema<_T>
   }
-  interface LStatics<_X extends LType> {
-    [EffectSchema]: _X extends EffectSchema<infer T> ? T : never
+}
+
+type EffectSchema<O> = {
+  readonly [x in ESchema.TypeId]: {
+    readonly _A: (_: O) => O
+    readonly _I: (_: never) => json.ValueObject
+    readonly _R: (_: never) => never
   }
 }
 
 export declare const EffectSchema: unique symbol
 
-export type EffectSchema<T = any> = ESchema.Schema<T, any, never>
-
 register({
   test(type) {
     return ESchema.isSchema(type)
   },
-  toJSON(type) {
-    return make(type.ast)
+  schema(type) {
+    return make((type as any).ast)
   },
   async validate(type, value) {
-    return ESchema.decodeSync(type)(value)
+    return ESchema.decodeSync(type as never)(value)
   },
 })

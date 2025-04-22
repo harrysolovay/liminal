@@ -4,6 +4,7 @@ import "liminal-arktype/register"
 import "liminal-effect/register"
 import "liminal-zod3/register"
 import { type } from "arktype"
+import { Schema } from "effect"
 import { z } from "zod"
 
 const Activity = type({
@@ -19,6 +20,10 @@ const ZodActivity = z.object({
   description: z.string(),
 })
 
+const eType = Schema.Struct({
+  value: Schema.String,
+})
+
 await Agent(
   function*() {
     yield* L.model(openai("gpt-4o-mini"))
@@ -29,8 +34,9 @@ await Agent(
     while (i < 5) {
       // yield* L.assistant()
       const x = yield* L.assistant(Activity)
-      // const y = yield* L.assistant(ZodActivity)
-      activities.push(x)
+      const y = yield* L.assistant(ZodActivity)
+      yield* L.assistant(eType)
+      // activities.push(x)
       yield* L.user`Another please.`
       i++
     }

@@ -1,20 +1,15 @@
 import { toJsonSchema } from "@valibot/to-json-schema"
-import { type LType, register } from "liminal-schema"
+import { register } from "liminal-schema"
 import { LiminalAssertionError } from "liminal-util"
 import type { BaseIssue, BaseSchema } from "valibot"
 
 declare module "liminal-schema" {
-  interface LTypes {
-    [LiminalValibot]: LiminalValibot
-  }
-  interface LStatics<_X extends LType> {
-    [LiminalValibot]: _X extends LiminalValibot<infer T> ? T : never
+  interface LTypes<_T> {
+    [LiminalValibot]: BaseSchema<_T, any, BaseIssue<any>>
   }
 }
 
 export declare const LiminalValibot: unique symbol
-
-export type LiminalValibot<T = any> = BaseSchema<T, any, BaseIssue<any>>
 
 register({
   test(type) {
@@ -23,7 +18,7 @@ register({
       && typeof (type as any)["~run"] === "function"
     )
   },
-  toJSON(type) {
+  schema(type) {
     return toJsonSchema(type)
   },
   async validate(type, value) {

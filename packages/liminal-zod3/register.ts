@@ -1,25 +1,21 @@
-import { type LType, register } from "liminal-schema"
+import { register } from "liminal-schema"
 import { LiminalAssertionError } from "liminal-util"
 import { ZodType } from "zod"
 import { zodToJsonSchema } from "zod-to-json-schema"
 
 declare module "liminal-schema" {
-  interface LTypes {
-    [LiminalZod3]: LiminalZod3
-  }
-  interface LStatics<_X extends LType> {
-    [LiminalZod3]: _X extends LiminalZod3<infer T> ? T : never
+  interface LTypes<_T> {
+    [LiminalZod3]: ZodType<_T, any, any>
   }
 }
 
 export declare const LiminalZod3: unique symbol
-export type LiminalZod3<T = any> = ZodType<T, any, any>
 
 register({
   test(type) {
     return type instanceof ZodType
   },
-  toJSON(type) {
+  schema(type) {
     return zodToJsonSchema(type)
   },
   async validate(type, value) {
