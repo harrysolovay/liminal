@@ -54,69 +54,42 @@ inference.
 `conversation.ts`
 
 ```ts
-import { exec, L } from "liminal"
+import { Agent, L } from "liminal"
+import { ollama } from "liminal-ollama"
 
-export default function*() {
-  yield* L.declareLanguageModel("reasoning")
-  yield* L.system`
-    When an instruction is given, don't ask any follow-up questions.
-    Just reply to the best of your ability given the information you have.
-  `
-  yield* L
-    .user`Decide on a subtopic for us to discuss within the domain of technological futurism.`
-  yield* L.infer
-  yield* L
-    .user`Great, please teach something interesting about this choice of subtopic.`
-  yield* L.infer
-  let i = 0
-  while (i < 5) {
-    const userReply = yield* L.fork("infer-user-reply", function*() {
-      yield* L.user`Please reply to the last message on my behalf.`
-      return yield* L.infer
-    })
-    yield* L.user(userReply)
-    yield* L.infer
-  }
-  yield* L.user`Please summarize the key points from our conversation.`
-  return yield* L.infer
-}
-```
-
-> Note: `async function* Conversation() { // ...` is perfectly valid if you need
-> async/await.
-
-## Execution
-
-When executing the conversation, we bind the model implementation to the key
-with which we declared the model.
-
-In this example, we use a Vercel AI SDK `LanguageModelV1` (produced by the
-`openai` factory).
-
-```ts
-// ...
-
-import { openai } from "@ai-sdk/openai"
-import { AILanguageModel } from "liminal-ai"
-
-// From before.
-import conversation from "./conversation.ts"
-
-const result = await exec(Conversation, {
-  default: AILanguageModel(openai("gpt-4o-mini")),
-  bind: {
-    reasoning: AILanguageModel(openai("o3-mini")),
+await Agent(
+  function*() {
+    yield* L.model(ollama("gemma3:1b"))
+    yield* L.system`
+      When an instruction is given, don't ask any follow-up questions.
+      Just reply to the best of your ability given the information you have.
+    `
+    yield* L
+      .user`Decide on a subtopic for us to discuss within the domain of technological futurism.`
+    yield* L.assistant
+    yield* L
+      .user`Great, please teach something interesting about this choice of subtopic.`
+    yield* L.assistant
+    yield* L.emit(new MyEvent())
+    let i = 0
+    while (i < 3) {
+      const reply = yield* L.branch(function*() {
+        yield* L.user`Please reply to the last message on my behalf.`
+        return yield* L.assistant
+      })
+      yield* L.user(reply)
+      yield* L.assistant
+      i++
+    }
+    yield* L.user`Please summarize the key points from our conversation.`
+    return yield* L.assistant
   },
-})
-
-result satisfies Array<string>
+  { handler: console.log },
+)
 ```
 
-## Actions
-
-Actions are the values yielded from Liminal conversations (generators or other
-iterables/iterators). They tell the executor how to update internal state such
-as the model or tool selection.
+> Note: `async function*() { // ...` is perfectly valid if you wish to use await
+> promises.
 
 ---
 
