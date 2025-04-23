@@ -1,8 +1,8 @@
-import { assert, json } from "liminal-util"
-import type { Schema } from "./Schema.ts"
-import type { SchemaRoot } from "./SchemaRoot.ts"
+import { assert } from "liminal-util"
+import type { Schema, SchemaObject, SchemaTypeName } from "./Schema.ts"
+import { Value } from "./Value.ts"
 
-export function validateSchemaRoot(value: unknown): SchemaRoot {
+export function validateSchemaRoot(value: unknown): SchemaObject {
   assert(typeof value === "object")
   assert(value !== null)
   if ("$schema" in value) {
@@ -10,7 +10,7 @@ export function validateSchemaRoot(value: unknown): SchemaRoot {
   }
   assert("type" in value)
   assert(value.type === "object")
-  return validateSchema(value) as SchemaRoot
+  return validateSchema(value) as SchemaObject
 }
 
 export function validateSchema(value: unknown): Schema {
@@ -35,7 +35,7 @@ export function validateSchema(value: unknown): Schema {
       case "string": {
         assert(!("const" in value && "enum" in value))
         if ("const" in value) {
-          json.assert(value.const)
+          Value.assert(value.const)
         }
         if ("enum" in value) {
           assert(Array.isArray(value.enum))
@@ -73,7 +73,7 @@ export function validateSchema(value: unknown): Schema {
   return value as Schema
 }
 
-function isJSONTypeName(value: string): value is json.SchemaTypeName {
+function isJSONTypeName(value: string): value is SchemaTypeName {
   return !!({
     null: true,
     boolean: true,

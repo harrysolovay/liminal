@@ -1,11 +1,11 @@
-import type { SchemaRoot } from "liminal-schema"
+import type { SchemaObject } from "liminal-schema"
 import type { Message } from "./Message.ts"
 
 export type LEvent = InferenceRequested | Inferred | MessageAppended | FiberCreated | FiberStarted | FiberResolved
 
 export interface InferenceRequested extends LEventBase<"inference_requested"> {
   requestId: number
-  schema?: SchemaRoot
+  schema?: SchemaObject
 }
 
 export interface Inferred extends LEventBase<"inferred"> {
@@ -24,7 +24,8 @@ export interface FiberResolved extends LEventBase<"fiber_resolved"> {
 }
 
 interface LEventBase<K extends string> {
-  [LEventTag]: K
+  [LEventTag]: true
+  type: K
 }
 
 export const LEventTag: unique symbol = Symbol.for("liminal/LEvent")

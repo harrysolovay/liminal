@@ -11,7 +11,8 @@ export function* _message(role: MessageRole, content: Array<ContentPart>): _mess
   const [messageRegistry] = yield* state(MessageRegistry)
   const message: Message = { role, content }
   yield* emit<MessageAppended>({
-    [LEventTag]: "message_appended",
+    [LEventTag]: true,
+    type: "message_appended",
     message,
   })
   messageRegistry.append(message)

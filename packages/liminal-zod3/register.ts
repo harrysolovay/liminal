@@ -16,7 +16,7 @@ register({
     return type instanceof ZodType
   },
   schema(type) {
-    return zodToJsonSchema(type)
+    return zodToJsonSchema(type) // TODO
   },
   async validate(type, value) {
     const result = await type.safeParseAsync(value)

@@ -55,7 +55,8 @@ export function Fiber<T>(config: FiberConfig<T>): Fiber<T> {
     handler,
   } satisfies Omit<Fiber<T>, "T"> as Fiber<T>
   fiber.handler<FiberCreated>({
-    [LEventTag]: "fiber_created",
+    [LEventTag]: true,
+    type: "fiber_created",
   })
   return fiber
 
@@ -75,7 +76,8 @@ export function Fiber<T>(config: FiberConfig<T>): Fiber<T> {
       throw this.status.reason
     }
     this.handler<FiberStarted>({
-      [LEventTag]: "fiber_started",
+      [LEventTag]: true,
+      type: "fiber_started",
     })
     const { promise, resolve, reject } = Promise.withResolvers<T>()
     if (config.signal) {
@@ -104,7 +106,8 @@ export function Fiber<T>(config: FiberConfig<T>): Fiber<T> {
         }
         const { value } = current
         this.handler<FiberResolved>({
-          [LEventTag]: "fiber_resolved",
+          [LEventTag]: true,
+          type: "fiber_resolved",
           value,
         })
         resolve(value)

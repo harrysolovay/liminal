@@ -1,5 +1,5 @@
 import { unreachable } from "liminal-util"
-import type { SchemaRoot } from "./SchemaRoot.ts"
+import type { SchemaObject } from "./Schema.ts"
 import { validateSchemaRoot } from "./validate.ts"
 
 export interface LTypes<_T> {}
@@ -25,8 +25,8 @@ export function adapter(type: LType): LTypeAdapter {
   unreachable()
 }
 
-const schemaMemo = new WeakMap<LType, SchemaRoot>()
-export function toJSONSchema<X extends LType>(type: X): SchemaRoot {
+const schemaMemo = new WeakMap<LType, SchemaObject>()
+export function toJSONSchema<X extends LType>(type: X): SchemaObject {
   let schema = schemaMemo.get(type)
   if (!schema) {
     schema = validateSchemaRoot(adapter(type).schema(type))

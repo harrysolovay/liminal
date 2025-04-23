@@ -1,6 +1,5 @@
 import { Agent, L } from "liminal"
 import { openai } from "liminal-openai"
-// import "liminal-arktype/register"
 
 await Agent(
   function*() {
@@ -12,12 +11,19 @@ await Agent(
     yield* L.user`Decide on a subtopic for us to discuss within the domain of technological futurism.`
     yield* L.assistant
     yield* L.user`Great, please teach something interesting about this choice of subtopic.`
+    yield* L.assistant
     let i = 0
+    yield* L.emit(new MyEvent())
     while (i < 3) {
       const reply = yield* L.branch(function*() {
         yield* L.user`Please reply to the last message on my behalf.`
         return yield* L.assistant
       })
+      const childFiber = yield* L.fork(function*() {
+        yield* L.user`Please reply to the last message on my behalf.`
+        return ""
+      })
+      const result = yield* L.join(childFiber)
       yield* L.user(reply)
       yield* L.assistant
       i++
