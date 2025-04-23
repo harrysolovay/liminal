@@ -9,6 +9,8 @@ export function EventBase<B extends symbol, K extends string>(brand: B, type: K)
   return class implements EventBase<B, K> {
     readonly brand = brand
     readonly type = type
+
+    // Allows us to circumvent a private-symbol-related diagnostic: https://github.com/microsoft/TypeScript/issues/58496
     static {
       Object.defineProperties(this.prototype, {
         [inspect.custom]: {
