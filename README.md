@@ -30,14 +30,14 @@ Run one of the example files. The `chaining` example perhaps.
 bun examples/agents/chaining
 ```
 
-## Rationale
+<!-- ## Rationale
 
 - [Implicit Message Buffers &rarr;](./liminal.land/rationale/implicit_message_buffers.md)<br />Intuitive
   conventions-based approach to managing message buffers.
 - [Decoupling Conversations From Models &rarr;](./liminal.land/rationale/decoupling_conversations_from_models.md)<br />Ensure
   conversations can be executed with any provider/model.
 - [Eliminating Boilerplate &rarr;](./liminal.land/rationale/eliminating_boilerplate.md)<br />Avoid
-  the redundancies of inferencing and embedding.
+  the redundancies of inferencing and embedding. -->
 
 <!-- - [Type-safe Observability &rarr;](https://liminal.land/rationale/type-safe_observability)<br />Observe
   events from the entire conversation tree; infer event static types like with
