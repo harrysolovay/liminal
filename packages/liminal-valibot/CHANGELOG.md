@@ -1,5 +1,12 @@
 # liminal-valibot
 
+## 0.0.2
+
+### Patch Changes
+
+- Updated dependencies [284adab]
+  - liminal-schema@0.0.2
+
 ## 0.0.1
 
 ### Patch Changes
