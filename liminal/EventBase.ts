@@ -7,11 +7,7 @@ export abstract class EventBase<B extends symbol, K extends string> {
   ) {}
 
   [inspect.custom](depth: number, options: InspectOptions) {
-    const {
-      [this.brand]: _0,
-      type: _1,
-      ...rest
-    } = this
+    const { brand: _0, type: _1, ...rest } = this
     return `${this.constructor.name} ` + inspect(rest, { ...options, depth })
   }
 }

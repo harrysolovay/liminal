@@ -2,6 +2,10 @@ import type { Model } from "../Model.ts"
 
 /** An intrusive list for storing `Model`s. */
 export class ModelRegistry {
+  static make() {
+    return new ModelRegistry()
+  }
+
   declare head?: ModelRegistryNode | undefined
   declare tail?: ModelRegistryNode | undefined
 

@@ -1,7 +1,7 @@
-import type { Fiber } from "./Fiber.ts"
+import type { FiberConfig } from "./Fiber.ts"
 
 export interface Rune<out E = any> {
-  (fiber: Fiber): any
+  (fiber: FiberConfig): any
   [RuneKey]: E
 }
 

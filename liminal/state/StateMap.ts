@@ -1,4 +1,4 @@
-export class StateMap extends Map<StateConstructor<Cloneable>, Cloneable> {
+export class StateMap extends Map<StateFactory, Cloneable> {
   clone(): StateMap {
     const clone = new StateMap()
     for (const [key, value] of this.entries()) {
@@ -6,9 +6,18 @@ export class StateMap extends Map<StateConstructor<Cloneable>, Cloneable> {
     }
     return clone
   }
+
+  getOrInit<T extends Cloneable>(factory: StateFactory<T>): T {
+    let instance = this.get(factory)
+    if (!instance) {
+      instance = factory()
+      this.set(factory, instance)
+    }
+    return instance as never
+  }
 }
 
-export type StateConstructor<T extends Cloneable = Cloneable> = new() => T
+export type StateFactory<T extends Cloneable = Cloneable> = () => T
 
 export interface Cloneable {
   clone(): this

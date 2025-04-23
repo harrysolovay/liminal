@@ -1,13 +1,13 @@
-import type { Fiber } from "../Fiber.ts"
+import type { FiberConfig } from "../Fiber.ts"
 import type { Rune } from "../Rune.ts"
 import { rune } from "./rune.ts"
 
 export interface self {
-  [Symbol.iterator](): Generator<Rune<never>, Fiber>
+  [Symbol.iterator](): Generator<Rune<never>, FiberConfig>
 }
 
 export const self: self = {
   *[Symbol.iterator]() {
-    return yield* rune((fiber) => fiber)
+    return yield* rune((fiberConfig) => fiberConfig)
   },
 }
