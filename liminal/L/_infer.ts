@@ -11,9 +11,9 @@ import { rune } from "./rune.ts"
 export function* _infer(schema?: SchemaObject): Generator<Rune<LEvent>, string> {
   const modelRegistry = Context.getOrInit(ModelRegistry.make)
   const model = modelRegistry.peek()
+  assert(model)
   const messageRegistry = Context.getOrInit(MessageRegistry.make)
   const counter = Context.getOrInit(InferenceRequestCounter)
-  assert(model)
   const requestId = counter.next()
   yield* emit(new InferenceRequested(requestId, schema))
   const inference = yield* rune(() => model.resolve(messageRegistry.messages, schema))

@@ -16,6 +16,17 @@ conversations.
 - [Examples &rarr;](https://github.com/harrysolovay/liminal/tree/main/examples)<br />Examples
   illustrating common use cases. -->
 
+## Running Locally
+
+```ts
+// Once:
+git clone git@github.com:harrysolovay/liminal.git && cd liminal
+bun i && bun run build
+
+// Run example:
+bun examples/agents/chaining
+```
+
 ## Rationale
 
 - [Implicit Message Buffers &rarr;](./liminal.land/rationale/implicit_message_buffers.md)<br />Intuitive

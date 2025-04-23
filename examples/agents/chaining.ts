@@ -1,8 +1,13 @@
-import { L } from "liminal"
+import { Agent, L } from "liminal"
 import { z } from "zod"
 import "liminal-zod3/register"
+import { openai } from "@ai-sdk/openai"
+import { ai } from "liminal-ai"
 
-export default function*() {
+const result = await Agent(function*() {
+  yield* L.model(ai(openai("gpt-4o-mini", {
+    structuredOutputs: true,
+  })))
   yield* L
     .system`Write persuasive marketing copy for: Buffy The Vampire Slayer. Focus on benefits and emotional appeal.`
   yield* L.user`Please generate the first draft.`
@@ -34,4 +39,10 @@ export default function*() {
     copy = yield* L.assistant
   }
   return { copy, qualityMetrics }
-}
+}, {
+  handler(event) {
+    console.log(event)
+  },
+})
+
+console.log(result)

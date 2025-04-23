@@ -10,7 +10,8 @@ export function EventBase<B extends symbol, K extends string>(brand: B, type: K)
     readonly brand = brand
     readonly type = type
 
-    // Allows us to circumvent a private-symbol-related diagnostic: https://github.com/microsoft/TypeScript/issues/58496
+    // Allows us to circumvent a false positive ts error related to private symbols.
+    // https://github.com/microsoft/TypeScript/issues/58496
     static {
       Object.defineProperties(this.prototype, {
         [inspect.custom]: {

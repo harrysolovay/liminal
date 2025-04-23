@@ -9,6 +9,7 @@ dotenvx
 dprint
 eventsource
 fuzzystrmatch
+harrysolovay
 iconoir
 inferencing
 inheritables
