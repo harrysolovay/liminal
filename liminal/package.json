@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "0.5.3",
+  "version": "0.5.4",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -20,8 +20,8 @@
   },
   "dependencies": {
     "conditional-type-checks": "^1.0.6",
-    "liminal-schema": "^0.0.1",
-    "liminal-util": "^0.0.1"
+    "liminal-schema": "^0.0.2",
+    "liminal-util": "^0.0.2"
   },
   "peerDependenciesMeta": {
     "conditional-type-checks": {

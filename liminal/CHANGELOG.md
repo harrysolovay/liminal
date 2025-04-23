@@ -1,5 +1,14 @@
 # liminal
 
+## 0.5.4
+
+### Patch Changes
+
+- 284adab: Reintroduce AI SDK adapter and begin simplifying runic execution.
+- Updated dependencies [284adab]
+  - liminal-schema@0.0.2
+  - liminal-util@0.0.2
+
 ## 0.5.3
 
 ### Patch Changes

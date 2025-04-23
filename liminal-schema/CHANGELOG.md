@@ -1,5 +1,11 @@
 # liminal-schema
 
+## 0.0.2
+
+### Patch Changes
+
+- 284adab: Reintroduce AI SDK adapter and begin simplifying runic execution.
+
 ## 0.0.1
 
 ### Patch Changes
