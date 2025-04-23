@@ -1,8 +1,6 @@
 import { Agent, L } from "liminal"
 import { openai } from "liminal-openai"
 import "liminal-arktype/register"
-import "liminal-effect/register"
-import "liminal-zod3/register"
 import { type } from "arktype"
 
 const Activity = type({

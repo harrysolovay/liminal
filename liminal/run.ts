@@ -1,31 +1,29 @@
-import type { FiberConfig } from "./Fiber.ts"
+import { Context } from "./Context.ts"
+import type { Rune } from "./Rune.ts"
 import { Runic } from "./Runic.ts"
-import { context } from "./state/Context.ts"
+import { Fiber } from "./state/Fiber.ts"
 
-export async function run<X extends Runic>(
-  runic: X,
-  config: FiberConfig<Runic.T<X>>,
-): Promise<Runic.T<X>> {
-  const { promise, resolve, reject } = Promise.withResolvers<Runic.T<X>>()
-  if (config.signal) {
-    if (config.signal.aborted) {
-      reject(config.signal.reason)
-      return await promise
-    } else {
-      config.signal.addEventListener("abort", () => {
-        reject(config.signal?.reason)
-      })
-    }
+export function run<T>(runic: Runic<Rune, T>, context?: Context): Promise<T> {
+  const { promise, resolve, reject } = Promise.withResolvers<T>()
+  const { signal } = Context.getAssert(Fiber.make)
+  if (signal.aborted) {
+    reject(signal.reason)
+    return promise
+  } else {
+    signal.addEventListener("abort", () => {
+      reject(signal?.reason)
+    })
   }
+
   queueMicrotask(() =>
-    context.fork(async () => {
+    Context.storage.run(context ?? Context.unwrap(), async () => {
       const iterator = Runic.unwrap(runic)
       let nextArg: any
       try {
-        let current = await iterator.next(config)
+        let current = await iterator.next()
         while (!current.done) {
           const rune = current.value
-          nextArg = await rune(config)
+          nextArg = await rune()
           current = await iterator.next(nextArg)
         }
         const { value } = current
@@ -35,5 +33,5 @@ export async function run<X extends Runic>(
       }
     })
   )
-  return await promise
+  return promise
 }

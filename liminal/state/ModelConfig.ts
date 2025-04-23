@@ -1,6 +1,17 @@
 export class ModelConfig {
-  static from(config: Partial<ModelConfig>) {
-    return Object.assign(new ModelConfig(), config)
+  static make(config?: ModelConfig) {
+    if (config) {
+      return Object.assign(new ModelConfig(), {
+        ...this,
+        logitBias: { ...config.logitBias },
+        sampling: {
+          ...config.sampling,
+          stopSequences: [...(config.sampling?.stopSequences ?? [])],
+          penalty: { ...config.sampling?.penalty },
+        },
+      })
+    }
+    return new ModelConfig()
   }
 
   /** Seed used for deterministic sampling. */
@@ -9,19 +20,6 @@ export class ModelConfig {
   declare logitBias?: Record<string, number>
   /** Sampling configuration. */
   declare sampling?: SamplerConfig
-
-  /** Creates a copy of the configuration. */
-  clone() {
-    return Object.assign(new ModelConfig(), {
-      ...this,
-      logitBias: { ...this.logitBias },
-      sampling: {
-        ...this.sampling,
-        stopSequences: [...(this.sampling?.stopSequences ?? [])],
-        penalty: { ...this.sampling?.penalty },
-      },
-    })
-  }
 }
 
 export interface SamplerConfig {

@@ -1,7 +1,5 @@
-export * as _util from "liminal-util"
 export * from "./Agent.ts"
 export * from "./EventBase.ts"
-export * from "./Fiber.ts"
 export * as L from "./L/L.ts"
 export * from "./LEvent.ts"
 export * from "./Message.ts"

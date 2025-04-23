@@ -1,12 +1,16 @@
-import { openai } from "@ai-sdk/openai"
-import { Agent, L } from "liminal"
-import { ai } from "liminal-ai"
+import { Agent, EventBase, L } from "liminal"
+import { ollama } from "liminal-ollama"
+
+const g = Symbol()
+class MyEvent extends EventBase<typeof g, "MyEvent"> {
+  constructor() {
+    super(g, "MyEvent")
+  }
+}
 
 await Agent(
   function*() {
-    yield* L.model(ai(openai("gpt-4o", {
-      structuredOutputs: true,
-    })))
+    yield* L.model(ollama("gemma3:1b"))
     yield* L.system`
       When an instruction is given, don't ask any follow-up questions.
       Just reply to the best of your ability given the information you have.
@@ -15,6 +19,7 @@ await Agent(
     yield* L.assistant
     yield* L.user`Great, please teach something interesting about this choice of subtopic.`
     yield* L.assistant
+    yield* L.emit(new MyEvent())
     let i = 0
     while (i < 3) {
       const reply = yield* L.branch(function*() {
@@ -29,8 +34,8 @@ await Agent(
     return yield* L.assistant
   },
   {
-    handler(event) {
-      console.log(event)
+    handler(event, fiberInfo) {
+      console.log(event, fiberInfo)
     },
   },
 )
