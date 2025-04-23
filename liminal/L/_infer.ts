@@ -22,14 +22,19 @@ export function* _infer(schema?: SchemaObject): Generator<Rune<LEvent>, string> 
   return inference
 }
 
-function InferenceRequestCounter(count: number = 0) {
+function InferenceRequestCounter(instance?: Counter) {
   return {
-    count,
+    count: instance?.count ?? 0,
     next() {
       return this.count++
     },
     clone() {
-      return InferenceRequestCounter(this.count)
+      return InferenceRequestCounter(this)
     },
   }
+}
+
+interface Counter {
+  count: number
+  next(): number
 }

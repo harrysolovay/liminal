@@ -17,7 +17,7 @@ export class StateMap extends Map<StateFactory, Cloneable> {
   }
 }
 
-export type StateFactory<T extends Cloneable = Cloneable> = () => T
+export type StateFactory<T = any> = (instance?: T) => T
 
 export interface Cloneable {
   clone(): this

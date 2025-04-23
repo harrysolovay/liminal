@@ -1,9 +1,12 @@
+import { openai } from "@ai-sdk/openai"
 import { Agent, L } from "liminal"
-import { openai } from "liminal-openai"
+import { ai } from "liminal-ai"
 
 await Agent(
   function*() {
-    yield* L.model(openai("gpt-4o"))
+    yield* L.model(ai(openai("gpt-4o", {
+      structuredOutputs: true,
+    })))
     yield* L.system`
       When an instruction is given, don't ask any follow-up questions.
       Just reply to the best of your ability given the information you have.

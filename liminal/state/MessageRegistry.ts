@@ -2,8 +2,8 @@ import type { Message } from "../Message.ts"
 
 // TODO: marks and tags
 export class MessageRegistry {
-  static make() {
-    return new MessageRegistry()
+  static make(messageRegistry?: MessageRegistry) {
+    return new MessageRegistry(messageRegistry?.messages ? [...messageRegistry?.messages] : undefined)
   }
 
   messages: Array<Message>
