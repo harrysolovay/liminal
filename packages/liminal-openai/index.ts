@@ -1,5 +1,5 @@
 import type { Model } from "liminal"
-import { _util } from "liminal"
+import { assert } from "liminal-util"
 import { OpenAI } from "openai"
 import type { ResponsesModel } from "openai/resources.mjs"
 import type { ResponseInputContent, ResponseInputItem } from "openai/resources/responses/responses.js"
@@ -28,9 +28,9 @@ export function openai(model: ResponsesModel, client: OpenAI = new OpenAI()): Mo
       })
       const { output } = response
       const [message] = output
-      _util.assert(message?.type === "message")
+      assert(message?.type === "message")
       const [content] = message.content
-      _util.assert(content?.type === "output_text")
+      assert(content?.type === "output_text")
       return content.text
     },
   }

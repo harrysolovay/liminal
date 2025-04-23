@@ -15,14 +15,6 @@ export class ModelRegistry {
   declare head?: ModelRegistryNode | undefined
   declare tail?: ModelRegistryNode | undefined
 
-  clone(): ModelRegistry {
-    const clone = new ModelRegistry()
-    for (let node = this?.head; node; node = node.next) {
-      clone.register(node.model)
-    }
-    return clone
-  }
-
   peek(): Model | undefined {
     return this.tail?.model
   }

@@ -1,5 +1,5 @@
 import { type CoreMessage, generateObject, generateText, jsonSchema, type LanguageModelV1 } from "ai"
-import { _util, type Message, type Model } from "liminal"
+import { type Message, type Model } from "liminal"
 import { assert } from "liminal-util"
 
 export function ai(model: LanguageModelV1): Model {
