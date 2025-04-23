@@ -2,6 +2,16 @@ import type { Model } from "../Model.ts"
 
 /** An intrusive list for storing `Model`s. */
 export class ModelRegistry {
+  static make(modelRegistry?: ModelRegistry) {
+    const instance = new ModelRegistry()
+    if (modelRegistry) {
+      for (let node = modelRegistry.head; node; node = node.next) {
+        instance.register(node.model)
+      }
+    }
+    return instance
+  }
+
   declare head?: ModelRegistryNode | undefined
   declare tail?: ModelRegistryNode | undefined
 

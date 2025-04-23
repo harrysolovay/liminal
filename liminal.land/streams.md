@@ -7,37 +7,7 @@ representing a list of chunks from the model.
 
 ```ts
 function* g() {
-  yield* L.user("write a poem")
-
-  const stream = L.fork(L.assistant.stream(stream => stream))
-
-
-
-  const result = yield* L.assistant.stream((stream: ReadableStream) => {
-    ...
-    return 123
-  })
-
-  result == 123
-
-    const stream =  yield* L.assistant.stream()
-
-  let message = ""
-  for await(const chunk of stream) {
-message += chunk
-  }
-
-  yield* L.user("your poem was " + message.length " characters long");
-
-
-
-  const final = yield* L.assistant.stream(function*(chunk) {
-    // ...
-  })
-
   const stream = yield* L.stream()
-
-  yield* L.user("write everything in ALL CAPS")
 
   stream satisfies ReadableStream<string>
 }

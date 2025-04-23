@@ -1,3 +1,5 @@
+// // @ts-nocheck
+
 // import { L } from "liminal"
 
 // export default function*() {
@@ -6,15 +8,15 @@
 //   yield* L.user`Rewrite it in whatever way you think best.`
 //   const variants = yield* L.branch({
 //     *a() {
-//       // yield* L.declareModel("one", "language")
+//       yield* L.declareModel("one", "language")
 //       return yield* L.assistant
 //     },
 //     *b() {
-//       // yield* L.declareModel("two", "language")
+//       yield* L.declareModel("two", "language")
 //       return yield* L.assistant
 //     },
 //     *c() {
-//       // yield* L.declareModel("three", "language")
+//       yield* L.declareModel("three", "language")
 //       return yield* L.assistant
 //     },
 //   })

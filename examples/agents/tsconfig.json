@@ -20,6 +20,9 @@
     },
     {
       "path": "../../packages/liminal-openai"
+    },
+    {
+      "path": "../../packages/liminal-ai"
     }
   ]
 }

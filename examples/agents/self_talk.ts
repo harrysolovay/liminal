@@ -1,10 +1,12 @@
+import { openai } from "@ai-sdk/openai"
 import { Agent, L } from "liminal"
-import { openai } from "liminal-openai"
-// import "liminal-arktype/register"
+import { ai } from "liminal-ai"
 
 await Agent(
   function*() {
-    yield* L.model(openai("gpt-4o"))
+    yield* L.model(ai(openai("gpt-4o", {
+      structuredOutputs: true,
+    })))
     yield* L.system`
       When an instruction is given, don't ask any follow-up questions.
       Just reply to the best of your ability given the information you have.
@@ -12,6 +14,7 @@ await Agent(
     yield* L.user`Decide on a subtopic for us to discuss within the domain of technological futurism.`
     yield* L.assistant
     yield* L.user`Great, please teach something interesting about this choice of subtopic.`
+    yield* L.assistant
     let i = 0
     while (i < 3) {
       const reply = yield* L.branch(function*() {
@@ -31,13 +34,3 @@ await Agent(
     },
   },
 )
-
-function* child() {
-  yield* L.emit(new MyEvent())
-  yield* L.user`Hello`
-  return yield* L.assistant
-}
-
-class MyEvent {
-  readonly type = "my_event"
-}

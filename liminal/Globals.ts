@@ -3,7 +3,7 @@ export interface Globals {
 }
 
 export interface EventInfo {
-  fiber: number
+  // fiber: number
   timestamp: number
   // group
   // depth

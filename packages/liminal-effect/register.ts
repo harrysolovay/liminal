@@ -1,7 +1,6 @@
 import { Schema as ESchema } from "effect"
 import { make } from "effect/Schema"
-import { register } from "liminal-schema"
-import { json } from "liminal-util"
+import { register, type ValueObject } from "liminal-schema"
 
 declare module "liminal-schema" {
   interface LTypes<_T> {
@@ -12,7 +11,7 @@ declare module "liminal-schema" {
 type EffectSchema<O> = {
   readonly [x in ESchema.TypeId]: {
     readonly _A: (_: O) => O
-    readonly _I: (_: never) => json.ValueObject
+    readonly _I: (_: never) => ValueObject
     readonly _R: (_: never) => never
   }
 }

@@ -1,4 +1,4 @@
-import type { SchemaArray } from "../SchemaArray.ts"
+import type { SchemaArray } from "../Schema.ts"
 import type { LType } from "./LType.ts"
 import type { LTypeBase } from "./LTypeBase.ts"
 

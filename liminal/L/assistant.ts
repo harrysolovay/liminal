@@ -1,7 +1,4 @@
-import type { StandardSchemaV1 } from "@standard-schema/spec"
-import { type LType, toJSONSchema } from "liminal-schema"
-import type { json } from "liminal-util"
-import { LiminalAssertionError } from "liminal-util"
+import { type LType, toJSONSchema, validate } from "liminal-schema"
 import type { LEvent } from "../LEvent.ts"
 import type { Rune } from "../Rune.ts"
 import { _infer } from "./_infer.ts"
@@ -18,11 +15,7 @@ export const assistant: assistant = Object.assign(
     const inference = yield* _infer(schema)
     yield* _message("assistant", [{ part: inference }])
     const input = JSON.parse(inference)
-    const result = yield* rune(() => (type as StandardSchemaV1<json.ValueObject, T>)["~standard"].validate(input))
-    if (result.issues) {
-      throw new LiminalAssertionError(JSON.stringify(result.issues, null, 2))
-    }
-    return result.value
+    return yield* rune(() => validate(type, input))
   },
   {
     *[Symbol.iterator]() {
