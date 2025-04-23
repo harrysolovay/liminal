@@ -16,8 +16,6 @@ output, configuring tools, emitting events and forking conversations.
 
 <!-- - [llms.txt &rarr;](./llms.txt)<br />Chunks of truth to be fed into LLMs. -->
 
-<!-- - [llms.txt &rarr;](./llms.txt)<br />Chunks of truth to be fed into LLMs. -->
-
 ## Running [Examples](./examples/agents)
 
 Clone and build Liminal.
