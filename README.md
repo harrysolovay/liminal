@@ -20,14 +20,14 @@ conversations.
 
 Clone and build Liminal.
 
-```ts
+```sh
 git clone git@github.com:harrysolovay/liminal.git && cd liminal
 bun i && bun run build
 ```
 
 Run one of the example files. The `chaining` example perhaps.
 
-```ts
+```sh
 bun examples/agents/chaining
 ```
 
