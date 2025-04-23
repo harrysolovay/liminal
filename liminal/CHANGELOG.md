@@ -1,5 +1,11 @@
 # liminal
 
+## 0.5.5
+
+### Patch Changes
+
+- 43afd27: Fixing misc. bugs and refactoring context management.
+
 ## 0.5.4
 
 ### Patch Changes

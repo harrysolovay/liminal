@@ -1,5 +1,13 @@
 # liminal-openai
 
+## 0.0.2
+
+### Patch Changes
+
+- 43afd27: Fixing misc. bugs and refactoring context management.
+- Updated dependencies [43afd27]
+  - liminal@0.5.5
+
 ## 0.0.1
 
 ### Patch Changes
