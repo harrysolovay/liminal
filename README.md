@@ -16,14 +16,18 @@ conversations.
 - [Examples &rarr;](https://github.com/harrysolovay/liminal/tree/main/examples)<br />Examples
   illustrating common use cases. -->
 
-## Running Locally
+## Running Examples
+
+Clone and build Liminal.
 
 ```ts
-// Once:
 git clone git@github.com:harrysolovay/liminal.git && cd liminal
 bun i && bun run build
+```
 
-// Run example:
+Run one of the example files. The `chaining` example perhaps.
+
+```ts
 bun examples/agents/chaining
 ```
 
