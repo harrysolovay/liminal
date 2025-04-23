@@ -2,11 +2,7 @@ import { Agent, EventBase, L } from "liminal"
 import { ollama } from "liminal-ollama"
 
 const g = Symbol()
-class MyEvent extends EventBase<typeof g, "MyEvent"> {
-  constructor() {
-    super(g, "MyEvent")
-  }
-}
+class MyEvent extends EventBase(g, "MyEvent") {}
 
 await Agent(
   function*() {
