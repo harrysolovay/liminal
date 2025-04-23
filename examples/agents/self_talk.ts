@@ -13,17 +13,11 @@ await Agent(
     yield* L.user`Great, please teach something interesting about this choice of subtopic.`
     yield* L.assistant
     let i = 0
-    yield* L.emit(new MyEvent())
     while (i < 3) {
       const reply = yield* L.branch(function*() {
         yield* L.user`Please reply to the last message on my behalf.`
         return yield* L.assistant
       })
-      const childFiber = yield* L.fork(function*() {
-        yield* L.user`Please reply to the last message on my behalf.`
-        return ""
-      })
-      const result = yield* L.join(childFiber)
       yield* L.user(reply)
       yield* L.assistant
       i++
@@ -37,13 +31,3 @@ await Agent(
     },
   },
 )
-
-function* child() {
-  yield* L.emit(new MyEvent())
-  yield* L.user`Hello`
-  return yield* L.assistant
-}
-
-class MyEvent {
-  readonly type = "my_event"
-}

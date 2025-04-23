@@ -85,22 +85,20 @@
     },
     "liminal": {
       "name": "liminal",
-      "version": "0.5.2",
+      "version": "0.5.3",
       "bin": {
         "liminal": "./dist/cli/main.js",
       },
       "dependencies": {
-        "@standard-schema/spec": "^1.0.0",
         "conditional-type-checks": "^1.0.6",
-        "liminal-schema": "^0.0.0",
-        "liminal-util": "^0.0.0",
+        "liminal-schema": "^0.0.1",
+        "liminal-util": "^0.0.1",
       },
     },
     "liminal-schema": {
       "name": "liminal-schema",
-      "version": "0.0.0",
+      "version": "0.0.1",
       "peerDependencies": {
-        "@standard-schema/spec": "^1.0.0",
         "conditional-type-checks": "^1.0.6",
       },
       "optionalPeers": [
@@ -109,7 +107,7 @@
     },
     "liminal-util": {
       "name": "liminal-util",
-      "version": "0.0.0",
+      "version": "0.0.1",
     },
     "liminal.land": {
       "name": "liminal.land",
@@ -130,7 +128,7 @@
     },
     "packages/liminal-ai": {
       "name": "liminal-ai",
-      "version": "0.0.3",
+      "version": "0.0.4",
       "peerDependencies": {
         "ai": "^4.1.61",
         "liminal": "^0.5.2",
@@ -145,7 +143,7 @@
     },
     "packages/liminal-arktype": {
       "name": "liminal-arktype",
-      "version": "0.0.0",
+      "version": "0.0.1",
       "peerDependencies": {
         "arktype": "^2.1.10",
         "liminal-schema": "^0.0.0",
@@ -153,7 +151,7 @@
     },
     "packages/liminal-effect": {
       "name": "liminal-effect",
-      "version": "0.0.0",
+      "version": "0.0.1",
       "peerDependencies": {
         "effect": "^3.13.12",
         "liminal-schema": "^0.0.0",
@@ -161,7 +159,7 @@
     },
     "packages/liminal-ollama": {
       "name": "liminal-ollama",
-      "version": "0.0.1",
+      "version": "0.0.2",
       "peerDependencies": {
         "liminal": "^0.5.2",
         "ollama": "^0.5.14",
@@ -169,7 +167,7 @@
     },
     "packages/liminal-openai": {
       "name": "liminal-openai",
-      "version": "0.0.0",
+      "version": "0.0.1",
       "peerDependencies": {
         "liminal": "^0.5.2",
         "openai": "^4.95.1",
@@ -177,7 +175,7 @@
     },
     "packages/liminal-typebox": {
       "name": "liminal-typebox",
-      "version": "0.0.0",
+      "version": "0.0.1",
       "peerDependencies": {
         "@sinclair/typebox": "^0.34.33",
         "ajv": "^8.17.1",
@@ -186,7 +184,7 @@
     },
     "packages/liminal-valibot": {
       "name": "liminal-valibot",
-      "version": "0.0.0",
+      "version": "0.0.1",
       "peerDependencies": {
         "@valibot/to-json-schema": "^1.0.0",
         "liminal-schema": "^0.0.0",
@@ -195,7 +193,7 @@
     },
     "packages/liminal-zod3": {
       "name": "liminal-zod3",
-      "version": "0.0.0",
+      "version": "0.0.1",
       "peerDependencies": {
         "liminal-schema": "^0.0.0",
         "liminal-util": "^0.0.0",

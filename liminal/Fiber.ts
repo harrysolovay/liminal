@@ -1,5 +1,5 @@
 import type { Globals } from "./Globals.ts"
-import { type FiberCreated, type FiberResolved, type FiberStarted, LEventTag } from "./LEvent.ts"
+import { FiberCreated, FiberResolved, FiberStarted } from "./LEvent.ts"
 import type { Rune } from "./Rune.ts"
 import { Runic } from "./Runic.ts"
 import { DefaultStateMap } from "./state/DefaultStateMap.ts"
@@ -54,10 +54,8 @@ export function Fiber<T>(config: FiberConfig<T>): Fiber<T> {
     run,
     handler,
   } satisfies Omit<Fiber<T>, "T"> as Fiber<T>
-  fiber.handler<FiberCreated>({
-    [LEventTag]: true,
-    type: "fiber_created",
-  })
+
+  fiber.handler(new FiberCreated())
   return fiber
 
   function handler<E>(this: Fiber<T>, event: E): void {
@@ -75,10 +73,7 @@ export function Fiber<T>(config: FiberConfig<T>): Fiber<T> {
     } else if (this.status.type === "rejected") {
       throw this.status.reason
     }
-    this.handler<FiberStarted>({
-      [LEventTag]: true,
-      type: "fiber_started",
-    })
+    this.handler(new FiberStarted())
     const { promise, resolve, reject } = Promise.withResolvers<T>()
     if (config.signal) {
       if (config.signal.aborted) {
@@ -105,11 +100,7 @@ export function Fiber<T>(config: FiberConfig<T>): Fiber<T> {
           current = await iterator.next(nextArg)
         }
         const { value } = current
-        this.handler<FiberResolved>({
-          [LEventTag]: true,
-          type: "fiber_resolved",
-          value,
-        })
+        this.handler(new FiberResolved(value))
         resolve(value)
       } catch (reason: unknown) {
         reject(reason)
