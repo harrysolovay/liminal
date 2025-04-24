@@ -1,21 +1,20 @@
-import type { Model } from "../Model.ts"
+import { ContextHandle } from "./Context.ts"
+import type { Model } from "./Model.ts"
 
 /** An intrusive list for storing `Model`s. */
 export class ModelRegistry {
-  static make(modelRegistry?: ModelRegistry) {
-    const instance = new ModelRegistry()
-    if (modelRegistry) {
-      for (let node = modelRegistry.head; node; node = node.next) {
-        instance.register(node.model)
-      }
-    }
-    return instance
-  }
-
   declare head?: ModelRegistryNode | undefined
   declare tail?: ModelRegistryNode | undefined
 
-  peek(): Model | undefined {
+  constructor(models?: Array<Model>) {
+    if (models) {
+      for (const model of models) {
+        this.register(model)
+      }
+    }
+  }
+
+  peek() {
     return this.tail?.model
   }
 
@@ -33,7 +32,7 @@ export class ModelRegistry {
     return node
   }
 
-  remove(node: ModelRegistryNode): void {
+  remove(node: ModelRegistryNode) {
     if (node.prev) {
       node.prev.next = node.next
     }
@@ -55,3 +54,11 @@ export interface ModelRegistryNode {
   model: Model
   next?: ModelRegistryNode | undefined
 }
+
+export const ModelRegistryContext: ContextHandle<ModelRegistry> = ContextHandle(({ head }) => {
+  const instance = new ModelRegistry()
+  for (let node = head; node; node = node.next) {
+    instance.register(node.model)
+  }
+  return instance
+})

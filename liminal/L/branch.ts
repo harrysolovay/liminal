@@ -1,8 +1,7 @@
 import { Context } from "../Context.ts"
-import { run } from "../run.ts"
+import { Fiber } from "../Fiber.ts"
 import { type Rune } from "../Rune.ts"
 import type { Runic } from "../Runic.ts"
-import { Fiber } from "../state/Fiber.ts"
 import { rune } from "./rune.ts"
 
 export interface branch<Y extends Rune, T> extends Generator<Y, T> {}
@@ -15,23 +14,20 @@ export function branch<XR extends Record<keyof any, Runic>>(
   runics: XR,
 ): branch<Runic.Y<XR[keyof XR]> | Rune<never>, { [K in keyof XR]: Runic.T<XR[K]> }>
 export function* branch(value: Runic | Array<Runic> | Record<keyof any, Runic>): branch<Rune, any> {
-  const parent = Context.get(Fiber.make)
+  const context = Context.ensure()
+  const parent = yield* rune((fiber) => fiber)
   if (Array.isArray(value)) {
-    const runners = value.map((runic) => {
-      const context = Context.make(Context.unwrap())
-      context.set(Fiber.make, new Fiber(parent))
-      return () => run(runic, context)
-    })
-    return yield* rune(() => Promise.all(runners.map((runner) => runner())))
+    const fibers = value.map((runic) => context.clone().run(() => Fiber(runic, parent)))
+    return yield* rune(() => Promise.all(fibers.map(({ resolve }) => resolve())))
   } else if (typeof value === "object") {
-    const runners = Object.entries(value).map(([key, runic]) => {
-      const context = Context.make(Context.unwrap())
-      context.set(Fiber.make, new Fiber(parent))
-      return async () => [key, await run(runic, context)]
-    })
-    return yield* rune(() => Promise.all(runners.map((runner) => runner())).then(Object.fromEntries))
+    const entries = Object.entries(value)
+    const fibers = entries.map(([_key, runic]) => context.clone().run(() => Fiber(runic, parent)))
+    return yield* rune(() =>
+      Promise
+        .all(fibers.map(({ resolve }, i) => resolve().then((value) => [entries[i]![0], value])))
+        .then(Object.fromEntries)
+    )
   }
-  const context = Context.make(Context.unwrap())
-  context.set(Fiber.make, new Fiber(parent))
-  return yield* rune(() => run(typeof value === "function" ? value() : value, context))
+  const fiber = context.clone().run(() => Fiber(typeof value === "function" ? value() : value, parent))
+  return yield* rune(() => fiber.resolve())
 }

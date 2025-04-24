@@ -1,10 +1,11 @@
+import { Fiber } from "../Fiber.ts"
 import { type Rune, RuneKey } from "../Rune.ts"
 
 export interface rune<T> extends Iterable<Rune<never>, T> {
   <E>(): Generator<Rune<E>, T>
 }
 
-export function rune<R>(source: () => R): rune<Awaited<R>> {
+export function rune<R>(source: (fiber: Fiber) => R): rune<Awaited<R>> {
   return Object.assign(
     function*<E>(): Generator<Rune<E>, Awaited<R>> {
       return yield Object.assign(source, { [RuneKey]: {} as never })

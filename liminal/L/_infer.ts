@@ -1,39 +1,33 @@
 import type { SchemaObject } from "liminal-schema"
 import { assert } from "liminal-util"
-import { Context } from "../Context.ts"
+import { Context, ContextHandle } from "../Context.ts"
 import { InferenceRequested, Inferred, type LEvent } from "../LEvent.ts"
+import { MessageRegistryContext } from "../MessageRegistry.ts"
+import { ModelRegistryContext } from "../ModelRegistry.ts"
 import type { Rune } from "../Rune.ts"
-import { MessageRegistry } from "../state/MessageRegistry.ts"
-import { ModelRegistry } from "../state/ModelRegistry.ts"
 import { emit } from "./emit.ts"
 import { rune } from "./rune.ts"
 
 export function* _infer(schema?: SchemaObject): Generator<Rune<LEvent>, string> {
-  const modelRegistry = Context.getOrInit(ModelRegistry.make)
+  const context = Context.ensure()
+  const modelRegistry = context.get(ModelRegistryContext)
+  assert(modelRegistry)
   const model = modelRegistry.peek()
   assert(model)
-  const messageRegistry = Context.getOrInit(MessageRegistry.make)
-  const counter = Context.getOrInit(InferenceRequestCounter)
-  const requestId = counter.next()
+  const requestId = context.getOrInit(InferenceRequestCounterContext, () => new InferenceRequestCounter()).next()
   yield* emit(new InferenceRequested(requestId, schema))
+  const messageRegistry = context.get(MessageRegistryContext)
+  assert(messageRegistry)
   const inference = yield* rune(() => model.resolve(messageRegistry.messages, schema))
   yield* emit(new Inferred(requestId, inference))
   return inference
 }
 
-function InferenceRequestCounter(instance?: Counter) {
-  return {
-    count: instance?.count ?? 0,
-    next() {
-      return this.count++
-    },
-    clone() {
-      return InferenceRequestCounter(this)
-    },
+class InferenceRequestCounter {
+  count: number = 0
+  next(): number {
+    return this.count++
   }
 }
 
-interface Counter {
-  count: number
-  next(): number
-}
+const InferenceRequestCounterContext: ContextHandle<InferenceRequestCounter> = ContextHandle()

@@ -1,44 +1,52 @@
 import { assert } from "liminal-util"
 import { AsyncLocalStorage } from "node:async_hooks"
 
-export class Context extends Map<StateFactory, unknown> {
-  static storage: AsyncLocalStorage<Context> = new AsyncLocalStorage<Context>()
+const storage = new AsyncLocalStorage<Context>()
 
-  static make(context?: Context): Context {
-    const instance = new Context()
-    if (context) {
-      for (const [key, value] of context.entries()) {
-        instance.set(key, key(value))
-      }
-    }
-    return instance
-  }
-
-  static unwrap(): Context {
-    const context = this.storage.getStore()
+export class Context extends Map<ContextHandle, unknown> {
+  static ensure(): Context {
+    const context = storage.getStore()
     assert(context)
     return context
   }
 
-  static get<T>(factory: StateFactory<T>): T | undefined {
-    return this.unwrap().get(factory) as never
+  get<V>(context: ContextHandle<V>): V | undefined {
+    return super.get(context) as never
   }
 
-  static getAssert<T>(factory: StateFactory<T>): T {
-    const value = this.get(factory)
-    assert(value)
-    return value
-  }
-
-  static getOrInit<T>(factory: StateFactory<T>): T {
-    let context = this.unwrap()
-    let instance = context.get(factory)
-    if (!instance) {
-      instance = factory()
-      context.set(factory, instance)
+  getOrInit<V>(context: ContextHandle<V>, init: () => V): V {
+    if (this.has(context)) {
+      return this.get(context) as V
     }
-    return instance as never
+    const instance = init()
+    this.set(context, instance)
+    return instance
+  }
+
+  set<V>(context: ContextHandle<V>, value: V): this {
+    super.set(context, value)
+    return this
+  }
+
+  run<R>(callback: () => R): R {
+    return storage.run(this, callback)
+  }
+
+  clone(overrides?: Iterable<[ContextHandle, unknown]>): Context {
+    const context = new Context(overrides)
+    for (const [handle, value] of this.entries()) {
+      if (!context.has(handle)) {
+        context.set(handle, handle.clone?.(value) ?? value)
+      }
+    }
+    return context
   }
 }
 
-export type StateFactory<T = any> = (instance?: T) => T
+export type ContextHandle<V = any> = {
+  clone?: ((value: V) => V) | undefined
+}
+
+export function ContextHandle<V>(clone?: (value: V) => V): ContextHandle<V> {
+  return { clone }
+}

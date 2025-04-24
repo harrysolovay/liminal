@@ -1,9 +1,18 @@
 import { Context } from "./Context.ts"
-import { run } from "./run.ts"
-import type { Rune, RuneKey } from "./Rune.ts"
+import { Fiber } from "./Fiber.ts"
+import { HandlerContext } from "./Handler.ts"
+import { MessageRegistry, MessageRegistryContext } from "./MessageRegistry.ts"
+import { ModelRegistry, ModelRegistryContext } from "./ModelRegistry.ts"
+import type { Rune } from "./Rune.ts"
 import type { Runic } from "./Runic.ts"
-import { Fiber } from "./state/Fiber.ts"
-import { Globals } from "./state/Globals.ts"
+import type { RuntimeEvent } from "./RuntimeEvent.ts"
+
+export interface AgentConfig<E> {
+  handler?: ((event: RuntimeEvent<E>) => void) | undefined
+  models?: ModelRegistry
+  messages?: MessageRegistry
+  signal?: AbortSignal | undefined
+}
 
 export interface Agent<out T, out E> extends PromiseLike<T> {
   T: T
@@ -12,15 +21,16 @@ export interface Agent<out T, out E> extends PromiseLike<T> {
 
 export function Agent<Y extends Rune, T>(
   runic: Runic<Y, T>,
-  globals?: Partial<Globals<Y[RuneKey]>>,
+  config?: AgentConfig<Rune.E<Y>>,
 ): Agent<T, Rune.E<Y>> {
   return {
     then(onfulfilled, onrejected) {
-      const context = new Context([
-        [Globals.make, Globals.make(globals)],
-        [Fiber.make, Fiber.make()],
+      const rootCtx = new Context([
+        [HandlerContext, config?.handler],
+        [ModelRegistryContext, config?.models ?? new ModelRegistry()],
+        [MessageRegistryContext, config?.messages ?? new MessageRegistry()],
       ])
-      return Context.storage.run(context, () => run(runic).then(onfulfilled, onrejected))
+      return rootCtx.run(() => Fiber(runic).resolve().then(onfulfilled, onrejected))
     },
   } satisfies Omit<Agent<T, Rune.E<Y>>, "E" | "T"> as never
 }
