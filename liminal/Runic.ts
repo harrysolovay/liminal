@@ -1,12 +1,19 @@
 import type { Rune } from "./Rune.ts"
 
 export type RuneIterator<Y extends Rune = Rune, T = any> = Iterator<Y, T> | AsyncIterator<Y, T>
-export type RuneIterable<Y extends Rune, T> = Iterable<Y, T> | AsyncIterable<Y, T>
+export type RuneIterable<Y extends Rune = Rune, T = any> = Iterable<Y, T> | AsyncIterable<Y, T>
 export type Runic<Y extends Rune = Rune, T = any> = RuneIterable<Y, T> | (() => RuneIterable<Y, T>)
 
 export namespace Runic {
-  export type Y<R extends Runic> = R extends Runic<infer Y> ? Y : never
-  export type T<R extends Runic> = R extends Runic<Rune, infer T> ? T : never
+  export type Y<X extends Runic> = X extends RuneIterable<infer Y> ? Y
+    : X extends () => RuneIterable<infer Y> ? Y
+    : X extends RuneIterator<infer Y> ? Y
+    : never
+
+  export type T<X extends Runic> = X extends RuneIterable<Rune, infer T> ? T
+    : X extends () => RuneIterable<Rune, infer T> ? T
+    : X extends RuneIterator<Rune, infer T> ? T
+    : never
 
   export function unwrap<Y extends Rune, T>(runic: Runic<Y, T>): RuneIterator<Y, T> {
     if (Symbol.iterator in runic) {

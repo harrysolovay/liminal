@@ -1,15 +1,21 @@
+import { ContextHandle } from "./Context.ts"
 import type { Message } from "./Message.ts"
 
-export interface MessageRegistry {
+export class MessageRegistry {
   messages: Array<Message>
-  append(message: Message): void
-}
+  constructor(messages?: Array<Message>) {
+    this.messages = messages ?? []
+  }
 
-export function MessageRegistry(messages?: Array<Message>): MessageRegistry {
-  return {
-    messages: messages ?? [],
-    append(message) {
-      this.messages.push(message)
-    },
+  append(message: Message): void {
+    this.messages.push(message)
+  }
+
+  clone(): MessageRegistry {
+    return new MessageRegistry([...this.messages])
   }
 }
+
+export const MessageRegistryContext: ContextHandle<MessageRegistry> = ContextHandle(({ messages }) =>
+  new MessageRegistry([...messages])
+)

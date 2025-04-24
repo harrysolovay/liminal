@@ -1,7 +1,8 @@
-import { AgentContext } from "./AgentContext.ts"
-import { MessageRegistry } from "./MessageRegistry.ts"
-import { ModelRegistry } from "./ModelRegistry.ts"
-import { run } from "./run.ts"
+import { Context } from "./Context.ts"
+import { Fiber } from "./Fiber.ts"
+import { HandlerContext } from "./Handler.ts"
+import { MessageRegistry, MessageRegistryContext } from "./MessageRegistry.ts"
+import { ModelRegistry, ModelRegistryContext } from "./ModelRegistry.ts"
 import type { Rune } from "./Rune.ts"
 import type { Runic } from "./Runic.ts"
 
@@ -17,24 +18,18 @@ export interface Agent<out T, out E> extends PromiseLike<T> {
   E: E
 }
 
-let nextIndex = 0
-
 export function Agent<Y extends Rune, T>(
   runic: Runic<Y, T>,
   config?: AgentConfig<Rune.E<Y>>,
 ): Agent<T, Rune.E<Y>> {
   return {
     then(onfulfilled, onrejected) {
-      return run(
-        runic,
-        AgentContext({
-          index: nextIndex++,
-          handler: config?.handler,
-          models: config?.models ?? ModelRegistry(),
-          messages: config?.messages ?? MessageRegistry(),
-          parent: undefined,
-        }),
-      ).then(onfulfilled, onrejected)
+      const rootCtx = new Context([
+        [HandlerContext, config?.handler],
+        [ModelRegistryContext, config?.models ?? new ModelRegistry()],
+        [MessageRegistryContext, config?.messages ?? new MessageRegistry()],
+      ])
+      return rootCtx.run(() => Fiber(runic).resolve().then(onfulfilled, onrejected))
     },
   } satisfies Omit<Agent<T, Rune.E<Y>>, "E" | "T"> as never
 }

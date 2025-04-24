@@ -1,10 +1,18 @@
 import type { EnsureNarrow } from "liminal-util"
-import { AgentContext } from "../AgentContext.ts"
+import { Context } from "../Context.ts"
+import { HandlerContext } from "../Handler.ts"
 import type { Rune } from "../Rune.ts"
+import { rune } from "./rune.ts"
 
 export interface emit<E> extends Generator<Rune<E>, void> {}
 
 export function* emit<const E>(event: EnsureNarrow<E>): emit<E> {
-  const { handler } = AgentContext.get()
-  handler?.(event)
+  const context = Context.ensure()
+  const handler = context.get(HandlerContext)
+  const fiber = yield* rune((fiber) => fiber)
+  handler?.({
+    ...fiber.info,
+    ...fiber.parent && { parent: fiber.parent.info },
+    event,
+  })
 }
