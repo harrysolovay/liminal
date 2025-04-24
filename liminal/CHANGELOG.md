@@ -1,5 +1,11 @@
 # liminal
 
+## 0.5.6
+
+### Patch Changes
+
+- f79205e: Include fiber information in the event type supplied to user-specified handlers. Continue reworking runtime implementation.
+
 ## 0.5.5
 
 ### Patch Changes
