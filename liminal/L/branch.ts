@@ -17,17 +17,13 @@ export function* branch(value: Runic | Array<Runic> | Record<keyof any, Runic>):
   const context = Context.ensure()
   const parent = yield* rune((fiber) => fiber)
   if (Array.isArray(value)) {
-    const fibers = value.map((runic) => context.clone().run(() => Fiber(runic, parent)))
-    return yield* rune(() => Promise.all(fibers.map(({ resolve }) => resolve())))
+    const fibers = value.map((runic) => context.clone().run(() => new Fiber(runic, parent)))
+    return yield* rune(() => Promise.all(fibers.map((fiber) => fiber.resolve())))
   } else if (typeof value === "object") {
     const entries = Object.entries(value)
-    const fibers = entries.map(([_key, runic]) => context.clone().run(() => Fiber(runic, parent)))
-    return yield* rune(() =>
-      Promise
-        .all(fibers.map(({ resolve }, i) => resolve().then((value) => [entries[i]![0], value])))
-        .then(Object.fromEntries)
-    )
+    const fibers = entries.map(([_key, runic]) => context.clone().run(() => new Fiber(runic, parent)))
+    return yield* rune(() => Promise.all(fibers.map((fiber) => fiber.resolve())).then(Object.fromEntries))
   }
-  const fiber = context.clone().run(() => Fiber(typeof value === "function" ? value() : value, parent))
+  const fiber = context.clone().run(() => new Fiber(typeof value === "function" ? value() : value, parent))
   return yield* rune(() => fiber.resolve())
 }

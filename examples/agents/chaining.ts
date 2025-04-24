@@ -4,45 +4,44 @@ import "liminal-zod3/register"
 import { openai } from "@ai-sdk/openai"
 import { ai } from "liminal-ai"
 
-const result = await Agent(function*() {
-  yield* L.model(ai(openai("gpt-4o-mini", {
-    structuredOutputs: true,
-  })))
-  yield* L
-    .system`Write persuasive marketing copy for: Buffy The Vampire Slayer. Focus on benefits and emotional appeal.`
-  yield* L.user`Please generate the first draft.`
-  let copy = yield* L.assistant
-  yield* L.user`
-    Now evaluate this marketing copy for:
-
-    1. Presence of call to action (true/false)
-    2. Emotional appeal (1-10)
-    3. Clarity (1-10)
-
-    Copy to evaluate: ${copy}
-  `
-  const qualityMetrics = yield* L.assistant(z.object({
-    hasCallToAction: z.boolean(),
-    emotionalAppeal: z.number(),
-    clarity: z.number(),
-  }))
-  if (!qualityMetrics.hasCallToAction || qualityMetrics.emotionalAppeal < 7 || qualityMetrics.clarity < 7) {
+const result = await Agent(
+  function*() {
+    yield* L.model(ai(openai("gpt-4o-mini", {
+      structuredOutputs: true,
+    })))
+    yield* L
+      .system`Write persuasive marketing copy for: Buffy The Vampire Slayer. Focus on benefits and emotional appeal.`
+    yield* L.user`Please generate the first draft.`
+    let copy = yield* L.assistant
     yield* L.user`
-      Rewrite this marketing copy with:
+      Now evaluate this marketing copy for:
 
-      ${!qualityMetrics.hasCallToAction ? "- A clear call to action" : ""}
-      ${qualityMetrics.emotionalAppeal < 7 ? "- Stronger emotional appeal" : ""}
-      ${qualityMetrics.clarity < 7 ? "- Improved clarity and directness" : ""}
+      1. Presence of call to action (true/false)
+      2. Emotional appeal (1-10)
+      3. Clarity (1-10)
 
-      Original copy: ${copy}
+      Copy to evaluate: ${copy}
     `
-    copy = yield* L.assistant
-  }
-  return { copy, qualityMetrics }
-}, {
-  handler(event) {
-    console.log(event)
+    const qualityMetrics = yield* L.assistant(z.object({
+      hasCallToAction: z.boolean(),
+      emotionalAppeal: z.number(),
+      clarity: z.number(),
+    }))
+    if (!qualityMetrics.hasCallToAction || qualityMetrics.emotionalAppeal < 7 || qualityMetrics.clarity < 7) {
+      yield* L.user`
+        Rewrite this marketing copy with:
+
+        ${!qualityMetrics.hasCallToAction ? "- A clear call to action" : ""}
+        ${qualityMetrics.emotionalAppeal < 7 ? "- Stronger emotional appeal" : ""}
+        ${qualityMetrics.clarity < 7 ? "- Improved clarity and directness" : ""}
+
+        Original copy: ${copy}
+      `
+      copy = yield* L.assistant
+    }
+    return { copy, qualityMetrics }
   },
-})
+  { handler: console.log },
+)
 
 console.log(result)

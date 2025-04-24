@@ -10,9 +10,5 @@ export function* emit<const E>(event: EnsureNarrow<E>): emit<E> {
   const context = Context.ensure()
   const handler = context.get(HandlerContext)
   const fiber = yield* rune((fiber) => fiber)
-  handler?.({
-    ...fiber.info,
-    ...fiber.parent && { parent: fiber.parent.info },
-    event,
-  })
+  handler?.call(fiber, event)
 }

@@ -5,10 +5,9 @@ import { MessageRegistry, MessageRegistryContext } from "./MessageRegistry.ts"
 import { ModelRegistry, ModelRegistryContext } from "./ModelRegistry.ts"
 import type { Rune } from "./Rune.ts"
 import type { Runic } from "./Runic.ts"
-import type { RuntimeEvent } from "./RuntimeEvent.ts"
 
 export interface AgentConfig<E> {
-  handler?: ((event: RuntimeEvent<E>) => void) | undefined
+  handler?: ((this: Fiber, event: E) => void) | undefined
   models?: ModelRegistry
   messages?: MessageRegistry
   signal?: AbortSignal | undefined
@@ -30,7 +29,7 @@ export function Agent<Y extends Rune, T>(
         [ModelRegistryContext, config?.models ?? new ModelRegistry()],
         [MessageRegistryContext, config?.messages ?? new MessageRegistry()],
       ])
-      return rootCtx.run(() => Fiber(runic).resolve().then(onfulfilled, onrejected))
+      return rootCtx.run(() => new Fiber(runic).resolve().then(onfulfilled, onrejected))
     },
   } satisfies Omit<Agent<T, Rune.E<Y>>, "E" | "T"> as never
 }
