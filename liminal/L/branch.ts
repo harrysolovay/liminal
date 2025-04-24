@@ -18,12 +18,19 @@ export function* branch(value: Runic | Array<Runic> | Record<keyof any, Runic>):
   const parent = yield* rune((fiber) => fiber)
   if (Array.isArray(value)) {
     const fibers = value.map((runic) => context.clone().run(() => new Fiber(runic, parent)))
-    return yield* rune(() => Promise.all(fibers.map((fiber) => fiber.resolve())))
+    return yield* rune(() => Fiber.join(fibers))
   } else if (typeof value === "object") {
-    const entries = Object.entries(value)
-    const fibers = entries.map(([_key, runic]) => context.clone().run(() => new Fiber(runic, parent)))
-    return yield* rune(() => Promise.all(fibers.map((fiber) => fiber.resolve())).then(Object.fromEntries))
+    const fibers = Object.values(value).map(
+      (runic) => context.clone().run(() => new Fiber(runic, parent)),
+    )
+    return yield* rune(async () => {
+      const keys = Object.keys(value)
+      return await Fiber
+        .join(fibers)
+        .then((resolved) => resolved.map((value, i) => [keys[i], value]))
+        .then(Object.fromEntries)
+    })
   }
   const fiber = context.clone().run(() => new Fiber(typeof value === "function" ? value() : value, parent))
-  return yield* rune(() => fiber.resolve())
+  return yield* rune(() => fiber.resolution())
 }
