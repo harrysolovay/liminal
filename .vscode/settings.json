@@ -34,7 +34,7 @@
     "strings": "on"
   },
   "editor.tabSize": 2,
-  // "dprint.path": "node_modules/.bin/dprint",
+  "dprint.path": "node_modules/.bin/dprint",
   "sqltools.connections": [
     {
       "server": "localhost",
