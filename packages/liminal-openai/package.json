@@ -16,6 +16,7 @@
   },
   "peerDependencies": {
     "liminal": "^0.5.5",
+    "liminal-util": "^0.0.3",
     "openai": "^4.95.1"
   }
 }

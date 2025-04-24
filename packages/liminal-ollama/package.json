@@ -16,6 +16,7 @@
   },
   "peerDependencies": {
     "liminal": "^0.5.5",
-    "ollama": "^0.5.14"
+    "ollama": "^0.5.14",
+    "liminal-util": "^0.0.3"
   }
 }
