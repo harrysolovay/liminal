@@ -5,9 +5,10 @@ import { MessageRegistry, MessageRegistryContext } from "./MessageRegistry.ts"
 import { ModelRegistry, ModelRegistryContext } from "./ModelRegistry.ts"
 import type { Rune } from "./Rune.ts"
 import type { Runic } from "./Runic.ts"
+import type { RuntimeEvent } from "./RuntimeEvent.ts"
 
 export interface AgentConfig<E> {
-  handler?: ((event: E) => void) | undefined
+  handler?: ((event: RuntimeEvent<E>) => void) | undefined
   models?: ModelRegistry
   messages?: MessageRegistry
   signal?: AbortSignal | undefined

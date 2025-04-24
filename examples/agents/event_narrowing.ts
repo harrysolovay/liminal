@@ -1,9 +1,8 @@
 import { type } from "arktype"
 import { Agent, isLEvent, L } from "liminal"
-// import "liminal-arktype/register"
 
 await Agent(g, {
-  handler(event) {
+  handler({ event }) {
     if (isLEvent(event)) {
       console.log({ event })
     }
