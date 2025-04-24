@@ -6,7 +6,7 @@ import { _message } from "./_message.ts"
 import { rune } from "./rune.ts"
 
 export interface assistant extends Iterable<Rune<LEvent>, string> {
-  <T>(schema: LType<T>): Generator<Rune<LEvent>, T>
+  <T>(type: LType<T>): Generator<Rune<LEvent>, T>
 }
 
 export const assistant: assistant = Object.assign(

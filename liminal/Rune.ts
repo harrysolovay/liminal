@@ -1,8 +1,9 @@
 import type { Fiber } from "./Fiber.ts"
 
 export interface Rune<out E = any> {
+  E: E
   (fiber: Fiber): any
-  [RuneKey]: E
+  [RuneKey]: true
 }
 
 export declare namespace Rune {

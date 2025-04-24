@@ -1,37 +1,35 @@
-import type { Model } from "liminal"
+import { Model } from "liminal"
 import { assert } from "liminal-util"
 import { OpenAI } from "openai"
 import type { ResponsesModel } from "openai/resources.mjs"
 import type { ResponseInputContent, ResponseInputItem } from "openai/resources/responses/responses.js"
 
 export function openai(model: ResponsesModel, client: OpenAI = new OpenAI()): Model {
-  return {
-    async resolve(messages, schema) {
-      const response = await client.responses.create({
-        input: messages.map((m): ResponseInputItem => ({
-          role: m.role,
-          content: m.content.map((c): ResponseInputContent => ({
-            type: m.role === "assistant" ? "output_text" as never : "input_text",
-            text: String(c.part),
-          })),
+  return new Model("openai", async (messages, schema) => {
+    const response = await client.responses.create({
+      input: messages.map((m): ResponseInputItem => ({
+        role: m.role,
+        content: m.content.map((c): ResponseInputContent => ({
+          type: m.role === "assistant" ? "output_text" as never : "input_text",
+          text: String(c.part),
         })),
-        model,
-        ...schema && {
-          text: {
-            format: {
-              type: "json_schema",
-              name: "TODO",
-              schema: schema as never as Record<string, unknown>,
-            },
+      })),
+      model,
+      ...schema && {
+        text: {
+          format: {
+            type: "json_schema",
+            name: "TODO",
+            schema: schema as never as Record<string, unknown>,
           },
         },
-      })
-      const { output } = response
-      const [message] = output
-      assert(message?.type === "message")
-      const [content] = message.content
-      assert(content?.type === "output_text")
-      return content.text
-    },
-  }
+      },
+    })
+    const { output } = response
+    const [message] = output
+    assert(message?.type === "message")
+    const [content] = message.content
+    assert(content?.type === "output_text")
+    return content.text
+  })
 }

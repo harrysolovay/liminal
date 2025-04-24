@@ -6,8 +6,8 @@ import { ModelRegistry, ModelRegistryContext } from "./ModelRegistry.ts"
 import type { Rune } from "./Rune.ts"
 import type { Runic } from "./Runic.ts"
 
-export interface AgentConfig<E> {
-  handler?: ((this: Fiber, event: E) => void) | undefined
+export interface AgentConfig<T, E> {
+  handler?: ((this: Fiber<T>, event: E) => void) | undefined
   models?: ModelRegistry
   messages?: MessageRegistry
   signal?: AbortSignal | undefined
@@ -20,16 +20,16 @@ export interface Agent<out T, out E> extends PromiseLike<T> {
 
 export function Agent<Y extends Rune, T>(
   runic: Runic<Y, T>,
-  config?: AgentConfig<Rune.E<Y>>,
+  config?: AgentConfig<T, Rune.E<Y>>,
 ): Agent<T, Rune.E<Y>> {
   return {
     then(onfulfilled, onrejected) {
-      const rootCtx = new Context([
+      return new Context([
         [HandlerContext, config?.handler],
         [ModelRegistryContext, config?.models ?? new ModelRegistry()],
         [MessageRegistryContext, config?.messages ?? new MessageRegistry()],
       ])
-      return rootCtx.run(() => new Fiber(runic).resolve().then(onfulfilled, onrejected))
+        .run(() => new Fiber(runic).resolution().then(onfulfilled, onrejected))
     },
   } satisfies Omit<Agent<T, Rune.E<Y>>, "E" | "T"> as never
 }

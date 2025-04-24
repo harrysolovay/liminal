@@ -8,11 +8,11 @@ export interface rune<T> extends Iterable<Rune<never>, T> {
 export function rune<R>(source: (fiber: Fiber) => R): rune<Awaited<R>> {
   return Object.assign(
     function*<E>(): Generator<Rune<E>, Awaited<R>> {
-      return yield Object.assign(source, { [RuneKey]: {} as never })
+      return yield Object.assign(source, { [RuneKey]: true } as never)
     },
     {
       *[Symbol.iterator](): Generator<Rune<never>, Awaited<R>> {
-        return yield Object.assign(source, { [RuneKey]: {} as never })
+        return yield Object.assign(source, { [RuneKey]: true } as never)
       },
     },
   )
