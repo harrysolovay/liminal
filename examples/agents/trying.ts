@@ -1,33 +1,20 @@
-// import { L } from "liminal"
+import { Agent, L } from "liminal"
 
-// export default function*() {
-//   const result = yield* L.catch("attempt-key", mayThrow)
-//   if (result.thrown) {
-//     console.log("Threw the following value:", result.thrown)
-//   } else {
-//     console.log("Succeed with the following value:", result.value)
-//   }
-// }
+await Agent(function*() {
+  const result = yield* L.catch(function*() {
+    return mayThrow()
+  })
+  if (result.resolved) {
+    console.log("Succeed with the following value:", result.resolved)
+  } else {
+    console.log("Threw the following value:", result.rejected)
+  }
+})
 
-// function* mayThrow() {
-//   try {
-//     return externalExample()
-//   } catch (thrown: unknown) {
-//     if (thrown instanceof RandomError) {
-//       return yield* L.throw(thrown)
-//     }
-//     throw thrown // unrecoverable
-//   }
-// }
-
-// class RandomError extends Error {
-//   override readonly name = "RandomError"
-// }
-
-// function externalExample(): number {
-//   const rand = Math.random()
-//   if (rand > .5) {
-//     throw new RandomError()
-//   }
-//   return rand
-// }
+function mayThrow(): number {
+  const rand = Math.random()
+  if (rand > .5) {
+    throw new Error()
+  }
+  return rand
+}
