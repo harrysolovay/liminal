@@ -1,5 +1,13 @@
 # liminal
 
+## 0.5.7
+
+### Patch Changes
+
+- a56f121: Re-flatten events. Make fiber info available in event handler via this.
+- Updated dependencies [a56f121]
+  - liminal-util@0.0.3
+
 ## 0.5.6
 
 ### Patch Changes
