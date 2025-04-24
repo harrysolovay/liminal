@@ -1,22 +1,19 @@
 import type { SchemaObject } from "liminal-schema"
 import { assert } from "liminal-util"
-import { Context } from "../Context.ts"
+import { AgentContext } from "../AgentContext.ts"
 import { InferenceRequested, Inferred, type LEvent } from "../LEvent.ts"
 import type { Rune } from "../Rune.ts"
-import { MessageRegistry } from "../state/MessageRegistry.ts"
-import { ModelRegistry } from "../state/ModelRegistry.ts"
 import { emit } from "./emit.ts"
 import { rune } from "./rune.ts"
 
 export function* _infer(schema?: SchemaObject): Generator<Rune<LEvent>, string> {
-  const modelRegistry = Context.getOrInit(ModelRegistry.make)
-  const model = modelRegistry.peek()
+  const { models } = AgentContext.get()
+  const model = models.peek()
   assert(model)
-  const messageRegistry = Context.getOrInit(MessageRegistry.make)
-  const counter = Context.getOrInit(InferenceRequestCounter)
-  const requestId = counter.next()
+  const { messages, getLocal } = AgentContext.get()
+  const requestId = getLocal(InferenceRequestCounter).next()
   yield* emit(new InferenceRequested(requestId, schema))
-  const inference = yield* rune(() => model.resolve(messageRegistry.messages, schema))
+  const inference = yield* rune(() => model.resolve(messages.messages, schema))
   yield* emit(new Inferred(requestId, inference))
   return inference
 }

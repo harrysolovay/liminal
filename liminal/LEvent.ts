@@ -1,11 +1,25 @@
 import type { SchemaObject } from "liminal-schema"
 import { EventBase } from "./EventBase.ts"
 import type { Message } from "./Message.ts"
+import type { Model } from "./Model.ts"
 
-export type LEvent = InferenceRequested | Inferred | MessageAppended | FiberCreated | FiberStarted | FiberResolved
+export type LEvent =
+  | FiberCreated
+  | FiberResolved
+  | FiberStarted
+  | InferenceRequested
+  | Inferred
+  | MessageAppended
+  | ModelRegistered
 
 export const LEventTag: unique symbol = Symbol.for("liminal/LEvent")
 export type LEventTag = typeof LEventTag
+
+export class ModelRegistered extends EventBase(LEventTag, "model_registered") {
+  constructor(readonly model: Model) {
+    super()
+  }
+}
 
 export class InferenceRequested extends EventBase(LEventTag, "inference_requested") {
   declare schema?: SchemaObject

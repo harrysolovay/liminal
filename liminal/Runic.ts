@@ -3,6 +3,7 @@ import type { Rune } from "./Rune.ts"
 export type RuneIterator<Y extends Rune = Rune, T = any> = Iterator<Y, T> | AsyncIterator<Y, T>
 export type RuneIterable<Y extends Rune, T> = Iterable<Y, T> | AsyncIterable<Y, T>
 export type Runic<Y extends Rune = Rune, T = any> = RuneIterable<Y, T> | (() => RuneIterable<Y, T>)
+
 export namespace Runic {
   export type Y<R extends Runic> = R extends Runic<infer Y> ? Y : never
   export type T<R extends Runic> = R extends Runic<Rune, infer T> ? T : never

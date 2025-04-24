@@ -29,9 +29,5 @@ await Agent(
     yield* L.user`Please summarize the key points from our conversation.`
     return yield* L.assistant
   },
-  {
-    handler(event, fiberInfo) {
-      console.log(event, fiberInfo)
-    },
-  },
+  { handler: console.log },
 )
