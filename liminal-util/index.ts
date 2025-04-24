@@ -1,4 +1,5 @@
 export * from "./assert.ts"
+export * from "./attachCustomInspect.ts"
 export * from "./EnsureNarrow.ts"
 export * from "./inspect.ts"
 export * from "./isTemplateStringsArray.ts"
