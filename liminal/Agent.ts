@@ -3,7 +3,7 @@ import { Fiber } from "./Fiber.ts"
 import { HandlerContext } from "./Handler.ts"
 import { MessageRegistry, MessageRegistryContext } from "./MessageRegistry.ts"
 import { ModelRegistry, ModelRegistryContext } from "./ModelRegistry.ts"
-import { type Rune } from "./Rune.ts"
+import type { Rune } from "./Rune.ts"
 import type { Runic } from "./Runic.ts"
 
 export interface AgentConfig<T, E> {
