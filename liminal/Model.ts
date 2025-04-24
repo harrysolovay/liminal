@@ -1,13 +1,14 @@
 import type { Schema } from "liminal-schema"
+import { attachCustomInspect } from "liminal-util"
 import type { Message } from "./Message.ts"
 
-export interface Model {
-  resolve(messages: Array<Message>, schema?: Schema): Promise<string>
-}
+export class Model {
+  constructor(
+    readonly vendor: string,
+    readonly resolve: (messages: Array<Message>, schema?: Schema) => Promise<string>,
+  ) {}
 
-// export interface ModelCapabilities {
-//   readonly url: boolean
-//   readonly mimes: Set<string>
-//   readonly reasoning: boolean
-//   readonly structures: boolean
-// }
+  static {
+    attachCustomInspect(this, ({ vendor }) => ({ vendor }))
+  }
+}
