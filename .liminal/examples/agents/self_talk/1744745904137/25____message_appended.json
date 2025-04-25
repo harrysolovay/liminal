@@ -1,0 +1,9 @@
+{
+  "scope": [],
+  "index": 0,
+  "type": "message_appended",
+  "message": {
+    "role": "user",
+    "content": "Thank you for outlining these strategies! I appreciate the emphasis on reskilling and upskilling programs, as well as the importance of community-based initiatives. It's encouraging to see how collaboration between educational institutions, employers, and government can create a more adaptable workforce. I’m particularly interested in how we can ensure that these programs are accessible to everyone, especially those from underserved communities. What are some effective ways to reach and engage these populations in training opportunities?"
+  }
+}

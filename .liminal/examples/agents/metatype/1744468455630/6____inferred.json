@@ -1,0 +1,89 @@
+{
+  "scope": [],
+  "index": 0,
+  "type": "inferred",
+  "value": {
+    "beings": [
+      {
+        "name": "Elara",
+        "type": "witch",
+        "powers": [
+          "spellcasting",
+          "herbology",
+          "telepathy"
+        ],
+        "origin": "Born under a blood moon, Elara discovered her powers at a young age.",
+        "allies": [
+          {
+            "name": "Liam",
+            "type": "werewolf"
+          },
+          {
+            "name": "Mira",
+            "type": "fae"
+          }
+        ]
+      },
+      {
+        "name": "Draven",
+        "type": "vampire",
+        "powers": [
+          "super strength",
+          "hypnosis",
+          "night vision"
+        ],
+        "origin": "Turned into a vampire during the 18th century, Draven has roamed the night ever since.",
+        "allies": [
+          {
+            "name": "Selene",
+            "type": "vampire"
+          },
+          {
+            "name": "Gideon",
+            "type": "witch"
+          }
+        ]
+      },
+      {
+        "name": "Fenrir",
+        "type": "werewolf",
+        "powers": [
+          "enhanced senses",
+          "regeneration",
+          "shape-shifting"
+        ],
+        "origin": "Cursed by a witch, Fenrir embraces his dual nature as both man and beast.",
+        "allies": [
+          {
+            "name": "Elara",
+            "type": "witch"
+          },
+          {
+            "name": "Ronan",
+            "type": "fae"
+          }
+        ]
+      },
+      {
+        "name": "Aisling",
+        "type": "fae",
+        "powers": [
+          "illusion creation",
+          "nature manipulation",
+          "flight"
+        ],
+        "origin": "Aisling hails from the enchanted forest of Eldergrove, where magic flows freely.",
+        "allies": [
+          {
+            "name": "Draven",
+            "type": "vampire"
+          },
+          {
+            "name": "Luna",
+            "type": "witch"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "scope": [],
+  "index": 0,
+  "type": "message_appended",
+  "message": {
+    "role": "assistant",
+    "content": "{\"title\": \"Go to a Beach!\", \"description\": \"Florida has amazing beaches! Whether you want to relax, swim, or surf, there's a perfect beach for everyone. Think sunshine, sand, and waves!\\\"\", \"location\": \"Florida - Various Beaches (e.g., Miami Beach, Clearwater Beach, Daytona Beach)\\\", \" ,\"estimatedCostUSD\": 20, \"ageRange\": { \"0\": 8, \"1\": 12 } }"
+  }
+}

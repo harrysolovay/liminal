@@ -1,0 +1,12 @@
+{
+  "scope": [
+    "types",
+    "gritty"
+  ],
+  "index": 0,
+  "type": "message_appended",
+  "message": {
+    "role": "assistant",
+    "content": "{\n  \"Character\": {\n    \"name\": \"Elara\",\n    \"type\": \"witch\",\n    \"powers\": [\n      \"elemental magic\",\n      \"telepathy\",\n      \"potion brewing\"\n    ],\n    \"backstory\": \"Elara was born into a long line of powerful witches. After a tragic event that took her family, she vowed to protect the magical realm from dark forces.\",\n    \"allies\": [\n      {\n        \"name\": \"Draven\",\n        \"type\": \"vampire\"\n      },\n      {\n        \"name\": \"Fenrir\",\n        \"type\": \"werewolf\"\n      }\n    ]\n  },\n  \"Location\": {\n    \"name\": \"Eldergrove Forest\",\n    \"type\": \"forest\",\n    \"description\": \"A mystical forest filled with ancient trees and magical creatures. It is said to be the heart of the magical realm, where the veil between worlds is thin.\",\n    \"notableCharacters\": [\n      {\n        \"name\": \"Thorn\",\n        \"type\": \"fae\"\n      },\n      {\n        \"name\": \"Luna\",\n        \"type\": \"witch\"\n      }\n    ]\n  }\n}"
+  }
+}

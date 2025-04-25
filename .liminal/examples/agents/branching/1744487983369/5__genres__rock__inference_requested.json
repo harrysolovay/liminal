@@ -1,0 +1,8 @@
+{
+  "scope": [
+    "genres",
+    "rock"
+  ],
+  "index": 0,
+  "type": "inference_requested"
+}

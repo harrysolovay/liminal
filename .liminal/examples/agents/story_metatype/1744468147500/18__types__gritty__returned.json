@@ -1,0 +1,51 @@
+{
+  "scope": [
+    "types",
+    "gritty"
+  ],
+  "index": 0,
+  "type": "returned",
+  "value": {
+    "Character": {
+      "name": "Elara",
+      "type": "witch",
+      "powers": [
+        "elemental magic",
+        "telepathy",
+        "potion brewing"
+      ],
+      "backstory": "Elara was born into a long line of witches, known for their mastery of elemental magic. After a tragic event that took her family, she vowed to protect the magical realm from dark forces.",
+      "allies": [
+        {
+          "name": "Thorne",
+          "type": "vampire"
+        },
+        {
+          "name": "Luna",
+          "type": "fae"
+        }
+      ]
+    },
+    "Location": {
+      "name": "Whispering Woods",
+      "type": "forest",
+      "description": "A mystical forest filled with ancient trees and magical creatures. The air is thick with enchantment, and whispers of the past can be heard among the leaves.",
+      "notableCharacters": [
+        {
+          "name": "Galen",
+          "type": "werewolf"
+        },
+        {
+          "name": "Mira",
+          "type": "witch"
+        }
+      ]
+    },
+    "Artifact": {
+      "name": "Heart of the Forest",
+      "type": "talisman",
+      "effects": "Grants the bearer the ability to communicate with nature and control plant life.",
+      "lore": "Forged by the first druids, this talisman is said to hold the essence of the forest itself, protecting it from harm."
+    }
+  }
+}

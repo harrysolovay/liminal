@@ -1,0 +1,15 @@
+{
+  "scope": [],
+  "index": 0,
+  "type": "inferred",
+  "value": {
+    "title": "Explore a Florida Swamp!",
+    "description": "Get lost in the beauty of Florida’s swamps! You’ll see unique plants and animals, and it’s a really tranquil and immersive experience. It’s a great way to feel connected to nature.\", ",
+    "location": "Various Swamps in Florida - e.g., Cypress swamps, Sawgrass marshes\\",
+    "estimatedCostUSD": 30,
+    "ageRange": {
+      "0": 8,
+      "1": 12
+    }
+  }
+}

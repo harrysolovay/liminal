@@ -1,0 +1,223 @@
+{
+  "scope": [
+    "types",
+    "gritty"
+  ],
+  "index": 0,
+  "type": "inferred",
+  "value": {
+    "type": "record",
+    "value": {
+      "description": "A fantastical story world with super-powered beings.",
+      "fields": [
+        {
+          "description": "A character in the story world.",
+          "key": "Character",
+          "value": {
+            "type": "record",
+            "value": {
+              "description": "Details about a character.",
+              "fields": [
+                {
+                  "description": "The name of the character.",
+                  "key": "name",
+                  "value": {
+                    "type": "atom",
+                    "value": {
+                      "description": "The name of the character.",
+                      "atomType": "string"
+                    }
+                  }
+                },
+                {
+                  "description": "The type of being (e.g., witch, vampire, werewolf, fae).",
+                  "key": "type",
+                  "value": {
+                    "type": "enum",
+                    "value": {
+                      "description": "The type of supernatural being.",
+                      "variants": [
+                        "witch",
+                        "vampire",
+                        "werewolf",
+                        "fae"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "description": "The character's powers or abilities.",
+                  "key": "powers",
+                  "value": {
+                    "type": "array",
+                    "value": {
+                      "description": "List of powers the character possesses.",
+                      "items": {
+                        "type": "atom",
+                        "value": {
+                          "description": "A power or ability.",
+                          "atomType": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "description": "The character's backstory.",
+                  "key": "backstory",
+                  "value": {
+                    "type": "atom",
+                    "value": {
+                      "description": "A brief backstory of the character.",
+                      "atomType": "string"
+                    }
+                  }
+                },
+                {
+                  "description": "The character's allies.",
+                  "key": "allies",
+                  "value": {
+                    "type": "array",
+                    "value": {
+                      "description": "List of allies the character has.",
+                      "items": {
+                        "type": "record",
+                        "value": {
+                          "description": "An ally character.",
+                          "fields": [
+                            {
+                              "description": "The name of the ally.",
+                              "key": "name",
+                              "value": {
+                                "type": "atom",
+                                "value": {
+                                  "description": "The name of the ally.",
+                                  "atomType": "string"
+                                }
+                              }
+                            },
+                            {
+                              "description": "The type of being of the ally.",
+                              "key": "type",
+                              "value": {
+                                "type": "enum",
+                                "value": {
+                                  "description": "The type of supernatural being of the ally.",
+                                  "variants": [
+                                    "witch",
+                                    "vampire",
+                                    "werewolf",
+                                    "fae"
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "description": "A location in the story world.",
+          "key": "Location",
+          "value": {
+            "type": "record",
+            "value": {
+              "description": "Details about a location.",
+              "fields": [
+                {
+                  "description": "The name of the location.",
+                  "key": "name",
+                  "value": {
+                    "type": "atom",
+                    "value": {
+                      "description": "The name of the location.",
+                      "atomType": "string"
+                    }
+                  }
+                },
+                {
+                  "description": "The type of location (e.g., forest, castle, town).",
+                  "key": "type",
+                  "value": {
+                    "type": "enum",
+                    "value": {
+                      "description": "The type of location.",
+                      "variants": [
+                        "forest",
+                        "castle",
+                        "town",
+                        "mountain"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "description": "A description of the location.",
+                  "key": "description",
+                  "value": {
+                    "type": "atom",
+                    "value": {
+                      "description": "A brief description of the location.",
+                      "atomType": "string"
+                    }
+                  }
+                },
+                {
+                  "description": "Notable characters in this location.",
+                  "key": "notableCharacters",
+                  "value": {
+                    "type": "array",
+                    "value": {
+                      "description": "List of notable characters in the location.",
+                      "items": {
+                        "type": "record",
+                        "value": {
+                          "description": "A notable character in the location.",
+                          "fields": [
+                            {
+                              "description": "The name of the character.",
+                              "key": "name",
+                              "value": {
+                                "type": "atom",
+                                "value": {
+                                  "description": "The name of the character.",
+                                  "atomType": "string"
+                                }
+                              }
+                            },
+                            {
+                              "description": "The type of being of the character.",
+                              "key": "type",
+                              "value": {
+                                "type": "enum",
+                                "value": {
+                                  "description": "The type of supernatural being of the character.",
+                                  "variants": [
+                                    "witch",
+                                    "vampire",
+                                    "werewolf",
+                                    "fae"
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}

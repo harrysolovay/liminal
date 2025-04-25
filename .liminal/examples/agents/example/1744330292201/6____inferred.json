@@ -1,0 +1,15 @@
+{
+  "scope": [],
+  "index": 0,
+  "type": "inferred",
+  "value": {
+    "title": "Explore the Everglades with a boat tour! It’s a unique and incredibly beautiful experience, full of wildlife and history.",
+    "description": "Experience the Everglades' incredible ecosystem – see alligators, birds, and manatees up close. A boat tour is a fantastic way to learn about this vital ecosystem.",
+    "location": "Florida, USA",
+    "estimatedCostUSD": 75,
+    "ageRange": {
+      "0": 8,
+      "1": 9
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "scope": [
+    "best"
+  ],
+  "index": 0,
+  "type": "model_pushed",
+  "modelKey": "arbiter",
+  "modelType": "language"
+}

@@ -1,0 +1,9 @@
+{
+  "scope": [],
+  "index": 0,
+  "type": "message_appended",
+  "message": {
+    "role": "user",
+    "content": "I need a type that represents the data of a fantastical story world\nfull of super-powered beings such as witches, vampires, werewolves and fae.\nPrefer producing complex object types."
+  }
+}

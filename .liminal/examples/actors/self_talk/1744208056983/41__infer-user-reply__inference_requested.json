@@ -1,0 +1,6 @@
+{
+  "scope": [
+    "infer-user-reply"
+  ],
+  "type": "inference_requested"
+}

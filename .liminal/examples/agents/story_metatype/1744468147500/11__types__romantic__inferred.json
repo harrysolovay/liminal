@@ -1,0 +1,229 @@
+{
+  "scope": [
+    "types",
+    "romantic"
+  ],
+  "index": 0,
+  "type": "inferred",
+  "value": {
+    "type": "record",
+    "value": {
+      "description": "A fantastical story world with super-powered beings.",
+      "fields": [
+        {
+          "description": "A record representing a character in the story world.",
+          "key": "Character",
+          "value": {
+            "type": "record",
+            "value": {
+              "description": "Details about a character.",
+              "fields": [
+                {
+                  "description": "The name of the character.",
+                  "key": "name",
+                  "value": {
+                    "type": "atom",
+                    "value": {
+                      "description": "The name of the character.",
+                      "atomType": "string"
+                    }
+                  }
+                },
+                {
+                  "description": "The age of the character.",
+                  "key": "age",
+                  "value": {
+                    "type": "atom",
+                    "value": {
+                      "description": "The age of the character.",
+                      "atomType": "integer"
+                    }
+                  }
+                },
+                {
+                  "description": "The type of being (e.g., witch, vampire, werewolf, fae).",
+                  "key": "type",
+                  "value": {
+                    "type": "enum",
+                    "value": {
+                      "description": "The type of supernatural being.",
+                      "variants": [
+                        "witch",
+                        "vampire",
+                        "werewolf",
+                        "fae"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "description": "The powers possessed by the character.",
+                  "key": "powers",
+                  "value": {
+                    "type": "array",
+                    "value": {
+                      "description": "List of powers the character possesses.",
+                      "items": {
+                        "type": "atom",
+                        "value": {
+                          "description": "A power that the character can use.",
+                          "atomType": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "description": "The character's backstory.",
+                  "key": "backstory",
+                  "value": {
+                    "type": "atom",
+                    "value": {
+                      "description": "A brief backstory of the character.",
+                      "atomType": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "description": "A record representing a location in the story world.",
+          "key": "Location",
+          "value": {
+            "type": "record",
+            "value": {
+              "description": "Details about a location in the story world.",
+              "fields": [
+                {
+                  "description": "The name of the location.",
+                  "key": "name",
+                  "value": {
+                    "type": "atom",
+                    "value": {
+                      "description": "The name of the location.",
+                      "atomType": "string"
+                    }
+                  }
+                },
+                {
+                  "description": "The type of location (e.g., forest, castle, village).",
+                  "key": "type",
+                  "value": {
+                    "type": "enum",
+                    "value": {
+                      "description": "The type of location.",
+                      "variants": [
+                        "forest",
+                        "castle",
+                        "village",
+                        "mountain",
+                        "lake"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "description": "A description of the location.",
+                  "key": "description",
+                  "value": {
+                    "type": "atom",
+                    "value": {
+                      "description": "A description of the location.",
+                      "atomType": "string"
+                    }
+                  }
+                },
+                {
+                  "description": "Notable characters that reside in this location.",
+                  "key": "notableCharacters",
+                  "value": {
+                    "type": "array",
+                    "value": {
+                      "description": "List of notable characters in this location.",
+                      "items": {
+                        "type": "atom",
+                        "value": {
+                          "description": "A character's name.",
+                          "atomType": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "description": "A record representing a magical artifact in the story world.",
+          "key": "Artifact",
+          "value": {
+            "type": "record",
+            "value": {
+              "description": "Details about a magical artifact.",
+              "fields": [
+                {
+                  "description": "The name of the artifact.",
+                  "key": "name",
+                  "value": {
+                    "type": "atom",
+                    "value": {
+                      "description": "The name of the artifact.",
+                      "atomType": "string"
+                    }
+                  }
+                },
+                {
+                  "description": "The type of artifact (e.g., weapon, talisman, potion).",
+                  "key": "type",
+                  "value": {
+                    "type": "enum",
+                    "value": {
+                      "description": "The type of magical artifact.",
+                      "variants": [
+                        "weapon",
+                        "talisman",
+                        "potion",
+                        "scroll"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "description": "The powers or effects of the artifact.",
+                  "key": "effects",
+                  "value": {
+                    "type": "array",
+                    "value": {
+                      "description": "List of effects the artifact has.",
+                      "items": {
+                        "type": "atom",
+                        "value": {
+                          "description": "An effect of the artifact.",
+                          "atomType": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "description": "The history or lore surrounding the artifact.",
+                  "key": "lore",
+                  "value": {
+                    "type": "atom",
+                    "value": {
+                      "description": "A brief history of the artifact.",
+                      "atomType": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}

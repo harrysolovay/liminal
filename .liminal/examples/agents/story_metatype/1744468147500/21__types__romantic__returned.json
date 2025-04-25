@@ -1,0 +1,41 @@
+{
+  "scope": [
+    "types",
+    "romantic"
+  ],
+  "index": 0,
+  "type": "returned",
+  "value": {
+    "Character": {
+      "name": "Elara",
+      "age": 150,
+      "type": "witch",
+      "powers": [
+        "elemental magic",
+        "telepathy",
+        "potion brewing"
+      ],
+      "backstory": "Elara was born in a small village and discovered her powers at a young age. After being shunned by her peers, she retreated to the enchanted forest where she honed her skills."
+    },
+    "Location": {
+      "name": "The Enchanted Forest",
+      "type": "forest",
+      "description": "A mystical forest filled with ancient trees, magical creatures, and hidden secrets. The air is thick with enchantment, and the paths shift to confuse intruders.",
+      "notableCharacters": [
+        "Elara",
+        "Thorn the Fae",
+        "Grom the Werewolf"
+      ]
+    },
+    "Artifact": {
+      "name": "Amulet of Shadows",
+      "type": "talisman",
+      "effects": [
+        "grants invisibility",
+        "enhances magical abilities",
+        "protects against dark magic"
+      ],
+      "lore": "Forged in the depths of the Shadow Realm, this amulet is said to contain the essence of a fallen star, granting its wearer unparalleled power."
+    }
+  }
+}

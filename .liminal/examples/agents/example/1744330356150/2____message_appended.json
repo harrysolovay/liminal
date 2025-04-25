@@ -1,0 +1,9 @@
+{
+  "scope": [],
+  "index": 0,
+  "type": "message_appended",
+  "message": {
+    "role": "user",
+    "content": "I'm planning a trip to florida and want a suggestion for a fun activity."
+  }
+}

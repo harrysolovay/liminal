@@ -1,0 +1,9 @@
+{
+  "scope": [],
+  "index": 0,
+  "type": "message_appended",
+  "message": {
+    "role": "assistant",
+    "content": "{\"title\": \"Visit the Kennedy Space Center\", \"description\": \"Witness the history of space exploration – see rockets, learn about launches, and maybe even catch a glimpse of a real rocket!\", \"location\": \"Cape Canaveral, Florida\", \"estimatedCostUSD\": 60, \"ageRange\": { \"0\": 8, \"1\": 12 } }"
+  }
+}

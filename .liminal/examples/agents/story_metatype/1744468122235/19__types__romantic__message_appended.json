@@ -1,0 +1,12 @@
+{
+  "scope": [
+    "types",
+    "romantic"
+  ],
+  "index": 0,
+  "type": "message_appended",
+  "message": {
+    "role": "assistant",
+    "content": "{\n  \"beings\": [\n    {\n      \"name\": \"Elara\",\n      \"type\": \"witch\",\n      \"powers\": [\n        \"spellcasting\",\n        \"herbology\",\n        \"telepathy\"\n      ],\n      \"origin\": \"Born under a blood moon, Elara discovered her powers at a young age.\",\n      \"allies\": [\n        {\n          \"name\": \"Liam\",\n          \"type\": \"werewolf\"\n        },\n        {\n          \"name\": \"Mira\",\n          \"type\": \"fae\"\n        }\n      ]\n    },\n    {\n      \"name\": \"Draven\",\n      \"type\": \"vampire\",\n      \"powers\": [\n        \"super strength\",\n        \"hypnosis\",\n        \"night vision\"\n      ],\n      \"origin\": \"Turned into a vampire during a tragic battle centuries ago.\",\n      \"allies\": [\n        {\n          \"name\": \"Elara\",\n          \"type\": \"witch\"\n        },\n        {\n          \"name\": \"Ronan\",\n          \"type\": \"vampire\"\n        }\n      ]\n    },\n    {\n      \"name\": \"Fenrir\",\n      \"type\": \"werewolf\",\n      \"powers\": [\n        \"enhanced senses\",\n        \"regeneration\",\n        \"shape-shifting\"\n      ],\n      \"origin\": \"Cursed by a witch, Fenrir embraces his dual nature.\",\n      \"allies\": [\n        {\n          \"name\": \"Draven\",\n          \"type\": \"vampire\"\n        },\n        {\n          \"name\": \"Kira\",\n          \"type\": \"werewolf\"\n        }\n      ]\n    },\n    {\n      \"name\": \"Aeliana\",\n      \"type\": \"fae\",\n      \"powers\": [\n        \"illusion creation\",\n        \"nature manipulation\",\n        \"flight\"\n      ],\n      \"origin\": \"Born from the essence of the ancient forest, Aeliana protects her realm.\",\n      \"allies\": [\n        {\n          \"name\": \"Elara\",\n          \"type\": \"witch\"\n        },\n        {\n          \"name\": \"Luna\",\n          \"type\": \"fae\"\n        }\n      ]\n    }\n  ]\n}"
+  }
+}

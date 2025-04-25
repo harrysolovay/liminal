@@ -1,0 +1,167 @@
+{
+  "scope": [
+    "types",
+    "romantic"
+  ],
+  "index": 0,
+  "type": "returned",
+  "value": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+      "characters": {
+        "$ref": "#/$defs/1"
+      },
+      "locations": {
+        "$ref": "#/$defs/6"
+      },
+      "magicalItems": {
+        "$ref": "#/$defs/9"
+      }
+    },
+    "required": [
+      "characters",
+      "locations",
+      "magicalItems"
+    ],
+    "additionalProperties": false,
+    "$defs": {
+      "1": {
+        "type": "array",
+        "items": {
+          "$ref": "#/$defs/2"
+        }
+      },
+      "2": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "witch",
+              "vampire",
+              "werewolf",
+              "fae"
+            ]
+          },
+          "powers": {
+            "$ref": "#/$defs/3"
+          },
+          "backstory": {
+            "type": "string"
+          },
+          "allies": {
+            "$ref": "#/$defs/4"
+          },
+          "enemies": {
+            "$ref": "#/$defs/5"
+          }
+        },
+        "required": [
+          "name",
+          "type",
+          "powers",
+          "backstory",
+          "allies",
+          "enemies"
+        ],
+        "additionalProperties": false
+      },
+      "3": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "4": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "5": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "6": {
+        "type": "array",
+        "items": {
+          "$ref": "#/$defs/7"
+        }
+      },
+      "7": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "forest",
+              "castle",
+              "town",
+              "cave"
+            ]
+          },
+          "description": {
+            "type": "string"
+          },
+          "notableCharacters": {
+            "$ref": "#/$defs/8"
+          }
+        },
+        "required": [
+          "name",
+          "type",
+          "description",
+          "notableCharacters"
+        ],
+        "additionalProperties": false
+      },
+      "8": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "9": {
+        "type": "array",
+        "items": {
+          "$ref": "#/$defs/10"
+        }
+      },
+      "10": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "artifact",
+              "weapon",
+              "potion",
+              "amulet"
+            ]
+          },
+          "effects": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "type",
+          "effects"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}

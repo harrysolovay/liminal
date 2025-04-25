@@ -1,0 +1,84 @@
+{
+  "scope": [
+    "types",
+    "comedic"
+  ],
+  "index": 0,
+  "type": "inferred",
+  "value": {
+    "beings": [
+      {
+        "name": "Elara",
+        "type": "witch",
+        "powers": [
+          "spellcasting",
+          "herbology",
+          "telekinesis"
+        ],
+        "origin": "Born under a blood moon, Elara discovered her powers at a young age.",
+        "allies": [
+          "The Coven of Shadows",
+          "The Forest Spirits"
+        ],
+        "enemies": [
+          "The Vampire Lord",
+          "The Werewolf Pack"
+        ]
+      },
+      {
+        "name": "Draven",
+        "type": "vampire",
+        "powers": [
+          "super strength",
+          "mind control",
+          "immortality"
+        ],
+        "origin": "Turned into a vampire in the 18th century, Draven has roamed the night ever since.",
+        "allies": [
+          "The Night Syndicate",
+          "The Fae Court"
+        ],
+        "enemies": [
+          "The Witch Hunters",
+          "The Sunlight Guild"
+        ]
+      },
+      {
+        "name": "Fenrir",
+        "type": "werewolf",
+        "powers": [
+          "enhanced senses",
+          "regeneration",
+          "shape-shifting"
+        ],
+        "origin": "Cursed by a witch, Fenrir transforms during the full moon.",
+        "allies": [
+          "The Pack of the Moon",
+          "The Shapeshifters"
+        ],
+        "enemies": [
+          "The Vampire Hunters",
+          "The Silver Clan"
+        ]
+      },
+      {
+        "name": "Lirael",
+        "type": "fae",
+        "powers": [
+          "illusion creation",
+          "nature manipulation",
+          "flight"
+        ],
+        "origin": "Born from the essence of the ancient forest, Lirael embodies the spirit of nature.",
+        "allies": [
+          "The Woodland Creatures",
+          "The Elemental Spirits"
+        ],
+        "enemies": [
+          "The Dark Sorcerer",
+          "The Iron Fae"
+        ]
+      }
+    ]
+  }
+}

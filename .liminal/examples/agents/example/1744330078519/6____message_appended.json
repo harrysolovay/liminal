@@ -1,0 +1,9 @@
+{
+  "scope": [],
+  "index": 0,
+  "type": "message_appended",
+  "message": {
+    "role": "user",
+    "content": "Please break it apart into a list that abides by the specified schema."
+  }
+}

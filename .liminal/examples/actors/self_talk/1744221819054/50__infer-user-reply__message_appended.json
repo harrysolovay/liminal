@@ -1,0 +1,11 @@
+{
+  "scope": [
+    "infer-user-reply"
+  ],
+  "index": 4,
+  "type": "message_appended",
+  "message": {
+    "role": "user",
+    "content": "Please reply to the last message on my behalf."
+  }
+}

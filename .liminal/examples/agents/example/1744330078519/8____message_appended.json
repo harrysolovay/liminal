@@ -1,0 +1,9 @@
+{
+  "scope": [],
+  "index": 0,
+  "type": "message_appended",
+  "message": {
+    "role": "assistant",
+    "content": "{\n  \"role\": \"assistant\",\n  \"content\": \"{\\\"activities\\\":\\n  {\\\"title\\\": \\\"Florida Fun - Activity Suggestions\\\", \\\"description\\\": \\\"A breakdown of fun activities across various interests in Florida.\\\", \\\"location\\\": \\\"Florida\\\", \\\"estimatedCostUSD\\\": null, \\\"ageRange\\\": {\\\"0\\\": 0, \\\"1\\\": 1}}\\n  }\\n\"\n}"
+  }
+}

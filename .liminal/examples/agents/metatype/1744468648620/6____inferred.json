@@ -1,0 +1,81 @@
+{
+  "scope": [],
+  "index": 0,
+  "type": "inferred",
+  "value": {
+    "beings": [
+      {
+        "name": "Elara",
+        "type": "witch",
+        "powers": [
+          "spellcasting",
+          "herbology",
+          "telekinesis"
+        ],
+        "origin": "Born under a blood moon, Elara discovered her powers at a young age.",
+        "allies": [
+          "The Coven of Shadows",
+          "The Forest Spirits"
+        ],
+        "enemies": [
+          "The Vampire Lord",
+          "The Werewolf Pack"
+        ]
+      },
+      {
+        "name": "Draven",
+        "type": "vampire",
+        "powers": [
+          "super strength",
+          "hypnosis",
+          "night vision"
+        ],
+        "origin": "Turned into a vampire during a tragic battle centuries ago.",
+        "allies": [
+          "The Nightwalkers",
+          "The Shadow Council"
+        ],
+        "enemies": [
+          "The Witch Hunters",
+          "The Sunlight Brigade"
+        ]
+      },
+      {
+        "name": "Fenrir",
+        "type": "werewolf",
+        "powers": [
+          "enhanced senses",
+          "regeneration",
+          "shape-shifting"
+        ],
+        "origin": "Cursed by a vengeful witch, Fenrir embraces his dual nature.",
+        "allies": [
+          "The Pack of the Moon",
+          "The Fae Guardians"
+        ],
+        "enemies": [
+          "The Vampire Hunters",
+          "The Silver Clan"
+        ]
+      },
+      {
+        "name": "Lirael",
+        "type": "fae",
+        "powers": [
+          "illusion creation",
+          "nature manipulation",
+          "flight"
+        ],
+        "origin": "Born from the essence of the ancient forest, Lirael protects her realm.",
+        "allies": [
+          "The Woodland Creatures",
+          "The Elemental Spirits"
+        ],
+        "enemies": [
+          "The Dark Sorcerer",
+          "The Iron Brigade"
+        ]
+      }
+    ]
+  }
+}

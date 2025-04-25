@@ -1,0 +1,9 @@
+{
+  "scope": [],
+  "index": 0,
+  "type": "message_appended",
+  "message": {
+    "role": "assistant",
+    "content": "Hi there! I’m doing well, thank you for asking. As an AI, I don’t really “feel” in the same way humans do, but I’m functioning perfectly and ready to help you with whatever you need. \n\nHow about you? How are *you* doing today? 😊"
+  }
+}

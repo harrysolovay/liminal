@@ -1,0 +1,204 @@
+{
+  "scope": [],
+  "index": 0,
+  "type": "returned",
+  "value": {
+    "gritty": {
+      "Character": {
+        "name": "Elara",
+        "type": "witch",
+        "powers": [
+          "elemental magic",
+          "telepathy",
+          "potion brewing"
+        ],
+        "backstory": "Elara was born into a long line of powerful witches. After a tragic event that took her family, she vowed to protect the magical realm from dark forces.",
+        "allies": [
+          {
+            "name": "Draven",
+            "type": "vampire"
+          },
+          {
+            "name": "Fenrir",
+            "type": "werewolf"
+          }
+        ]
+      },
+      "Location": {
+        "name": "Eldergrove Forest",
+        "type": "forest",
+        "description": "A mystical forest filled with ancient trees and magical creatures. It is said to be the heart of the magical realm, where the veil between worlds is thin.",
+        "notableCharacters": [
+          {
+            "name": "Thorn",
+            "type": "fae"
+          },
+          {
+            "name": "Luna",
+            "type": "witch"
+          }
+        ]
+      }
+    },
+    "comedic": {
+      "beings": [
+        {
+          "name": "Elara",
+          "type": "witch",
+          "powers": [
+            "spellcasting",
+            "herbology",
+            "telekinesis"
+          ],
+          "origin": "Born under a blood moon, Elara discovered her powers at a young age.",
+          "allies": [
+            "The Coven of Shadows",
+            "The Forest Spirits"
+          ],
+          "enemies": [
+            "The Vampire Lord",
+            "The Werewolf Pack"
+          ]
+        },
+        {
+          "name": "Draven",
+          "type": "vampire",
+          "powers": [
+            "super strength",
+            "mind control",
+            "immortality"
+          ],
+          "origin": "Turned into a vampire in the 18th century, Draven has roamed the night ever since.",
+          "allies": [
+            "The Night Syndicate",
+            "The Fae Court"
+          ],
+          "enemies": [
+            "The Witch Hunters",
+            "The Sunlight Guild"
+          ]
+        },
+        {
+          "name": "Fenrir",
+          "type": "werewolf",
+          "powers": [
+            "enhanced senses",
+            "regeneration",
+            "shape-shifting"
+          ],
+          "origin": "Cursed by a witch, Fenrir transforms during the full moon.",
+          "allies": [
+            "The Pack of the Moon",
+            "The Shapeshifters"
+          ],
+          "enemies": [
+            "The Vampire Hunters",
+            "The Silver Clan"
+          ]
+        },
+        {
+          "name": "Lirael",
+          "type": "fae",
+          "powers": [
+            "illusion creation",
+            "nature manipulation",
+            "flight"
+          ],
+          "origin": "Born from the essence of the ancient forest, Lirael embodies the spirit of nature.",
+          "allies": [
+            "The Woodland Creatures",
+            "The Elemental Spirits"
+          ],
+          "enemies": [
+            "The Dark Sorcerer",
+            "The Iron Fae"
+          ]
+        }
+      ]
+    },
+    "romantic": {
+      "beings": [
+        {
+          "name": "Elara",
+          "type": "witch",
+          "powers": [
+            "spellcasting",
+            "herbology",
+            "telepathy"
+          ],
+          "origin": "Born under a blood moon, Elara discovered her powers at a young age.",
+          "allies": [
+            {
+              "name": "Liam",
+              "type": "werewolf"
+            },
+            {
+              "name": "Mira",
+              "type": "fae"
+            }
+          ]
+        },
+        {
+          "name": "Draven",
+          "type": "vampire",
+          "powers": [
+            "super strength",
+            "hypnosis",
+            "night vision"
+          ],
+          "origin": "Turned into a vampire during a tragic battle centuries ago.",
+          "allies": [
+            {
+              "name": "Elara",
+              "type": "witch"
+            },
+            {
+              "name": "Ronan",
+              "type": "vampire"
+            }
+          ]
+        },
+        {
+          "name": "Fenrir",
+          "type": "werewolf",
+          "powers": [
+            "enhanced senses",
+            "regeneration",
+            "shape-shifting"
+          ],
+          "origin": "Cursed by a witch, Fenrir embraces his dual nature.",
+          "allies": [
+            {
+              "name": "Draven",
+              "type": "vampire"
+            },
+            {
+              "name": "Kira",
+              "type": "werewolf"
+            }
+          ]
+        },
+        {
+          "name": "Aeliana",
+          "type": "fae",
+          "powers": [
+            "illusion creation",
+            "nature manipulation",
+            "flight"
+          ],
+          "origin": "Born from the essence of the ancient forest, Aeliana protects her realm.",
+          "allies": [
+            {
+              "name": "Elara",
+              "type": "witch"
+            },
+            {
+              "name": "Luna",
+              "type": "fae"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

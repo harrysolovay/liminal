@@ -1,0 +1,9 @@
+{
+  "scope": [],
+  "index": 0,
+  "type": "message_appended",
+  "message": {
+    "role": "assistant",
+    "content": "{\n\"title\": \"Explore the Everglades National Park\",\n\"description\": \"Take a guided airboat tour through the Everglades! It’s a fantastic way to see alligators, birds, and other wildlife – a truly unique Florida experience.\"\n,\n\"location\": \"Everglades National Park, Florida\"\n,\n\"estimatedCostUSD\": 40\n,\n\"ageRange\": {\"0\": 8, \"1\": 12}\n}"
+  }
+}

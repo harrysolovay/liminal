@@ -1,0 +1,15 @@
+{
+  "scope": [],
+  "index": 0,
+  "type": "inferred",
+  "value": {
+    "title": "Visit a fascinating theme park like Disney World or Universal Studios! It’s a classic Florida experience filled with thrills, magic, and unforgettable memories.\\",
+    "description": "Visit a fascinating theme park like Disney World or Universal Studios! It’s a classic Florida experience filled with thrills, magic, and unforgettable memories.\\",
+    "location": "Florida, USA",
+    "estimatedCostUSD": 250,
+    "ageRange": {
+      "0": 8,
+      "1": 9
+    }
+  }
+}

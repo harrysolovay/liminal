@@ -1,0 +1,8 @@
+{
+  "scope": [],
+  "type": "message_appended",
+  "message": {
+    "role": "user",
+    "content": "Great, please teach something interesting about this choice of subtopic."
+  }
+}

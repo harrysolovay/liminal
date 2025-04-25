@@ -1,0 +1,9 @@
+{
+  "scope": [],
+  "index": 0,
+  "type": "message_appended",
+  "message": {
+    "role": "assistant",
+    "content": "{\"title\": \"Explore a Wildlife Sanctuary – Florida!\", \"description\": \"Discover the beauty of Florida’s wildlife with a visit to a dedicated sanctuary! You’ll have the chance to see alligators, birds, and other fascinating creatures in a natural setting. It’s a chance to learn about conservation and Florida’s unique ecosystem.  It's a really special experience.\\\\\", \"location\": \"Various Sanctuaries throughout Florida - check out [link to a relevant resource, e.g., a Florida Wildlife Federation site]”, \"\n  ,\"estimatedCostUSD\": 50, \"ageRange\": { \"0\": 8, \"1\": 12}\n}"
+  }
+}

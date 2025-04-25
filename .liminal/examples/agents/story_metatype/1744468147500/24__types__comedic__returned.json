@@ -1,0 +1,54 @@
+{
+  "scope": [
+    "types",
+    "comedic"
+  ],
+  "index": 0,
+  "type": "returned",
+  "value": {
+    "Character": {
+      "name": "Elara",
+      "type": "witch",
+      "powers": [
+        "spellcasting",
+        "herbology",
+        "telekinesis"
+      ],
+      "backstory": "Elara grew up in a secluded village where she learned the ancient arts of witchcraft from her grandmother. After a dark prophecy foretold of a great evil, she set out to gather allies and prevent the impending doom.",
+      "allies": [
+        {
+          "name": "Lysander",
+          "type": "vampire"
+        },
+        {
+          "name": "Garrick",
+          "type": "werewolf"
+        }
+      ]
+    },
+    "Location": {
+      "name": "The Enchanted Forest",
+      "type": "forest",
+      "description": "A mystical forest filled with ancient trees, glowing plants, and hidden creatures. The air is thick with magic, and the paths shift to confuse intruders.",
+      "inhabitants": [
+        {
+          "name": "Thalia",
+          "type": "fae"
+        },
+        {
+          "name": "Bram",
+          "type": "werewolf"
+        }
+      ]
+    },
+    "MagicalItem": {
+      "name": "Amulet of Shadows",
+      "type": "amulet",
+      "effects": [
+        "grants invisibility",
+        "enhances magical abilities",
+        "protects against dark magic"
+      ]
+    }
+  }
+}

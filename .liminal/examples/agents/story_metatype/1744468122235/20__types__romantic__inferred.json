@@ -1,0 +1,92 @@
+{
+  "scope": [
+    "types",
+    "romantic"
+  ],
+  "index": 0,
+  "type": "inferred",
+  "value": {
+    "beings": [
+      {
+        "name": "Elara",
+        "type": "witch",
+        "powers": [
+          "spellcasting",
+          "herbology",
+          "telepathy"
+        ],
+        "origin": "Born under a blood moon, Elara discovered her powers at a young age.",
+        "allies": [
+          {
+            "name": "Liam",
+            "type": "werewolf"
+          },
+          {
+            "name": "Mira",
+            "type": "fae"
+          }
+        ]
+      },
+      {
+        "name": "Draven",
+        "type": "vampire",
+        "powers": [
+          "super strength",
+          "hypnosis",
+          "night vision"
+        ],
+        "origin": "Turned into a vampire during a tragic battle centuries ago.",
+        "allies": [
+          {
+            "name": "Elara",
+            "type": "witch"
+          },
+          {
+            "name": "Ronan",
+            "type": "vampire"
+          }
+        ]
+      },
+      {
+        "name": "Fenrir",
+        "type": "werewolf",
+        "powers": [
+          "enhanced senses",
+          "regeneration",
+          "shape-shifting"
+        ],
+        "origin": "Cursed by a witch, Fenrir embraces his dual nature.",
+        "allies": [
+          {
+            "name": "Draven",
+            "type": "vampire"
+          },
+          {
+            "name": "Kira",
+            "type": "werewolf"
+          }
+        ]
+      },
+      {
+        "name": "Aeliana",
+        "type": "fae",
+        "powers": [
+          "illusion creation",
+          "nature manipulation",
+          "flight"
+        ],
+        "origin": "Born from the essence of the ancient forest, Aeliana protects her realm.",
+        "allies": [
+          {
+            "name": "Elara",
+            "type": "witch"
+          },
+          {
+            "name": "Luna",
+            "type": "fae"
+          }
+        ]
+      }
+    ]
+  }
+}

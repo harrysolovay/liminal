@@ -1,0 +1,9 @@
+{
+  "scope": [],
+  "index": 0,
+  "type": "message_appended",
+  "message": {
+    "role": "assistant",
+    "content": "{\n  \"role\": \"assistant\",\n  \"content\": \"{\\\"title\\\": \\\"Take a dolphin watching tour! It's a classic Florida experience and you’re likely to see playful dolphins in their natural habitat.\\\", \\\"description\\\": \\\"Take a dolphin watching tour! It’s a classic Florida experience and you’re likely to see playful dolphins in their natural habitat. It’s a truly memorable experience!\\\", \\\"location\\\": \\\"Florida\\\", \\\"estimatedCostUSD\\\": 80, \\\"forWhom\\\": \\\"Families and those who enjoy marine life\\\"}\"\n}"
+  }
+}

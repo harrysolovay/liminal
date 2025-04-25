@@ -1,0 +1,9 @@
+{
+  "scope": [],
+  "index": 0,
+  "type": "message_appended",
+  "message": {
+    "role": "assistant",
+    "content": "{\"title\": \"Discover the vibrant city of Miami! Explore its unique culture, beaches, and nightlife, offering a dynamic blend of art, music, and delicious food.\\\\\\\\\", \"description\": \"Discover the vibrant city of Miami! Explore its unique culture, beaches, and nightlife, offering a dynamic blend of art, music, and delicious food.\\\\\\\\\", \"location\": \"Miami, Florida, USA\", \"estimatedCostUSD\": 180.00, \"ageRange\": {\"0\": 8, \"1\": 9}}"
+  }
+}

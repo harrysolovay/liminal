@@ -1,0 +1,17 @@
+{
+  "scope": [],
+  "index": 0,
+  "type": "inferred",
+  "value": {
+    "activities": {
+      "title": "Florida Fun - Here's a Plan!",
+      "description": "Florida offers endless possibilities! Here’s a breakdown of activities, categorized by interest:”, 1, ",
+      "location": "Florida has something for everyone!",
+      "estimatedCostUSD": 750,
+      "ageRange": {
+        "0": 18,
+        "1": 25
+      }
+    }
+  }
+}

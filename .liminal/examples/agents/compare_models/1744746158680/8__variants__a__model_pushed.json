@@ -1,0 +1,10 @@
+{
+  "scope": [
+    "variants",
+    "a"
+  ],
+  "index": 0,
+  "type": "model_pushed",
+  "modelKey": "one",
+  "modelType": "language"
+}

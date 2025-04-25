@@ -1,0 +1,45 @@
+{
+  "scope": [
+    "types",
+    "gritty"
+  ],
+  "index": 0,
+  "type": "returned",
+  "value": {
+    "Character": {
+      "name": "Elara",
+      "type": "witch",
+      "powers": [
+        "elemental magic",
+        "telepathy",
+        "potion brewing"
+      ],
+      "backstory": "Elara was born into a long line of powerful witches. After a tragic event that took her family, she vowed to protect the magical realm from dark forces.",
+      "allies": [
+        {
+          "name": "Draven",
+          "type": "vampire"
+        },
+        {
+          "name": "Fenrir",
+          "type": "werewolf"
+        }
+      ]
+    },
+    "Location": {
+      "name": "Eldergrove Forest",
+      "type": "forest",
+      "description": "A mystical forest filled with ancient trees and magical creatures. It is said to be the heart of the magical realm, where the veil between worlds is thin.",
+      "notableCharacters": [
+        {
+          "name": "Thorn",
+          "type": "fae"
+        },
+        {
+          "name": "Luna",
+          "type": "witch"
+        }
+      ]
+    }
+  }
+}
