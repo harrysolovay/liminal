@@ -11,7 +11,8 @@ hero:
       text: Getting Started
       link: /getting_started
     - theme: alt
-      text: npx liminal init
+      text: Why Though?
+      link: /why
 features:
   - icon:
       src: /iconoir--planet.svg
@@ -32,31 +33,3 @@ features:
 
 <br />
 <br />
-
----
-
-<script setup>
-
-import { onMounted } from 'vue'
-
-onMounted(() => {
-  const heading = document.querySelector(".heading .name")
-  const betaBadge = document.createElement("span")
-  heading.style += ";display: flex; align-items: start;"
-  betaBadge.textContent = " (Beta)"
-  betaBadge.style = "font-size: 36px;"
-  heading.appendChild(betaBadge)
-  const element = document.querySelector("a.VPButton.medium.alt");
-  element.addEventListener('click', function() {
-    navigator.clipboard
-      .writeText("npx liminal init")
-      .then(() => {
-        console.log('Text copied to clipboard successfully!');
-      })
-      .catch(err => {
-        console.error('Failed to copy text: ', err);
-      });
-  })
-})
-
-</script>

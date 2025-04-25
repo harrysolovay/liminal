@@ -1,51 +1,39 @@
 # Why Liminal? <Badge type="warning" text="beta" />
 
-## Agent Definition
+## Conversation-Modeling
 
-Liminal provides model-agnostic building blocks that describe the behavior of
-agents. For example:
-
-```ts
-// Change the current model mid-conversation.
-L.model("key")
-
-// Append a user message to the message buffer.
-L.user`User message here.`
-
-// Trigger a completion.
-L.reply
-```
-
-## Conversation Management
-
-As we yield these building blocks, Liminal maintains an underlying conversation.
-This allows us to reason about the progression of the conversation as part of
-standard function control flow.
+Liminal provides building blocks for modeling conversations as part of ordinary
+function control flow.
 
 ```ts
-function* agent() {
+function* g() {
   // Append a system message.
-  yield* L.system`Be very specific.`
+  yield* L.system`
+    You are a Leprechaun.
+  `
 
   // Append a user message.
-  yield* L.user`Answer my question.`
+  yield* L.user`
+    Where is the pot of gold?
+  `
 
-  // Get a reply from the model, append as an assistant message.
-  const answer = yield* L.reply
+  // Infer and append a reply.
+  yield* L.assistant
 }
 ```
 
-When executed, the resulting message state will look similar to the following.
+With each yield, Liminal updates the underlying conversation state. The final of
+the example above looks as follows.
 
 ```json
 [
   {
     "role": "system",
-    "content": "Be very specific."
+    "content": "You are a Leprechaun."
   },
   {
     "role": "user",
-    "content": "Answer my question."
+    "content": "Where is the pot of gold?"
   },
   {
     "role": "assistant",
@@ -54,61 +42,10 @@ When executed, the resulting message state will look similar to the following.
 ]
 ```
 
-## Model Interoperability
+## Pure Composition
 
-Models are never hard-coded into Liminal agents. Instead, we specify keys.
-
-```ts
-function* g() {
-  yield* L.model("initial")
-  yield* L.infer
-  yield* L.model("mini")
-  yield* L.infer
-  yield* L.model("reasoning")
-  yield* L.infer
-}
-```
-
-Only upon execution do we bind models to these keys.
-
-```ts
-declare const initial: LanguageModel
-declare const mini: LanguageModel
-declare const reasoning: LanguageModel
-
-const result = await exec(g, {
-  initial,
-  mini,
-  reasoning,
-})
-```
-
-## Standard JavaScript
-
-Liminal agents are JavaScript objects that implement the iterator protocol (such
-as arrays, iterators and generators).
-
-Iterating can trigger ordinary JavaScript code, such as while loops and promise
-execution.
-
-```ts
-async function* g() {
-  yield* L.system`...`
-
-  const item = await db.getItem()
-
-  while (Math.random() < .9) {
-    yield* L.reply
-  }
-
-  // ...
-}
-```
-
-## Agent Composition
-
-Because agents are mere iterator protocol objects, it's easy to create and reuse
-patterns such as iterative refinement loops.
+Because agents are made from iterator protocol objects, it's easy to create and
+reuse patterns such as iterative refinement loops.
 
 ```ts
 function* refine(content: string) {
@@ -121,75 +58,152 @@ function* refine(content: string) {
 }
 ```
 
+Later on we can use this conversation with ease.
+
+```ts {4}
+function* g() {
+  const initial = await prompt("Please provide some text.")!
+  const refined = yield* refine(initial)
+  return refined
+}
+```
+
+## Branching
+
+Liminal streamlines conversational branching, allowing us to explore alternative
+conversation states and compute results.
+
+Let's modify the example above to isolate the refinement loop from the outer
+conversation (`g`).
+
+```ts
+function* g() {
+  const initial = await prompt("Please provide some text.")!
+  const refined = yield* L.branch(refine(initial))
+  return refined
+}
+```
+
+## Parallel Agents
+
+We can execute parallel branches, each with their own isolated copy of the outer
+conversation.
+
+```ts
+function* g() {
+  yield* L.user`A message, soon to be inherited by refiners.`
+
+  const refined = yield* L.branch(values.map(refine))
+
+  refined satisfies Array<string>
+}
+```
+
+### Convenient APIs
+
+Branch definitions can take the form of iterables, iterable-producing (nullary)
+functions and records of the aforementioned values.
+
+```ts
+function* g() {
+  yield* L.user`...`
+
+  const result = yield* L.branch({
+    a: refined(text),
+    *b() {
+      yield* L.user`...`
+      return "A"
+    },
+  })
+
+  result satisfies {
+    a: string
+    b: string
+  }
+}
+```
+
 ## Structured Output
 
-Liminal allows you to use various [standard schema](https://standardschema.dev/)
-types to ensure replies conform to the specified shape.
+Liminal allows you to use various runtime type libraries to ensure assistant
+replies conform to a specified shape.
 
 > [!TIP]
 > Supported libraries include zod, arktype, effect/schema, typebox and
-> [Liminal runtime types](./liminal_types/preface.md).
 
 ```ts
+import { compile } from "liminal-zod"
 import { z } from "zod"
 
+const MyType = compile(z.object({
+  a: z.string,
+  b: z.number,
+}))
+
 function* g() {
-  const result = yield* L.reply(
-    z.object({
-      value: z.string,
-    }),
-  )
+  const result = yield* L.assistant(MyType)
 
   result satisfies {
-    value: string
+    a: string
+    b: number
   }
+}
+```
+
+## Model-switching
+
+Switch the model anytime by yielding it. After being yielded, the model will be
+used for subsequent inference.
+
+```ts
+import { models } from "./models.ts"
+
+function* g() {
+  yield* L.user`Message A.`
+  yield* L.model(models.default)
+  yield* L.infer
+
+  yield* L.user`Message B.`
+  yield* L.model(models.reasoning)
+  yield* L.infer
+}
+```
+
+## Standard JavaScript
+
+Liminal agents are defined as JavaScript iterables. These iterables can trigger
+arbitrary computations, such as looping and promise execution.
+
+```ts
+async function* g() {
+  yield* L.system`...`
+
+  while (Math.random() < .9) {
+    yield* L.assistant
+  }
+
+  const item = await db.getItem()
 }
 ```
 
 ## Observability
 
-Within agents, we can yield events that contain arbitrary data. This enables us
-to then listen for those events during the agent's runtime.
+Agents definitions can yield events. We can listen to these events during the
+agent's runtime.
 
 ```ts
-function* g() {
-  yield* L.event("event-name-here")
-}
-
-exec(g, {
-  // ...
-  handler(event) {
-    if (event === "event-name-here") {
-      // ...
-    }
+await Agent(
+  function*() {
+    yield* L.event("event-name-here")
   },
-})
-```
-
-## Agent Hierarchies
-
-Liminal simplifies conversational branching and parallel agents.
-
-Any agent can branch into child agents, each with their own isolated copy of the
-parent state.
-
-```ts
-function* g() {
-  yield* L.user`Shared message.`
-
-  yield* L.branch({
-    *a() {
-      // Has `Shared Message.`
-      yield* L.user`Child agent A.`
+  {
+    handler(event) {
+      if (event === "event-name-here") {
+        // ...
+      }
     },
-    *b() {
-      // Has `Shared Message.`
-      yield* L.user`Child agent B`
-    },
-  })
-
-  // Does not have the message yielded in agent `a` nor `b`.
-}
+  },
+)
 ```
 
 ## Next Steps

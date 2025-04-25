@@ -34,96 +34,72 @@ yarn add liminal
 
 ## First Steps
 
-Let's consider a function that validates an email input from a form. Our initial
-implementation may look as follows.
+### Example Problem
+
+Let's consider a function that validates an email. Our initial implementation
+may look as follows.
 
 ```ts
 function validateEmail(email: string) {
   if (!EMAIL_REGEX.test(email)) {
     return { error: "Invalid email format." }
   }
-  return { success: true }
+  return { valid: true }
 }
 ```
 
-In this scenario, the error message we return is opaque. The user viewing the
-message may be confused about why their submission is invalid.
+Downside of this implementation: the error message we return is opaque. If
+provided to an end user, they may be confused about why the email they provided
+is invalid.
+
+### Solution
 
 Let's turn our function into a Liminal agent and infer a helpful validation
 message.
 
-```ts {3,5-7}
-import { L } from "liminal"
+```ts {7-9}
+import { openai } from "@ai-sdk/openai"
+import { Agent, L } from "liminal"
+import { ai } from "liminal-ai"
 
 export function* validateEmail(email: string) {
   if (!EMAIL_REGEX.test(email)) {
-    yield* L.model("default")
-    yield* L.user`Why is the following email is invalid?: "${email}".`
-    const error = yield* L.infer
+    yield* L.model(ai(openai("gpt-4o-mini"))) // 1. Specify the language model.
+    yield* L.user`Why is the following email is invalid?: "${email}".` // 2. Ask a question.
+    const error = yield* L.assistant // 3. Infer the answer.
     return { error }
   }
   return { valid: true }
 }
 ```
 
-## Running Agents
+#### Running `validateEmail`
 
-To make use of `validateEmail`, we use `exec` and specify the desired model(s).
+To make use of the updated `validateEmail`, we import and call with `Agent`.
 
-```ts {10-12}
-import { exec, L } from "liminal"
-
-import { openai } from "@ai-sdk/openai"
-import { AILanguageModel } from "liminal-ai"
+```ts {7}
+// ...
 
 export function validationEndpoint(request: Request) {
   const formData = await request.formData()
   const email = formData.get("email")?.toString()
   if (email) {
-    const result = await exec(validateEmail(email), {
-      default: AILanguageModel(openai("gpt-3.5-turbo")),
-    })
+    const result = await Agent(validateEmail(email))
     return Response.json(result)
   }
   // ...
 }
 ```
 
-## Agentic Behavior
+If the supplied email address is invalid, we may get error messages similar to
+the following.
 
-In this example, we imbue the `validateEmail` function with agentic capabilities
-by (A) appending an asterisk to the `function` keyword and later (B) calling it
-with Liminal's `exec` function.
-
-```diff
-- export function validateEmail(email: string) {
-+ export function* validateEmail(email: string) {
-
-// ...
-
-- const result = await validateEmail(email)
-+ const result = await exec(validateEmail(email), {
-+   default: AILanguageModel(openai("gpt-3.5-turbo")),
-+ })
-```
-
-## Expected Results
-
-When we call `exec` with our `validateEmail` agent, we expect everything to be
-the same except that we use a language model to generate the validation error
-message.
-
-```txt
-"john..doe@example" → "Your email is missing the top-level domain (like .com or .org) after 'example'."
-```
-
-```txt
-"user@domain" → "Your email address is incomplete and missing the domain extension."
-```
-
-```txt
-"john@example..com" → "Your email contains consecutive dots which aren't allowed in a valid address."
-```
+- `john..doe@example`: Your email is missing the top-level domain (like .com or
+  .org) after 'example'.
+- `user@domain`: Your email address is incomplete and missing the domain
+  extension.
+- `john@example..com`: Your email contains consecutive dots which aren't allowed
+  in a valid address.
 
 ## Next Steps
 

@@ -53,14 +53,14 @@ export default defineConfig({
     sidebar: [
       {
         text: "Examples",
-        link: "https://raw.githubusercontent.com/harrysolovay/liminal/refs/heads/main/AWESOME.md",
+        link: "https://github.com/harrysolovay/liminal/tree/main/examples",
         target: "blank",
       },
-      {
-        text: "llms.txt",
-        link: "https://raw.githubusercontent.com/harrysolovay/liminal/refs/heads/main/llms.txt",
-        target: "blank",
-      },
+      // {
+      //   text: "llms.txt",
+      //   link: "https://raw.githubusercontent.com/harrysolovay/liminal/refs/heads/main/llms.txt",
+      //   target: "blank",
+      // },
       {
         text: "Introduction",
         items: [
@@ -70,45 +70,49 @@ export default defineConfig({
         ],
       },
       {
-        text: "Agents",
+        text: "Configuration",
+        items: [
+          { text: "Models", link: "/models" },
+          { text: "Tools", link: "/tools" },
+        ],
+      },
+      {
+        text: "Conversation",
         items: [
           { text: "Messages", link: "/messages" },
           { text: "Streams", link: "/streams" },
-          { text: "Models", link: "/models" },
           { text: "Events", link: "/events" },
-          { text: "Tool-calling", link: "/tool-calling" },
           { text: "Branches", link: "/branches" },
-          { text: "Fibers", link: "/fibers" },
         ],
       },
-      {
-        text: "Types",
-        base: "/types",
-        items: [
-          { text: "Registry", link: "/registry" },
-          { text: "LSchema", link: "/lschema" },
-          {
-            text: "Type Factories",
-            collapsed: true,
-            items: [
-              { text: "Preface", link: "/preface" },
-              { text: "Intrinsics", link: "/intrinsics" },
-              { text: "Utilities", link: "/utilities" },
-              { text: "Metatype", link: "/metatypes" },
-              { text: "Transforms", link: "/transforms" },
-              { text: "Visitation", link: "/visitation" },
-            ],
-          },
-        ],
-      },
-      {
-        text: "Testing",
-        collapsed: true,
-        items: [
-          { text: "Model Proxy", link: "/model_proxy" },
-          { text: "Step-debugging", link: "/step_debugging" },
-        ],
-      },
+      // {
+      //   text: "Types",
+      //   base: "/types",
+      //   items: [
+      //     { text: "Supported Runtime Types", link: "/integrations" },
+      //     { text: "LSchema", link: "/lschema" },
+      //     {
+      //       text: "Type Factories",
+      //       collapsed: true,
+      //       items: [
+      //         { text: "Preface", link: "/preface" },
+      //         { text: "Intrinsics", link: "/intrinsics" },
+      //         { text: "Utilities", link: "/utilities" },
+      //         { text: "Metatype", link: "/metatypes" },
+      //         { text: "Transforms", link: "/transforms" },
+      //         { text: "Visitation", link: "/visitation" },
+      //       ],
+      //     },
+      //   ],
+      // },
+      // {
+      //   text: "Testing",
+      //   collapsed: true,
+      //   items: [
+      //     { text: "Model Proxy", link: "/model_proxy" },
+      //     { text: "Step-debugging", link: "/step_debugging" },
+      //   ],
+      // },
     ],
   },
   transformHead: ({ pageData: { frontmatter }, siteData }) => {
