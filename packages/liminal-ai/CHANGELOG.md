@@ -1,5 +1,13 @@
 # liminal-ai
 
+## 0.0.8
+
+### Patch Changes
+
+- dbd5e93: Reintroduced tools and various examples.
+- Updated dependencies [dbd5e93]
+  - liminal@0.5.9
+
 ## 0.0.7
 
 ### Patch Changes
