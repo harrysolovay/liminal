@@ -1,49 +1,58 @@
-// import { L } from "liminal"
-// import { readFile } from "node:fs/promises"
-// import { fileURLToPath } from "node:url"
+import { Agent, L } from "liminal"
+import "liminal-arktype/register"
+import { type } from "arktype"
+import { readFile } from "node:fs/promises"
+import { fileURLToPath } from "node:url"
+import { gpt4oMini } from "./models.ts"
 
-// export default async function*() {
-//   const code = await readFile(fileURLToPath(import.meta.url), "utf-8")
-//   yield* L.system`You are a technical lead summarizing multiple code reviews. Review the supplied code.`
-//   yield* L.user(code)
-//   const reviews = L.branch("reviews", { security, performance, maintainability })
-//   yield* L.user(JSON.stringify(Object.values(reviews), null, 2))
-//   yield* L.user`You are a technical lead summarizing multiple code reviews.`
-//   const summary = yield* L.infer
-//   return { reviews, summary }
-// }
+const LMH = type("'lower' | 'medium' | 'high'")
 
-// function* security() {
-//   yield* L
-//     .system`You are an expert in code security. Focus on identifying security vulnerabilities, injection risks, and authentication issues.`
-//   return yield* L.object({
-//     type: "security",
-//     vulnerabilities: L.array(L.string),
-//     riskLevel: LMH,
-//     suggestions: L.array(L.string),
-//   })
-// }
+const result = await Agent(
+  async function*() {
+    yield* L.model(gpt4oMini)
+    const code = await readFile(fileURLToPath(import.meta.url), "utf-8")
+    yield* L.system`You are a technical lead summarizing multiple code reviews. Review the supplied code.`
+    yield* L.user(code)
+    const reviews = yield* L.branch({ security, performance, maintainability })
+    yield* L.user(JSON.stringify(Object.values(reviews), null, 2))
+    yield* L.user`You are a technical lead summarizing multiple code reviews.`
+    const summary = yield* L.assistant
+    return { reviews, summary }
+  },
+  { handler: console.log },
+)
 
-// function* performance() {
-//   yield* L
-//     .system`You are an expert in code performance. Focus on identifying performance bottlenecks, memory leaks, and optimization opportunities.`
-//   return yield* L.object({
-//     type: "performance",
-//     issues: L.array(L.string),
-//     impact: LMH,
-//     optimizations: L.array(L.string),
-//   })
-// }
+console.log(result)
 
-// function* maintainability() {
-//   yield* L
-//     .system`You are an expert in code quality. Focus on code structure, readability, and adherence to best practices.`
-//   return yield* L.object({
-//     type: "maintainability",
-//     concerns: L.array(L.string),
-//     qualityScore: L.integer`Between 1 and 10, inclusive.`,
-//     recommendations: "string[]",
-//   })
-// }
+function* security() {
+  yield* L
+    .system`You are an expert in code security. Focus on identifying security vulnerabilities, injection risks, and authentication issues.`
+  return yield* L.assistant(type({
+    type: "'security'",
+    vulnerabilities: "string[]",
+    riskLevel: LMH,
+    suggestions: "string[]",
+  }))
+}
 
-// const LMH = L.enum("lower", "medium", "high")
+function* performance() {
+  yield* L
+    .system`You are an expert in code performance. Focus on identifying performance bottlenecks, memory leaks, and optimization opportunities.`
+  return yield* L.assistant(type({
+    type: "'performance'",
+    issues: "string[]",
+    impact: LMH,
+    optimizations: "string[]",
+  }))
+}
+
+function* maintainability() {
+  yield* L
+    .system`You are an expert in code quality. Focus on code structure, readability, and adherence to best practices.`
+  return yield* L.assistant(type({
+    type: "'maintainability'",
+    concerns: "string[]",
+    qualityScore: "number.integer",
+    recommendations: "string[]",
+  }))
+}

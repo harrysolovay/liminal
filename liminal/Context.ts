@@ -14,15 +14,6 @@ export class Context extends Map<ContextHandle, unknown> {
     return super.get(context) as never
   }
 
-  getOrInit<V>(context: ContextHandle<V>, init: () => V): V {
-    if (this.has(context)) {
-      return this.get(context) as V
-    }
-    const instance = init()
-    this.set(context, instance)
-    return instance
-  }
-
   set<V>(context: ContextHandle<V>, value: V): this {
     super.set(context, value)
     return this
@@ -44,7 +35,7 @@ export class Context extends Map<ContextHandle, unknown> {
 }
 
 export type ContextHandle<V = any> = {
-  clone?: ((value: V) => V) | undefined
+  clone: ((value: V) => V) | undefined
 }
 
 export function ContextHandle<V>(clone?: (value: V) => V): ContextHandle<V> {

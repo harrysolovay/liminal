@@ -1,7 +1,7 @@
 import { Agent, L } from "liminal"
-import { openai } from "liminal-openai"
 import "liminal-arktype/register"
 import { type } from "arktype"
+import { gpt4oMini } from "./models.ts"
 
 const Activity = type({
   title: "string",
@@ -13,7 +13,7 @@ const Activity = type({
 
 await Agent(
   function*() {
-    yield* L.model(openai("gpt-4o-mini"))
+    yield* L.model(gpt4oMini)
     yield* L.system`When you are asked a question, answer without asking for clarification.`
     yield* L.user`I'm planning a trip to florida and want a suggestion for a fun activity.`
     let i = 0

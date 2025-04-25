@@ -23,12 +23,15 @@ export function validateSchema(value: unknown): Schema {
     })
   } else {
     if ("enum" in value) {
-      ;(value as any).type = "string"
       assert(Array.isArray(value.enum))
       assert(!("const" in value))
       value.enum.forEach((v) => {
         assert(typeof v === "string")
       })
+      ;(value as any).type = "string"
+    } else if ("const" in value) {
+      assert(typeof value.const === "string")
+      ;(value as any).type = "string"
     }
     assert("type" in value)
     assert(typeof value.type === "string")

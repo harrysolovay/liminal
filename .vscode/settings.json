@@ -5,6 +5,9 @@
   "[dockercompose]": {
     "editor.defaultFormatter": "dprint.dprint"
   },
+  "[github-actions-workflow]": {
+    "editor.defaultFormatter": "dprint.dprint"
+  },
   "[html]": {
     "editor.defaultFormatter": "dprint.dprint"
   },
@@ -34,7 +37,7 @@
     "strings": "on"
   },
   "editor.tabSize": 2,
-  // "dprint.path": "node_modules/.bin/dprint",
+  "dprint.path": "node_modules/.bin/dprint",
   "sqltools.connections": [
     {
       "server": "localhost",

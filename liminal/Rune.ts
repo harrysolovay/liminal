@@ -4,6 +4,7 @@ export interface Rune<out E = any> {
   E: E
   (fiber: Fiber): any
   [RuneKey]: true
+  debug?: string
 }
 
 export declare namespace Rune {

@@ -9,6 +9,6 @@ export interface emit<E> extends Generator<Rune<E>, void> {}
 export function* emit<const E>(event: EnsureNarrow<E>): emit<E> {
   const context = Context.ensure()
   const handler = context.get(HandlerContext)
-  const fiber = yield* rune((fiber) => fiber)
+  const fiber = yield* rune
   handler?.call(fiber, event)
 }

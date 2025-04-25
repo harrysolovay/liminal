@@ -58,5 +58,5 @@ export class FiberResolved extends EventBase(LEventTag, "fiber_resolved") {
 }
 
 export function isLEvent(value: unknown): value is LEvent {
-  return typeof value === "object" && value !== null && LEventTag in value
+  return typeof value === "object" && value !== null && "brand" in value && value.brand === LEventTag
 }

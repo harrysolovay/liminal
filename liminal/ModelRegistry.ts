@@ -6,14 +6,6 @@ export class ModelRegistry {
   declare head?: ModelRegistryNode | undefined
   declare tail?: ModelRegistryNode | undefined
 
-  constructor(models?: Array<Model>) {
-    if (models) {
-      for (const model of models) {
-        this.register(model)
-      }
-    }
-  }
-
   peek() {
     return this.tail?.model
   }
