@@ -7,7 +7,7 @@ export interface Rune<out E = any> {
 }
 
 export declare namespace Rune {
-  export type E<X extends Rune> = X[RuneKey]
+  export type E<X extends Rune> = X["E"]
 }
 
 export const RuneKey: unique symbol = Symbol.for("liminal/Rune")

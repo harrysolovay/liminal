@@ -22,6 +22,14 @@ export function validateSchema(value: unknown): Schema {
       validateSchema(v)
     })
   } else {
+    if ("enum" in value) {
+      ;(value as any).type = "string"
+      assert(Array.isArray(value.enum))
+      assert(!("const" in value))
+      value.enum.forEach((v) => {
+        assert(typeof v === "string")
+      })
+    }
     assert("type" in value)
     assert(typeof value.type === "string")
     assert(isJSONTypeName(value.type))
@@ -33,15 +41,8 @@ export function validateSchema(value: unknown): Schema {
         break
       }
       case "string": {
-        assert(!("const" in value && "enum" in value))
         if ("const" in value) {
-          Value.assert(value.const)
-        }
-        if ("enum" in value) {
-          assert(Array.isArray(value.enum))
-          value.enum.forEach((v) => {
-            assert(typeof v === "string")
-          })
+          assert(typeof value.const === "string")
         }
         break
       }
