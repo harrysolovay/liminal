@@ -1,29 +1,15 @@
 # Liminal Agents <Badge type="warning" text="beta" />
 
-Liminal agents are defined with
-[iterator protocol](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Iterator)
-objects that yield "directives."
+Liminal agents are defined as
+[iterable](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#the_iterable_protocol)
+objects that yield "Runes."
 
-For example, the following agent creates and appends a user-role message to the
-messages underlying the agent.
+## Runes
 
-```ts {4,6}
-function* g() {
-  yield* L.user`User message here.`
-}
-```
-
-## Directives
-
-Directives are the means by which we interact with an agent's state, models and
-host.
-
-We can access directive-related bindings off of the `L` namespace.
+Runes are our means of interacting with the state underlying an agent at
+runtime. Rune-related bindings can be accessed on the `L` namespace.
 
 ```ts
-// For declaring and changing the current model.
-L.model("reasoning")
-
 // For appending a user-role message to the conversation.
 L.user`User message here.`
 
