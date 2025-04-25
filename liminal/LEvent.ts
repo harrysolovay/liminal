@@ -12,6 +12,12 @@ export type LEvent =
   | MessageAppended
   | ModelRegistered
 
+export namespace LEvent {
+  export function is(value: unknown): value is LEvent {
+    return typeof value === "object" && value !== null && "brand" in value && value.brand === LEventTag
+  }
+}
+
 export const LEventTag: unique symbol = Symbol.for("liminal/LEvent")
 export type LEventTag = typeof LEventTag
 
@@ -55,8 +61,4 @@ export class FiberResolved extends EventBase(LEventTag, "fiber_resolved") {
   constructor(readonly value: any) {
     super()
   }
-}
-
-export function isLEvent(value: unknown): value is LEvent {
-  return typeof value === "object" && value !== null && "brand" in value && value.brand === LEventTag
 }
