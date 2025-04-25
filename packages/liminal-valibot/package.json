@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "0.0.3",
+  "version": "0.0.4",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -17,7 +17,7 @@
   },
   "peerDependencies": {
     "@valibot/to-json-schema": "^1.0.0",
-    "liminal-schema": "^0.0.3",
+    "liminal-schema": "^0.0.4",
     "valibot": "^1.0.0"
   }
 }

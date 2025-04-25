@@ -1,5 +1,14 @@
 # liminal
 
+## 0.5.10
+
+### Patch Changes
+
+- aef5564: Update Model interface to support streaming. Improve event-related functionality and emit fiber-related events.
+- Updated dependencies [aef5564]
+  - liminal-schema@0.0.4
+  - liminal-util@0.0.5
+
 ## 0.5.9
 
 ### Patch Changes

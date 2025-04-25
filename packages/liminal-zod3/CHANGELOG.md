@@ -1,5 +1,13 @@
 # liminal-zod3
 
+## 0.0.5
+
+### Patch Changes
+
+- Updated dependencies [aef5564]
+  - liminal-schema@0.0.4
+  - liminal-util@0.0.5
+
 ## 0.0.4
 
 ### Patch Changes
