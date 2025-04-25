@@ -1,5 +1,14 @@
 # liminal-ai
 
+## 0.0.9
+
+### Patch Changes
+
+- aef5564: Update Model interface to support streaming. Improve event-related functionality and emit fiber-related events.
+- Updated dependencies [aef5564]
+  - liminal-util@0.0.5
+  - liminal@0.5.10
+
 ## 0.0.8
 
 ### Patch Changes
