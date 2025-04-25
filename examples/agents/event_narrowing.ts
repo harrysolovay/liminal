@@ -1,12 +1,20 @@
 import { type } from "arktype"
 import "liminal-arktype/register"
-import { Agent, isLEvent, L } from "liminal"
+import { Agent, EventBase, L, LEvent } from "liminal"
 import { gpt4oMini } from "./models.ts"
+
+const SomethingTag = Symbol()
+class Something extends EventBase(SomethingTag, "something") {}
 
 await Agent(g, {
   handler(event) {
-    if (isLEvent(event)) {
-      console.log({ event })
+    console.log({ event })
+    if (LEvent.is(event)) {
+      event satisfies LEvent
+    } else if (Something.is(event)) {
+      event satisfies Something
+    } else {
+      event satisfies string
     }
   },
 })
@@ -42,8 +50,4 @@ function* g() {
   })
   yield* L.user`Where can I stay there, what can I do there, how do I get there?`
   return yield* L.assistant
-}
-
-class Something {
-  readonly key = "HELLO"
 }

@@ -1,4 +1,28 @@
+import { subtle } from "node:crypto"
+
 export type Schema = SchemaType | SchemaAnyOf
+
+export namespace Schema {
+  const ids = new WeakMap<SchemaObject, Record<string, string>>()
+
+  export async function id(schema: SchemaObject, description?: string): Promise<string> {
+    description = description ?? ""
+    if (!ids.has(schema)) {
+      ids.set(schema, {})
+    }
+    const schemaIds = ids.get(schema)!
+    let id = schemaIds[description]
+    if (!id) {
+      const content = `${description}_${JSON.stringify(schema)}`
+      const bytes = new Uint8Array(await subtle.digest("SHA-256", new TextEncoder().encode(content)))
+      let binary = ""
+      for (const b of bytes) binary += String.fromCharCode(b)
+      id = btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "")
+      schemaIds[description] = id
+    }
+    return id
+  }
+}
 
 export type SchemaType =
   | SchemaNull
