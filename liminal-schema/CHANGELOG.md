@@ -1,5 +1,11 @@
 # liminal-schema
 
+## 0.0.3
+
+### Patch Changes
+
+- 23a24ae: Reintroduce L.catch and clean up parts of the generator runtime.
+
 ## 0.0.2
 
 ### Patch Changes

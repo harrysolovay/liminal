@@ -1,5 +1,15 @@
 # liminal-zod3
 
+## 0.0.4
+
+### Patch Changes
+
+- 23a24ae: Reintroduce L.catch and clean up parts of the generator runtime.
+- Updated dependencies [23a24ae]
+- Updated dependencies [f2f360c]
+  - liminal-schema@0.0.3
+  - liminal-util@0.0.4
+
 ## 0.0.3
 
 ### Patch Changes
