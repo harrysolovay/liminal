@@ -1,5 +1,11 @@
 # liminal-ai
 
+## 0.0.10
+
+### Patch Changes
+
+- ff92241: Fixed serialization error
+
 ## 0.0.9
 
 ### Patch Changes
