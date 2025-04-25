@@ -1,6 +1,5 @@
 {
   "extends": "../../tsconfig.base",
-  "compilerOptions": {},
   "include": ["."],
   "references": [
     { "path": "../../liminal" },

@@ -18,7 +18,7 @@ export function* _infer(schema?: SchemaObject): Generator<Rune<LEvent>, string> 
   yield* emit(new InferenceRequested(requestId, schema))
   const messageRegistry = context.get(MessageRegistryContext)
   assert(messageRegistry)
-  const inference = yield* rune(() => model.resolve(messageRegistry.messages, schema))
+  const inference = yield* rune(() => model.resolve(messageRegistry.messages, schema), "infer")
   yield* emit(new Inferred(requestId, inference))
   return inference
 }

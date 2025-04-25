@@ -1,7 +1,7 @@
 import { type } from "arktype"
 import "liminal-arktype/register"
 import { Agent, L } from "liminal"
-import models from "./models.ts"
+import { gpt4oMini, o1Mini } from "./models.ts"
 
 const USE_CLASSIFICATION_AGENT_PROMPTS = {
   general: "You are an expert customer service agent handling general inquiries.",
@@ -13,7 +13,7 @@ const USE_CLASSIFICATION_AGENT_PROMPTS = {
 
 await Agent(
   function*() {
-    yield* L.model(models.gpt4oMini)
+    yield* L.model(gpt4oMini)
     const classification = yield* L.branch(function*() {
       yield* L.system`
         Classify this supplied customer query:
@@ -34,7 +34,7 @@ await Agent(
     const response = yield* L.branch(function*() {
       yield* L.system(USE_CLASSIFICATION_AGENT_PROMPTS[classification.type])
       if (classification.complexity === "complex") {
-        yield* L.model(models.o1Mini)
+        yield* L.model(o1Mini)
       }
       return yield* L.assistant
     })

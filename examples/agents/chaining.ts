@@ -1,11 +1,11 @@
 import { Agent, L } from "liminal"
 import { z } from "zod"
 import "liminal-zod3/register"
-import models from "./models.ts"
+import { gpt4oMini } from "./models.ts"
 
 const result = await Agent(
   function*() {
-    yield* L.model(models.gpt4oMini)
+    yield* L.model(gpt4oMini)
     yield* L
       .system`Write persuasive marketing copy for: Buffy The Vampire Slayer. Focus on benefits and emotional appeal.`
     yield* L.user`Please generate the first draft.`

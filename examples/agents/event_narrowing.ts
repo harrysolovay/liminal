@@ -1,7 +1,7 @@
 import { type } from "arktype"
 import "liminal-arktype/register"
 import { Agent, isLEvent, L } from "liminal"
-import models from "./models.ts"
+import { gpt4oMini } from "./models.ts"
 
 await Agent(g, {
   handler(event) {
@@ -12,7 +12,7 @@ await Agent(g, {
 })
 
 function* g() {
-  yield* L.model(models.gpt4oMini)
+  yield* L.model(gpt4oMini)
   yield* L.user`Tell me a joke.`
   yield* L.assistant
   yield* L.emit("event-root")

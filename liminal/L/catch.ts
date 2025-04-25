@@ -10,7 +10,7 @@ function* catch_<Y extends Rune, T>(runic: Runic<Y, T>): Generator<Rune<Y>, Catc
     } catch (exception: unknown) {
       return { rejected: exception }
     }
-  })
+  }, "catch")
 }
 Object.defineProperty(catch_, "name", { value: "catch" })
 

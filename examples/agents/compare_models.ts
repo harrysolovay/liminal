@@ -1,11 +1,11 @@
 import { type } from "arktype"
 import { Agent, L } from "liminal"
 import "liminal-arktype/register"
-import models from "./models"
+import { gemma3, gpt4o, gpt4oMini, o1Mini } from "./models.ts"
 
 await Agent(
   function*() {
-    yield* L.model(models.gpt4oMini)
+    yield* L.model(gpt4oMini)
     yield* L.user`Write a rap about type-level programming in TypeScript`
     yield* L.assistant
     yield* L.user`Rewrite it in whatever way you think best.`
@@ -14,16 +14,16 @@ await Agent(
         return yield* L.assistant
       },
       *b() {
-        yield* L.model(models.o1Mini)
+        yield* L.model(o1Mini)
         return yield* L.assistant
       },
       *c() {
-        yield* L.model(models.gemma3)
+        yield* L.model(gemma3)
         return yield* L.assistant
       },
     })
     const key = yield* L.branch(function*() {
-      yield* L.model(models.gpt4o)
+      yield* L.model(gpt4o)
       yield* L.user`
         Out of the following variants, which is your favorite?:
 
