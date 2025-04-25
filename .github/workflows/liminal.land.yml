@@ -21,7 +21,7 @@ jobs:
           bun-version: latest
       - uses: actions/configure-pages@v4
       - run: bun i
-      - run: bun liminal.land build
+      - run: cd liminal.land && bunx vitepress build
       - uses: actions/upload-pages-artifact@v3
         with:
           path: liminal.land/.vitepress/dist
