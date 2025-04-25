@@ -1,9 +1,0 @@
-{
-  "scope": [],
-  "index": 0,
-  "type": "message_appended",
-  "message": {
-    "role": "assistant",
-    "content": "{\n  \"role\": \"assistant\",\n  \"content\": \"{\\\"title\\\": \\\"Visit a fascinating theme park like Disney World or Universal Studios! It’s a classic Florida experience filled with thrills, magic, and unforgettable memories.\\\\\\\\\\\", \\\"description\\\": \\\"Visit a fascinating theme park like Disney World or Universal Studios! It’s a classic Florida experience filled with thrills, magic, and unforgettable memories.\\\\\\\\\\\", \\\"location\\\": \\\"Florida, USA\\\", \\\"estimatedCostUSD\\\": 250.00, \\\"ageRange\\\": {\\\"0\\\": 8, \\\"1\\\": 9}}\"\n}"
-  }
-}

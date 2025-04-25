@@ -1,9 +1,0 @@
-{
-  "scope": [],
-  "index": 0,
-  "type": "message_appended",
-  "message": {
-    "role": "assistant",
-    "content": "{\"title\": \"Visit the Florida Keys for a Beach Day!\", \"description\": \"Relax on pristine beaches, swim in turquoise waters, and soak up the sun. The Florida Keys offer stunning coastline, vibrant marine life, and plenty of opportunities for relaxation and fun! It’s a classic Florida vacation spot.\\\", \\\"location\\\": \\\"Florida Keys, Florida\\\", \\\"estimatedCostUSD\\\": 200, \\\"ageRange\\\": {\\\"0\\\": 8, \\\"1\\\": 12}}\"\n  , \"location\": \"Florida Keys, Florida\" , \"estimatedCostUSD\": 200, \"ageRange\": { \"0\": 8, \"1\": 12}\n}"
-  }
-}

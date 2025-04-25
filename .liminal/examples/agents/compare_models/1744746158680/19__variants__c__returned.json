@@ -1,9 +1,0 @@
-{
-  "scope": [
-    "variants",
-    "c"
-  ],
-  "index": 0,
-  "type": "returned",
-  "value": "(Verse 1)  \nYo, check it, I’m coding with precision,  \nType-level programming, that’s my mission.  \nIn the TypeScript realm, where the types collide,  \nWe’re crafting clean code, let our logic guide.  \n\nGenerics in the game, we keep it versatile,  \nInterfaces flexin’, yeah, we do it with style.  \nFrom `T` to `U`, we’re mapping it right,  \nType inference so smooth, it’s a coder’s delight.  \n\n(Chorus)  \nType-level vibes, we’re coding with pride,  \nIn the TypeScript world, we take it in stride.  \nStatic checks in place, no runtime fright,  \nType-level programming, we’re shining so bright.  \n\n(Verse 2)  \nUnion types, man, they’re the real deal,  \nCombining all options, that’s how we feel.  \nLiteral types keep our values in check,  \nNo more guesswork, we’re cashing that check.  \n\nConditional types, we’re making it clear,  \nIf `A` then `B`, we’ve got nothing to fear.  \nMapped types on the rise, transforming the game,  \nWith every line of code, we’re building our name.  \n\n(Chorus)  \nType-level vibes, we’re coding with pride,  \nIn the TypeScript world, we take it in stride.  \nStatic checks in place, no runtime fright,  \nType-level programming, we’re shining so bright.  \n\n(Bridge)  \nFrom `Pick` to `Omit`, we’re slicing it clean,  \nType utilities, you know what I mean.  \nComposition’s the key, stacking it right,  \nWith every type we define, we’re reaching new heights.  \n\n(Verse 3)  \nSo let’s raise a glass to the types that we write,  \nIn the TypeScript universe, we’re taking flight.  \nWith every function call, we’re keeping it strong,  \nType-level programming, come join the throng.  \n\n(Outro)  \nSo if you’re in the game and you wanna be smart,  \nDive into TypeScript, let’s make it an art.  \nWith types on our side, we’ll conquer the night,  \nType-level programming, we’re ready to ignite!"
-}

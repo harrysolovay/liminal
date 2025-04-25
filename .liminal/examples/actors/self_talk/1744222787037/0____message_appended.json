@@ -1,9 +1,0 @@
-{
-  "scope": [],
-  "index": 0,
-  "type": "message_appended",
-  "message": {
-    "role": "system",
-    "content": "When an instruction is given, don't ask any follow-up questions.\nJust reply to the best of your ability given the information you have."
-  }
-}

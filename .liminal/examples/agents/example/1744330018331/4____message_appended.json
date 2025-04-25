@@ -1,9 +1,0 @@
-{
-  "scope": [],
-  "index": 0,
-  "type": "message_appended",
-  "message": {
-    "role": "assistant",
-    "content": "{\n  \"role\": \"assistant\",\n  \"content\": \"{\\n\\\"activities\\\": {\\n\\\"title\\\": \\\"Florida Fun - Here's a Plan!\\\",\\n\\\"description\\\": \\\"Florida offers endless possibilities! Here’s a breakdown of activities, categorized by interest:”, 1, \\\"\\n  \\t  \\t  \\t  \\t  \\t  \\t  ,\\n  \\\"location\\\": \\\"Florida has something for everyone!\\\",\\n  \\\"estimatedCostUSD\\\": 750, \\\"ageRange\\\": {\\\"0\\\": 18, \\\"1\\\": 25}\\n  }\\n}\\n\"\n}"
-  }
-}

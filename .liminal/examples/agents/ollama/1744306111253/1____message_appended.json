@@ -1,9 +1,0 @@
-{
-  "scope": [],
-  "index": 0,
-  "type": "message_appended",
-  "message": {
-    "role": "user",
-    "content": "Hi Gemma3, how are you today?"
-  }
-}

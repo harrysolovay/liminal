@@ -1,9 +1,0 @@
-{
-  "scope": [],
-  "index": 0,
-  "type": "message_appended",
-  "message": {
-    "role": "assistant",
-    "content": "{\"title\": \"Visit a vibrant Florida theme park! Disney World, Universal Studios, or SeaWorld offer incredible entertainment and thrills for all ages.\", \"description\": \"Visit a vibrant Florida theme park! Disney World, Universal Studios, or SeaWorld offer incredible entertainment and thrills for all ages. It’s a full day of magic and adventure! Would you like me to suggest a specific park or some things to do there?\\\"\", \"location\": \"Florida\", \"estimatedCostUSD\": 200, \"forWhom\": \"Families with children and adults\"}"
-  }
-}

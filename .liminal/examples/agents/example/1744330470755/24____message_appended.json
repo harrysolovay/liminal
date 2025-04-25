@@ -1,9 +1,0 @@
-{
-  "scope": [],
-  "index": 0,
-  "type": "message_appended",
-  "message": {
-    "role": "assistant",
-    "content": "{\n  \"role\": \"assistant\",\n  \"content\": \"{\\\"title\\\": \\\"Take a Dolphin Watching Tour!\\\", \\\"description\\\": \\\"See playful dolphins in their natural habitat! Many tours offer fantastic views and opportunities to learn about these amazing creatures. It’s a fun and memorable experience.\\\\\\\", \\\" ,\\\"location\\\": \\\"Various Locations - e.g., Miami, Key Largo, Destin\\\\\\\\\\\", \\\"estimatedCostUSD\\\": 75, \\\"ageRange\\\": { \\\"0\\\": 8, \\\"1\\\": 12 } }\"\n}"
-  }
-}

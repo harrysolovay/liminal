@@ -1,9 +1,0 @@
-{
-  "scope": [],
-  "index": 0,
-  "type": "message_appended",
-  "message": {
-    "role": "assistant",
-    "content": "{\n  \"role\": \"assistant\",\n  \"content\": \"{\\\"title\\\": \\\"Stroll through the Florida Keys – relax, snorkel, and soak up the sunshine! It’s a unique and beautiful coastline with crystal-clear waters and stunning views.\\\\\\\", \\\\\\\"description\\\\\\\": \\\\\\\"Stroll through the Florida Keys – relax, snorkel, and soak up the sunshine! It’s a unique and beautiful coastline with crystal-clear waters and stunning views. It’s a truly relaxing escape! Would you like me to suggest some boat tours or seafood restaurants?\\\\\\\\\\\\\\\", \\\\\\\"location\\\\\\\": \\\\\\\"Florida\\\\\\\", \\\\\\\"estimatedCostUSD\\\\\\\": 150, \\\\\\\"forWhom\\\\\\\": \\\\\\\"Couples, families, and anyone seeking a tranquil beach getaway\\\\\\\"}\\\\\\\"}\\\"\\n \\t \\t \\t \\t \\t \\t \\t \\t \\t \\t, \\\"description\\\": \\\"Stroll through the Florida Keys – relax, snorkel, and soak up the sunshine! It’s a unique and beautiful coastline with crystal-clear waters and stunning views. It’s a truly relaxing escape! Would you like me to suggest some boat tours or seafood restaurants?\\\\\\\\\\\", \\\"location\\\": \\\"Florida\\\", \\\"estimatedCostUSD\\\": 150, \\\"forWhom\\\": \\\"Couples, families, and anyone seeking a tranquil beach getaway\\\"}\"\n}"
-  }
-}

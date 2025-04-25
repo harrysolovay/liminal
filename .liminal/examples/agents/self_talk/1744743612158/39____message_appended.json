@@ -1,9 +1,0 @@
-{
-  "scope": [],
-  "index": 0,
-  "type": "message_appended",
-  "message": {
-    "role": "user",
-    "content": "Please summarize the key points from our conversation."
-  }
-}

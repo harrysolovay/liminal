@@ -1,9 +1,0 @@
-{
-  "scope": [],
-  "index": 0,
-  "type": "message_appended",
-  "message": {
-    "role": "assistant",
-    "content": "{\n  \"role\": \"assistant\",\n  \"content\": \"{\\\"title\\\": \\\"Kayaking or Paddleboarding on the Calusa River\\\", \\\"description\\\": \\\"Enjoy a peaceful paddle through the calm waters of the Calusa River. It’s a great way to see wildlife and enjoy the natural beauty of the area.\\\", \\\"location\\\": \\\"Various locations along the Calusa River, Florida\\\", \\\"estimatedCostUSD\\\": 30, \\\"ageRange\\\": {\\\"0\\\": 8, \\\"1\\\": 12}}\"\n}"
-  }
-}

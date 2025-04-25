@@ -1,9 +1,0 @@
-{
-  "scope": [],
-  "index": 0,
-  "type": "message_appended",
-  "message": {
-    "role": "user",
-    "content": "Decide on a subtopic for us to discuss within the domain of technological futurism."
-  }
-}

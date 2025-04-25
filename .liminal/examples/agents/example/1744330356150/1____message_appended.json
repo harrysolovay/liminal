@@ -1,9 +1,0 @@
-{
-  "scope": [],
-  "index": 0,
-  "type": "message_appended",
-  "message": {
-    "role": "system",
-    "content": "When you are asked a question, answer without asking for clarification."
-  }
-}

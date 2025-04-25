@@ -1,9 +1,0 @@
-{
-  "scope": [],
-  "index": 0,
-  "type": "message_appended",
-  "message": {
-    "role": "assistant",
-    "content": "{\"title\": \"Discover the vibrant culture of Miami! Explore Art Deco districts, indulge in delicious Cuban food, and experience the lively nightlife.\", \"description\": \"Discover the vibrant culture of Miami! Explore Art Deco districts, indulge in delicious Cuban food, and experience the lively nightlife. It’s a city of endless energy and unforgettable experiences! Would you like me to suggest some must-see attractions or restaurants?\\\\\\\\\\\\\\\\\\\", \"\n  ,\"location\": \"Florida\", \"estimatedCostUSD\": 200, \"forWhom\": \"Anyone interested in art, history, and nightlife!\"}"
-  }
-}

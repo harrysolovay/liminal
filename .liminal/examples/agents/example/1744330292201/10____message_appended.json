@@ -1,9 +1,0 @@
-{
-  "scope": [],
-  "index": 0,
-  "type": "message_appended",
-  "message": {
-    "role": "assistant",
-    "content": "{\"title\": \"Take a scenic drive along the Florida coast – think beaches, bridges, and stunning ocean views! It’s perfect for a relaxing day or a bit of adventure.\", \"description\": \"Take a scenic drive along the Florida coast – think beaches, bridges, and stunning ocean views! It’s perfect for a relaxing day or a bit of adventure.\", \"location\": \"Florida, USA\", \"estimatedCostUSD\": 100.00, \"ageRange\": {\"0\": 8, \"1\": 9}}"
-  }
-}

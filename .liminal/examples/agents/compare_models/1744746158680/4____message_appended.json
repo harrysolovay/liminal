@@ -1,9 +1,0 @@
-{
-  "scope": [],
-  "index": 0,
-  "type": "message_appended",
-  "message": {
-    "role": "user",
-    "content": "Rewrite it in whatever way you think best."
-  }
-}
