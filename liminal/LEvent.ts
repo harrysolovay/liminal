@@ -62,3 +62,8 @@ export class FiberResolved extends EventBase(LEventTag, "fiber_resolved") {
     super()
   }
 }
+export class FiberRejected extends EventBase(LEventTag, "fiber_rejected") {
+  constructor(readonly reason: any) {
+    super()
+  }
+}

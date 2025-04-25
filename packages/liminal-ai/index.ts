@@ -1,43 +1,62 @@
-import { type CoreMessage, generateObject, generateText, jsonSchema, type LanguageModelV1, tool as aiTool } from "ai"
+import {
+  type CoreMessage,
+  generateObject,
+  generateText,
+  jsonSchema,
+  type LanguageModelV1,
+  streamObject,
+  streamText,
+  tool as aiTool,
+} from "ai"
 import { Context, type Message, Model, ToolRegistryContext } from "liminal"
 import { assert } from "liminal-util"
 
 export function ai(model: LanguageModelV1): Model {
-  return new Model("ai-sdk", async (messages, schema) => {
-    const context = Context.ensure()
-    const tools = Object.fromEntries(
-      context
-        .get(ToolRegistryContext)
-        ?.values()
-        .map((tool) => [
-          tool.name,
-          aiTool({
-            type: "function",
-            description: tool.description,
-            parameters: jsonSchema(tool.parameterSchema),
-            execute(a) {
-              return tool.f(a) as never
-            },
-          }),
-        ])
-        .toArray() ?? [],
-    )
-    if (schema) {
-      const response = await generateObject({
+  return new Model(
+    "ai-sdk",
+    ({ messages, schema: lSchema, signal }) => {
+      const context = Context.ensure()
+      const tools = Object.fromEntries(
+        context
+          .get(ToolRegistryContext)
+          ?.values()
+          .map((tool) => [
+            tool.name,
+            aiTool({
+              type: "function",
+              description: tool.description,
+              parameters: jsonSchema(tool.parameterSchema),
+              execute(a) {
+                return tool.f(a) as never
+              },
+            }),
+          ])
+          .toArray() ?? [],
+      )
+      const schema = lSchema ? jsonSchema(lSchema) : undefined
+      const toolConfig = {
+        tools,
+        maxSteps: Infinity,
+      }
+      const common = {
         model,
         messages: messages.map(toCoreMessage),
-        schema: jsonSchema(schema),
-      })
-      return JSON.stringify(response.object)
-    }
-    const response = await generateText({
-      model,
-      messages: messages.map(toCoreMessage),
-      tools,
-      maxSteps: Infinity,
-    })
-    return response.text
-  })
+        ...signal && { abortSignal: signal },
+      }
+      return {
+        resolve() {
+          return schema
+            ? generateObject({ ...common, schema }).then(JSON.stringify)
+            : generateText({ ...common, ...toolConfig }).then((v) => v.text)
+        },
+        stream() {
+          return schema
+            ? streamObject({ ...common, schema }).textStream
+            : streamText({ ...common, ...toolConfig }).textStream
+        },
+      }
+    },
+  )
 }
 
 // TODO: handle other content types

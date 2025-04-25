@@ -1,8 +1,9 @@
 import { attachCustomInspect } from "liminal-util"
 import { Context } from "./Context.ts"
+import { type Handler, HandlerContext } from "./Handler.ts"
+import { FiberCreated, FiberRejected, FiberResolved, FiberStarted } from "./LEvent.ts"
 import type { Rune } from "./Rune.ts"
 import { Runic } from "./Runic.ts"
-
 export type FiberStatus<T> = {
   type: "untouched"
 } | {
@@ -29,6 +30,7 @@ export class Fiber<T = any> {
   #runic: Runic<Rune, T>
   declare readonly parent?: Fiber
   #context: Context = Context.ensure()
+  #handler?: Handler = this.#context.get(HandlerContext)
 
   signal: AbortSignal
   either: AbortSignal
@@ -48,6 +50,7 @@ export class Fiber<T = any> {
       this.signal,
     ])
     this.abort = controller.abort.bind(controller)
+    this.#handler?.call(this, new FiberCreated())
   }
 
   fork<T>(runic: Runic<Rune, T>): Fiber<T> {
@@ -64,6 +67,7 @@ export class Fiber<T = any> {
           self: this.signal,
           promise,
         }
+        this.#handler?.call(this, new FiberStarted())
         const iterator = Runic.unwrap(this.#runic)
         let nextArg: unknown
         this.#context.run(async () => {
@@ -79,6 +83,7 @@ export class Fiber<T = any> {
               type: "resolved",
               value,
             }
+            this.#handler?.call(this, new FiberResolved(value))
             abort()
             resolve(value)
           } catch (exception) {
@@ -86,6 +91,7 @@ export class Fiber<T = any> {
               type: "rejected",
               exception,
             }
+            this.#handler?.call(this, new FiberRejected(exception))
             abort(exception)
             reject(exception)
           }
