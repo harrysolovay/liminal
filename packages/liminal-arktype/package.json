@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -17,6 +17,6 @@
   },
   "peerDependencies": {
     "arktype": "^2.1.10",
-    "liminal-schema": "^0.0.2"
+    "liminal-schema": "^0.0.3"
   }
 }

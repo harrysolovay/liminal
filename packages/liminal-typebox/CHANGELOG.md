@@ -1,5 +1,13 @@
 # liminal-typebox
 
+## 0.0.3
+
+### Patch Changes
+
+- 23a24ae: Reintroduce L.catch and clean up parts of the generator runtime.
+- Updated dependencies [23a24ae]
+  - liminal-schema@0.0.3
+
 ## 0.0.2
 
 ### Patch Changes
