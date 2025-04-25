@@ -5,7 +5,7 @@ import * as mathjs from "mathjs"
 import { gpt4oMini } from "./models.ts"
 
 const mathTool = await Tool.make(
-  "MathTool",
+  "A tool for evaluating mathematical expressions.",
   type({
     expression: "string[]",
   }),
