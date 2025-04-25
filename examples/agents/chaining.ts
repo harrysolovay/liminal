@@ -3,7 +3,7 @@ import { z } from "zod"
 import "liminal-zod3/register"
 import { gpt4oMini } from "./models.ts"
 
-const result = await Agent(
+await Agent(
   function*() {
     yield* L.model(gpt4oMini)
     yield* L
@@ -40,5 +40,3 @@ const result = await Agent(
   },
   { handler: console.log },
 )
-
-console.log(result)

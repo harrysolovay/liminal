@@ -46,7 +46,7 @@ export function ai(model: LanguageModelV1): Model {
       return {
         resolve() {
           return schema
-            ? generateObject({ ...common, schema }).then(JSON.stringify)
+            ? generateObject({ ...common, schema }).then((value) => JSON.stringify(value.object))
             : generateText({ ...common, ...toolConfig }).then((v) => v.text)
         },
         stream() {
