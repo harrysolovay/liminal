@@ -15,22 +15,20 @@ export function branch<XR extends Record<keyof any, Runic>>(
 ): branch<Runic.Y<XR[keyof XR]> | Rune<never>, { [K in keyof XR]: Runic.T<XR[K]> }>
 export function* branch(value: Runic | Array<Runic> | Record<keyof any, Runic>): branch<Rune, any> {
   const context = Context.ensure()
-  const parent = yield* rune((fiber) => fiber)
+  const parent = yield* rune
   if (Array.isArray(value)) {
-    const fibers = value.map((runic) => context.clone().run(() => new Fiber(runic, parent)))
-    return yield* rune(() => Fiber.join(fibers))
+    const fibers = value.map((runic) => context.clone().run(() => parent.fork(runic)))
+    return yield* rune(() => Fiber.allResolutions(fibers))
   } else if (typeof value === "object") {
-    const fibers = Object.values(value).map(
-      (runic) => context.clone().run(() => new Fiber(runic, parent)),
-    )
+    const fibers = Object.values(value).map((runic) => context.clone().run(() => parent.fork(runic)))
     return yield* rune(async () => {
       const keys = Object.keys(value)
       return await Fiber
-        .join(fibers)
+        .allResolutions(fibers)
         .then((resolved) => resolved.map((value, i) => [keys[i], value]))
         .then(Object.fromEntries)
     })
   }
-  const fiber = context.clone().run(() => new Fiber(typeof value === "function" ? value() : value, parent))
+  const fiber = context.clone().run(() => parent.fork(typeof value === "function" ? value() : value))
   return yield* rune(() => fiber.resolution())
 }

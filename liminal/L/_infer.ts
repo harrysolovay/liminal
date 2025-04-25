@@ -1,6 +1,6 @@
 import type { SchemaObject } from "liminal-schema"
 import { assert } from "liminal-util"
-import { Context, ContextHandle } from "../Context.ts"
+import { Context } from "../Context.ts"
 import { InferenceRequested, Inferred, type LEvent } from "../LEvent.ts"
 import { MessageRegistryContext } from "../MessageRegistry.ts"
 import { ModelRegistryContext } from "../ModelRegistry.ts"
@@ -14,7 +14,7 @@ export function* _infer(schema?: SchemaObject): Generator<Rune<LEvent>, string> 
   assert(modelRegistry)
   const model = modelRegistry.peek()
   assert(model)
-  const requestId = context.getOrInit(InferenceRequestCounterContext, () => new InferenceRequestCounter()).next()
+  const requestId = InferenceCounter.next()
   yield* emit(new InferenceRequested(requestId, schema))
   const messageRegistry = context.get(MessageRegistryContext)
   assert(messageRegistry)
@@ -23,11 +23,9 @@ export function* _infer(schema?: SchemaObject): Generator<Rune<LEvent>, string> 
   return inference
 }
 
-class InferenceRequestCounter {
-  count: number = 0
-  next(): number {
+class InferenceCounter {
+  static count: number = 0
+  static next(): number {
     return this.count++
   }
 }
-
-const InferenceRequestCounterContext: ContextHandle<InferenceRequestCounter> = ContextHandle()
