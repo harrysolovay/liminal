@@ -1,26 +1,32 @@
-// import { L } from "liminal"
-// import * as mathjs from "mathjs"
+import { type } from "arktype"
+import "liminal-arktype/register"
+import { Agent, L, Tool, ToolRegistry } from "liminal"
+import * as mathjs from "mathjs"
+import models from "./models.ts"
 
-// export default function*() {
-//   yield* L.system`
-//     You are solving math problems. Reason step by step. Use the calculator when necessary.
-//     When you give the final answer, provide an explanation for how you arrived at it.
-//   `
-//   yield* L.enableTool(
-//     "MathTool",
-//     `
-//       A tool for evaluating mathematical expressions. Example expressions:
+const mathTool = await Tool.make(
+  "MathTool",
+  type({
+    expression: "string[]",
+  }),
+  ({ expression }) => mathjs.evaluate(expression),
+)
 
-//       - \`1.2 * (2 + 4.5)\`
-//       - \`12.7 cm to inch\`
-//       - \`sin(45 deg) ^ 2\`
-//     `,
-//     L.wrapper(L.array(L.string)),
-//     ({ value }) => mathjs.evaluate(value),
-//   )
-//   yield* L.user`
-//     A taxi driver earns $9461 per 1-hour of work. If he works 12 hours a day and in 1 hour
-//     he uses 12 liters of petrol with a price  of $134 for 1 liter. How much money does he earn in one day?
-//   `
-//   return yield* L.infer
-// }
+const tools = new ToolRegistry([mathTool])
+
+const answer = await Agent(
+  function*() {
+    yield* L.model(models.gpt4oMini)
+    yield* L.user`
+      A taxi driver earns $9461 per 1-hour of work. If he works 12 hours a day and in 1 hour
+      he uses 12 liters of petrol with a price  of $134 for 1 liter. How much money does he earn in one day?
+    `
+    return yield* L.assistant
+  },
+  {
+    handler: console.log,
+    tools,
+  },
+)
+
+console.log(answer)

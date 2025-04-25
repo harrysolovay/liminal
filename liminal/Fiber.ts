@@ -50,10 +50,6 @@ export class Fiber<T = any> {
     this.abort = controller.abort.bind(controller)
   }
 
-  static async allResolutions<F extends Array<Fiber>>(fibers: F): Promise<{ [I in keyof F]: F[I]["T"] }> {
-    return await Promise.all(fibers.map((fiber) => fiber.resolution())) as never
-  }
-
   fork<T>(runic: Runic<Rune, T>): Fiber<T> {
     return new Fiber(runic, this)
   }
@@ -79,9 +75,17 @@ export class Fiber<T = any> {
               current = await iterator.next(nextArg)
             }
             const { value } = current
+            this.status = {
+              type: "resolved",
+              value,
+            }
             abort()
             resolve(value)
           } catch (exception) {
+            this.status = {
+              type: "rejected",
+              exception,
+            }
             abort(exception)
             reject(exception)
           }

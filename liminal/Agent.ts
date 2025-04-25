@@ -5,11 +5,13 @@ import { MessageRegistry, MessageRegistryContext } from "./MessageRegistry.ts"
 import { ModelRegistry, ModelRegistryContext } from "./ModelRegistry.ts"
 import type { Rune } from "./Rune.ts"
 import type { Runic } from "./Runic.ts"
+import { ToolRegistry, ToolRegistryContext } from "./ToolRegistry.ts"
 
 export interface AgentConfig<T, E> {
   handler?: ((this: Fiber<T>, event: E) => void) | undefined
   models?: ModelRegistry
   messages?: MessageRegistry
+  tools?: ToolRegistry
   signal?: AbortSignal | undefined
 }
 
@@ -28,6 +30,7 @@ export function Agent<Y extends Rune, T>(
         [HandlerContext, config?.handler],
         [ModelRegistryContext, config?.models ?? new ModelRegistry()],
         [MessageRegistryContext, config?.messages ?? new MessageRegistry()],
+        [ToolRegistryContext, config?.tools ?? new ToolRegistry()],
       ])
         .run(() => new Fiber(runic).resolution().then(onfulfilled, onrejected))
     },

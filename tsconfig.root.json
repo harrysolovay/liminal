@@ -1,5 +1,5 @@
 {
   "extends": "./tsconfig.base",
-  "include": ["env.ts", "liminal.ts"],
+  "include": ["env.ts"],
   "references": [{ "path": "./liminal" }]
 }

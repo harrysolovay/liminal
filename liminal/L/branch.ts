@@ -1,5 +1,4 @@
 import { Context } from "../Context.ts"
-import { Fiber } from "../Fiber.ts"
 import { type Rune } from "../Rune.ts"
 import type { Runic } from "../Runic.ts"
 import { rune } from "./rune.ts"
@@ -18,13 +17,13 @@ export function* branch(value: Runic | Array<Runic> | Record<keyof any, Runic>):
   const parent = yield* rune
   if (Array.isArray(value)) {
     const fibers = value.map((runic) => context.clone().run(() => parent.fork(runic)))
-    return yield* rune(() => Fiber.allResolutions(fibers))
+    return yield* rune(() => Promise.all(fibers.map((fiber) => fiber.resolution())))
   } else if (typeof value === "object") {
     const fibers = Object.values(value).map((runic) => context.clone().run(() => parent.fork(runic)))
     return yield* rune(async () => {
       const keys = Object.keys(value)
-      return await Fiber
-        .allResolutions(fibers)
+      return await Promise
+        .all(fibers.map((fiber) => fiber.resolution()))
         .then((resolved) => resolved.map((value, i) => [keys[i], value]))
         .then(Object.fromEntries)
     })

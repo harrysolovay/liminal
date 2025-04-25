@@ -1,4 +1,3 @@
-import { Fiber } from "../Fiber.ts"
 import type { Rune } from "../Rune.ts"
 import type { Runic } from "../Runic.ts"
 import { rune } from "./rune.ts"

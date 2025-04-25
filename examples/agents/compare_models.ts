@@ -1,33 +1,40 @@
-// // @ts-nocheck
+import { type } from "arktype"
+import { Agent, L } from "liminal"
+import "liminal-arktype/register"
+import models from "./models"
 
-// import { L } from "liminal"
+await Agent(
+  function*() {
+    yield* L.model(models.gpt4oMini)
+    yield* L.user`Write a rap about type-level programming in TypeScript`
+    yield* L.assistant
+    yield* L.user`Rewrite it in whatever way you think best.`
+    const variants = yield* L.branch({
+      *a() {
+        return yield* L.assistant
+      },
+      *b() {
+        yield* L.model(models.o1Mini)
+        return yield* L.assistant
+      },
+      *c() {
+        yield* L.model(models.gemma3)
+        return yield* L.assistant
+      },
+    })
+    const key = yield* L.branch(function*() {
+      yield* L.model(models.gpt4o)
+      yield* L.user`
+        Out of the following variants, which is your favorite?:
 
-// export default function*() {
-//   yield* L.user`Write a rap about type-level programming in TypeScript`
-//   yield* L.assistant
-//   yield* L.user`Rewrite it in whatever way you think best.`
-//   const variants = yield* L.branch({
-//     *a() {
-//       yield* L.declareModel("one", "language")
-//       return yield* L.assistant
-//     },
-//     *b() {
-//       yield* L.declareModel("two", "language")
-//       return yield* L.assistant
-//     },
-//     *c() {
-//       yield* L.declareModel("three", "language")
-//       return yield* L.assistant
-//     },
-//   })
-//   const { value } = yield* L.fork(function*() {
-//     yield* L.declareModel("arbiter", "language")
-//     yield* L.user`
-//       Out of the following variants, which is your favorite?:
-
-//       ${JSON.stringify(variants)}
-//     `
-//     return yield* L.wrapper(L.enum("a", "b", "c"))
-//   })
-//   return variants[value]
-// }
+        ${JSON.stringify(variants)}
+      `
+      const { value } = yield* L.assistant(type({
+        value: "'a' | 'b' | 'c'",
+      }))
+      return value
+    })
+    return variants[key]
+  },
+  { handler: console.log },
+)
