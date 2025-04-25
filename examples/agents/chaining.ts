@@ -38,7 +38,5 @@ await Agent(
     }
     return { copy, qualityMetrics }
   },
-  // { handler: console.log },
+  { handler: console.log },
 )
-
-// console.log(result)
