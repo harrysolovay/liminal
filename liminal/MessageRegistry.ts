@@ -1,4 +1,4 @@
-import { ContextHandle } from "./Context.ts"
+import { ContextPart } from "./Context.ts"
 import type { Message } from "./Message.ts"
 
 export class MessageRegistry {
@@ -16,6 +16,7 @@ export class MessageRegistry {
   }
 }
 
-export const MessageRegistryContext: ContextHandle<MessageRegistry> = ContextHandle(({ messages }) =>
-  new MessageRegistry([...messages])
+export const MessageRegistryContext: ContextPart<MessageRegistry> = ContextPart(
+  (parent) => parent?.clone() ?? new MessageRegistry(),
+  "message_registry",
 )

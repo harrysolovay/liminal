@@ -2,7 +2,7 @@ import { Model } from "liminal"
 import { assert, unimplemented } from "liminal-util"
 import { type Message, Ollama } from "ollama"
 
-export function ollama(model: string, client: Ollama = new Ollama()): Model {
+export function adapter(model: string, client: Ollama = new Ollama()): Model {
   return new Model(
     "ollama",
     ({ messages, schema }) => {

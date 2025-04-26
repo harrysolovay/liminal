@@ -1,11 +1,10 @@
 {
   "files": [],
   "references": [
-    { "path": "./examples/agents" },
-    { "path": "./examples/deploy-to-cf-worker" },
-    { "path": "./examples/hono" },
-    { "path": "./examples/vite-react-app" },
-    { "path": "./experiments" },
+    { "path": "./example-integrations/deploy-to-cf-worker" },
+    { "path": "./example-integrations/hono" },
+    { "path": "./example-integrations/vite-react-app" },
+    { "path": "./examples" },
     { "path": "./liminal" },
     { "path": "./liminal-schema" },
     { "path": "./liminal-util" },

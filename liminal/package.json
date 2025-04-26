@@ -11,7 +11,7 @@
     "directory": "liminal"
   },
   "type": "module",
-  "description": "Primitives for composing model-agnostic agents using TypeScript generator functions.",
+  "description": "Primitives for composing conversation trees with language models and TypeScript iterators.",
   "bin": {
     "liminal": "./dist/cli/main.js"
   },

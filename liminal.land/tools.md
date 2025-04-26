@@ -1,6 +1,61 @@
 # Liminal Tools <Badge type="warning" text="beta" />
 
+## Prerequisite
+
+Schema
+
+## Compile Type
+
 ```ts
+const mathTool = await Tool.make(
+  "A tool for evaluating mathematical expressions.",
+  type({
+    expression: "string[]",
+  }),
+  ({ expression }) => mathjs.evaluate(expression),
+)
+```
+
+## Using ArkType
+
+```ts
+const mathTool = await Tool.make(
+  "A tool for evaluating mathematical expressions.",
+  type({
+    expression: "string[]",
+  }),
+  ({ expression }) => mathjs.evaluate(expression),
+)
+```
+
+```ts
+import { type } from "arktype"
+import "liminal-arktype/register"
+import { L, Tool, ToolRegistry } from "liminal"
+import * as mathjs from "mathjs"
+import { gpt4oMini } from "./models.ts"
+
+const tools = new ToolRegistry([mathTool])
+
+const answer = await L.strand(
+  function*() {
+    yield* L.model(gpt4oMini)
+    yield* L.user`
+      A taxi driver earns $9461 per 1-hour of work. If he works 12 hours a day and in 1 hour
+      he uses 12 liters of petrol with a price  of $134 for 1 liter. How much money does he earn in one day?
+    `
+    return yield* L.assistant
+  },
+  {
+    handler: console.log,
+    tools,
+  },
+)
+
+console.log(answer)
+```
+
+<!-- ```ts
 import { L } from "liminal"
 
 function* g() {
@@ -21,4 +76,4 @@ function* g() {
 
   return yield* L.number
 }
-```
+``` -->

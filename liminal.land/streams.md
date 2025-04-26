@@ -22,20 +22,6 @@ for await (const chunk of stream) {
 }
 ```
 
-## Agent State Change
-
-Just as with `L.reply`, the streamed output is ultimately placed inside an
-Assistant message and appended to the message list. This can be circumvented by
-isolating within a branch.
-
-```ts
-async function* g() {
-  for await (const chunk of yield* L.branch(L.stream())) {
-    // ...
-  }
-}
-```
-
 ## Item Structured Output
 
 We can also specify a standard type to which items should conform, just as we

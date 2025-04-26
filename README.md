@@ -3,33 +3,17 @@
 > Liminal is a work in progress. The documentation may not reflect the current
 > implementation.
 
-Liminal is a model-agnostic library for managing conversation trees. It provides
-a set of primitives for buffering messages, generating text and structured
-output, configuring tools, emitting events and forking conversations.
+Liminal is a toolkit for composing conversation trees with language models using
+TypeScript iterators.
 
-<!-- ## Resources
+## Resources
 
 - [Documentation &rarr;](https://liminal.land)<br />Usage guide intended for
   human readers.
 - [Examples &rarr;](https://github.com/harrysolovay/liminal/tree/main/examples)<br />Examples
-  illustrating common use cases. -->
-
-<!-- - [llms.txt &rarr;](./llms.txt)<br />Chunks of truth to be fed into LLMs. -->
-
-## Running [Examples](./examples/agents)
-
-Clone and build Liminal.
-
-```sh
-git clone git@github.com:harrysolovay/liminal.git && cd liminal
-bun i && bun run build
-```
-
-Run one of the example files. The `chaining` example perhaps.
-
-```sh
-bun examples/agents/chaining
-```
+  illustrating common use cases.
+- [llms.txt &rarr;](https://liminal.land/llms.txt)<br />Chunks of truth to be
+  fed into LLMs.
 
 <!-- ## Rationale
 
@@ -48,41 +32,36 @@ bun examples/agents/chaining
 
 ## Overview
 
-Model a conversation as a generator function. Yield actions such as declaring
-the model, appending messages to the underlying message buffer and triggering
-inference.
+Model a conversation as a generator function. Yield Liminal "runes" to interact
+with the underlying state of the conversation strand.
 
-`conversation.ts`
+[`examples/readme.ts`](./examples/readme.ts)
 
 ```ts
-import { Agent, L } from "liminal"
-import { ollama } from "liminal-ollama"
+import { L } from "liminal"
+import { adapter } from "liminal-ollama"
 
-await Agent(
+await L.strand(
   function*() {
-    yield* L.model(ollama("gemma3:1b"))
-    yield* L.system`
-      When an instruction is given, don't ask any follow-up questions.
-      Just reply to the best of your ability given the information you have.
-    `
-    yield* L
-      .user`Decide on a subtopic for us to discuss within the domain of technological futurism.`
+    // Kick off the conversation.
+    yield* L.model(adapter("gemma3:1b"))
+    yield* L.user`Decide on a topic for us to discuss.`
     yield* L.assistant
-    yield* L
-      .user`Great, please teach something interesting about this choice of subtopic.`
-    yield* L.assistant
-    yield* L.emit(new MyEvent())
+
+    // Loop through some conversation turns.
     let i = 0
-    while (i < 3) {
-      const reply = yield* L.branch(function*() {
+    while (i++ < 3) {
+      // Have the language model respond to itself in an isolated copy of the current "strand."
+      const reply = yield* L.strand(function*() {
         yield* L.user`Please reply to the last message on my behalf.`
         return yield* L.assistant
       })
+
+      // Use the child strand's return value to append a user message within the root "strand."
       yield* L.user(reply)
       yield* L.assistant
-      i++
     }
-    yield* L.user`Please summarize the key points from our conversation.`
+    yield* L.user`Summarize key points from our conversation.`
     return yield* L.assistant
   },
   { handler: console.log },
@@ -91,6 +70,23 @@ await Agent(
 
 > Note: `async function*() { // ...` is perfectly valid if you wish to use await
 > promises.
+
+## Running [Examples](./examples)
+
+1. Clone and build Liminal.
+
+   ```sh
+   git clone git@github.com:harrysolovay/liminal.git && cd liminal
+   bun i && bun run build
+   ```
+
+2. Configure environment variables used by the example.
+
+3. Run one of the example files. The `chaining` example, perhaps.
+
+   ```sh
+   bun examples/chaining
+   ```
 
 ---
 
