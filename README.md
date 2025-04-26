@@ -85,7 +85,7 @@ await L.strand(
 
 2. Configure any environment variables used by the example.
 
-3. Run one of the example files. The `chaining` example, perhaps.
+3. Run one of the example files.
 
    ```sh
    bun examples/<path-to-example>
