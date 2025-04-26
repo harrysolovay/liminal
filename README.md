@@ -4,10 +4,9 @@
 > implementation.
 
 Liminal is a toolkit for composing conversation trees with language models using
-TypeScript iterators. Model the progression of conversation with primitive
-building blocks for appending messages, generating replies, focusing new
-language models, emitting events to observers and branching conversation
-strands.
+TypeScript iterators. Model a conversation with building blocks for appending
+messages, inferring replies, focusing new language models, emitting events to
+observers and branching conversation strands.
 
 - [Documentation &rarr;](https://liminal.land)<br />Usage guide intended for
   human readers.
