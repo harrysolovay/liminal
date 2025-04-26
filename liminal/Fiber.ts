@@ -1,17 +1,13 @@
 import { attachCustomInspect } from "liminal-util"
 import { Context } from "./Context.ts"
 import { type Handler, HandlerContext } from "./Handler.ts"
-import { ToolRegistry, ToolRegistryContext } from "./index.ts"
 import { FiberCreated, FiberRejected, FiberResolved, FiberStarted } from "./LEvent.ts"
-import { MessageRegistry, MessageRegistryContext } from "./MessageRegistry.ts"
-import { ModelRegistry, ModelRegistryContext } from "./ModelRegistry.ts"
 import { type Rune, RuneKey } from "./Rune.ts"
 import { Runic } from "./Runic.ts"
 
 export interface FiberConfig {
   parent?: Fiber
   signal?: AbortSignal
-  context: Context
 }
 
 export class Fiber<T = any> {
@@ -25,7 +21,7 @@ export class Fiber<T = any> {
   static nextIndex: number = 0
   readonly index: number = Fiber.nextIndex++
 
-  readonly #context: Context
+  readonly #context: Context = Context.get() ?? new Context()
   readonly #runic: Runic<Rune, T>
   readonly #handler: Handler | undefined = HandlerContext.get()
   readonly #configSignal?: AbortSignal
@@ -35,10 +31,9 @@ export class Fiber<T = any> {
   status: FiberStatus<T> = { type: "untouched" }
   controller: AbortController = new AbortController()
 
-  constructor(runic: Runic<Rune, T>, config: FiberConfig) {
+  constructor(runic: Runic<Rune, T>, config?: FiberConfig) {
     this.#runic = runic
-    const { context, parent, signal } = config
-    this.#context = context
+    const { parent, signal } = config ?? {}
     if (parent) this.parent = parent
     if (signal) this.#configSignal = signal
     this.handle(new FiberCreated())
