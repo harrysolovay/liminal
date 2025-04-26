@@ -1,5 +1,11 @@
 # liminal-schema
 
+## 0.0.5
+
+### Patch Changes
+
+- cf42ed2: Agent -> Strand. Making the API more uniform. Ie. Agent -> L.strand. L.branch -> L.strand.
+
 ## 0.0.4
 
 ### Patch Changes

@@ -1,5 +1,14 @@
 # liminal
 
+## 0.5.11
+
+### Patch Changes
+
+- cf42ed2: Agent -> Strand. Making the API more uniform. Ie. Agent -> L.strand. L.branch -> L.strand.
+- Updated dependencies [cf42ed2]
+  - liminal-schema@0.0.5
+  - liminal-util@0.0.6
+
 ## 0.5.10
 
 ### Patch Changes
