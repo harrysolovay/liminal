@@ -1,3 +1,0 @@
-# Liminal Intrinsic Types
-
-## Recursion

@@ -3,9 +3,9 @@ layout: home
 title: Liminal
 hero:
   name: Liminal
-  text: Agents in TypeScript
+  text: Compose Agent Conversations
   image: /liminal_puzzle.png
-  tagline: Primitives for composing model-agnostic agents using TypeScript generator functions.
+  tagline: Primitives for building reusable conversation trees with language models using TypeScript iterators.
   actions:
     - theme: brand
       text: Getting Started
@@ -16,19 +16,19 @@ hero:
 features:
   - icon:
       src: /iconoir--planet.svg
-    title: Decoupling From Models
-    details: Create reusable conversation patterns, which can be shared without vendor lock-in.
-    link: /why#model-interoperability
+    title: Model-Switching
+    details: Create conversation patterns that leverage many language models in tandem.
+    link: /why#model-switching
   - icon:
       src: /iconoir--chat-bubble-check.svg
     title: Message Lists, Simplified
     details: Manage conversations through implicit message buffers, blended into function control flow.
-    link: /why#conversation-management
+    link: /why#conversation-modeling
   - icon:
       src: /iconoir--text-magnifying-glass.svg
     title: Infer Static Event Types
-    details: Infer the static types of the events emitted from within an agent and its descendants.
-    link: /concepts/events
+    details: Infer the static types of the events emitted from within a strand and its descendants.
+    link: /events
 ---
 
 <br />

@@ -1,0 +1,19 @@
+{
+  "name": "liminal-examples",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@ai-sdk/openai": "^1.3.9",
+    "arktype": "^2.1.20",
+    "effect": "^3.14.12",
+    "liminal": "workspace:*",
+    "liminal-ai": "workspace:*",
+    "liminal-arktype": "workspace:*",
+    "liminal-effect": "workspace:*",
+    "liminal-ollama": "workspace:*",
+    "liminal-openai": "workspace:*",
+    "liminal-zod3": "workspace:*",
+    "mathjs": "^14.3.1",
+    "zod": "^3.24.3"
+  }
+}

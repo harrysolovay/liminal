@@ -48,18 +48,17 @@ function validateEmail(email: string) {
 }
 ```
 
-Downside of this implementation: the error message we return is opaque. If
-provided to an end user, they may be confused about why the email they provided
-is invalid.
+The error message we return is opaque. The submitter lacks information about why
+validation failed.
 
-### Solution
+### Example Solution
 
 Let's turn our function into a Liminal agent and infer a helpful validation
 message.
 
 ```ts {7-9}
 import { openai } from "@ai-sdk/openai"
-import { Agent, L } from "liminal"
+import { L } from "liminal"
 import { ai } from "liminal-ai"
 
 export function* validateEmail(email: string) {
@@ -75,7 +74,7 @@ export function* validateEmail(email: string) {
 
 #### Running `validateEmail`
 
-To make use of the updated `validateEmail`, we import and call with `Agent`.
+Await `L.strand` to call `validateEmail`.
 
 ```ts {7}
 // ...
@@ -84,7 +83,7 @@ export function validationEndpoint(request: Request) {
   const formData = await request.formData()
   const email = formData.get("email")?.toString()
   if (email) {
-    const result = await Agent(validateEmail(email))
+    const result = await L.strand(validateEmail(email))
     return Response.json(result)
   }
   // ...
@@ -103,5 +102,4 @@ the following.
 
 ## Next Steps
 
-In the next section, we dive deep into what makes something an "agent" in
-Liminal.
+In the next section, we dive deep into what makes something "runic" in Liminal.

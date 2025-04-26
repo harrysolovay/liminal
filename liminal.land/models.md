@@ -1,43 +1,28 @@
 # Liminal Declaration <Badge type="warning" text="beta" />
 
-## Model Adapters
-
-- [Anthropic](./model_adapters/anthropic)
-- [OpenAI](./model_adapters/openai)
-- [xAI](./model_adapters/xai)
-- [Ollama](./model_adapters/ollama)
-- [Google Generative AI](./model_adapters/google_gen_ai)
-- [(Vercel) AI SDK](./model_adapters/ai-sdk)
-- [DeepSeek](./model_adapters/deepseek)
-
-## Model Declaration
-
-Models are never hard-coded into Liminal agents. Instead, we specify keys.
+## AI SDK
 
 ```ts
-function* g(value) {
-  yield* L.infer
-  yield* L.model("mini")
-  yield* L.infer
-  yield* L.model("reasoning")
-  yield* L.infer
+import { openai } from "@ai-sdk/openai"
+import { L } from "liminal"
+import { ai } from "liminal-ai"
+
+function* g() {
+  yield* L.model(ai(openai("gpt-4o-mini")))
 }
 ```
 
-Only upon execution do we mind a model to these keys.
+## Ollama
 
 ```ts
-declare const root: LanguageModel
-declare const mini: LanguageModel
-declare const reasoning: LanguageModel
+import { L } from "liminal"
+import { ollama } from "liminal-ollama"
 
-const exec = await g()
-  .run(root, { mini, reasoning })
-  .on((event) => {
-    console.log(event)
-  })
+function* g() {
+  yield* L.model(ollama("gemma3:1b"))
+}
 ```
 
-## Host Declaration
+## Create Adapter
 
-## Building Model Adapters
+TODO

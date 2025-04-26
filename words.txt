@@ -16,6 +16,7 @@ inheritables
 initdb
 ljson
 llms
+llmstxt
 logit
 metaarray
 metaatom
@@ -33,6 +34,7 @@ rica
 rootable
 runics
 shikijs
+shoutout
 solovay
 subscope
 supabase

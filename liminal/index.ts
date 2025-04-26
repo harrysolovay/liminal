@@ -1,4 +1,3 @@
-export * from "./Agent.ts"
 export * from "./Context.ts"
 export * from "./EventBase.ts"
 export * from "./Fiber.ts"

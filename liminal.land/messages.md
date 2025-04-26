@@ -3,8 +3,8 @@
 Whenever we interact with a language model, we send along a list of messages.
 These messages are context with which the language model forms a reply.
 
-It is as if the language model is your creative writing partner, and is
-suggesting the next passage your story (the list of messages).
+The language model is your creative writing partner. It writes the next passage
+(message) of the story.
 
 ## Message Roles
 
@@ -32,16 +32,15 @@ from the "other" participant in the conversation. For example:
 
 Assistant messages are typically produced by the language model. However, they
 can also be used to give the language model a sense of "self" or to seed its
-replies.[^1] A language model might reply to the aforementioned user message
-with the following:
+replies.[^1] A language model might reply to the previous user message as
+follows:
 
-> "You could purchase a frame and place a photo of the two of you inside it. I
-> think she would love that!"
+> "You could purchase a frame and place a photo of the two of you inside.
 
 ## Appending Messages
 
 There are three factories––each corresponding to one of the three roles––which
-we can use to append messages to the agent's message list.
+we can use to append messages to the strand's message list.
 
 ```ts
 function* g() {
@@ -51,8 +50,8 @@ function* g() {
 }
 ```
 
-When we execute this agent source as an agent, the following messages will be
-appended to its message list.
+When we execute this generator function as a strand, the following messages will
+be appended to its message list.
 
 ```json
 [
@@ -78,14 +77,14 @@ they're actually quite open to interpretation; we can decide what messages
 should assume what roles.
 
 For example, a common pattern is to have the language model converse with
-itself, which is useful for producing chains of thought.
+itself.
 
 ```ts
 function* g() {
   yield* L.user`Hi, how are you today?`
   while (true) {
     yield* L.reply
-    const next = yield* L.branch(function*() {
+    const next = yield* L.strand(function*() {
       yield* L.user`Please reply to your last message as if you're me.`
       return yield* L.reply
     })
@@ -94,13 +93,11 @@ function* g() {
 }
 ```
 
-In this example, we have the agent reply to itself in a branch as to avoid
-mutating the root agent's message list. We capture the value returned from the
-branch and append it to the parent branch's messages as a user message.
+Here a child strand replies for its parent.
 
 ## CRUD
 
-When using Liminal, we avoid direct retrieval or manipulation of an agent's
+When using Liminal, we avoid direct retrieval or manipulation of a strand's
 messages. Instead, we utilize "segments." Segments are a mechanism for
 selecting, reducing and scoping to a subset of messages.
 
@@ -124,22 +121,23 @@ function* g() {
 Segments can also be created from [mark pairs](./segments#mark-ranges) (message
 ranges) and [tags](./segments#tags) (messages with custom labels).
 
-## Interoperability
+## Message Format
 
-Liminal provides a model-agnostic interface for any `Message`. Whenever we send
-messages to a given model, they are transformed into the agent's Model-specific
-format.
+Liminal provides a model-agnostic interface for messages. Whenever we send
+messages to a given model, they are transformed into the Model-specific format.
 
 ```ts
 function* g() {
-  yield* openai("gpt-4o-mini")
+  yield* L.model(ai(openai("gpt-4o-mini")))
   yield* L.user`User message A.`
-  yield* L.reply
+  yield* L.assistant
 
-  yield* xai("grok-3-mini-beta")
-  yield* L.user`User message B.` // Same means of appending messages.
-  yield* L.reply // Uses xAI, yet  use the same message list.
+  yield* L.model(xai("grok-3-mini-beta"))
+  yield* L.user`User message B.`
+  yield* L.assistant
 }
 ```
+
+TODO: Add streams info here
 
 [^1]: [LLM assistant message seeding](https://padolsey.medium.com/simple-llm-gpt-trick-seeding-08fbcc1880c7)

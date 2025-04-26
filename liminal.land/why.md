@@ -17,13 +17,13 @@ function* g() {
     Where is the pot of gold?
   `
 
-  // Infer and append a reply.
+  // Infer and append a model reply.
   yield* L.assistant
 }
 ```
 
-With each yield, Liminal updates the underlying conversation state. The final of
-the example above looks as follows.
+With each yield, Liminal updates the underlying conversation state. The final
+conversation looks as follows.
 
 ```json
 [
@@ -37,14 +37,14 @@ the example above looks as follows.
   },
   {
     "role": "assistant",
-    "content": "..."
+    "content": "Under the rainbow."
   }
 ]
 ```
 
 ## Pure Composition
 
-Because agents are made from iterator protocol objects, it's easy to create and
+Because strands are made from iterator protocol objects, it's easy to create and
 reuse patterns such as iterative refinement loops.
 
 ```ts
@@ -52,7 +52,7 @@ function* refine(content: string) {
   let i = 0
   while (i < 5) {
     yield* L.user`Improve the following text: ${content}`
-    content = yield* L.reply
+    content = yield* L.inference
   }
   return content
 }
@@ -70,11 +70,8 @@ function* g() {
 
 ## Branching
 
-Liminal streamlines conversational branching, allowing us to explore alternative
-conversation states and compute results.
-
-Let's modify the example above to isolate the refinement loop from the outer
-conversation (`g`).
+Branch conversations and explore their alternative states and return values. The
+child conversation won't affect the parent conversation (`g`).
 
 ```ts
 function* g() {
@@ -84,35 +81,38 @@ function* g() {
 }
 ```
 
-## Parallel Agents
+## Parallel Strands
 
-We can execute parallel branches, each with their own isolated copy of the outer
-conversation.
+Branching is one means by which we can create parallel strands. Each of the
+following strands has their own isolated copy of the outer conversation.
 
 ```ts
 function* g() {
   yield* L.user`A message, soon to be inherited by refiners.`
 
-  const refined = yield* L.branch(values.map(refine))
+  const results = yield* L.strand(values.map(refine))
 
-  refined satisfies Array<string>
+  results satisfies Array<string>
 }
 ```
 
-### Convenient APIs
+### Expressive Branching
 
-Branch definitions can take the form of iterables, iterable-producing (nullary)
-functions and records of the aforementioned values.
+Branch definitions can take the form of iterables, iterable-producing functions
+and records of those values.
 
 ```ts
 function* g() {
   yield* L.user`...`
 
-  const result = yield* L.branch({
-    a: refined(text),
-    *b() {
+  const result = yield* L.strand({
+    *a() {
       yield* L.user`...`
       return "A"
+    },
+    *b() {
+      yield* L.user`...`
+      return "B"
     },
   })
 
@@ -125,16 +125,13 @@ function* g() {
 
 ## Structured Output
 
-Liminal allows you to use various runtime type libraries to ensure assistant
-replies conform to a specified shape.
-
-> [!TIP]
-> Supported libraries include zod, arktype, effect/schema, typebox and
+Use runtime types as structured output schema.
 
 ```ts
 import { compile } from "liminal-zod"
 import { z } from "zod"
 
+// Get an LLM-optimized subset of JSON schema.
 const MyType = compile(z.object({
   a: z.string,
   b: z.number,
@@ -150,31 +147,32 @@ function* g() {
 }
 ```
 
-## Model-switching
+> See integration guide for [`arktype`](./schema.md), [`valibot`](./schema.md),
+> [`typebox`](./schema.md) and [`effect/Schema`](./schema.md).
 
-Switch the model anytime by yielding it. After being yielded, the model will be
-used for subsequent inference.
+## Model Selection
+
+Focus a model anytime by yielding it. The model will be used for subsequent
+inference.
 
 ```ts
-import { models } from "./models.ts"
+import { openai } from "@ai-sdk/openai"
+import { ai } from "liminal-ai"
 
 function* g() {
-  yield* L.user`Message A.`
-  yield* L.model(models.default)
+  yield* L.model(ai(openai("gpt-4o-mini")))
   yield* L.infer
-
-  yield* L.user`Message B.`
-  yield* L.model(models.reasoning)
+  yield* L.model(ai(openai("o4-mini-high")))
   yield* L.infer
 }
 ```
 
 ## Standard JavaScript
 
-Liminal agents are defined as JavaScript iterables. These iterables can trigger
-arbitrary computations, such as looping and promise execution.
+Liminal strands are defined as JavaScript iterables. These iterables can trigger
+arbitrary computations, such as loops and promise execution.
 
-```ts
+```ts {4,8}
 async function* g() {
   yield* L.system`...`
 
@@ -188,11 +186,10 @@ async function* g() {
 
 ## Observability
 
-Agents definitions can yield events. We can listen to these events during the
-agent's runtime.
+Strand definitions can yield events. We can listen to these events at runtime.
 
 ```ts
-await Agent(
+await L.strand(
   function*() {
     yield* L.event("event-name-here")
   },

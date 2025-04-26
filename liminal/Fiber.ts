@@ -1,73 +1,63 @@
 import { attachCustomInspect } from "liminal-util"
 import { Context } from "./Context.ts"
 import { type Handler, HandlerContext } from "./Handler.ts"
+import { ToolRegistry, ToolRegistryContext } from "./index.ts"
 import { FiberCreated, FiberRejected, FiberResolved, FiberStarted } from "./LEvent.ts"
-import type { Rune } from "./Rune.ts"
+import { MessageRegistry, MessageRegistryContext } from "./MessageRegistry.ts"
+import { ModelRegistry, ModelRegistryContext } from "./ModelRegistry.ts"
+import { type Rune, RuneKey } from "./Rune.ts"
 import { Runic } from "./Runic.ts"
-export type FiberStatus<T> = {
-  type: "untouched"
-} | {
-  type: "pending"
-  self: AbortSignal
-  promise: Promise<T>
-} | {
-  type: "aborted"
-  reason: unknown
-} | {
-  type: "resolved"
-  value: T
-} | {
-  type: "rejected"
-  exception: unknown
+
+export interface FiberConfig {
+  parent?: Fiber
+  signal?: AbortSignal
+  context: Context
 }
 
 export class Fiber<T = any> {
-  static nextIndex: number = 0
+  static *[Symbol.iterator](): Generator<Rune<never>, Fiber> {
+    return yield Object.assign((fiber: Fiber) => fiber, {
+      [RuneKey]: true,
+      debug: "current_fiber",
+    } as never)
+  }
 
-  declare T: T
+  static nextIndex: number = 0
   readonly index: number = Fiber.nextIndex++
 
-  #runic: Runic<Rune, T>
-  declare readonly parent?: Fiber
-  #context: Context = Context.ensure()
-  #handler?: Handler = this.#context.get(HandlerContext)
+  readonly #context: Context
+  readonly #runic: Runic<Rune, T>
+  readonly #handler: Handler | undefined = HandlerContext.get()
+  readonly #configSignal?: AbortSignal
 
-  signal: AbortSignal
-  either: AbortSignal
-  abort: (reason?: any) => void
+  declare readonly parent?: Fiber
 
   status: FiberStatus<T> = { type: "untouched" }
+  controller: AbortController = new AbortController()
 
-  constructor(runic: Runic<Rune, T>, parent?: Fiber) {
+  constructor(runic: Runic<Rune, T>, config: FiberConfig) {
     this.#runic = runic
-    if (parent) {
-      this.parent = parent
-    }
-    const controller = new AbortController()
-    this.signal = controller.signal
-    this.either = AbortSignal.any([
-      ...this.parent?.signal ? [this.parent.signal] : [],
-      this.signal,
-    ])
-    this.abort = controller.abort.bind(controller)
-    this.#handler?.call(this, new FiberCreated())
+    const { context, parent, signal } = config
+    this.#context = context
+    if (parent) this.parent = parent
+    if (signal) this.#configSignal = signal
+    this.handle(new FiberCreated())
   }
 
-  fork<T>(runic: Runic<Rune, T>): Fiber<T> {
-    return new Fiber(runic, this)
+  handle(event: any) {
+    this.#handler?.call(this, event)
   }
 
-  resolution(this: Fiber<T>): Promise<T> {
-    const { status, abort } = this
-    switch (status.type) {
+  resolution(): Promise<T> {
+    switch (this.status.type) {
       case "untouched": {
         const { promise, resolve, reject } = Promise.withResolvers<T>()
         this.status = {
           type: "pending",
-          self: this.signal,
+          self: this.controller.signal,
           promise,
         }
-        this.#handler?.call(this, new FiberStarted())
+        this.handle(new FiberStarted())
         const iterator = Runic.unwrap(this.#runic)
         let nextArg: unknown
         this.#context.run(async () => {
@@ -83,32 +73,32 @@ export class Fiber<T = any> {
               type: "resolved",
               value,
             }
-            this.#handler?.call(this, new FiberResolved(value))
-            abort()
+            this.handle(new FiberResolved(value))
+            this.controller.abort()
             resolve(value)
           } catch (exception) {
             this.status = {
               type: "rejected",
               exception,
             }
-            this.#handler?.call(this, new FiberRejected(exception))
-            abort(exception)
+            this.handle(new FiberRejected(exception))
+            this.controller.abort()
             reject(exception)
           }
         })
         return promise
       }
       case "pending": {
-        return status.promise
+        return this.status.promise
       }
       case "resolved": {
-        return Promise.resolve(status.value)
+        return Promise.resolve(this.status.value)
       }
       case "rejected": {
-        return Promise.reject(status.exception)
+        return Promise.reject(this.status.exception)
       }
       case "aborted": {
-        return Promise.reject(status.reason)
+        return Promise.reject(this.status.reason)
       }
     }
   }
@@ -116,4 +106,21 @@ export class Fiber<T = any> {
   static {
     attachCustomInspect(this, ({ index, parent }) => ({ index, ...parent && { parent } }))
   }
+}
+
+export type FiberStatus<T> = {
+  type: "untouched"
+} | {
+  type: "pending"
+  self: AbortSignal
+  promise: Promise<T>
+} | {
+  type: "aborted"
+  reason: unknown
+} | {
+  type: "resolved"
+  value: T
+} | {
+  type: "rejected"
+  exception: unknown
 }

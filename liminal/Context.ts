@@ -1,43 +1,40 @@
-import { assert } from "liminal-util"
 import { AsyncLocalStorage } from "node:async_hooks"
 
 const storage = new AsyncLocalStorage<Context>()
 
-export class Context extends Map<ContextHandle, unknown> {
-  static ensure(): Context {
-    const context = storage.getStore()
-    assert(context)
-    return context
+export class Context extends Map<ContextPart, unknown> {
+  static get(): Context | undefined {
+    return storage.getStore()
   }
 
-  get<V>(context: ContextHandle<V>): V | undefined {
-    return super.get(context) as never
+  run<R>(f: () => R): R {
+    return storage.run(this, f)
   }
 
-  set<V>(context: ContextHandle<V>, value: V): this {
-    super.set(context, value)
-    return this
-  }
-
-  run<R>(callback: () => R): R {
-    return storage.run(this, callback)
-  }
-
-  clone(overrides?: Iterable<[ContextHandle, unknown]>): Context {
-    const context = new Context(overrides)
+  fork(): Context {
+    const context = new Context()
     for (const [handle, value] of this.entries()) {
       if (!context.has(handle)) {
-        context.set(handle, handle.clone?.(value) ?? value)
+        context.set(handle, handle.fork(value))
       }
     }
     return context
   }
 }
 
-export type ContextHandle<V = any> = {
-  clone: ((value: V) => V) | undefined
+export interface ContextPart<V = any> {
+  fork(parent?: V): V
+  get(): V | undefined
+  debug?: string
 }
 
-export function ContextHandle<V>(clone?: (value: V) => V): ContextHandle<V> {
-  return { clone }
+export function ContextPart<V>(fork: (parent?: V) => V, debug?: string): ContextPart<V> {
+  const self: ContextPart<V> = {
+    fork,
+    get() {
+      return Context.get()?.get(self) as never
+    },
+    ...debug && { debug },
+  }
+  return self
 }

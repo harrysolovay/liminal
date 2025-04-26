@@ -2,8 +2,8 @@
   "private": true,
   "type": "module",
   "workspaces": [
-    "examples/*",
-    "experiments",
+    "examples",
+    "example-integrations/*",
     "liminal",
     "liminal-schema",
     "liminal-util",

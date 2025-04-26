@@ -1,7 +1,5 @@
 {
   "name": "liminal.land",
-  "private": true,
-  "type": "module",
   "devDependencies": {
     "@ai-sdk/openai": "^1.3.9",
     "@shikijs/vitepress-twoslash": "^1.23.1",
@@ -14,6 +12,9 @@
     "markdown-it-steps": "^0.2.0",
     "valibot": "^1.0.0",
     "vitepress": "^1.5.0",
+    "vitepress-plugin-llmstxt": "^0.1.0",
     "zod": "^3.24.2"
-  }
+  },
+  "private": true,
+  "type": "module"
 }

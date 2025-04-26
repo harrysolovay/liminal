@@ -2,6 +2,7 @@ import { transformerTwoslash } from "@shikijs/vitepress-twoslash"
 import footnotePlugin from "markdown-it-footnote"
 import markdownSteps from "markdown-it-steps"
 import { defineConfig, HeadConfig } from "vitepress"
+import { llmstxtPlugin } from "vitepress-plugin-llmstxt"
 import packageJson from "../../liminal/package.json" with { type: "json" }
 
 // cspell:disable
@@ -16,6 +17,9 @@ const GOOGLE_ANALYTICS = `
 export default defineConfig({
   title: "Liminal",
   description: packageJson.description,
+  vite: {
+    plugins: [llmstxtPlugin()],
+  },
   markdown: {
     codeTransformers: [transformerTwoslash()],
     theme: { light: "light-plus", dark: "dracula" },
@@ -64,9 +68,9 @@ export default defineConfig({
       {
         text: "Introduction",
         items: [
-          { text: "Why Liminal?", link: "/why" },
-          { text: "Getting Started", link: "/getting_started" },
-          { text: "Liminal Agents", link: "/agents" },
+          { text: "Why?", link: "/why" },
+          { text: "Quickstart", link: "/getting_started" },
+          { text: "Strands", link: "/strands" },
         ],
       },
       {
@@ -77,12 +81,12 @@ export default defineConfig({
         ],
       },
       {
-        text: "Conversation",
+        text: "Strands",
         items: [
           { text: "Messages", link: "/messages" },
-          { text: "Streams", link: "/streams" },
+          { text: "Schema", link: "/schema" },
           { text: "Events", link: "/events" },
-          { text: "Branches", link: "/branches" },
+          { text: "Children", link: "/children" },
         ],
       },
       // {
