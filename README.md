@@ -6,8 +6,6 @@
 Liminal is a toolkit for composing conversation trees with language models using
 TypeScript iterators.
 
-## Resources
-
 - [Documentation &rarr;](https://liminal.land)<br />Usage guide intended for
   human readers.
 - [Examples &rarr;](https://github.com/harrysolovay/liminal/tree/main/examples)<br />Examples
