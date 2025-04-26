@@ -21,6 +21,7 @@ await L.strand(
       yield* L.user(reply)
       yield* L.assistant
     }
+
     yield* L.user`Summarize key points from our conversation.`
     return yield* L.assistant
   },

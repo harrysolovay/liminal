@@ -61,6 +61,7 @@ await L.strand(
       yield* L.user(reply)
       yield* L.assistant
     }
+
     yield* L.user`Summarize key points from our conversation.`
     return yield* L.assistant
   },
@@ -71,21 +72,23 @@ await L.strand(
 > Note: `async function*() { // ...` is perfectly valid if you wish to use await
 > promises.
 
-## Running [Examples](./examples)
+## Running Examples Locally
 
 1. Clone and build Liminal.
 
    ```sh
-   git clone git@github.com:harrysolovay/liminal.git && cd liminal
-   bun i && bun run build
+   git clone git@github.com:harrysolovay/liminal.git
+   cd liminal
+   bun i
+   bun run build
    ```
 
-2. Configure environment variables used by the example.
+2. Configure any environment variables used by the example.
 
 3. Run one of the example files. The `chaining` example, perhaps.
 
    ```sh
-   bun examples/chaining
+   bun examples/<path-to-example>
    ```
 
 ---
