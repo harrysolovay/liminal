@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "0.0.5",
+  "version": "0.0.6",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -16,8 +16,8 @@
     "./register": "./dist/register.js"
   },
   "peerDependencies": {
-    "liminal-schema": "^0.0.4",
-    "liminal-util": "^0.0.5",
+    "liminal-schema": "^0.0.5",
+    "liminal-util": "^0.0.6",
     "zod": "^3.24.2",
     "zod-to-json-schema": "^3.24.5"
   }
