@@ -1,5 +1,13 @@
 # liminal-ai
 
+## 0.0.12
+
+### Patch Changes
+
+- Updated dependencies [4808a57]
+  - liminal-util@0.0.7
+  - liminal@0.5.12
+
 ## 0.0.11
 
 ### Patch Changes

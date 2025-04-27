@@ -1,5 +1,13 @@
 # liminal
 
+## 0.5.12
+
+### Patch Changes
+
+- 4808a57: Fix handling of standalone iterables supplied to L.strand. Also introduce strandard, a standard library of strands.
+- Updated dependencies [4808a57]
+  - liminal-util@0.0.7
+
 ## 0.5.11
 
 ### Patch Changes

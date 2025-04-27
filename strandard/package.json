@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "0.0.0",
+  "version": "0.0.1",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -17,6 +17,6 @@
     "./expand": "./dist/expand.js"
   },
   "dependencies": {
-    "liminal": "^0.5.11"
+    "liminal": "^0.5.12"
   }
 }
