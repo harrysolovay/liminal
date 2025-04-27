@@ -16,7 +16,7 @@ export const stream: stream = {
     const model = modelRegistry.peek()
     assert(model)
     const requestId = RequestCounter.next()
-    yield* emit(new InferenceRequested(requestId))
+    yield* event(new InferenceRequested(requestId))
     const messageRegistry = MessageRegistryContext.get()
     assert(messageRegistry)
     return yield* rune((fiber) =>

@@ -9,6 +9,6 @@ export interface message extends Generator<Rune<LEvent>, void> {}
 export function* message(role: MessageRole, content: Array<ContentPart>): message {
   const messageRegistry = MessageRegistryContext.getOrInit()
   const message: Message = { role, content }
-  yield* emit(new MessageAppended(message))
+  yield* event(new MessageAppended(message))
   messageRegistry.append(message)
 }

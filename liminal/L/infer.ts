@@ -17,7 +17,7 @@ function* infer_(schema?: SchemaObject): infer_ {
   const model = modelRegistry.peek()
   assert(model)
   const requestId = RequestCounter.next()
-  yield* emit(new InferenceRequested(requestId, schema))
+  yield* event(new InferenceRequested(requestId, schema))
   const messageRegistry = MessageRegistryContext.getOrInit()
   const inference = yield* rune((fiber) =>
     model
@@ -27,7 +27,7 @@ function* infer_(schema?: SchemaObject): infer_ {
         signal: fiber.controller.signal,
       })
       .resolve(), "infer")
-  yield* emit(new Inferred(requestId, inference))
+  yield* event(new Inferred(requestId, inference))
   return inference
 }
 Object.defineProperty(infer_, "name", { value: "infer" })
