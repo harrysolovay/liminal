@@ -12,9 +12,6 @@
   },
   "type": "module",
   "description": "Primitives for composing conversation trees with language models and TypeScript iterators.",
-  "bin": {
-    "liminal": "./dist/cli/main.js"
-  },
   "exports": {
     ".": "./dist/index.js"
   },

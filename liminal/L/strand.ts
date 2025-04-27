@@ -1,20 +1,14 @@
+import { assert, isIterableLike } from "liminal-util"
 import { Context } from "../Context.ts"
 import { Fiber } from "../Fiber.ts"
 import { HandlerContext } from "../Handler.ts"
 import { MessageRegistry, MessageRegistryContext } from "../MessageRegistry.ts"
 import { ModelRegistry, ModelRegistryContext } from "../ModelRegistry.ts"
 import { type Rune } from "../Rune.ts"
-import type { Runic } from "../Runic.ts"
+import { Runic } from "../Runic.ts"
+import type { StrandConfig } from "../StrandConfig.ts"
 import { ToolRegistry, ToolRegistryContext } from "../ToolRegistry.ts"
 import { rune } from "./rune.ts"
-
-export interface StrandConfig<T = any, E = any> {
-  handler?: ((this: Fiber<T>, event: E) => void) | undefined
-  models?: ModelRegistry | undefined
-  messages?: MessageRegistry | undefined
-  tools?: ToolRegistry | undefined
-  signal?: AbortSignal | undefined
-}
 
 export interface strand<Y extends Rune, T> extends Iterable<Y, T>, PromiseLike<T> {}
 
@@ -38,48 +32,30 @@ export function strand(
     *[Symbol.iterator](): Generator<Rune, any> {
       const parent = yield* Fiber
       if (Array.isArray(value)) {
-        const fibers = value.map((runic) =>
-          new Fiber(runic, {
-            parent,
-            context: makeContext(),
-          })
-        )
+        const fibers = value.map((runic) => context().run(() => new Fiber(runic, { parent })))
         return yield* rune(() => Promise.all(fibers.map((fiber) => fiber.resolution())), "strand")
-      } else if (typeof value === "object") {
-        const fibers = Object.values(value).map((runic) =>
-          new Fiber(runic, {
-            parent,
-            context: makeContext(),
-          })
-        )
-        return yield* rune(async () => {
+      } else if (typeof value === "object" && !isIterableLike(value)) {
+        const fibers = Object.values(value).map((runic) => context().run(() => new Fiber(runic, { parent })))
+        return yield* rune(() => {
           const keys = Object.keys(value)
-          return await Promise
+          return Promise
             .all(fibers.map((fiber) => fiber.resolution()))
             .then((resolved) => resolved.map((value, i) => [keys[i], value]))
             .then(Object.fromEntries)
         }, "strand")
       }
-      const self = new Fiber(typeof value === "function" ? value() : value, {
-        parent,
-        context: makeContext(),
-      })
-      return yield* rune(() => self.resolution(), "strand")
+      const fiber = context().run(() => new Fiber(value, { parent }))
+      return yield* rune(() => fiber.resolution(), "strand")
     },
     then(onfulfilled, onrejected) {
-      return new Fiber(this, { context: makeContext() }).resolution().then(onfulfilled, onrejected)
+      return new Fiber(this).resolution().then(onfulfilled, onrejected)
     },
   }
 
-  function makeContext() {
-    let context = Context.get()?.fork()
-    if (!context) {
-      context = new Context([
-        [ModelRegistryContext, new ModelRegistry()],
-        [MessageRegistryContext, new MessageRegistry()],
-        [ToolRegistryContext, new ToolRegistry()],
-      ])
-    }
+  function context() {
+    const current = Context.get()
+    assert(current)
+    const context = current.fork()
     if (config) {
       if ("handler" in config) {
         context.set(HandlerContext, config.handler)

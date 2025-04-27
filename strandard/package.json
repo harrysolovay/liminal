@@ -1,0 +1,22 @@
+{
+  "name": "strandard",
+  "publishConfig": {
+    "access": "public"
+  },
+  "version": "0.0.0",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/harrysolovay/liminal.git",
+    "directory": "strandard"
+  },
+  "type": "module",
+  "description": "Strands for common conversation patterns with Liminal.",
+  "exports": {
+    "./debate": "./dist/debate.js",
+    "./expand": "./dist/expand.js"
+  },
+  "dependencies": {
+    "liminal": "^0.5.11"
+  }
+}

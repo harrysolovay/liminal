@@ -13,14 +13,12 @@ export { infer_ as infer }
 interface infer_ extends Generator<Rune<LEvent>, string> {}
 
 function* infer_(schema?: SchemaObject): infer_ {
-  const modelRegistry = ModelRegistryContext.get()
-  assert(modelRegistry)
+  const modelRegistry = ModelRegistryContext.getOrInit()
   const model = modelRegistry.peek()
   assert(model)
   const requestId = RequestCounter.next()
   yield* emit(new InferenceRequested(requestId, schema))
-  const messageRegistry = MessageRegistryContext.get()
-  assert(messageRegistry)
+  const messageRegistry = MessageRegistryContext.getOrInit()
   const inference = yield* rune((fiber) =>
     model
       .seal({

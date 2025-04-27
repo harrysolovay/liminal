@@ -14,6 +14,7 @@
     "liminal-openai": "workspace:*",
     "liminal-zod3": "workspace:*",
     "mathjs": "^14.3.1",
+    "strandard": "workspace:*",
     "zod": "^3.24.3"
   }
 }

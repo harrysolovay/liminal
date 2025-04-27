@@ -77,6 +77,7 @@ export default defineConfig({
         text: "Configuration",
         items: [
           { text: "Models", link: "/models" },
+          { text: "Schemas", link: "/schemas" },
           { text: "Tools", link: "/tools" },
         ],
       },
@@ -84,7 +85,6 @@ export default defineConfig({
         text: "Strands",
         items: [
           { text: "Messages", link: "/messages" },
-          { text: "Schema", link: "/schema" },
           { text: "Events", link: "/events" },
           { text: "Children", link: "/children" },
         ],

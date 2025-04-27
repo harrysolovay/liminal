@@ -13,12 +13,7 @@ function* catch_<Y extends Rune, T>(runic: Runic<Y, T>): Generator<Rune<Y>, Catc
       const context = Context.get()
       assert(context)
       return {
-        resolved: await context.fork().run(() =>
-          new Fiber(runic, {
-            context: context.fork(),
-            parent,
-          }).resolution()
-        ),
+        resolved: await context.fork().run(() => new Fiber(runic, { parent }).resolution()),
       }
     } catch (exception: unknown) {
       return { rejected: exception }
