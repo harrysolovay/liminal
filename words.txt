@@ -1,5 +1,6 @@
 agentic
 arktype
+branchable
 bunx
 codegen
 combinators
@@ -25,6 +26,7 @@ metatype
 metatypes
 metatyping
 moderations
+multistep
 nullary
 ollama
 ossp
@@ -46,5 +48,6 @@ twoslash
 typebox
 valibot
 vitepress
+vitest
 vtype
 yieldable

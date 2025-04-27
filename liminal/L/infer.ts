@@ -5,7 +5,7 @@ import { MessageRegistryContext } from "../MessageRegistry.ts"
 import { ModelRegistryContext } from "../ModelRegistry.ts"
 import type { Rune } from "../Rune.ts"
 import { RequestCounter } from "./_common.ts"
-import { emit } from "./emit.ts"
+import { event } from "./event.ts"
 import { rune } from "./rune.ts"
 
 export { infer_ as infer }

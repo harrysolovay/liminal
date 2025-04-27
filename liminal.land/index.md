@@ -5,7 +5,7 @@ hero:
   name: Liminal
   text: Conversations as Code
   image: /liminal_puzzle.png
-  tagline: Primitives for building reusable conversation trees with language models using TypeScript iterators.
+  tagline: Reusable, branchable, self-evolving conversations with language models and TypeScript iterators.
   actions:
     - theme: brand
       text: Getting Started
