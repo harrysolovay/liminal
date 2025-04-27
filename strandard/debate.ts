@@ -1,4 +1,4 @@
-import { L } from "liminal"
+import { L, LEvent, type Rune } from "liminal"
 
 export interface DebateConfig {
   topic: string
@@ -30,7 +30,7 @@ export function debate({
   ],
   rounds = 4,
   goals,
-}: DebateConfig) {
+}: DebateConfig): L.strand<Rune<LEvent>, DebateResult> {
   return L.strand(function*() {
     // Collects all arguments and rebuttals in the debate, in order
     const turns: Array<DebateTurn> = []

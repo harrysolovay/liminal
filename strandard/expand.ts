@@ -1,4 +1,4 @@
-import { L } from "liminal"
+import { L, LEvent, type Rune } from "liminal"
 import "liminal-arktype/register"
 import { type } from "arktype"
 
@@ -13,7 +13,7 @@ export interface ExpandResult {
   expanded: string
 }
 
-export function expand({ goals, input, size }: ExpandConfig) {
+export function expand({ goals, input, size }: ExpandConfig): L.strand<Rune<LEvent>, ExpandResult> {
   return L.strand(function*() {
     L.system`
       You are given an idea, concept, or other arbitrary input. Your job is as follows:
