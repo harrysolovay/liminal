@@ -4,7 +4,7 @@ import { MessageRegistryContext } from "../MessageRegistry.ts"
 import { ModelRegistryContext } from "../ModelRegistry.ts"
 import { type Rune } from "../Rune.ts"
 import { RequestCounter } from "./_common.ts"
-import { emit } from "./emit.ts"
+import { event } from "./event.ts"
 import { rune } from "./rune.ts"
 
 export interface stream extends Iterable<Rune<LEvent>, ReadableStream<string>> {}
@@ -16,7 +16,7 @@ export const stream: stream = {
     const model = modelRegistry.peek()
     assert(model)
     const requestId = RequestCounter.next()
-    yield* emit(new InferenceRequested(requestId))
+    yield* event(new InferenceRequested(requestId))
     const messageRegistry = MessageRegistryContext.get()
     assert(messageRegistry)
     return yield* rune((fiber) =>

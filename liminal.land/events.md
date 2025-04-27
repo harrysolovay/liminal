@@ -7,8 +7,7 @@ function* g() {
 ```
 
 ```ts
-await exec(g, {
-  default: defaultModel,
+await L.strand(g, {
   handler(event) {
     if (event === "my-event") {
       // ...
@@ -18,33 +17,25 @@ await exec(g, {
 ```
 
 ```ts
-export type AppEvent = {
-  type: "A"
-  value: string
-} | {
-  type: "B"
-  value: number
-}
+const YourProgramKey = Symbol.for("<your-program-name>/AppTag")
+export class MyEvent extends EventBase(YourProgramKey, "my_event") {}
 
-export const AppEvent = L.event<AppEvent>
+await L.strand(
+  function*() {
+    yield* L.event(new AppEvent())
+  },
+  {
+    handler(event) {
+      if (MyEvent.is(event)) {
+        // ...
+      }
+    },
+  },
+)
 ```
 
 ```ts
-function* g() {
-  yield* AppEvent({
-    type: "a",
-    value: "A",
-  })
-  yield* AppEvent({
-    type: "b",
-    value: 101,
-  })
-}
-```
-
-```ts
-await exec(g, {
-  default: defaultModel,
+await L.event(g, {
   handler(event) {
     if (event.type === "a") {
       event.value satisfies string

@@ -95,32 +95,6 @@ function* g() {
 
 Here a child strand replies for its parent.
 
-## CRUD
-
-When using Liminal, we avoid direct retrieval or manipulation of a strand's
-messages. Instead, we utilize "segments." Segments are a mechanism for
-selecting, reducing and scoping to a subset of messages.
-
-We cover segments in depth in [a later chapter](./segments.md). Here is a
-preview of how to create and utilize a segment with a "mark."
-
-```ts
-function* g() {
-  yield* L.user`First message.`
-
-  const mark = yield* L.mark
-
-  yield* L.user`Second message.`
-
-  yield* mark.trailing(function*() {
-    // Has only `Second message`.
-  })
-}
-```
-
-Segments can also be created from [mark pairs](./segments#mark-ranges) (message
-ranges) and [tags](./segments#tags) (messages with custom labels).
-
 ## Message Format
 
 Liminal provides a model-agnostic interface for messages. Whenever we send

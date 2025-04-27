@@ -2,28 +2,33 @@
 
 ## Conversation-Modeling
 
-Liminal provides building blocks for modeling conversations as part of ordinary
-function control flow.
+Liminal provides generic building blocks for modeling conversations and
+interacting with language models. The conversation state is abstracted into
+ordinary function control flow. This enables us to reason about control flow and
+narrative progression as one.
 
 ```ts
+import { L } from "liminal"
+
 function* g() {
   // Append a system message.
-  yield* L.system`
-    You are a Leprechaun.
-  `
+  yield* L.system`You are a Leprechaun.`
 
   // Append a user message.
-  yield* L.user`
-    Where is the pot of gold?
-  `
+  yield* L.user`Where is the pot of gold?`
 
   // Infer and append a model reply.
-  yield* L.assistant
+  const inference = yield* L.assistant
+
+  // The conversation culminates in a string.
+  return inference
 }
 ```
 
+### State Management
+
 With each yield, Liminal updates the underlying conversation state. The final
-conversation looks as follows.
+conversation may look as follows.
 
 ```json
 [
@@ -42,135 +47,21 @@ conversation looks as follows.
 ]
 ```
 
-## Pure Composition
+### Conversation Runtime
 
-Because strands are made from iterator protocol objects, it's easy to create and
-reuse patterns such as iterative refinement loops.
-
-```ts
-function* refine(content: string) {
-  let i = 0
-  while (i < 5) {
-    yield* L.user`Improve the following text: ${content}`
-    content = yield* L.inference
-  }
-  return content
-}
-```
-
-Later on we can use this conversation with ease.
-
-```ts {4}
-function* g() {
-  const initial = await prompt("Please provide some text.")!
-  const refined = yield* refine(initial)
-  return refined
-}
-```
-
-## Branching
-
-Branch conversations and explore their alternative states and return values. The
-child conversation won't affect the parent conversation (`g`).
+Liminal manages conversation-related state such as message lists, language model
+stacks and registered tools, so that you can focus on evolving your context and
+other core functionality.
 
 ```ts
-function* g() {
-  const initial = await prompt("Please provide some text.")!
-  const refined = yield* L.branch(refine(initial))
-  return refined
-}
-```
-
-## Parallel Strands
-
-Branching is one means by which we can create parallel strands. Each of the
-following strands has their own isolated copy of the outer conversation.
-
-```ts
-function* g() {
-  yield* L.user`A message, soon to be inherited by refiners.`
-
-  const results = yield* L.strand(values.map(refine))
-
-  results satisfies Array<string>
-}
-```
-
-### Expressive Branching
-
-Branch definitions can take the form of iterables, iterable-producing functions
-and records of those values.
-
-```ts
-function* g() {
-  yield* L.user`...`
-
-  const result = yield* L.strand({
-    *a() {
-      yield* L.user`...`
-      return "A"
-    },
-    *b() {
-      yield* L.user`...`
-      return "B"
-    },
-  })
-
-  result satisfies {
-    a: string
-    b: string
-  }
-}
-```
-
-## Structured Output
-
-Use runtime types as structured output schema.
-
-```ts
-import { compile } from "liminal-zod"
-import { z } from "zod"
-
-// Get an LLM-optimized subset of JSON schema.
-const MyType = compile(z.object({
-  a: z.string,
-  b: z.number,
-}))
-
-function* g() {
-  const result = yield* L.assistant(MyType)
-
-  result satisfies {
-    a: string
-    b: number
-  }
-}
-```
-
-> See integration guide for [`arktype`](./schema.md), [`valibot`](./schema.md),
-> [`typebox`](./schema.md) and [`effect/Schema`](./schema.md).
-
-## Model Selection
-
-Focus a model anytime by yielding it. The model will be used for subsequent
-inference.
-
-```ts
-import { openai } from "@ai-sdk/openai"
-import { ai } from "liminal-ai"
-
-function* g() {
-  yield* L.model(ai(openai("gpt-4o-mini")))
-  yield* L.infer
-  yield* L.model(ai(openai("o4-mini-high")))
-  yield* L.infer
-}
+const value = await L.strand(g)
 ```
 
 ## Standard JavaScript
 
-Liminal strands are defined as JavaScript iterables. These iterables can trigger
-arbitrary computations, such as loops and promise execution.
+Liminal "strands" (conversation isolates) are created using JavaScript iterables
+(in this case a generator function). These iterables can trigger arbitrary
+computations, such as loops and promise execution.
 
 ```ts {4,8}
 async function* g() {
@@ -181,12 +72,168 @@ async function* g() {
   }
 
   const item = await db.getItem()
+
+  yield L.user`The retrieved item: ${item}`
+}
+```
+
+## Pure Composition
+
+Because strands are made from iterators, it's easy to create and reuse patterns
+such as iterative refinement loops.
+
+```ts
+function* refine(content: string, i = 5) {
+  while (i-- > 0) {
+    yield* L.user`Improve the following text: ${content}`
+    content = yield* L.inference
+  }
+  return content
+}
+```
+
+We can reuse these conversation components, enabling us to compose higher-level
+conversations.
+
+```ts {5}
+function* maybeRefine(content: string) {
+  yield* L.user`Does the following text require refinement?: ${content}`
+  const shouldRefine = yield* L.boolean
+  if (shouldRefine) {
+    return yield* refine(initial)
+  }
+  return content
+}
+```
+
+## Branching
+
+Branch conversations into isolated strands and explore their alternative states
+and return values.
+
+```ts
+function* g(content: string) {
+  yield* L.user`Ask me a question about language models.`
+  yield* L.assistant
+
+  const answer = yield* L.strand(function*() {
+    // Has no affect on the conversation underlying `g`.
+    yield* L.user`Reply to this question on my behalf.`
+    return yield* L.assistant
+  })
+
+  // Respond (from the user) with `answer` in the conversation underlying `g`.
+  yield* L.user(answer)
+
+  // ...
+}
+```
+
+## Parallel Strands
+
+Each of the following strands has their own isolated copy of the outer
+conversation.
+
+```ts
+function* g() {
+  yield* L.user`It's halloween night!`
+
+  const results = yield* L.strand({
+    *trick() {
+      yield* L.system`You're a prankster.`
+      yield* L.user`What are some good pranks?`
+      return yield* L.assistant
+    },
+    *treat() {
+      yield* L.system`You love sugar!`
+      yield* L.user`How to get the most candy possible?`
+      return yield* L.assistant
+    },
+  })
+
+  results satisfies {
+    trick: string
+    treat: string
+  }
+}
+```
+
+### Dynamic Branching
+
+Strands can be created from various kinds of "Runic" values and collections.
+
+```ts
+async function* g() {
+  yield* L.system`
+    You are a custom support agent responsible for determining whether
+    a given message needs to be escalated to a human for review.
+  `
+
+  // Example function dynamically retrieves hypothetical customer support messages.
+  const messages = await getCustomerSupportMessages()
+
+  const escalations = yield* L.strand(
+    messages.map(function*({ messageId, message }) {
+      yield* L.user`
+        Does the following customer message merit
+        a human reviewer giving it attention?:
+        ---
+        ${message}
+      `
+      return {
+        messageId,
+        requiresEscalation: yield* L.boolean,
+      }
+    }),
+  )
+
+  result satisfies Array<{
+    messageId: string
+    requiresEscalation: boolean
+  }>
+}
+```
+
+## Structured Output
+
+Use your runtime type library of choice to ensure inference conforms to the
+specified shape.
+
+```ts
+import { compile } from "liminal-zod"
+import { z } from "zod"
+
+// Get/ensure an LLM-optimized subset of JSON schema.
+const MyType = compile(
+  z.object({ a: z.string, b: z.number }),
+)
+
+function* g() {
+  const result = yield* L.assistant(MyType)
+
+  result satisfies { a: string; b: number }
+}
+```
+
+## Model Selection
+
+Focus a model anytime with `L.model`. The specified model adapter will be used
+for subsequent inference.
+
+```ts
+import { openai } from "liminal-openai"
+
+function* g() {
+  yield* L.model(openai("gpt-4o-mini"))
+  yield* L.infer // uses 4o mini
+  yield* L.model(openai("o4-mini-high"))
+  yield* L.infer // uses 4o mini high
 }
 ```
 
 ## Observability
 
-Strand definitions can yield events. We can listen to these events at runtime.
+Yield event "runes." Then listen to for your events at runtime.
 
 ```ts
 await L.strand(

@@ -23,6 +23,41 @@ function* g() {
 }
 ```
 
-## Create Adapter
+## OpenAI
 
-TODO
+```ts
+import { L } from "liminal"
+import { ollama } from "liminal-openai"
+
+function* g() {
+  yield* L.model(openai("gpt-4o-mini"))
+}
+```
+
+## Creating Adapters
+
+```ts
+import { Model } from "liminal"
+import { type Message, Ollama } from "ollama"
+
+// Up to you. Could be a union of model name literals.
+type YourConfig = any
+
+export function adapter(config: YourConfig): Model {
+  return new Model(
+    "your_vendor_name",
+    ({ messages, schema }) => {
+      return {
+        resolve() {
+          // Request inference from model.
+          // Return the inferred value.
+        },
+        stream() {
+          // Request inference from model with streaming enabled.
+          // Return a ReadableStream<string>
+        },
+      }
+    },
+  )
+}
+```

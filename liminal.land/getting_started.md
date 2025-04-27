@@ -48,45 +48,28 @@ function validateEmail(email: string) {
 }
 ```
 
-The error message we return is opaque. The submitter lacks information about why
+The error message we return is opaque. The caller lacks information about why
 validation failed.
 
 ### Example Solution
 
-Let's turn our function into a Liminal agent and infer a helpful validation
+Let's turn our function into a Liminal strand and infer a helpful validation
 message.
 
-```ts {7-9}
-import { openai } from "@ai-sdk/openai"
+```ts {5,7-9}
 import { L } from "liminal"
-import { ai } from "liminal-ai"
+import { openai } from "liminal-openai"
 
-export function* validateEmail(email: string) {
-  if (!EMAIL_REGEX.test(email)) {
-    yield* L.model(ai(openai("gpt-4o-mini"))) // 1. Specify the language model.
-    yield* L.user`Why is the following email is invalid?: "${email}".` // 2. Ask a question.
-    const error = yield* L.assistant // 3. Infer the answer.
-    return { error }
-  }
-  return { valid: true }
-}
-```
-
-#### Running `validateEmail`
-
-Await `L.strand` to call `validateEmail`.
-
-```ts {7}
-// ...
-
-export function validationEndpoint(request: Request) {
-  const formData = await request.formData()
-  const email = formData.get("email")?.toString()
-  if (email) {
-    const result = await L.strand(validateEmail(email))
-    return Response.json(result)
-  }
-  // ...
+export async function validateEmail(email: string) {
+  return await L.strand(function*() {
+    if (!EMAIL_REGEX.test(email)) {
+      yield* L.model(openai("gpt-4o-mini")) // 1. Specify the language model.
+      yield* L.user`Why is the following email is invalid?: "${email}".` // 2. Ask a question.
+      const error = yield* L.assistant // 3. Infer the answer.
+      return { error }
+    }
+    return { valid: true }
+  })
 }
 ```
 

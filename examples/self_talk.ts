@@ -14,7 +14,7 @@ await L.strand(function*() {
   yield* L.assistant
   yield* L.user`Great, please teach something interesting about this choice of subtopic.`
   yield* L.assistant
-  yield* L.emit(new MyEvent())
+  yield* L.event(new MyEvent())
   let i = 0
   while (i < 3) {
     const reply = yield* L.strand(function*() {

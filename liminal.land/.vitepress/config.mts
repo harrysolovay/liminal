@@ -56,15 +56,15 @@ export default defineConfig({
     search: { provider: "local" },
     sidebar: [
       {
+        text: "llms.txt",
+        link: "llms.txt",
+        target: "blank",
+      },
+      {
         text: "Examples",
         link: "https://github.com/harrysolovay/liminal/tree/main/examples",
         target: "blank",
       },
-      // {
-      //   text: "llms.txt",
-      //   link: "https://raw.githubusercontent.com/harrysolovay/liminal/refs/heads/main/llms.txt",
-      //   target: "blank",
-      // },
       {
         text: "Introduction",
         items: [
@@ -74,19 +74,13 @@ export default defineConfig({
         ],
       },
       {
-        text: "Configuration",
+        text: "Conversation",
         items: [
           { text: "Models", link: "/models" },
           { text: "Schemas", link: "/schemas" },
           { text: "Tools", link: "/tools" },
-        ],
-      },
-      {
-        text: "Strands",
-        items: [
           { text: "Messages", link: "/messages" },
           { text: "Events", link: "/events" },
-          { text: "Children", link: "/children" },
         ],
       },
       // {
