@@ -8,7 +8,8 @@
     "liminal-schema",
     "liminal-util",
     "liminal.land",
-    "packages/*"
+    "packages/*",
+    "strandard"
   ],
   "scripts": {
     "build": "tsc -b",

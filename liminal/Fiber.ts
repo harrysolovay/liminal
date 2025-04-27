@@ -20,6 +20,7 @@ export class Fiber<T = any> {
 
   static nextIndex: number = 0
   readonly index: number = Fiber.nextIndex++
+  readonly depth: number
 
   readonly #context: Context = Context.get() ?? new Context()
   readonly #runic: Runic<Rune, T>
@@ -32,6 +33,7 @@ export class Fiber<T = any> {
   controller: AbortController = new AbortController()
 
   constructor(runic: Runic<Rune, T>, config?: FiberConfig) {
+    this.depth = (config?.parent?.depth ?? -2) + 1
     this.#runic = runic
     const { parent, signal } = config ?? {}
     if (parent) this.parent = parent

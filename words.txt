@@ -36,6 +36,7 @@ runics
 shikijs
 shoutout
 solovay
+strandard
 subscope
 supabase
 tmpfs

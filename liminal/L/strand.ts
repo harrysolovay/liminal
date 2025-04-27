@@ -1,21 +1,14 @@
-import { assert } from "liminal-util"
+import { assert, isIterableLike } from "liminal-util"
 import { Context } from "../Context.ts"
 import { Fiber } from "../Fiber.ts"
 import { HandlerContext } from "../Handler.ts"
 import { MessageRegistry, MessageRegistryContext } from "../MessageRegistry.ts"
 import { ModelRegistry, ModelRegistryContext } from "../ModelRegistry.ts"
 import { type Rune } from "../Rune.ts"
-import type { Runic } from "../Runic.ts"
+import { Runic } from "../Runic.ts"
+import type { StrandConfig } from "../StrandConfig.ts"
 import { ToolRegistry, ToolRegistryContext } from "../ToolRegistry.ts"
 import { rune } from "./rune.ts"
-
-export interface StrandConfig<T = any, E = any> {
-  handler?: ((this: Fiber<T>, event: E) => void) | undefined
-  models?: ModelRegistry | undefined
-  messages?: MessageRegistry | undefined
-  tools?: ToolRegistry | undefined
-  signal?: AbortSignal | undefined
-}
 
 export interface strand<Y extends Rune, T> extends Iterable<Y, T>, PromiseLike<T> {}
 
@@ -41,7 +34,7 @@ export function strand(
       if (Array.isArray(value)) {
         const fibers = value.map((runic) => context().run(() => new Fiber(runic, { parent })))
         return yield* rune(() => Promise.all(fibers.map((fiber) => fiber.resolution())), "strand")
-      } else if (typeof value === "object") {
+      } else if (typeof value === "object" && !isIterableLike(value)) {
         const fibers = Object.values(value).map((runic) => context().run(() => new Fiber(runic, { parent })))
         return yield* rune(() => {
           const keys = Object.keys(value)
@@ -51,8 +44,8 @@ export function strand(
             .then(Object.fromEntries)
         }, "strand")
       }
-      const self = context().run(() => new Fiber(typeof value === "function" ? value() : value, { parent }))
-      return yield* rune(() => self.resolution(), "strand")
+      const fiber = context().run(() => new Fiber(value, { parent }))
+      return yield* rune(() => fiber.resolution(), "strand")
     },
     then(onfulfilled, onrejected) {
       return new Fiber(this).resolution().then(onfulfilled, onrejected)

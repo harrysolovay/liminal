@@ -3,7 +3,7 @@ layout: home
 title: Liminal
 hero:
   name: Liminal
-  text: Compose Agent Conversations
+  text: Conversations as Code
   image: /liminal_puzzle.png
   tagline: Primitives for building reusable conversation trees with language models using TypeScript iterators.
   actions:
