@@ -1,5 +1,11 @@
 # liminal-util
 
+## 0.0.7
+
+### Patch Changes
+
+- 4808a57: Fix handling of standalone iterables supplied to L.strand. Also introduce strandard, a standard library of strands.
+
 ## 0.0.6
 
 ### Patch Changes

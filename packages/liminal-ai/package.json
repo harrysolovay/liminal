@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "0.0.11",
+  "version": "0.0.12",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -16,7 +16,7 @@
   },
   "peerDependencies": {
     "ai": "^4.1.61",
-    "liminal": "^0.5.11",
-    "liminal-util": "^0.0.6"
+    "liminal": "^0.5.12",
+    "liminal-util": "^0.0.7"
   }
 }
