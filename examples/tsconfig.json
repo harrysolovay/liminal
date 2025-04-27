@@ -9,7 +9,7 @@
     { "path": "../packages/liminal-effect" },
     { "path": "../packages/liminal-ollama" },
     { "path": "../packages/liminal-openai" },
-    { "path": "../strandard" },
+    { "path": "../liminal-strands" },
     { "path": "../packages/liminal-zod3" }
   ]
 }

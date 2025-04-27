@@ -1,6 +1,6 @@
 import { L } from "liminal"
+import { debate } from "liminal-strands/debate"
 import { writeFile } from "node:fs/promises"
-import { debate } from "strandard/debate"
 import { gpt4oMini } from "./_models.ts"
 
 const result = await L.strand(function*() {

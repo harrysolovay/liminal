@@ -7,6 +7,7 @@
     { "path": "./examples" },
     { "path": "./liminal" },
     { "path": "./liminal-schema" },
+    { "path": "./liminal-strands" },
     { "path": "./liminal-util" },
     { "path": "./liminal.land" },
     { "path": "./packages/liminal-ai" },
@@ -18,7 +19,6 @@
     { "path": "./packages/liminal-typebox" },
     { "path": "./packages/liminal-valibot" },
     { "path": "./packages/liminal-zod3" },
-    { "path": "./strandard" },
     { "path": "./tsconfig.root.json" }
   ]
 }
