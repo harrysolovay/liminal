@@ -1,6 +1,6 @@
 import { L } from "liminal"
+import { expand } from "liminal-strands/expand"
 import { writeFile } from "node:fs/promises"
-import { expand } from "strandard/expand"
 import { gpt4oMini } from "./_models.ts"
 
 await L.strand(

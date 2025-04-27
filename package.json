@@ -6,10 +6,10 @@
     "example-integrations/*",
     "liminal",
     "liminal-schema",
+    "liminal-strands",
     "liminal-util",
     "liminal.land",
-    "packages/*",
-    "strandard"
+    "packages/*"
   ],
   "scripts": {
     "build": "tsc -b",

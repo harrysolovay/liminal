@@ -75,19 +75,19 @@
         "liminal-effect": "workspace:*",
         "liminal-ollama": "workspace:*",
         "liminal-openai": "workspace:*",
+        "liminal-strands": "workspace:*",
         "liminal-zod3": "workspace:*",
         "mathjs": "^14.3.1",
-        "strandard": "workspace:*",
         "zod": "^3.24.3",
       },
     },
     "liminal": {
       "name": "liminal",
-      "version": "0.5.11",
+      "version": "0.5.12",
       "dependencies": {
         "conditional-type-checks": "^1.0.6",
         "liminal-schema": "^0.0.5",
-        "liminal-util": "^0.0.6",
+        "liminal-util": "^0.0.7",
       },
     },
     "liminal-schema": {
@@ -100,9 +100,16 @@
         "conditional-type-checks",
       ],
     },
+    "liminal-strands": {
+      "name": "liminal-strands",
+      "version": "0.0.0",
+      "dependencies": {
+        "liminal": "^0.5.12",
+      },
+    },
     "liminal-util": {
       "name": "liminal-util",
-      "version": "0.0.6",
+      "version": "0.0.7",
     },
     "liminal.land": {
       "name": "liminal.land",
@@ -124,11 +131,11 @@
     },
     "packages/liminal-ai": {
       "name": "liminal-ai",
-      "version": "0.0.11",
+      "version": "0.0.12",
       "peerDependencies": {
         "ai": "^4.1.61",
-        "liminal": "^0.5.11",
-        "liminal-util": "^0.0.6",
+        "liminal": "^0.5.12",
+        "liminal-util": "^0.0.7",
       },
     },
     "packages/liminal-alchemy": {
@@ -156,19 +163,19 @@
     },
     "packages/liminal-ollama": {
       "name": "liminal-ollama",
-      "version": "0.0.6",
+      "version": "0.0.7",
       "peerDependencies": {
-        "liminal": "^0.5.11",
-        "liminal-util": "^0.0.6",
+        "liminal": "^0.5.12",
+        "liminal-util": "^0.0.7",
         "ollama": "^0.5.14",
       },
     },
     "packages/liminal-openai": {
       "name": "liminal-openai",
-      "version": "0.0.5",
+      "version": "0.0.6",
       "peerDependencies": {
-        "liminal": "^0.5.11",
-        "liminal-util": "^0.0.6",
+        "liminal": "^0.5.12",
+        "liminal-util": "^0.0.7",
         "openai": "^4.95.1",
       },
     },
@@ -192,19 +199,12 @@
     },
     "packages/liminal-zod3": {
       "name": "liminal-zod3",
-      "version": "0.0.6",
+      "version": "0.0.7",
       "peerDependencies": {
         "liminal-schema": "^0.0.5",
-        "liminal-util": "^0.0.6",
+        "liminal-util": "^0.0.7",
         "zod": "^3.24.2",
         "zod-to-json-schema": "^3.24.5",
-      },
-    },
-    "strandard": {
-      "name": "strandard",
-      "version": "0.0.0",
-      "dependencies": {
-        "liminal": "^0.5.11",
       },
     },
   },
@@ -1223,6 +1223,8 @@
 
     "liminal-schema": ["liminal-schema@workspace:liminal-schema"],
 
+    "liminal-strands": ["liminal-strands@workspace:liminal-strands"],
+
     "liminal-typebox": ["liminal-typebox@workspace:packages/liminal-typebox"],
 
     "liminal-util": ["liminal-util@workspace:liminal-util"],
@@ -1510,8 +1512,6 @@
     "speakingurl": ["speakingurl@14.0.1", "", {}, "sha512-1POYv7uv2gXoyGFpBCmpDVSNV74IfsWlDW216UPjbWufNf+bSU6GdbDsxdcxtfwb4xlI3yxzOTKClUosxARYrQ=="],
 
     "sprintf-js": ["sprintf-js@1.0.3", "", {}, "sha512-D9cPgkvLlV3t3IzL0D0YLvGA9Ahk4PcvVwUbN0dSGr1aP0Nrt4AEnTUbuGvquEC0mA64Gqt1fzirlRs5ibXx8g=="],
-
-    "strandard": ["strandard@workspace:strandard"],
 
     "string-width": ["string-width@5.1.2", "", { "dependencies": { "eastasianwidth": "^0.2.0", "emoji-regex": "^9.2.2", "strip-ansi": "^7.0.1" } }, "sha512-HnLOCR3vjcY8beoNLtcjZ5/nxn2afmME6lhrDrebokqMap+XbeW8n9TXpPDOqdGK5qcI3oT0GKTW6wC7EMiVqA=="],
 
