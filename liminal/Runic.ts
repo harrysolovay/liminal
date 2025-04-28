@@ -15,6 +15,8 @@ export namespace Runic {
     : X extends RuneIterator<Rune, infer T> ? T
     : never
 
+  export type E<X extends Runic> = Y<X>["E"]
+
   export function unwrap<Y extends Rune, T>(runic: Runic<Y, T>): RuneIterator<Y, T> {
     if (Symbol.iterator in runic) {
       return runic[Symbol.iterator]()
