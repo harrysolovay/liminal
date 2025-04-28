@@ -1,12 +1,11 @@
 import type { SchemaObject } from "liminal-schema"
 import { EventBase } from "./EventBase.ts"
+import type { FiberStatus } from "./Fiber.ts"
 import type { Message } from "./Message.ts"
 import type { Model } from "./Model.ts"
 
 export type LEvent =
-  | FiberCreated
-  | FiberResolved
-  | FiberStarted
+  | FiberStatusChanged
   | InferenceRequested
   | Inferred
   | MessageAppended
@@ -30,7 +29,7 @@ export class ModelRegistered extends EventBase(LEventTag, "model_registered") {
 export class InferenceRequested extends EventBase(LEventTag, "inference_requested") {
   declare schema?: SchemaObject
   constructor(
-    readonly requestId: number,
+    readonly requestId: string,
     schema?: SchemaObject | undefined,
   ) {
     super()
@@ -42,7 +41,7 @@ export class InferenceRequested extends EventBase(LEventTag, "inference_requeste
 
 export class Inferred extends EventBase(LEventTag, "inferred") {
   constructor(
-    readonly requestId: number,
+    readonly requestId: string,
     readonly inference: string,
   ) {
     super()
@@ -55,15 +54,8 @@ export class MessageAppended extends EventBase(LEventTag, "message_appended") {
   }
 }
 
-export class FiberCreated extends EventBase(LEventTag, "fiber_created") {}
-export class FiberStarted extends EventBase(LEventTag, "fiber_started") {}
-export class FiberResolved extends EventBase(LEventTag, "fiber_resolved") {
-  constructor(readonly value: any) {
-    super()
-  }
-}
-export class FiberRejected extends EventBase(LEventTag, "fiber_rejected") {
-  constructor(readonly reason: any) {
+export class FiberStatusChanged extends EventBase(LEventTag, "fiber_status_changed") {
+  constructor(readonly status: FiberStatus) {
     super()
   }
 }

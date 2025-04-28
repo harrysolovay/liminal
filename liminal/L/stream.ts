@@ -3,27 +3,26 @@ import { InferenceRequested, type LEvent } from "../LEvent.ts"
 import { MessageRegistryContext } from "../MessageRegistry.ts"
 import { ModelRegistryContext } from "../ModelRegistry.ts"
 import { type Rune } from "../Rune.ts"
-import { RequestCounter } from "./_common.ts"
+import { continuation } from "./continuation.ts"
 import { event } from "./event.ts"
-import { rune } from "./rune.ts"
+import { fiber } from "./fiber.ts"
 
-export interface stream extends Iterable<Rune<LEvent>, ReadableStream<string>> {}
-
-export const stream: stream = {
+export const stream: Iterable<Rune<LEvent>, ReadableStream<string>> = {
   *[Symbol.iterator](): Generator<Rune<LEvent>, ReadableStream<string>> {
     const modelRegistry = ModelRegistryContext.get()
     assert(modelRegistry)
     const model = modelRegistry.peek()
     assert(model)
-    const requestId = RequestCounter.next()
+    const requestId = crypto.randomUUID()
     yield* event(new InferenceRequested(requestId))
     const messageRegistry = MessageRegistryContext.get()
     assert(messageRegistry)
-    return yield* rune((fiber) =>
+    const { signal } = yield* fiber
+    return yield* continuation(() =>
       model
         .seal({
           messages: messageRegistry.messages,
-          signal: fiber.controller.signal,
+          signal,
         })
         .stream(), "stream")
   },

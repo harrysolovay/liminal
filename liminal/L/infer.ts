@@ -4,30 +4,26 @@ import { InferenceRequested, Inferred, type LEvent } from "../LEvent.ts"
 import { MessageRegistryContext } from "../MessageRegistry.ts"
 import { ModelRegistryContext } from "../ModelRegistry.ts"
 import type { Rune } from "../Rune.ts"
-import { RequestCounter } from "./_common.ts"
+import { continuation } from "./continuation.ts"
 import { event } from "./event.ts"
-import { rune } from "./rune.ts"
+import { fiber } from "./fiber.ts"
 
-export { infer_ as infer }
-
-interface infer_ extends Generator<Rune<LEvent>, string> {}
-
-function* infer_(schema?: SchemaObject): infer_ {
+export function* infer(schema?: SchemaObject): Generator<Rune<LEvent>, string> {
   const modelRegistry = ModelRegistryContext.getOrInit()
   const model = modelRegistry.peek()
   assert(model)
-  const requestId = RequestCounter.next()
+  const requestId = crypto.randomUUID()
   yield* event(new InferenceRequested(requestId, schema))
   const messageRegistry = MessageRegistryContext.getOrInit()
-  const inference = yield* rune((fiber) =>
+  const { signal } = yield* fiber
+  const inference = yield* continuation(() =>
     model
       .seal({
         messages: messageRegistry.messages,
         schema,
-        signal: fiber.controller.signal,
+        signal,
       })
       .resolve(), "infer")
   yield* event(new Inferred(requestId, inference))
   return inference
 }
-Object.defineProperty(infer_, "name", { value: "infer" })

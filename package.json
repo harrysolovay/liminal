@@ -17,7 +17,8 @@
     "liminal": "dotenvx run -- liminal",
     "lint": "eslint -c eslint.json .",
     "changeset": "changeset",
-    "clean": "find . -type d \\( -name dist -o -name node_modules \\) -prune -exec rm -rf {} +"
+    "clean": "find . -type d \\( -name dist -o -name node_modules \\) -prune -exec rm -rf {} +",
+    "mix": "bunx repomix liminal --ignore '**/*.md'"
   },
   "devDependencies": {
     "@ai-sdk/openai": "^1.2.5",
@@ -30,8 +31,5 @@
     "dprint": "^0.49.1",
     "typescript": "^5.8.3",
     "vitest": "^3.1.2"
-  },
-  "dependencies": {
-    "zod": "^3.24.3"
   }
 }

@@ -4,9 +4,7 @@ import { ModelRegistryContext } from "../ModelRegistry.ts"
 import type { Rune } from "../Rune.ts"
 import { event } from "./event.ts"
 
-export interface model extends Generator<Rune<ModelRegistered>, Model> {}
-
-export function* model(model: Model): model {
+export function* model(model: Model): Generator<Rune<ModelRegistered>, Model> {
   const registry = ModelRegistryContext.getOrInit()
   registry.register(model)
   yield* event(new ModelRegistered(model))

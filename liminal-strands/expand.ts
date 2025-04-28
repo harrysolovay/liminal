@@ -13,7 +13,7 @@ export interface ExpandResult {
   expanded: string
 }
 
-export function expand({ goals, input, size }: ExpandConfig): L.strand<Rune<LEvent>, ExpandResult> {
+export function expand({ goals, input, size }: ExpandConfig): L.Strand<Rune<LEvent>, ExpandResult> {
   return L.strand(function*() {
     L.system`
       You are given an idea, concept, or other arbitrary input. Your job is as follows:

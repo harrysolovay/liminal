@@ -1,5 +1,5 @@
 import { L } from "liminal"
-import { expand } from "liminal-strands/expand"
+import { expand } from "liminal-strands"
 import { writeFile } from "node:fs/promises"
 import { gpt4oMini } from "./_models.ts"
 
@@ -23,8 +23,8 @@ await L.strand(
   {
     async handler(event) {
       console.log(this.depth, event)
-      if (event.type === "fiber_resolved" && this.depth) {
-        await writeFile("./expansion.json", JSON.stringify(event.value, null, 2))
+      if (event.type === "fiber_status_changed" && event.status.type === "resolved" && this.depth === 0) {
+        await writeFile("./expansion.json", JSON.stringify(event.status.value, null, 2))
       }
     },
   },
