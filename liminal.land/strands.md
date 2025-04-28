@@ -1,7 +1,7 @@
 # Liminal Strands <Badge type="warning" text="beta" />
 
-A "strand" is a conversation state isolate. Each strand has its own registry of
-messages, models, tools and other such locals.
+A "strand" is a conversation isolate. Each strand has its own registry of
+messages, models, tools and other locals.
 
 ```ts
 function* g() {
@@ -14,27 +14,50 @@ function* g() {
     // Isolated from both `g` and the previous strand.
     yield* L.user`B`
   })
+
+  // `g` unaffected by the child strands.
 }
 ```
 
-## Yielded vs. Awaited
+## Running Strands
 
-Strands can be yielded within other strands.
+Strands are `PromiseLike` values. `await` the strand to run it.
 
 ```ts
-L.strand(function*() {
-  const result = yield* L.strand(function*() {
-    // ...
-  })
+await L.strand(function*() {
+  // ...
 })
 ```
 
-They can also be awaited.
+## Catching Errors
+
+Let's use `L.catch` to ensure that we capture any exceptions thrown by the
+iterator at runtime.
 
 ```ts
-const result = await L.strand(function*() {
-  //
+import { L } from "liminal"
+
+// Hypothetical function that may throw an exception.
+declare function mayThrow(): number
+
+// Run the strand.
+await L.strand(function*() {
+  const result = yield* L.catch(function*() {
+    return mayThrow()
+  })
+
+  result satisfies `CatchResult<number>`
 })
+```
+
+We can discriminate the `CatchResult` like so.
+
+```ts
+if (result.resolved) {
+  console.log("Succeed with the following value:", result.resolved)
+} else {
+  console.log("Threw the following value:", result.rejected)
+}
 ```
 
 ## Strand Configuration
@@ -42,11 +65,20 @@ const result = await L.strand(function*() {
 Strands are configurable.
 
 ```ts
-export interface StrandConfig<T = any, E = any> {
-  handler?: ((this: Fiber<T>, event: E) => void) | undefined
+export interface StrandConfig<T = any, E = any, TE = never> {
+  /** The handler to be supplied yielded events at runtime. */
+  handler?: ((this: Fiber, event: E) => void) | undefined
+
+  /** The language model registry. */
   models?: ModelRegistry | undefined
+
+  /** The initial message state. */
   messages?: MessageRegistry | undefined
-  tools?: ToolRegistry | undefined
+
+  /** Tools that should be made available to language models. */
+  tools?: ToolRegistry<TE> | undefined
+
+  /** A signal that can be used to terminate the strand. */
   signal?: AbortSignal | undefined
 }
 ```
@@ -94,6 +126,26 @@ function* g() {
 }
 ```
 
+### Yielding vs. Awaiting
+
+Strands can be composed within one another via yielding.
+
+```ts {3}
+L.strand(function*() {
+  const result = yield* L.strand(function*() {
+    // ...
+  })
+})
+```
+
+They can also be awaited to start the conversation runtime.
+
+```ts {1}
+const result = await L.strand(function*() {
+  //
+})
+```
+
 ## Runes
 
 Liminal conversations are defined as
@@ -115,16 +167,38 @@ const inference = yield* L.assistant
 yield* L.messages
 ```
 
-## Runics
+### Rune Type Signature
 
-Strands can be created with any value that is "Runic."
+The type signature of a `Rune` will contain the event type of `L.event`-produced
+yields.
 
 ```ts
-// Example conversation definition.
+g satisfies () => Generator<Rune<"my-event">, void>
+
 function* g() {
-  yield* L.user`Salutations.`
-  return yield* L.assistant
+  yield* L.event("my-event")
 }
+```
+
+The statically-inferred yield types are used to narrow the signature of
+configured event handlers.
+
+```ts
+await L.strand(function*() {
+  yield* L.event("my-first-event")
+  yield* L.event("my-second-event")
+}, {
+  handler(event) {
+    event satisfies "my-first-event" | "my-second-event"
+  },
+})
+```
+
+## Conversation Definition
+
+```ts
+// Usually created with a generator function.
+declare g: () => Iterable<Rune, any> | AsyncIterable<Rune, any>
 
 // With a nullary function that produces a rune iterable.
 const a = await strand(g)
@@ -196,7 +270,7 @@ messages to the agent's conversation.
 }
 ```
 
-## Returned Values
+## Return Values
 
 The yielding of Runes may return "next" values.
 

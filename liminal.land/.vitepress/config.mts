@@ -22,7 +22,10 @@ export default defineConfig({
   },
   markdown: {
     codeTransformers: [transformerTwoslash()],
-    theme: { light: "light-plus", dark: "dracula" },
+    theme: {
+      light: "light-plus",
+      dark: "dracula",
+    },
     config: (md) => {
       md.use(markdownSteps)
       md.use(footnotePlugin)
@@ -65,6 +68,11 @@ export default defineConfig({
         link: "https://github.com/harrysolovay/liminal/tree/main/examples",
         target: "blank",
       },
+      // {
+      //   text: "Contribute",
+      //   link: "https://github.com/harrysolovay/liminal/tree/main/CONTRIBUTING.md",
+      //   target: "blank",
+      // },
       {
         text: "Introduction",
         items: [
@@ -76,11 +84,13 @@ export default defineConfig({
       {
         text: "Conversation",
         items: [
-          { text: "Models", link: "/models" },
-          { text: "Schemas", link: "/schemas" },
-          { text: "Tools", link: "/tools" },
           { text: "Messages", link: "/messages" },
+          { text: "Models", link: "/models" },
+          { text: "Tools", link: "/tools" },
           { text: "Events", link: "/events" },
+          { text: "Schemas", link: "/schemas" },
+          { text: "Testing", link: "/testing" },
+          { text: "State", link: "/state" },
         ],
       },
       // {

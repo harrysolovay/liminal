@@ -1,4 +1,4 @@
-# Why Liminal? <Badge type="warning" text="beta" />
+# Why? <Badge type="warning" text="beta" />
 
 ## Conversation-Modeling
 
@@ -59,9 +59,8 @@ const value = await L.strand(g)
 
 ## Standard JavaScript
 
-Liminal "strands" (conversation isolates) are created using JavaScript iterables
-(in this case a generator function). These iterables can trigger arbitrary
-computations, such as loops and promise execution.
+They are defined with JavaScript iterables (in this case a generator function).
+They can trigger arbitrary computations, such as loops and promise execution.
 
 ```ts {4,8}
 async function* g() {
@@ -106,10 +105,25 @@ function* maybeRefine(content: string) {
 }
 ```
 
-## Branching
+## Model Selection
 
-Branch conversations into isolated strands and explore their alternative states
-and return values.
+Focus a model anytime with `L.model`. The specified model adapter will be used
+for subsequent inference.
+
+```ts
+import { openai } from "liminal-openai"
+
+function* g() {
+  yield* L.model(openai("gpt-4o-mini"))
+  yield* L.infer // uses 4o mini
+  yield* L.model(openai("o4-mini-high"))
+  yield* L.infer // uses 4o mini high
+}
+```
+
+## Strands
+
+Strands are conversation isolates.
 
 ```ts
 function* g(content: string) {
@@ -129,10 +143,9 @@ function* g(content: string) {
 }
 ```
 
-## Parallel Strands
+## Parallelization
 
-Each of the following strands has their own isolated copy of the outer
-conversation.
+Each of the following strands has their own isolated copy of the outer's state.
 
 ```ts
 function* g() {
@@ -158,9 +171,27 @@ function* g() {
 }
 ```
 
-### Dynamic Branching
+### Coding Agents Meeting Liminal
 
-Strands can be created from various kinds of "Runic" values and collections.
+Liminal conversations are composed with JavaScript iterators, which can be
+recursively spread into one another. This construct helps us express subsystems
+and conversation patterns purely.
+
+```ts
+function* a() {
+  yield* L.user`Hi from a.`
+  return yield* b()
+}
+
+function* b() {
+  yield* L.user`Hi from b.`
+  return "Hi!"
+}
+```
+
+### Self-Reflection
+
+We can create high-level conversation patterns for self-reflection.
 
 ```ts
 async function* g() {
@@ -212,22 +243,6 @@ function* g() {
   const result = yield* L.assistant(MyType)
 
   result satisfies { a: string; b: number }
-}
-```
-
-## Model Selection
-
-Focus a model anytime with `L.model`. The specified model adapter will be used
-for subsequent inference.
-
-```ts
-import { openai } from "liminal-openai"
-
-function* g() {
-  yield* L.model(openai("gpt-4o-mini"))
-  yield* L.infer // uses 4o mini
-  yield* L.model(openai("o4-mini-high"))
-  yield* L.infer // uses 4o mini high
 }
 ```
 

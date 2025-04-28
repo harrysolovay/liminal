@@ -1,10 +1,14 @@
 # Liminal Events <Badge type="warning" text="beta" />
 
+Yield events from your conversation definition.
+
 ```ts
 function* g() {
   yield* L.event("my-event")
 }
 ```
+
+When turning this definition into a strand, we can add an event handler.
 
 ```ts
 await L.strand(g, {
@@ -16,10 +20,55 @@ await L.strand(g, {
 })
 ```
 
-```ts
-const YourProgramKey = Symbol.for("<your-program-name>/AppTag")
-export class MyEvent extends EventBase(YourProgramKey, "my_event") {}
+## Extract Static Event Type
 
+```ts twoslash
+import { L, Runic } from "liminal"
+
+function* g() {
+  yield* L.event("A")
+  yield* L.event(["B"])
+  yield* L.event({ c: "D" })
+}
+
+type GEvent = Runic.E<typeof g>
+//   ^?
+```
+
+<br />
+<br />
+<br />
+
+## Custom Event Helper
+
+Yielding plain string literals may not scale well. Instead, you can use
+`EventBase` to create custom event type factories and guards.
+
+1. Create a unique symbol for your project
+
+```ts
+const CustomEventTag = Symbol.for("<your-project-name>/CustomEventTag")
+```
+
+2. Create the event constructor.
+
+```ts
+import { EventBase } from "liminal"
+
+class MyEvent extends EventBase(YourProgramKey, "my_event") {}
+```
+
+3. Yield instances of the event from within your conversation definition.
+
+```ts {2}
+function* g() {
+  yield* L.event(new MyEvent())
+}
+```
+
+4. Use the static `is` method of the custom event class.
+
+```ts {7}
 await L.strand(
   function*() {
     yield* L.event(new AppEvent())
@@ -32,18 +81,4 @@ await L.strand(
     },
   },
 )
-```
-
-```ts
-await L.event(g, {
-  handler(event) {
-    if (event.type === "a") {
-      event.value satisfies string
-    } else if (event.type === "b") {
-      event.value satisfies number
-    } else {
-      event.value satisfies never
-    }
-  },
-})
 ```
