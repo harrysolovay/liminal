@@ -9,7 +9,6 @@
     "liminal": "workspace:^",
     "liminal-ai": "workspace:^",
     "markdown-it-footnote": "^4.0.0",
-    "markdown-it-steps": "^0.2.0",
     "valibot": "^1.0.0",
     "vitepress": "^1.5.0",
     "vitepress-plugin-llmstxt": "^0.1.0",

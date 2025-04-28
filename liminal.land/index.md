@@ -3,7 +3,7 @@ layout: home
 title: Liminal
 hero:
   name: Liminal
-  text: Conversations as Code
+  text: Conversation Trees
   image: /liminal_puzzle.png
   tagline: Reusable, branchable, self-evolving conversations with language models and TypeScript iterators.
   actions:
@@ -15,15 +15,15 @@ hero:
       link: /why
 features:
   - icon:
+      src: /iconoir--chat-bubble-check.svg
+    title: Message Lists, Simplified
+    details: Conversation state management is blended into ordinary function control flow.
+    link: /why#conversation-modeling
+  - icon:
       src: /iconoir--planet.svg
     title: Model-Switching
     details: Create conversation patterns that leverage many language models in tandem.
-    link: /why#model-switching
-  - icon:
-      src: /iconoir--chat-bubble-check.svg
-    title: Message Lists, Simplified
-    details: Manage conversations through implicit message buffers, blended into function control flow.
-    link: /why#conversation-modeling
+    link: /why#model-selection
   - icon:
       src: /iconoir--text-magnifying-glass.svg
     title: Infer Static Event Types

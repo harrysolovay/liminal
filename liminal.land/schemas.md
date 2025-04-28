@@ -1,4 +1,4 @@
-# Liminal Schemas
+# Liminal Schemas <Badge type="warning" text="beta" />
 
 We may want to specify type information in cases such as tool parameter and
 structured output definition. In such cases, we can utilize existing runtime
