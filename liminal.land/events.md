@@ -31,7 +31,7 @@ function* g() {
   yield* L.event({ c: "D" })
 }
 
-type GRune = Runic.E<typeof g>
+type GEvent = Runic.E<typeof g>
 //   ^?
 ```
 
