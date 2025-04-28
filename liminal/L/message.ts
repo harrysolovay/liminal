@@ -4,9 +4,7 @@ import { MessageRegistryContext } from "../MessageRegistry.ts"
 import type { Rune } from "../Rune.ts"
 import { event } from "./event.ts"
 
-export interface message extends Generator<Rune<LEvent>, void> {}
-
-export function* message(role: MessageRole, content: Array<ContentPart>): message {
+export function* message(role: MessageRole, content: Array<ContentPart>): Generator<Rune<LEvent>, void> {
   const messageRegistry = MessageRegistryContext.getOrInit()
   const message: Message = { role, content }
   yield* event(new MessageAppended(message))

@@ -1,5 +1,5 @@
-import { ContextPart } from "liminal"
-import type { Tool } from "./Tool"
+import { ContextPart } from "./Context.ts"
+import type { Tool } from "./Tool.ts"
 
 export class ToolRegistry extends Set<Tool> {
   clone(): ToolRegistry {

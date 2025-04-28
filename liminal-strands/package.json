@@ -13,8 +13,7 @@
   "type": "module",
   "description": "Strands for common conversation patterns with Liminal.",
   "exports": {
-    "./debate": "./dist/debate.js",
-    "./expand": "./dist/expand.js"
+    ".": "./dist/index.js"
   },
   "dependencies": {
     "liminal": "^0.5.12"

@@ -4,48 +4,49 @@ import { Fiber } from "../Fiber.ts"
 import { HandlerContext } from "../Handler.ts"
 import { MessageRegistry, MessageRegistryContext } from "../MessageRegistry.ts"
 import { ModelRegistry, ModelRegistryContext } from "../ModelRegistry.ts"
-import { type Rune } from "../Rune.ts"
+import { type AnyRune, type Rune } from "../Rune.ts"
 import { Runic } from "../Runic.ts"
 import type { StrandConfig } from "../StrandConfig.ts"
 import { ToolRegistry, ToolRegistryContext } from "../ToolRegistry.ts"
-import { rune } from "./rune.ts"
+import { continuation } from "./continuation.ts"
+import { fiber } from "./fiber.ts"
 
-export interface strand<Y extends Rune, T> extends Iterable<Y, T>, PromiseLike<T> {}
+export interface Strand<Y extends AnyRune, T> extends Iterable<Y, T>, PromiseLike<T> {}
 
 export function strand<X extends Runic>(
   runic: X,
   config?: StrandConfig<Runic.T<X>, Rune.E<Runic.Y<X>>>,
-): strand<Runic.Y<X>, Runic.T<X>>
+): Strand<Runic.Y<X>, Runic.T<X>>
 export function strand<XA extends Array<Runic>>(
   runics: XA,
   config?: StrandConfig<{ [I in keyof XA]: Runic.T<XA[I]> }, Rune.E<Runic.Y<XA[number]>>>,
-): strand<Runic.Y<XA[number]> | Rune<never>, { [I in keyof XA]: Runic.T<XA[I]> }>
+): Strand<Runic.Y<XA[number]> | Rune<never>, { [I in keyof XA]: Runic.T<XA[I]> }>
 export function strand<XR extends Record<keyof any, Runic>>(
   runics: XR,
   config?: StrandConfig<{ [K in keyof XR]: Runic.T<XR[K]> }, Rune.E<Runic.Y<XR[keyof XR]>>>,
-): strand<Runic.Y<XR[keyof XR]> | Rune<never>, { [K in keyof XR]: Runic.T<XR[K]> }>
+): Strand<Runic.Y<XR[keyof XR]> | Rune<never>, { [K in keyof XR]: Runic.T<XR[K]> }>
 export function strand(
   value: Runic | Array<Runic> | Record<keyof any, Runic>,
   config?: StrandConfig,
-): strand<Rune, any> {
+): Strand<Rune, any> {
   return {
     *[Symbol.iterator](): Generator<Rune, any> {
-      const parent = yield* Fiber
+      const parent = yield* fiber
       if (Array.isArray(value)) {
-        const fibers = value.map((runic) => context().run(() => new Fiber(runic, { parent })))
-        return yield* rune(() => Promise.all(fibers.map((fiber) => fiber.resolution())), "strand")
+        const nextFibers = value.map((runic) => context().run(() => new Fiber(runic, { parent })))
+        return yield* continuation(() => Promise.all(nextFibers.map((fiber) => fiber.resolution())), "strand")
       } else if (typeof value === "object" && !isIterableLike(value)) {
-        const fibers = Object.values(value).map((runic) => context().run(() => new Fiber(runic, { parent })))
-        return yield* rune(() => {
+        const nextFibers = Object.values(value).map((runic) => context().run(() => new Fiber(runic, { parent })))
+        return yield* continuation(() => {
           const keys = Object.keys(value)
           return Promise
-            .all(fibers.map((fiber) => fiber.resolution()))
+            .all(nextFibers.map((fiber) => fiber.resolution()))
             .then((resolved) => resolved.map((value, i) => [keys[i], value]))
             .then(Object.fromEntries)
         }, "strand")
       }
-      const fiber = context().run(() => new Fiber(value, { parent }))
-      return yield* rune(() => fiber.resolution(), "strand")
+      const nextFiber = context().run(() => new Fiber(value, { parent }))
+      return yield* continuation(() => nextFiber.resolution(), "strand")
     },
     then(onfulfilled, onrejected) {
       return new Fiber(this).resolution().then(onfulfilled, onrejected)

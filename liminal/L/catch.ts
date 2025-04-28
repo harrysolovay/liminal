@@ -3,12 +3,14 @@ import { Context } from "../Context.ts"
 import { Fiber } from "../Fiber.ts"
 import type { Rune } from "../Rune.ts"
 import type { Runic } from "../Runic.ts"
-import { rune } from "./rune.ts"
+import { continuation } from "./continuation.ts"
+import { fiber } from "./fiber.ts"
 
 export { catch_ as catch }
 
 function* catch_<Y extends Rune, T>(runic: Runic<Y, T>): Generator<Rune<Y>, CatchResult<T>> {
-  return yield* rune(async (parent) => {
+  const parent = yield* fiber
+  return yield* continuation(async () => {
     try {
       const context = Context.get()
       assert(context)

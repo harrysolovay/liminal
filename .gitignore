@@ -5,3 +5,4 @@
 dist
 liminal.land/.vitepress/cache
 node_modules
+repomix-output.xml
