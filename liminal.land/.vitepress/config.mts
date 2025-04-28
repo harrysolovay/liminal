@@ -89,7 +89,7 @@ export default defineConfig({
           { text: "Tools", link: "/tools" },
           { text: "Events", link: "/events" },
           { text: "Schemas", link: "/schemas" },
-          { text: "State", link: "/state" },
+          // { text: "State", link: "/state" },
           { text: "Testing", link: "/testing" },
         ],
       },
