@@ -1,22 +1,20 @@
-import { assert } from "liminal-util"
-import { Context } from "../Context.ts"
 import { Fiber } from "../Fiber.ts"
 import type { Rune } from "../Rune.ts"
 import type { Runic } from "../Runic.ts"
 import { continuation } from "./continuation.ts"
-import { fiber } from "./fiber.ts"
+import { self } from "./self.ts"
 
 export { catch_ as catch }
 
 function* catch_<Y extends Rune, T>(runic: Runic<Y, T>): Generator<Rune<Y>, CatchResult<T>> {
-  const parent = yield* fiber
+  const parent = yield* self
   return yield* continuation(async () => {
     try {
-      const context = Context.get()
-      assert(context)
-      return {
-        resolved: await context.fork().run(() => new Fiber(runic, { parent }).resolution()),
-      }
+      const resolved = await new Fiber(runic, {
+        parent,
+        context: parent.context.fork(),
+      }).resolution()
+      return { resolved }
     } catch (exception: unknown) {
       return { rejected: exception }
     }

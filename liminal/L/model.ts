@@ -1,12 +1,12 @@
 import { ModelRegistered } from "../LEvent.ts"
 import type { Model } from "../Model.ts"
-import { ModelRegistryContext } from "../ModelRegistry.ts"
 import type { Rune } from "../Rune.ts"
 import { event } from "./event.ts"
+import { models } from "./models.ts"
 
 export function* model(model: Model): Generator<Rune<ModelRegistered>, Model> {
-  const registry = ModelRegistryContext.getOrInit()
-  registry.register(model)
+  const modelRegistry = yield* models
+  modelRegistry.register(model)
   yield* event(new ModelRegistered(model))
   return model
 }

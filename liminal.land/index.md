@@ -5,7 +5,7 @@ hero:
   name: Liminal
   text: Conversation Trees
   image: /liminal_puzzle.png
-  tagline: Reusable, branchable, self-evolving conversations with language models and TypeScript iterators.
+  tagline: Reusable, branchable, self-evolving conversations between language models.
   actions:
     - theme: brand
       text: Getting Started

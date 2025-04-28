@@ -1,4 +1,3 @@
-import { ContextPart } from "./Context.ts"
 import type { Model } from "./Model.ts"
 
 /** An intrusive list for storing `Model`s. */
@@ -40,7 +39,7 @@ export class ModelRegistry {
     node.prev = node.next = undefined
   }
 
-  clone(): ModelRegistry {
+  clone() {
     const instance = new ModelRegistry()
     for (let node = this.head; node; node = node.next) {
       instance.register(node.model)
@@ -54,8 +53,3 @@ export interface ModelRegistryNode {
   model: Model
   next?: ModelRegistryNode | undefined
 }
-
-export const ModelRegistryContext: ContextPart<ModelRegistry> = ContextPart(
-  (parent) => parent?.clone() ?? new ModelRegistry(),
-  "model_registry",
-)

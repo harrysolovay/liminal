@@ -1,58 +1,39 @@
-import { assert } from "liminal-util"
-import { AsyncLocalStorage } from "node:async_hooks"
+import { RuneKey, type StateRune } from "./Rune.ts"
 
-const storage = new AsyncLocalStorage<Context>()
-
-export class Context extends Map<ContextPart, unknown> {
-  static get(): Context | undefined {
-    return storage.getStore()
-  }
-
-  static ensure(): Context {
-    const current = Context.get()
-    assert(current)
-    return current
-  }
-
-  run<R>(f: () => R): R {
-    return storage.run(this, f)
-  }
-
-  fork(): Context {
-    const context = new Context()
-    for (const [handle, value] of this.entries()) {
-      if (!context.has(handle)) {
-        context.set(handle, handle.fork(value))
+export class Context extends Map<State, unknown> {
+  fork(override?: Context): Context {
+    const instance = new Context(override)
+    for (const [state, value] of this.entries()) {
+      if (!instance.has(state)) {
+        instance.set(state, state.f(value))
       }
     }
-    return context
+    return instance
+  }
+
+  getOrInit<V>(state: State<V>): V {
+    if (this.has(state)) {
+      return this.get(state) as never
+    }
+    const instance = state.f()
+    this.set(state, instance)
+    return instance
   }
 }
 
-export interface ContextPart<V = any> {
-  fork(parent?: V): V
-  get(): V | undefined
-  getOrInit(): V
-  debug?: string
+export interface State<V = any> extends Iterable<StateRune, V> {
+  f(parent?: V): V
 }
 
-export function ContextPart<V>(fork: (parent?: V) => V, debug?: string): ContextPart<V> {
-  const self: ContextPart<V> = {
-    fork,
-    get() {
-      return Context.get()?.get(self) as never
+export function State<V>(f: (parent?: V) => V): State<V> {
+  return {
+    f,
+    *[Symbol.iterator](): Generator<StateRune, V> {
+      return yield {
+        [RuneKey]: true,
+        kind: "state",
+        state: this,
+      } satisfies Omit<StateRune, "event"> as never
     },
-    getOrInit() {
-      const context = Context.get()
-      assert(context)
-      let value = context.get(this)
-      if (!value) {
-        value = this.fork()
-        context.set(this, value)
-      }
-      return value as never
-    },
-    ...debug && { debug },
   }
-  return self
 }
