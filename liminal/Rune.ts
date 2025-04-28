@@ -1,6 +1,7 @@
+import type { State } from "./Context.ts"
 import type { LEvent } from "./LEvent.ts"
 
-export type Rune<E = LEvent> = ContinuationRune | EventRune<E> | FiberRune
+export type Rune<E = LEvent> = ContinuationRune | EventRune<E> | SelfRune | StateRune
 
 export interface ContinuationRune extends RuneBase<"continuation", never> {
   f: () => any
@@ -9,7 +10,11 @@ export interface ContinuationRune extends RuneBase<"continuation", never> {
 
 export interface EventRune<E> extends RuneBase<"event", E> {}
 
-export interface FiberRune extends RuneBase<"fiber", never> {}
+export interface SelfRune extends RuneBase<"self", never> {}
+
+export interface StateRune extends RuneBase<"state", never> {
+  state: State
+}
 
 interface RuneBase<K extends string, E> {
   [RuneKey]: true

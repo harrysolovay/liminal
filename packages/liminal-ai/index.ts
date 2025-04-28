@@ -8,15 +8,16 @@ import {
   streamText,
   tool as aiTool,
 } from "ai"
-import { type Message, Model, ToolRegistryContext } from "liminal"
+import { type Message, Model } from "liminal"
 import { assert } from "liminal-util"
 
 export function adapter(model: LanguageModelV1): Model {
   return new Model(
     "ai-sdk",
-    ({ messages, schema: lSchema, signal }) => {
+    ({ messages, schema: lSchema, signal, tools: lTools }) => {
       const tools = Object.fromEntries(
-        ToolRegistryContext.get()?.values()
+        lTools
+          ?.values()
           .map((tool) => [
             tool.name,
             aiTool({

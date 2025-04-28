@@ -1,6 +1,7 @@
 import type { SchemaObject } from "liminal-schema"
 import { attachCustomInspect } from "liminal-util"
 import type { Message } from "./Message.ts"
+import type { ToolRegistry } from "./ToolRegistry.ts"
 
 export class Model {
   constructor(
@@ -16,7 +17,8 @@ export class Model {
 export interface Envelope {
   messages: Array<Message>
   schema?: SchemaObject | undefined
-  signal?: AbortSignal
+  signal: AbortSignal
+  tools?: ToolRegistry | undefined
 }
 
 export interface SealedEnvelope {

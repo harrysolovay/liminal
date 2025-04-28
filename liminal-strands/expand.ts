@@ -66,7 +66,7 @@ export function expand({ goals, input, size }: ExpandConfig): L.Strand<Rune<LEve
         `
         return yield* L.assistant
       },
-      { messages: undefined },
+      { messages: [] },
     )
     return { expansions, expanded } satisfies ExpandResult
   })

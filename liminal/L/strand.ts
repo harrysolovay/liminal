@@ -1,42 +1,47 @@
-import { assert, isIterableLike } from "liminal-util"
-import { Context } from "../Context.ts"
+import { isIterableLike } from "liminal-util"
+import { Config } from "../Config.ts"
 import { Fiber } from "../Fiber.ts"
-import { HandlerContext } from "../Handler.ts"
-import { MessageRegistry, MessageRegistryContext } from "../MessageRegistry.ts"
-import { ModelRegistry, ModelRegistryContext } from "../ModelRegistry.ts"
 import { type AnyRune, type Rune } from "../Rune.ts"
 import { Runic } from "../Runic.ts"
-import type { StrandConfig } from "../StrandConfig.ts"
-import { ToolRegistry, ToolRegistryContext } from "../ToolRegistry.ts"
 import { continuation } from "./continuation.ts"
-import { fiber } from "./fiber.ts"
+import { self } from "./self.ts"
 
 export interface Strand<Y extends AnyRune, T> extends Iterable<Y, T>, PromiseLike<T> {}
 
 export function strand<X extends Runic>(
   runic: X,
-  config?: StrandConfig<Runic.T<X>, Rune.E<Runic.Y<X>>>,
+  config?: Config<Runic.T<X>, Rune.E<Runic.Y<X>>>,
 ): Strand<Runic.Y<X>, Runic.T<X>>
 export function strand<XA extends Array<Runic>>(
   runics: XA,
-  config?: StrandConfig<{ [I in keyof XA]: Runic.T<XA[I]> }, Rune.E<Runic.Y<XA[number]>>>,
+  config?: Config<{ [I in keyof XA]: Runic.T<XA[I]> }, Rune.E<Runic.Y<XA[number]>>>,
 ): Strand<Runic.Y<XA[number]> | Rune<never>, { [I in keyof XA]: Runic.T<XA[I]> }>
 export function strand<XR extends Record<keyof any, Runic>>(
   runics: XR,
-  config?: StrandConfig<{ [K in keyof XR]: Runic.T<XR[K]> }, Rune.E<Runic.Y<XR[keyof XR]>>>,
+  config?: Config<{ [K in keyof XR]: Runic.T<XR[K]> }, Rune.E<Runic.Y<XR[keyof XR]>>>,
 ): Strand<Runic.Y<XR[keyof XR]> | Rune<never>, { [K in keyof XR]: Runic.T<XR[K]> }>
 export function strand(
   value: Runic | Array<Runic> | Record<keyof any, Runic>,
-  config?: StrandConfig,
+  config?: Config,
 ): Strand<Rune, any> {
   return {
     *[Symbol.iterator](): Generator<Rune, any> {
-      const parent = yield* fiber
+      const parent = yield* self
       if (Array.isArray(value)) {
-        const nextFibers = value.map((runic) => context().run(() => new Fiber(runic, { parent })))
+        const nextFibers = value.map((runic) =>
+          new Fiber(runic, {
+            parent,
+            context: Config.toContext(parent.context, config),
+          })
+        )
         return yield* continuation(() => Promise.all(nextFibers.map((fiber) => fiber.resolution())), "strand")
       } else if (typeof value === "object" && !isIterableLike(value)) {
-        const nextFibers = Object.values(value).map((runic) => context().run(() => new Fiber(runic, { parent })))
+        const nextFibers = Object.values(value).map((runic) =>
+          new Fiber(runic, {
+            parent,
+            context: Config.toContext(parent.context, config),
+          })
+        )
         return yield* continuation(() => {
           const keys = Object.keys(value)
           return Promise
@@ -45,32 +50,16 @@ export function strand(
             .then(Object.fromEntries)
         }, "strand")
       }
-      const nextFiber = context().run(() => new Fiber(value, { parent }))
+      const nextFiber = new Fiber(value, {
+        parent,
+        context: Config.toContext(parent.context, config),
+      })
       return yield* continuation(() => nextFiber.resolution(), "strand")
     },
     then(onfulfilled, onrejected) {
-      return new Fiber(this).resolution().then(onfulfilled, onrejected)
+      return new Fiber(this, {
+        context: Config.toContext(undefined, config),
+      }).resolution().then(onfulfilled, onrejected)
     },
-  }
-
-  function context() {
-    const current = Context.get()
-    assert(current)
-    const context = current.fork()
-    if (config) {
-      if ("handler" in config) {
-        context.set(HandlerContext, config.handler)
-      }
-      if ("models" in config) {
-        context.set(ModelRegistryContext, config.models?.clone() ?? new ModelRegistry())
-      }
-      if ("messages" in config) {
-        context.set(MessageRegistryContext, config.messages?.clone() ?? new MessageRegistry())
-      }
-      if ("tools" in config) {
-        context.set(ToolRegistryContext, config.tools?.clone() ?? new ToolRegistry())
-      }
-    }
-    return context
   }
 }

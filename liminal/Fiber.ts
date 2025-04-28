@@ -1,22 +1,21 @@
 import { attachCustomInspect } from "liminal-util"
 import { Context } from "./Context.ts"
 import { FiberRejectedError } from "./errors.ts"
-import { type Handler, HandlerContext } from "./Handler.ts"
+import { handlers } from "./L/handlers.ts"
 import { FiberStatusChanged } from "./LEvent.ts"
 import { type Rune } from "./Rune.ts"
 import { Runic } from "./Runic.ts"
 
 export interface FiberConfig {
-  parent?: Fiber
-  signal?: AbortSignal
+  parent?: Fiber | undefined
+  signal?: AbortSignal | undefined
+  context?: Context | undefined
 }
 
 export class Fiber<T = any> {
   static nextIndex: number = 0
 
-  readonly #context: Context = Context.get() ?? new Context()
   readonly #definition: Runic<Rune, T>
-  readonly #handler: Handler | undefined = HandlerContext.get()
   readonly #controller: AbortController = new AbortController()
 
   readonly signal: AbortSignal = this.#controller.signal
@@ -24,18 +23,26 @@ export class Fiber<T = any> {
 
   readonly index: number = Fiber.nextIndex++
   readonly depth: number
-
   declare readonly parent?: Fiber
+  readonly context: Context
 
   constructor(definition: Runic<Rune, T>, config?: FiberConfig) {
     this.depth = (config?.parent?.depth ?? -1) + 1
     this.#definition = definition
-    const { parent, signal } = config ?? {}
+    const { parent, signal, context } = config ?? {}
     if (parent) this.parent = parent
     if (signal) {
       this.#attachConfigSignal(signal)
     }
+    this.context = context ?? new Context()
     this.#handle(new FiberStatusChanged(this.status))
+  }
+
+  #handle(event: any): void {
+    this.context
+      .getOrInit(handlers)
+      .values()
+      .forEach((handler) => handler.call(this, event))
   }
 
   #setStatus(status: FiberStatus<T>): void {
@@ -67,17 +74,6 @@ export class Fiber<T = any> {
     }, { once: true })
   }
 
-  #handle(event: any) {
-    try {
-      this.#handler?.call(this, event)
-    } catch (exception: unknown) {
-      this.#setTerminalStatus({
-        type: "handler_exception_thrown",
-        exception,
-      })
-    }
-  }
-
   resolution(): Promise<T> {
     if (this.status.type !== "untouched") {
       return this.#replay(this.status)
@@ -97,13 +93,13 @@ export class Fiber<T = any> {
     this.#handle(new FiberStatusChanged(this.status))
     const iterator = Runic.unwrap(this.#definition)
     let nextArg: unknown
-    this.#context.run(async () => {
+    queueMicrotask(async () => {
       try {
         let current = await iterator.next()
         while (!current.done) {
           const rune = current.value
           switch (rune.kind) {
-            case "fiber": {
+            case "self": {
               nextArg = this
               break
             }
@@ -114,6 +110,10 @@ export class Fiber<T = any> {
             case "event": {
               this.#handle(rune.event)
               nextArg = undefined
+              break
+            }
+            case "state": {
+              nextArg = this.context.getOrInit(rune.state)
               break
             }
           }
