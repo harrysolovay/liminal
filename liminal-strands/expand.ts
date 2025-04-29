@@ -1,6 +1,6 @@
-import { L, LEvent, type Rune } from "liminal"
-import "liminal-arktype/register"
 import { type } from "arktype"
+import { L, LEvent, type Rune } from "liminal"
+import { compile } from "liminal-arktype"
 
 export interface ExpandConfig {
   input: string
@@ -12,6 +12,8 @@ export interface ExpandResult {
   expansions: Array<string>
   expanded: string
 }
+
+const ExpansionAvenues = compile(type.string.array())
 
 export function* expand({ goals, input, size }: ExpandConfig): Generator<Rune<LEvent>, ExpandResult> {
   return yield* L.strand(
@@ -42,7 +44,7 @@ export function* expand({ goals, input, size }: ExpandConfig): Generator<Rune<LE
 
         What are ${size ?? 4} ways in which this could be expanded upon?
       `
-      const { ways } = yield* L.assistant(ExpansionAvenues)
+      const ways = yield* L.assistant(ExpansionAvenues)
       const expansions = yield* L.all(ways.map(function*(way) {
         yield* L.user`In the context of the specified input, please elaborate on following avenue: ${way}`
         return yield* L.assistant
@@ -70,5 +72,3 @@ export function* expand({ goals, input, size }: ExpandConfig): Generator<Rune<LE
     },
   )
 }
-
-const ExpansionAvenues = type({ ways: "string[]" })

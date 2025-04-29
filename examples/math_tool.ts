@@ -1,15 +1,13 @@
 import { type } from "arktype"
-import "liminal-arktype/register"
 import { L, Tool } from "liminal"
+import { compile } from "liminal-arktype"
 import * as mathjs from "mathjs"
 import { gpt4oMini } from "./_models.ts"
 
 const mathTool = await Tool.make(
   "A tool for evaluating mathematical expressions.",
-  type({
-    expression: "string[]",
-  }),
-  ({ expression }) => mathjs.evaluate(expression),
+  compile(type.string.array()),
+  mathjs.evaluate,
 )
 
 const tools = new Set([mathTool])

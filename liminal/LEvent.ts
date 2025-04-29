@@ -1,7 +1,7 @@
 import { EventBase } from "./EventBase.ts"
 import type { Message } from "./Message.ts"
 import type { Model } from "./Model.ts"
-import type { SchemaObject } from "./schema/Schema.ts"
+import type { Schema } from "./Schema.ts"
 import type { StrandStatus } from "./Strand.ts"
 
 export type LEvent =
@@ -27,10 +27,10 @@ export class ModelRegistered extends EventBase(LEventTag, "model_registered") {
 }
 
 export class InferenceRequested extends EventBase(LEventTag, "inference_requested") {
-  declare schema?: SchemaObject
+  declare schema?: Schema
   constructor(
     readonly requestId: string,
-    schema?: SchemaObject | undefined,
+    schema?: Schema | undefined,
   ) {
     super()
     if (schema) {

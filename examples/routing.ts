@@ -1,6 +1,6 @@
 import { type } from "arktype"
-import "liminal-arktype/register"
 import { L } from "liminal"
+import { compile } from "liminal-arktype"
 import { gpt4oMini, o1Mini } from "./_models.ts"
 
 const USE_CLASSIFICATION_PROMPTS = {
@@ -25,11 +25,11 @@ await L.run(function*() {
         3. Brief reasoning for classification
       `
       yield* L.user`I'd like a refund please.`
-      return yield* L.assistant(type({
+      return yield* L.assistant(compile(type({
         reasoning: "string",
         type: "'general' | 'refund' | 'technical'",
         complexity: "'simple' | 'complex'",
-      }))
+      })))
     },
   )
   const response = yield* L.strand(function*() {

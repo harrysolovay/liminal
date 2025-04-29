@@ -4,12 +4,12 @@
   "exclude": [],
   "references": [
     { "path": "../liminal" },
+    { "path": "../liminal-strands" },
     { "path": "../packages/liminal-ai" },
     { "path": "../packages/liminal-arktype" },
     { "path": "../packages/liminal-effect" },
     { "path": "../packages/liminal-ollama" },
     { "path": "../packages/liminal-openai" },
-    { "path": "../liminal-strands" },
     { "path": "../packages/liminal-zod3" }
   ]
 }

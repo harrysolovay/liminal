@@ -13,7 +13,7 @@
   "type": "module",
   "sideEffects": true,
   "exports": {
-    "./register": "./dist/register.js"
+    ".": "./dist/index.js"
   },
   "peerDependencies": {
     "arktype": "^2.1.10",

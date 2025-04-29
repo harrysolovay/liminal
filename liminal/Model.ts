@@ -1,5 +1,5 @@
 import type { Message } from "./Message.ts"
-import type { SchemaObject } from "./schema/Schema.ts"
+import type { SchemaObject } from "./Schema.ts"
 import type { Tool } from "./Tool.ts"
 import { attachCustomInspect } from "./util/attachCustomInspect.ts"
 
