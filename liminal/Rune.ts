@@ -1,3 +1,6 @@
+import type { Context } from "./Context.ts"
+import type { Definition } from "./Definition.ts"
+
 export interface Rune<E> {
   [RuneKey]: true
   value: {
@@ -9,6 +12,10 @@ export interface Rune<E> {
     event: E
   } | {
     kind: "reflect"
+  } | {
+    kind: "child"
+    definition: Definition
+    context?: Context | undefined
   }
 }
 

@@ -138,6 +138,13 @@ export class Strand<Y extends Rune<any> = Rune<any>, T = any> implements Iterabl
               nextArg = undefined
               break
             }
+            case "child": {
+              nextArg = await new Strand(value.definition, {
+                parent: this,
+                context: value.context ?? this.context.clone(),
+              }).then()
+              break
+            }
           }
           switch (this.status.type) {
             case "config_signal_aborted":

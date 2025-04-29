@@ -6,8 +6,7 @@ import { emit } from "./emit.ts"
 import { reflect } from "./reflect.ts"
 
 export function* model(model: Model): Generator<Rune<LEvent>, Model> {
-  const { context } = yield* reflect
-  const { models } = context
+  const { context: { models } } = yield* reflect
   models.register(model)
   yield* emit(new ModelRegistered(model))
   return model

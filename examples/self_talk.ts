@@ -22,6 +22,7 @@ await L.run(
         yield* L.user`Please reply to the last message on my behalf.`
         return yield* L.assistant
       })
+      console.log({ reply })
       yield* L.user(reply)
       yield* L.assistant
       i++

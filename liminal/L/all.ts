@@ -1,5 +1,5 @@
 import type { Context } from "../Context.ts"
-import type { Definition } from "../Definition.ts"
+import { Definition } from "../Definition.ts"
 import type { LEvent } from "../LEvent.ts"
 import type { Rune } from "../Rune.ts"
 import { Strand } from "../Strand.ts"
@@ -17,16 +17,19 @@ export function all<A extends Record<keyof any, Definition>>(
 export function* all<A extends Array<Definition> | Record<keyof any, Definition>>(
   definitions: A,
   context?: Context,
-): Generator<Rune<any>, any> {
+): Generator<Rune<any>, any> { // TODO: although it's somewhat irrelevant, type this
   const parent = yield* reflect
   const strands: Array<Strand> = []
   for (const definition of Array.isArray(definitions) ? definitions : Object.values(definitions)) {
-    strands.push(new Strand(definition, { parent, context }))
+    strands.push(
+      new Strand(definition, {
+        parent,
+        context: context?.clone() ?? parent.context.clone(),
+      }),
+    )
   }
-  const results = yield* continuation("join", () => Promise.all(strands.map((strand) => strand.then())))
-  if (Array.isArray(definitions)) {
-    return results
-  }
-  const keys = Object.keys(definitions)
+  const results = yield* continuation("all", () => Promise.all(strands))
+  if (Array.isArray(strands)) return results
+  const keys = Object.keys(strands)
   return Object.fromEntries(results.map((result, i) => [keys[i], result]))
 }

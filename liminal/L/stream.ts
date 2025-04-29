@@ -7,8 +7,7 @@ import { reflect } from "./reflect.ts"
 
 export const stream: Iterable<Rune<LEvent>, ReadableStream<string>> = {
   *[Symbol.iterator](): Generator<Rune<LEvent>, ReadableStream<string>> {
-    const { context, signal } = yield* reflect
-    const { models, messages } = context
+    const { context: { models, messages }, signal } = yield* reflect
     const model = models.peek()
     assert(model)
     const requestId = crypto.randomUUID()
