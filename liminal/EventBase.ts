@@ -1,4 +1,4 @@
-import { attachCustomInspect } from "liminal-util"
+import { attachCustomInspect } from "./util/attachCustomInspect.ts"
 
 export interface EventBase<B extends symbol = symbol, K extends string = string> {
   readonly brand: B

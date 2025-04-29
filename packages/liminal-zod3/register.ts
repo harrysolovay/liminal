@@ -1,9 +1,8 @@
-import { register } from "liminal-schema"
-import { LiminalAssertionError } from "liminal-util"
+import { LiminalAssertionError, register } from "liminal"
 import { ZodType } from "zod"
 import { zodToJsonSchema } from "zod-to-json-schema"
 
-declare module "liminal-schema" {
+declare module "liminal" {
   interface LTypes<_T> {
     [LiminalZod3]: ZodType<_T, any, any>
   }

@@ -1,5 +1,4 @@
-import { Model } from "liminal"
-import { assert, unimplemented } from "liminal-util"
+import { LiminalAssertionError, Model } from "liminal"
 import { type Message, Ollama } from "ollama"
 
 export function adapter(model: string, client: Ollama = new Ollama()): Model {
@@ -13,7 +12,7 @@ export function adapter(model: string, client: Ollama = new Ollama()): Model {
               role: m.role,
               content: m.content
                 .map((c) => {
-                  assert(typeof c.part === "string")
+                  LiminalAssertionError.assert(typeof c.part === "string")
                   return c.part
                 })
                 .join("\n"),
@@ -24,7 +23,7 @@ export function adapter(model: string, client: Ollama = new Ollama()): Model {
           return message.content
         },
         stream() {
-          unimplemented()
+          LiminalAssertionError.unimplemented()
         },
       }
     },

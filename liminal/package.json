@@ -12,17 +12,8 @@
   },
   "type": "module",
   "description": "Primitives for composing conversation trees with language models and TypeScript iterators.",
-  "exports": {
-    ".": "./dist/index.js"
-  },
-  "dependencies": {
-    "conditional-type-checks": "^1.0.6",
-    "liminal-schema": "^0.0.5",
-    "liminal-util": "^0.0.7"
-  },
-  "peerDependenciesMeta": {
-    "conditional-type-checks": {
-      "optional": true
-    }
+  "exports": { ".": "./dist/index.js" },
+  "devDependencies": {
+    "conditional-type-checks": "^1.0.6"
   }
 }

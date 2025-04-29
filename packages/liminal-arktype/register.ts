@@ -1,7 +1,7 @@
 import { type Out, Type } from "arktype"
-import { type LType, register } from "liminal-schema"
+import { type LType, register } from "liminal"
 
-declare module "liminal-schema" {
+declare module "liminal" {
   interface LTypes<_T> {
     [LiminalArktype]: Type<_T> | Type<(In: any) => Out<_T>, {}>
   }

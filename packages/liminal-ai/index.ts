@@ -8,8 +8,7 @@ import {
   streamText,
   tool as aiTool,
 } from "ai"
-import { type Message, Model } from "liminal"
-import { assert } from "liminal-util"
+import { LiminalAssertionError, type Message, Model } from "liminal"
 
 export function adapter(model: LanguageModelV1): Model {
   return new Model(
@@ -63,7 +62,7 @@ function toCoreMessage(message: Message): CoreMessage {
     role: message.role,
     content: message.content
       .map((c) => {
-        assert(typeof c.part === "string")
+        LiminalAssertionError.assert(typeof c.part === "string")
         return c.part
       })
       .join("\n"),

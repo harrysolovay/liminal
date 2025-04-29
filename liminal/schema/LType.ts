@@ -1,4 +1,4 @@
-import { unreachable } from "liminal-util"
+import { LiminalAssertionError } from "../LiminalAssertionError.ts"
 import type { SchemaObject } from "./Schema.ts"
 import { validateSchemaRoot } from "./validate.ts"
 
@@ -22,7 +22,7 @@ export function adapter(type: LType): LTypeAdapter {
       return adapter
     }
   }
-  unreachable()
+  LiminalAssertionError.unreachable()
 }
 
 const schemaMemo = new WeakMap<LType, SchemaObject>()

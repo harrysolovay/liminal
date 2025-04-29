@@ -5,9 +5,7 @@
     "examples",
     "example-integrations/*",
     "liminal",
-    "liminal-schema",
     "liminal-strands",
-    "liminal-util",
     "liminal.land",
     "packages/*"
   ],

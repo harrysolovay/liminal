@@ -1,8 +1,8 @@
 import { Schema as ESchema } from "effect"
 import { make } from "effect/Schema"
-import { register, type ValueObject } from "liminal-schema"
+import { register, type ValueObject } from "liminal"
 
-declare module "liminal-schema" {
+declare module "liminal" {
   interface LTypes<_T> {
     [EffectSchema]: EffectSchema<_T>
   }

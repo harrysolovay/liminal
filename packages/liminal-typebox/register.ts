@@ -1,9 +1,9 @@
 import { Kind, type TSchema } from "@sinclair/typebox"
 import Ajv, { type ValidateFunction } from "ajv"
-import { register } from "liminal-schema"
-import { assert } from "liminal-util"
+import { LiminalAssertionError } from "liminal"
+import { register } from "liminal"
 
-declare module "liminal-schema" {
+declare module "liminal" {
   interface LTypes<_T> {
     [LiminalTypebox]: TSchema & { static: _T }
   }
@@ -27,7 +27,7 @@ register({
       validate = ajv.compile(type)
       validatorsMemo.set(type, validate)
     }
-    assert(validate(value))
+    LiminalAssertionError.assert(validate(value))
     return value
   },
 })
