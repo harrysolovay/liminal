@@ -1,41 +1,38 @@
-import { assert } from "liminal-util"
+import { LiminalAssertionError as LE } from "../LiminalAssertionError.ts"
 import type { Schema, SchemaObject, SchemaTypeName } from "./Schema.ts"
-import { Value } from "./Value.ts"
 
 export function validateSchemaRoot(value: unknown): SchemaObject {
-  assert(typeof value === "object")
-  assert(value !== null)
+  LE.assert(typeof value === "object")
+  LE.assert(value !== null)
   if ("$schema" in value) {
     delete value.$schema
   }
-  assert("type" in value)
-  assert(value.type === "object")
+  LE.assert("type" in value)
+  LE.assert(value.type === "object")
   return validateSchema(value) as SchemaObject
 }
 
 export function validateSchema(value: unknown): Schema {
-  assert(typeof value === "object")
-  assert(value !== null)
+  LE.assert(typeof value === "object")
+  LE.assert(value !== null)
   if ("anyOf" in value) {
-    assert(Array.isArray(value.anyOf))
-    value.anyOf.forEach((v) => {
-      validateSchema(v)
-    })
+    LE.assert(Array.isArray(value.anyOf))
+    value.anyOf = value.anyOf.map(validateSchema)
   } else {
     if ("enum" in value) {
-      assert(Array.isArray(value.enum))
-      assert(!("const" in value))
+      LE.assert(Array.isArray(value.enum))
+      LE.assert(!("const" in value))
       value.enum.forEach((v) => {
-        assert(typeof v === "string")
+        LE.assert(typeof v === "string")
       })
       ;(value as any).type = "string"
     } else if ("const" in value) {
-      assert(typeof value.const === "string")
+      LE.assert(typeof value.const === "string")
       ;(value as any).type = "string"
     }
-    assert("type" in value)
-    assert(typeof value.type === "string")
-    assert(isJSONTypeName(value.type))
+    LE.assert("type" in value)
+    LE.assert(typeof value.type === "string")
+    LE.assert(isJSONTypeName(value.type))
     switch (value.type) {
       case "null":
       case "boolean":
@@ -45,28 +42,28 @@ export function validateSchema(value: unknown): Schema {
       }
       case "string": {
         if ("const" in value) {
-          assert(typeof value.const === "string")
+          LE.assert(typeof value.const === "string")
         }
         break
       }
       case "array": {
-        assert("items" in value)
+        LE.assert("items" in value)
         validateSchema(value.items)
         break
       }
       case "object": {
-        assert("properties" in value)
-        assert(typeof value.properties === "object")
+        LE.assert("properties" in value)
+        LE.assert(typeof value.properties === "object")
         const { properties } = value
-        assert(properties !== null)
-        assert("required" in value)
-        assert(Array.isArray(value.required))
+        LE.assert(properties !== null)
+        LE.assert("required" in value)
+        LE.assert(Array.isArray(value.required))
         value.required.forEach((k) => {
-          assert(typeof k === "string")
-          assert(k in properties)
+          LE.assert(typeof k === "string")
+          LE.assert(k in properties)
         })
         if ("additionalProperties" in value) {
-          assert(value.additionalProperties === false)
+          LE.assert(value.additionalProperties === false)
         } else {
           ;(value as any).additionalProperties = false
         }

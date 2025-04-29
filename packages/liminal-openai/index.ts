@@ -1,6 +1,4 @@
-import { Model } from "liminal"
-import { Schema } from "liminal-schema"
-import { assert, unimplemented } from "liminal-util"
+import { LiminalAssertionError, Model, Schema } from "liminal"
 import { OpenAI } from "openai"
 import type { ResponsesModel } from "openai/resources.mjs"
 import type { ResponseInputContent, ResponseInputItem } from "openai/resources/responses/responses.js"
@@ -32,13 +30,13 @@ export function openai(model: ResponsesModel, client: OpenAI = new OpenAI()): Mo
           }, { signal })
           const { output } = response
           const [message] = output
-          assert(message?.type === "message")
+          LiminalAssertionError.assert(message?.type === "message")
           const [content] = message.content
-          assert(content?.type === "output_text")
+          LiminalAssertionError.assert(content?.type === "output_text")
           return content.text
         },
         stream() {
-          unimplemented()
+          LiminalAssertionError.unimplemented()
         },
       }
     },

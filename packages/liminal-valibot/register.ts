@@ -1,9 +1,9 @@
 import { toJsonSchema } from "@valibot/to-json-schema"
-import { register } from "liminal-schema"
-import { LiminalAssertionError } from "liminal-util"
+import { LiminalAssertionError } from "liminal"
+import { register } from "liminal"
 import type { BaseIssue, BaseSchema } from "valibot"
 
-declare module "liminal-schema" {
+declare module "liminal" {
   interface LTypes<_T> {
     [LiminalValibot]: BaseSchema<_T, any, BaseIssue<any>>
   }

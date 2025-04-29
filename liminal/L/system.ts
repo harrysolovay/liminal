@@ -1,6 +1,6 @@
-import { isTemplateStringsArray } from "liminal-util"
 import type { LEvent } from "../LEvent.ts"
 import type { Rune } from "../Rune.ts"
+import { isTemplateStringsArray } from "../util/isTemplateStringsArray.ts"
 import { message } from "./message.ts"
 
 export function system(

@@ -1,10 +1,10 @@
-import { attachCustomInspect } from "liminal-util"
 import { Context } from "./Context.ts"
 import { Definition } from "./Definition.ts"
 import { StrandRejectedError } from "./errors.ts"
 import { continuation } from "./L/continuation.ts"
 import { StrandStatusChanged } from "./LEvent.ts"
 import type { Rune } from "./Rune.ts"
+import { attachCustomInspect } from "./util/attachCustomInspect.ts"
 
 export interface StrandConfig {
   parent?: Strand | undefined

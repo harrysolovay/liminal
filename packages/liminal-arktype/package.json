@@ -17,6 +17,6 @@
   },
   "peerDependencies": {
     "arktype": "^2.1.10",
-    "liminal-schema": "^0.0.5"
+    "liminal": "^0.5.12"
   }
 }

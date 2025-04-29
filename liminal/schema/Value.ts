@@ -1,4 +1,4 @@
-import { assert as assert_ } from "liminal-util"
+import { LiminalAssertionError } from "liminal"
 
 export type Value = null | boolean | number | string | ValueArray | ValueObject
 export namespace Value {
@@ -10,7 +10,7 @@ export namespace Value {
     } else if (typeof value === "object") {
       Object.values(value).every(assert)
     } else {
-      assert_(typeof value === "string" || typeof value === "number" || typeof value === "boolean")
+      LiminalAssertionError.assert(typeof value === "string" || typeof value === "number" || typeof value === "boolean")
     }
   }
 }

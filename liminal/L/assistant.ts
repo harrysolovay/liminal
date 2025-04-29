@@ -1,6 +1,6 @@
-import { type LType, toJSONSchema, validate } from "liminal-schema"
 import type { LEvent } from "../LEvent.ts"
 import type { Rune } from "../Rune.ts"
+import { type LType, toJSONSchema, validate } from "../schema/LType.ts"
 import { continuation } from "./continuation.ts"
 import { infer } from "./infer.ts"
 import { message } from "./message.ts"

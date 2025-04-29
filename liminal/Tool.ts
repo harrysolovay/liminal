@@ -1,12 +1,6 @@
-import {
-  type LType,
-  Schema,
-  type SchemaObject,
-  toJSONSchema,
-  validate,
-  type Value,
-  type ValueObject,
-} from "liminal-schema"
+import { type LType, toJSONSchema, validate } from "./schema/LType.ts"
+import { Schema, type SchemaObject } from "./schema/Schema.ts"
+import type { Value, ValueObject } from "./schema/Value.ts"
 
 export class Tool {
   static async make<T extends ValueObject>(

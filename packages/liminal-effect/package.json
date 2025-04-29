@@ -17,6 +17,6 @@
   },
   "peerDependencies": {
     "effect": "^3.13.12",
-    "liminal-schema": "^0.0.5"
+    "liminal": "^0.5.12"
   }
 }

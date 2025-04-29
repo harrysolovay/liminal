@@ -18,6 +18,6 @@
   "peerDependencies": {
     "@sinclair/typebox": "^0.34.33",
     "ajv": "^8.17.1",
-    "liminal-schema": "^0.0.5"
+    "liminal": "^0.5.12"
   }
 }
