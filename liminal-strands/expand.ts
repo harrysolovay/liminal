@@ -14,7 +14,7 @@ export interface ExpandResult {
 }
 
 export function expand({ goals, input, size }: ExpandConfig): Generator<Rune<LEvent>, ExpandResult> {
-  return L.branch(function*() {
+  return L.strand(function*() {
     L.system`
       You are given an idea, concept, or other arbitrary input. Your job is as follows:
 
@@ -42,11 +42,11 @@ export function expand({ goals, input, size }: ExpandConfig): Generator<Rune<LEv
       What are ${size ?? 4} ways in which this could be expanded upon?
     `
     const { ways } = yield* L.assistant(ExpansionAvenues)
-    const expansions = yield* L.branch.all(ways.map(function*(way) {
+    const expansions = yield* L.all(ways.map(function*(way) {
       yield* L.user`In the context of the specified input, please elaborate on following avenue: ${way}`
       return yield* L.assistant
     }))
-    const expanded = yield* L.branch(
+    const expanded = yield* L.strand(
       function*() {
         yield* L.system`
           I'm going to give you some initial text, followed by various additional texts,

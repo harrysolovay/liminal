@@ -4,7 +4,7 @@ import { Rune, RuneKey } from "../Rune.ts"
 export function* continuation<R>(debug: string, f: () => R): Generator<Rune<LEvent>, Awaited<R>> {
   return yield {
     [RuneKey]: true,
-    descriptor: {
+    value: {
       kind: "continuation",
       debug,
       f,

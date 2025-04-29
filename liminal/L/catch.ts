@@ -3,19 +3,19 @@ import type { LEvent } from "../LEvent.ts"
 import type { Rune } from "../Rune.ts"
 import { Strand } from "../Strand.ts"
 import { continuation } from "./continuation.ts"
-import { current } from "./current.ts"
+import { reflect } from "./reflect.ts"
 
 export { catch_ as catch }
 
 function* catch_<Y extends Rune<any>, T>(
   definition: Definition<Y, T>,
 ): Generator<Rune<LEvent> | Rune<Y>, CatchResult<T>> {
-  const strand = yield* current
+  const parent = yield* reflect
   return yield* continuation("catch", async () => {
     try {
       const resolved = await new Strand(definition, {
-        parent: strand,
-        context: strand.config.context?.inheritance(),
+        parent,
+        context: parent.context.clone(),
       }).then()
       return { resolved }
     } catch (exception: unknown) {

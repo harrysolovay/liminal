@@ -13,7 +13,7 @@ const USE_CLASSIFICATION_PROMPTS = {
 
 await L.run(function*() {
   yield* L.model(gpt4oMini)
-  const classification = yield* L.branch(function*() {
+  const classification = yield* L.strand(function*() {
     yield* L.system`
       Classify this supplied customer query:
 
@@ -30,7 +30,7 @@ await L.run(function*() {
       complexity: "'simple' | 'complex'",
     }))
   })
-  const response = yield* L.branch(function*() {
+  const response = yield* L.strand(function*() {
     yield* L.system(USE_CLASSIFICATION_PROMPTS[classification.type])
     if (classification.complexity === "complex") {
       yield* L.model(o1Mini)

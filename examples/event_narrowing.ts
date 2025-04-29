@@ -25,27 +25,27 @@ function* g() {
   yield* L.user`Tell me a joke.`
   yield* L.assistant
   yield* L.emit("event-root")
-  yield* L.branch(function*() {
+  yield* L.strand(function*() {
     yield* L.emit("event-a")
-    yield* L.branch(function*() {
+    yield* L.strand(function*() {
       yield* L.assistant(type({
         something: "string",
       }))
       yield* L.emit("event-b")
-      yield* L.branch(function*() {
+      yield* L.strand(function*() {
         yield* L.emit(new Something())
       })
       return g
     })
     yield* L.emit("another-event")
-    yield* L.branch(function*() {
+    yield* L.strand(function*() {
       yield* L.emit("event-e")
-      yield* L.branch(function*() {})
+      yield* L.strand(function*() {})
       return "hello"
     })
     yield* L.emit(new Something())
     yield* L.emit("event-f")
-    yield* L.branch(function*() {
+    yield* L.strand(function*() {
       yield* L.emit("event-g")
     })
   })

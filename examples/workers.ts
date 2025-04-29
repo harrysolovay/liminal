@@ -37,6 +37,6 @@ await L.run(function*() {
     complexity: "'low' | 'medium' | 'high'",
     files: FileInfo.array(),
   }))
-  const fileChanges = yield* L.branch.all(implementationPlan.files.map(implement))
+  const fileChanges = yield* L.all(implementationPlan.files.map(implement))
   return { fileChanges, implementationPlan }
 }, { handler: console.log })

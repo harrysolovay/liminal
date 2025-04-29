@@ -18,7 +18,7 @@ await L.run(
     yield* L.emit(new MyEvent())
     let i = 0
     while (i < 3) {
-      const reply = yield* L.branch(function*() {
+      const reply = yield* L.strand(function*() {
         yield* L.user`Please reply to the last message on my behalf.`
         return yield* L.assistant
       })

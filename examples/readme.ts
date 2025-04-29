@@ -12,7 +12,7 @@ await L.run(
     let i = 0
     while (i++ < 3) {
       // Have the language model respond to itself in an isolated copy of the current "strand."
-      const reply = yield* L.branch(function*() {
+      const reply = yield* L.strand(function*() {
         yield* L.user`Please reply to the last message on my behalf.`
         return yield* L.assistant
       })

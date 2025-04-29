@@ -20,24 +20,26 @@ export class Strand<Y extends Rune<any> = Rune<any>, T = any> implements Iterabl
   readonly #controller: AbortController = new AbortController()
   readonly signal: AbortSignal = this.#controller.signal
   #handle?: ((this: Strand, event: any) => void) | undefined
+  #definition: Definition<Y, T>
   status: StrandStatus<T> = { type: "untouched" }
   readonly index: number = nextIndex++
   readonly depth: number
-  readonly parent?: Strand
+  declare readonly parent?: Strand
+  readonly context: Context
 
-  constructor(
-    readonly definition: Definition<Y, T>,
-    readonly config: StrandConfig,
-  ) {
+  constructor(definition: Definition<Y, T>, config: StrandConfig) {
+    this.#definition = definition
     this.depth = (config?.parent?.depth ?? -1) + 1
     const { parent, context } = config ?? {}
     if (parent) {
+      this.parent = parent
       this.#attachSignal(parent.signal, () => ({
         type: "parent_aborted",
         reason: parent.signal.reason,
       }))
     }
     if (context) {
+      this.context = context
       const { signal, handler } = context
       if (signal) {
         this.#attachSignal(signal, () => ({
@@ -58,6 +60,8 @@ export class Strand<Y extends Rune<any> = Rune<any>, T = any> implements Iterabl
         }).bind(this)
         this.#handle(new StrandStatusChanged(this.status))
       }
+    } else {
+      this.context = new Context()
     }
   }
 
@@ -111,25 +115,25 @@ export class Strand<Y extends Rune<any> = Rune<any>, T = any> implements Iterabl
       reject,
     }
     this.#handle?.(new StrandStatusChanged(this.status))
-    const iterator = Definition.unwrap(this.definition)
+    const iterator = Definition.unwrap(this.#definition)
     let nextArg: unknown
     queueMicrotask(async () => {
       try {
         let current = await iterator.next()
         while (!current.done) {
           const rune = current.value
-          const { descriptor } = rune
-          switch (descriptor.kind) {
-            case "self": {
+          const { value } = rune
+          switch (value.kind) {
+            case "reflect": {
               nextArg = this
               break
             }
             case "continuation": {
-              nextArg = await descriptor.f()
+              nextArg = await value.f()
               break
             }
             case "event": {
-              this.#handle?.(descriptor.event)
+              this.#handle?.(value.event)
               nextArg = undefined
               break
             }

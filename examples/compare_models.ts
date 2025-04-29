@@ -9,7 +9,7 @@ await L.run(
     yield* L.user`Write a rap about type-level programming in TypeScript`
     yield* L.assistant
     yield* L.user`Rewrite it in whatever way you think best.`
-    const variants = yield* L.branch.entries({
+    const variants = yield* L.all({
       *a() {
         return yield* L.assistant
       },
@@ -22,7 +22,7 @@ await L.run(
         return yield* L.assistant
       },
     })
-    const key = yield* L.branch(function*() {
+    const key = yield* L.strand(function*() {
       yield* L.model(gpt4o)
       yield* L.user`
         Out of the following variants, which is your favorite?:

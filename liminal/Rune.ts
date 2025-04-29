@@ -1,6 +1,6 @@
 export interface Rune<E> {
   [RuneKey]: true
-  descriptor: {
+  value: {
     kind: "continuation"
     debug: string
     f: () => any
@@ -8,7 +8,7 @@ export interface Rune<E> {
     kind: "event"
     event: E
   } | {
-    kind: "self"
+    kind: "reflect"
   }
 }
 

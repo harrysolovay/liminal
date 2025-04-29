@@ -13,7 +13,7 @@ const result = await L.run(
     const code = await readFile(fileURLToPath(import.meta.url), "utf-8")
     yield* L.system`You are a technical lead summarizing multiple code reviews. Review the supplied code.`
     yield* L.user(code)
-    const reviews = yield* L.branch.entries({
+    const reviews = yield* L.all({
       security,
       performance,
       maintainability,

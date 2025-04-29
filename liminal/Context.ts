@@ -41,7 +41,7 @@ export class Context {
     }
   }
 
-  inheritance(): Context {
+  clone(): Context {
     return new Context({
       handler: this.handler,
       models: this.models.clone(),

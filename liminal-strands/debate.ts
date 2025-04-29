@@ -31,7 +31,7 @@ export function debate({
   rounds = 4,
   goals,
 }: DebateConfig): Generator<Rune<LEvent>, DebateResult> {
-  return L.branch(function*() {
+  return L.strand(function*() {
     // Collects all arguments and rebuttals in the debate, in order
     const turns: Array<DebateTurn> = []
 
@@ -60,7 +60,7 @@ export function debate({
         debater.role ?? "No specific role"
       }\nTopic: ${topic}
       `
-      const point = yield* L.branch(function*() {
+      const point = yield* L.strand(function*() {
         yield* L.user`Please reply as if you are ${debater.debaterId} with the role of ${debater.role}.`
         return yield* L.assistant
       })
@@ -83,7 +83,7 @@ export function debate({
           opposing.map((arg) => `${arg.debater}: ${arg.argument}`).join("\n\n")
         }\n\nBe concise and address the main points.
         `
-        const point = yield* L.branch(function*() {
+        const point = yield* L.strand(function*() {
           yield* L.user`Please reply as if you are ${debater.debaterId} with the role of ${debater.role}.`
           return yield* L.assistant
         })
@@ -97,7 +97,7 @@ export function debate({
 
     // === Synthesis Phase ===
     // Moderator synthesizes the debate and may select a winner
-    const { summary, winner, rationale } = yield* L.branch(function*() {
+    const { summary, winner, rationale } = yield* L.strand(function*() {
       yield* L
         .system`As the debate moderator, your job is to synthesize the arguments and rebuttals presented by each debater.`
       const summary = yield* L.assistant
