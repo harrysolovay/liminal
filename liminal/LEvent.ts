@@ -1,11 +1,11 @@
 import type { SchemaObject } from "liminal-schema"
 import { EventBase } from "./EventBase.ts"
-import type { FiberStatus } from "./Fiber.ts"
 import type { Message } from "./Message.ts"
 import type { Model } from "./Model.ts"
+import type { StrandStatus } from "./Strand.ts"
 
 export type LEvent =
-  | FiberStatusChanged
+  | StrandStatusChanged
   | InferenceRequested
   | Inferred
   | MessageAppended
@@ -54,8 +54,8 @@ export class MessageAppended extends EventBase(LEventTag, "message_appended") {
   }
 }
 
-export class FiberStatusChanged extends EventBase(LEventTag, "fiber_status_changed") {
-  constructor(readonly status: FiberStatus) {
+export class StrandStatusChanged extends EventBase(LEventTag, "strand_status_changed") {
+  constructor(readonly status: StrandStatus) {
     super()
   }
 }

@@ -1,6 +1,6 @@
 import { type } from "arktype"
 import "liminal-arktype/register"
-import { L, Tool, ToolRegistry } from "liminal"
+import { L, Tool } from "liminal"
 import * as mathjs from "mathjs"
 import { gpt4oMini } from "./_models.ts"
 
@@ -12,9 +12,9 @@ const mathTool = await Tool.make(
   ({ expression }) => mathjs.evaluate(expression),
 )
 
-const tools = new ToolRegistry([mathTool])
+const tools = new Set([mathTool])
 
-const answer = await L.strand(function*() {
+const answer = await L.run(function*() {
   yield* L.model(gpt4oMini)
   yield* L.user`
     A taxi driver earns $9461 per 1-hour of work. If he works 12 hours a day and in 1 hour

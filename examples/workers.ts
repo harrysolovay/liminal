@@ -26,7 +26,7 @@ const IMPLEMENTATION_PROMPTS = {
   delete: "You are an expert at safely removing code while ensuring no breaking changes.",
 }
 
-await L.strand(function*() {
+await L.run(function*() {
   yield* L.model(adapter(openai("gpt-4o-mini", {
     structuredOutputs: true,
   })))
@@ -37,6 +37,6 @@ await L.strand(function*() {
     complexity: "'low' | 'medium' | 'high'",
     files: FileInfo.array(),
   }))
-  const fileChanges = yield* L.strand(implementationPlan.files.map(implement))
+  const fileChanges = yield* L.branch.all(implementationPlan.files.map(implement))
   return { fileChanges, implementationPlan }
 }, { handler: console.log })

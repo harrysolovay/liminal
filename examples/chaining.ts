@@ -3,7 +3,7 @@ import { z } from "zod"
 import "liminal-zod3/register"
 import { gpt4oMini } from "./_models.ts"
 
-await L.strand(function*() {
+await L.run(function*() {
   yield* L.model(gpt4oMini)
   yield* L
     .system`Write persuasive marketing copy for: Buffy The Vampire Slayer. Focus on benefits and emotional appeal.`

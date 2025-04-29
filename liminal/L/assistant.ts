@@ -15,7 +15,7 @@ export const assistant: assistant = Object.assign(
     const inference = yield* infer(schema)
     yield* message("assistant", [{ part: inference }])
     const input = JSON.parse(inference)
-    return yield* continuation(() => validate(type, input), "validate_assistant_message")
+    return yield* continuation("validate_assistant_message", () => validate(type, input))
   },
   {
     *[Symbol.iterator]() {

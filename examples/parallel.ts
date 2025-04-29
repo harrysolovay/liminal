@@ -7,21 +7,24 @@ import { gpt4oMini } from "./_models.ts"
 
 const LMH = type("'lower' | 'medium' | 'high'")
 
-const result = await L.strand(async function*() {
-  yield* L.model(gpt4oMini)
-  const code = await readFile(fileURLToPath(import.meta.url), "utf-8")
-  yield* L.system`You are a technical lead summarizing multiple code reviews. Review the supplied code.`
-  yield* L.user(code)
-  const reviews = yield* L.strand({
-    security,
-    performance,
-    maintainability,
-  })
-  yield* L.user(JSON.stringify(Object.values(reviews), null, 2))
-  yield* L.user`You are a technical lead summarizing multiple code reviews.`
-  const summary = yield* L.assistant
-  return { reviews, summary }
-}, { handler: console.log })
+const result = await L.run(
+  async function*() {
+    yield* L.model(gpt4oMini)
+    const code = await readFile(fileURLToPath(import.meta.url), "utf-8")
+    yield* L.system`You are a technical lead summarizing multiple code reviews. Review the supplied code.`
+    yield* L.user(code)
+    const reviews = yield* L.branch.entries({
+      security,
+      performance,
+      maintainability,
+    })
+    yield* L.user(JSON.stringify(Object.values(reviews), null, 2))
+    yield* L.user`You are a technical lead summarizing multiple code reviews.`
+    const summary = yield* L.assistant
+    return { reviews, summary }
+  },
+  { handler: console.log },
+)
 
 console.log(result)
 

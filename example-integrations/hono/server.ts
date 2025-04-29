@@ -10,7 +10,7 @@ export const app = new Hono().get("/sse", (c) => {
     stream.onAbort(() => {
       ctl.abort()
     })
-    await L.strand(definition, {
+    await L.run(definition, {
       handler(event) {
         if (event.type === "inferred") {
           stream.writeSSE({ data: event.inference })

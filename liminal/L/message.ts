@@ -1,12 +1,15 @@
-import { type LEvent, MessageAppended } from "../LEvent.ts"
+import { assert } from "liminal-util"
+import { LEvent, MessageAppended } from "../LEvent.ts"
 import type { ContentPart, Message, MessageRole } from "../Message.ts"
 import type { Rune } from "../Rune.ts"
-import { event } from "./event.ts"
-import { messages } from "./messages.ts"
+import { current } from "./current.ts"
+import { emit } from "./emit.ts"
 
 export function* message(role: MessageRole, content: Array<ContentPart>): Generator<Rune<LEvent>, void> {
-  const messageRegistry = yield* messages
+  const { config: { context } } = yield* current
+  assert(context)
+  const { messages } = context
   const message: Message = { role, content }
-  yield* event(new MessageAppended(message))
-  messageRegistry.append(message)
+  yield* emit(new MessageAppended(message))
+  messages.push(message)
 }

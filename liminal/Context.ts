@@ -1,39 +1,51 @@
-import { RuneKey, type StateRune } from "./Rune.ts"
+import type { Handler } from "./Handler.ts"
+import type { Message } from "./Message.ts"
+import { ModelRegistry } from "./ModelRegistry.ts"
+import type { Rune } from "./Rune.ts"
+import type { Tool } from "./Tool.ts"
 
-export class Context extends Map<State, unknown> {
-  fork(override?: Context): Context {
-    const instance = new Context(override)
-    for (const [state, value] of this.entries()) {
-      if (!instance.has(state)) {
-        instance.set(state, state.f(value))
-      }
-    }
-    return instance
-  }
-
-  getOrInit<V>(state: State<V>): V {
-    if (this.has(state)) {
-      return this.get(state) as never
-    }
-    const instance = state.f()
-    this.set(state, instance)
-    return instance
-  }
+export interface ContextConfig<Y extends Rune<any> = Rune<any>> {
+  handler?: Handler<Rune.E<Y>> | undefined
+  models?: ModelRegistry | undefined
+  messages?: Array<Message> | undefined
+  tools?: Set<Tool> | undefined
+  signal?: AbortSignal | undefined
 }
 
-export interface State<V = any> extends Iterable<StateRune, V> {
-  f(parent?: V): V
-}
+export class Context {
+  declare handler?: Handler | undefined
+  declare models: ModelRegistry
+  declare messages: Array<Message>
+  declare tools: Set<Tool>
+  declare signal?: AbortSignal | undefined
 
-export function State<V>(f: (parent?: V) => V): State<V> {
-  return {
-    f,
-    *[Symbol.iterator](): Generator<StateRune, V> {
-      return yield {
-        [RuneKey]: true,
-        kind: "state",
-        state: this,
-      } satisfies Omit<StateRune, "event"> as never
-    },
+  constructor(config?: ContextConfig) {
+    if (config?.handler) {
+      this.handler = config.handler
+    }
+    if (config?.models) {
+      this.models = config.models.clone()
+    } else {
+      this.models = new ModelRegistry()
+    }
+    if (config?.messages) {
+      this.messages = [...config.messages]
+    } else {
+      this.messages = []
+    }
+    if (config?.tools) {
+      this.tools = new Set(config.tools)
+    }
+    if (config?.signal) {
+      this.signal = config.signal
+    }
+  }
+
+  inheritance(): Context {
+    return new Context({
+      handler: this.handler,
+      models: this.models.clone(),
+      messages: [...this.messages],
+    })
   }
 }

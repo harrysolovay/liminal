@@ -11,9 +11,9 @@ const USE_CLASSIFICATION_PROMPTS = {
     "You are a technical support specialist with deep product knowledge. Focus on clear step-by-step troubleshooting.",
 }
 
-await L.strand(function*() {
+await L.run(function*() {
   yield* L.model(gpt4oMini)
-  const classification = yield* L.strand(function*() {
+  const classification = yield* L.branch(function*() {
     yield* L.system`
       Classify this supplied customer query:
 
@@ -30,7 +30,7 @@ await L.strand(function*() {
       complexity: "'simple' | 'complex'",
     }))
   })
-  const response = yield* L.strand(function*() {
+  const response = yield* L.branch(function*() {
     yield* L.system(USE_CLASSIFICATION_PROMPTS[classification.type])
     if (classification.complexity === "complex") {
       yield* L.model(o1Mini)

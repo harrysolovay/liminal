@@ -1,3 +1,3 @@
-import type { Fiber } from "./Fiber.ts"
+import type { Strand } from "./Strand.ts"
 
-export type Handler<E = any> = [(this: Fiber, event: E) => void][0]
+export type Handler<E = any> = (this: Strand, event: E) => void

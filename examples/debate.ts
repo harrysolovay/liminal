@@ -2,7 +2,7 @@ import { L } from "liminal"
 import { debate } from "liminal-strands"
 import { mistralSmall31 } from "./_models.ts"
 
-const result = await L.strand(
+const result = await L.run(
   function*() {
     yield* L.model(mistralSmall31)
     return yield* debate({

@@ -1,13 +1,13 @@
-import { type ContinuationRune, type Rune, RuneKey } from "../Rune.ts"
+import type { LEvent } from "../LEvent.ts"
+import { Rune, RuneKey } from "../Rune.ts"
 
-export function* continuation<R>(
-  f: () => R,
-  debug: string,
-): Generator<Rune<never>, Awaited<R>> {
+export function* continuation<R>(debug: string, f: () => R): Generator<Rune<LEvent>, Awaited<R>> {
   return yield {
     [RuneKey]: true,
-    kind: "continuation",
-    f,
-    debug,
-  } satisfies Omit<ContinuationRune, "event"> as never
+    descriptor: {
+      kind: "continuation",
+      debug,
+      f,
+    },
+  }
 }

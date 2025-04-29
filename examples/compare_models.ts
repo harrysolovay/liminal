@@ -3,13 +3,13 @@ import { L } from "liminal"
 import "liminal-arktype/register"
 import { gemma3, gpt4o, gpt4oMini, o1Mini } from "./_models.ts"
 
-await L.strand(
+await L.run(
   function*() {
     yield* L.model(gpt4oMini)
     yield* L.user`Write a rap about type-level programming in TypeScript`
     yield* L.assistant
     yield* L.user`Rewrite it in whatever way you think best.`
-    const variants = yield* L.strand({
+    const variants = yield* L.branch.entries({
       *a() {
         return yield* L.assistant
       },
@@ -22,7 +22,7 @@ await L.strand(
         return yield* L.assistant
       },
     })
-    const key = yield* L.strand(function*() {
+    const key = yield* L.branch(function*() {
       yield* L.model(gpt4o)
       yield* L.user`
         Out of the following variants, which is your favorite?:

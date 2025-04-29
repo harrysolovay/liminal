@@ -12,6 +12,7 @@ export function system(
   e0: TemplateStringsArray | string,
   ...rest: Array<number | string>
 ): Generator<Rune<LEvent>, void> {
-  const part = isTemplateStringsArray(e0) ? String.raw(e0, ...rest) : e0
-  return message("system", [{ part }])
+  return message("system", [{
+    part: isTemplateStringsArray(e0) ? String.raw(e0, ...rest) : e0,
+  }])
 }

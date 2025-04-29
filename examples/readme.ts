@@ -1,7 +1,7 @@
 import { L } from "liminal"
 import { adapter } from "liminal-ollama"
 
-await L.strand(
+await L.run(
   function*() {
     // Kick off the conversation.
     yield* L.model(adapter("gemma3:1b"))
@@ -12,7 +12,7 @@ await L.strand(
     let i = 0
     while (i++ < 3) {
       // Have the language model respond to itself in an isolated copy of the current "strand."
-      const reply = yield* L.strand(function*() {
+      const reply = yield* L.branch(function*() {
         yield* L.user`Please reply to the last message on my behalf.`
         return yield* L.assistant
       })
