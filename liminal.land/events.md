@@ -23,7 +23,7 @@ await L.strand(g, {
 ## Extract Static Event Type
 
 ```ts twoslash
-import { L, Runic } from "liminal"
+import { Definition, L } from "liminal"
 
 function* g() {
   yield* L.event("A")
@@ -31,7 +31,7 @@ function* g() {
   yield* L.event({ c: "D" })
 }
 
-type GEvent = Runic.E<typeof g>
+type GEvent = Definition.E<typeof g>
 //   ^?
 ```
 

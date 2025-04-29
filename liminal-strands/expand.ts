@@ -13,41 +13,41 @@ export interface ExpandResult {
   expanded: string
 }
 
-export function expand({ goals, input, size }: ExpandConfig): L.Strand<Rune<LEvent>, ExpandResult> {
-  return L.strand(function*() {
-    L.system`
-      You are given an idea, concept, or other arbitrary input. Your job is as follows:
+export function* expand({ goals, input, size }: ExpandConfig): Generator<Rune<LEvent>, ExpandResult> {
+  return yield* L.strand(
+    function*() {
+      L.system`
+        You are given an idea, concept, or other arbitrary input. Your job is as follows:
 
-      1. Propose the most relevant ways that the input can be expanded upon
-        (potentially based on goals, which may or may not be specified).
-        You may be asked to go through many iterations of proposing different
-        avenues for expansion.
-      2. You will ultimately be asked to deep-dive into one one of your proposed
-        points for expansion: Be extremely thorough but concise.
-    `
-    if (goals?.length) {
-      yield* L.user`
-        Before proposing avenues for expansion, I want you to know that my goals are as follows:
-
-        ${goals.join("\n\n")}
+        1. Propose the most relevant ways that the input can be expanded upon
+          (potentially based on goals, which may or may not be specified).
+          You may be asked to go through many iterations of proposing different
+          avenues for expansion.
+        2. You will ultimately be asked to deep-dive into one one of your proposed
+          points for expansion: Be extremely thorough but concise.
       `
-    }
-    yield* L.user`
-      The idea/concept/input that I want you to expand upon is the following:
+      if (goals?.length) {
+        yield* L.user`
+          Before proposing avenues for expansion, I want you to know that my goals are as follows:
 
-      ${input}
+          ${goals.join("\n\n")}
+        `
+      }
+      yield* L.user`
+        The idea/concept/input that I want you to expand upon is the following:
 
-      ---
+        ${input}
 
-      What are ${size ?? 4} ways in which this could be expanded upon?
-    `
-    const { ways } = yield* L.assistant(ExpansionAvenues)
-    const expansions = yield* L.strand(ways.map(function*(way) {
-      yield* L.user`In the context of the specified input, please elaborate on following avenue: ${way}`
-      return yield* L.assistant
-    }))
-    const expanded = yield* L.strand(
-      function*() {
+        ---
+
+        What are ${size ?? 4} ways in which this could be expanded upon?
+      `
+      const { ways } = yield* L.assistant(ExpansionAvenues)
+      const expansions = yield* L.all(ways.map(function*(way) {
+        yield* L.user`In the context of the specified input, please elaborate on following avenue: ${way}`
+        return yield* L.assistant
+      }))
+      const expanded = yield* L.strand(function*() {
         yield* L.system`
           I'm going to give you some initial text, followed by various additional texts,
           each of which expands on the initial text. Your job is to coalesce these expansion points
@@ -65,11 +65,10 @@ export function expand({ goals, input, size }: ExpandConfig): L.Strand<Rune<LEve
           ${expansions.join("\n\n")}
         `
         return yield* L.assistant
-      },
-      { messages: [] },
-    )
-    return { expansions, expanded } satisfies ExpandResult
-  })
+      })
+      return { expansions, expanded } satisfies ExpandResult
+    },
+  )
 }
 
 const ExpansionAvenues = type({ ways: "string[]" })

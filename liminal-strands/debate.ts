@@ -30,7 +30,7 @@ export function debate({
   ],
   rounds = 4,
   goals,
-}: DebateConfig): L.Strand<Rune<LEvent>, DebateResult> {
+}: DebateConfig): Generator<Rune<LEvent>, DebateResult> {
   return L.strand(function*() {
     // Collects all arguments and rebuttals in the debate, in order
     const turns: Array<DebateTurn> = []

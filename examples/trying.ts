@@ -1,6 +1,6 @@
 import { L } from "liminal"
 
-await L.strand(function*() {
+await L.run(function*() {
   const result = yield* L.catch(function*() {
     return mayThrow()
   })

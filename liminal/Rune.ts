@@ -1,36 +1,31 @@
-import type { State } from "./Context.ts"
-import type { LEvent } from "./LEvent.ts"
+import type { Context } from "./Context.ts"
+import type { Definition } from "./Definition.ts"
 
-export type Rune<E = LEvent> = ContinuationRune | EventRune<E> | SelfRune | StateRune
-
-export interface ContinuationRune extends RuneBase<"continuation", never> {
-  f: () => any
-  debug: string
-}
-
-export interface EventRune<E> extends RuneBase<"event", E> {}
-
-export interface SelfRune extends RuneBase<"self", never> {}
-
-export interface StateRune extends RuneBase<"state", never> {
-  state: State
-}
-
-interface RuneBase<K extends string, E> {
+export interface Rune<E> {
   [RuneKey]: true
-  kind: K
-  event: E
+  value: {
+    kind: "continuation"
+    debug: string
+    f: () => any
+  } | {
+    kind: "event"
+    event: E
+  } | {
+    kind: "reflect"
+  } | {
+    kind: "child"
+    definition: Definition
+    context?: Context | undefined
+  }
 }
 
-export type AnyRune = Rune<any>
+export namespace Rune {
+  export type E<X extends Rune<any>> = X extends Rune<infer E> ? E : never
 
-export declare namespace Rune {
-  export type E<X extends AnyRune> = X["event"]
+  export function is(value: unknown): value is Rune<any> {
+    return typeof value === "object" && value !== null && RuneKey in value
+  }
 }
 
-export const RuneKey: unique symbol = Symbol.for("liminal/Rune")
+export const RuneKey: unique symbol = Symbol.for("liminal/RuneKey")
 export type RuneKey = typeof RuneKey
-
-export function isRune(value: unknown): value is AnyRune {
-  return typeof value === "object" && value !== null && RuneKey in value
-}

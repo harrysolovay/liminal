@@ -35,7 +35,6 @@ pgvector
 repomix
 rica
 rootable
-runics
 shikijs
 shoutout
 solovay

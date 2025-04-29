@@ -11,7 +11,7 @@ const Activity = type({
   forWhom: type("string").describe("Description of the kind of person that would enjoy this activity."),
 })
 
-await L.strand(
+await L.run(
   function*() {
     yield* L.model(gpt4oMini)
     yield* L.system`When you are asked a question, answer without asking for clarification.`
@@ -25,7 +25,7 @@ await L.strand(
     }
   },
   {
-    handler: (event) => {
+    handler(event) {
       return console.log(event)
     },
   },

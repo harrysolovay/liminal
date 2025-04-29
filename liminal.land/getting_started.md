@@ -85,4 +85,5 @@ the following.
 
 ## Next Steps
 
-In the next section, we dive deep into what makes something "runic" in Liminal.
+In the next section, we dive deep into what makes something a Liminal
+definition.

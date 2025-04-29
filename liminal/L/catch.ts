@@ -1,24 +1,27 @@
-import { Fiber } from "../Fiber.ts"
+import type { Definition } from "../Definition.ts"
+import type { LEvent } from "../LEvent.ts"
 import type { Rune } from "../Rune.ts"
-import type { Runic } from "../Runic.ts"
+import { Strand } from "../Strand.ts"
 import { continuation } from "./continuation.ts"
-import { self } from "./self.ts"
+import { reflect } from "./reflect.ts"
 
 export { catch_ as catch }
 
-function* catch_<Y extends Rune, T>(runic: Runic<Y, T>): Generator<Rune<Y>, CatchResult<T>> {
-  const parent = yield* self
-  return yield* continuation(async () => {
+function* catch_<Y extends Rune<any>, T>(
+  definition: Definition<Y, T>,
+): Generator<Rune<LEvent> | Rune<Y>, CatchResult<T>> {
+  const parent = yield* reflect
+  return yield* continuation("catch", async () => {
     try {
-      const resolved = await new Fiber(runic, {
+      const resolved = await new Strand(definition, {
         parent,
-        context: parent.context.fork(),
-      }).resolution()
+        context: parent.context.clone(),
+      }).then()
       return { resolved }
     } catch (exception: unknown) {
       return { rejected: exception }
     }
-  }, "catch")
+  })
 }
 Object.defineProperty(catch_, "name", { value: "catch" })
 

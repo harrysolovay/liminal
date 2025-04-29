@@ -208,15 +208,15 @@ a satisfies string
 const b = await strand(g())
 b satisfies string
 
-// With a statically-typed tuple of runics.
+// With a statically-typed tuple of definitions.
 const c = strand([g, g()])
 c satisfies [string, string]
 
-// With an unsized array of runics.
+// With an unsized array of definitions.
 const d = strand(Array.from({ length }, g))
 d satisfies Array<string>
 
-// With a record of runics.
+// With a record of definitions.
 const e = strand({ a: g, b: g() })
 e satisfies { a: string; b: string }
 ```

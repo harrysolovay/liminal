@@ -3,13 +3,13 @@ import { L } from "liminal"
 import "liminal-arktype/register"
 import { gemma3, gpt4o, gpt4oMini, o1Mini } from "./_models.ts"
 
-await L.strand(
+await L.run(
   function*() {
     yield* L.model(gpt4oMini)
     yield* L.user`Write a rap about type-level programming in TypeScript`
     yield* L.assistant
     yield* L.user`Rewrite it in whatever way you think best.`
-    const variants = yield* L.strand({
+    const variants = yield* L.all({
       *a() {
         return yield* L.assistant
       },

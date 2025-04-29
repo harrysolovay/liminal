@@ -1,7 +1,7 @@
 import { L } from "liminal"
 import { adapter } from "liminal-ollama"
 
-await L.strand(
+await L.run(
   function*() {
     // Kick off the conversation.
     yield* L.model(adapter("gemma3:1b"))

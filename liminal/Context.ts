@@ -1,39 +1,32 @@
-import { RuneKey, type StateRune } from "./Rune.ts"
+import type { Handler } from "./Handler.ts"
+import type { Message } from "./Message.ts"
+import { ModelRegistry } from "./ModelRegistry.ts"
+import type { Tool } from "./Tool.ts"
 
-export class Context extends Map<State, unknown> {
-  fork(override?: Context): Context {
-    const instance = new Context(override)
-    for (const [state, value] of this.entries()) {
-      if (!instance.has(state)) {
-        instance.set(state, state.f(value))
-      }
-    }
-    return instance
-  }
+export interface Context {
+  readonly handler: Handler | undefined
+  readonly models: ModelRegistry
+  readonly messages: Array<Message>
+  readonly tools: Set<Tool>
 
-  getOrInit<V>(state: State<V>): V {
-    if (this.has(state)) {
-      return this.get(state) as never
-    }
-    const instance = state.f()
-    this.set(state, instance)
-    return instance
-  }
+  clone(): Context
 }
 
-export interface State<V = any> extends Iterable<StateRune, V> {
-  f(parent?: V): V
-}
-
-export function State<V>(f: (parent?: V) => V): State<V> {
+export function Context(context?: Omit<Context, "clone">): Context {
   return {
-    f,
-    *[Symbol.iterator](): Generator<StateRune, V> {
-      return yield {
-        [RuneKey]: true,
-        kind: "state",
-        state: this,
-      } satisfies Omit<StateRune, "event"> as never
+    handler: context?.handler,
+    models: context?.models.clone() ?? new ModelRegistry(),
+    messages: [],
+    tools: new Set(context?.tools),
+
+    clone(): Context {
+      return {
+        handler: this.handler,
+        models: this.models.clone(),
+        messages: [...this.messages],
+        tools: new Set(this.tools),
+        clone: this.clone,
+      }
     },
   }
 }
