@@ -9,6 +9,7 @@ import type { Rune } from "./Rune.ts"
 export interface StrandConfig {
   parent?: Strand | undefined
   context?: Context | undefined
+  signal?: AbortSignal | undefined
 }
 
 let nextIndex: number = 0
@@ -30,7 +31,7 @@ export class Strand<Y extends Rune<any> = Rune<any>, T = any> implements Iterabl
   constructor(definition: Definition<Y, T>, config: StrandConfig) {
     this.#definition = definition
     this.depth = (config?.parent?.depth ?? -1) + 1
-    const { parent, context } = config ?? {}
+    const { parent, context, signal: configSignal } = config ?? {}
     if (parent) {
       this.parent = parent
       this.#attachSignal(parent.signal, () => ({
@@ -38,15 +39,15 @@ export class Strand<Y extends Rune<any> = Rune<any>, T = any> implements Iterabl
         reason: parent.signal.reason,
       }))
     }
+    if (configSignal) {
+      this.#attachSignal(configSignal, () => ({
+        type: "config_signal_aborted",
+        reason: configSignal.reason,
+      }))
+    }
     if (context) {
       this.context = context
-      const { signal, handler } = context
-      if (signal) {
-        this.#attachSignal(signal, () => ({
-          type: "config_signal_aborted",
-          reason: signal.reason,
-        }))
-      }
+      const { handler } = context
       if (handler) {
         this.#handle = (function(this: Strand, event: any) {
           try {
@@ -61,7 +62,7 @@ export class Strand<Y extends Rune<any> = Rune<any>, T = any> implements Iterabl
         this.#handle(new StrandStatusChanged(this.status))
       }
     } else {
-      this.context = new Context()
+      this.context = Context()
     }
   }
 
