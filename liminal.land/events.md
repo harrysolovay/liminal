@@ -26,9 +26,9 @@ await L.strand(g, {
 import { Definition, L } from "liminal"
 
 function* g() {
-  yield* L.event("A")
-  yield* L.event(["B"])
-  yield* L.event({ c: "D" })
+  yield* L.emit("A")
+  yield* L.emit(["B"])
+  yield* L.emit({ c: "D" })
 }
 
 type GEvent = Definition.E<typeof g>
