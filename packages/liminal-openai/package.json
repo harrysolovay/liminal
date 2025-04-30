@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "0.0.6",
+  "version": "0.0.7",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -15,7 +15,7 @@
     ".": "./dist/index.js"
   },
   "peerDependencies": {
-    "liminal": "^0.5.12",
+    "liminal": "^0.5.13",
     "openai": "^4.95.1"
   }
 }
