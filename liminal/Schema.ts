@@ -111,57 +111,62 @@ export namespace Schema {
     LE.assert(value !== null)
     if ("anyOf" in value) {
       LE.assert(Array.isArray(value.anyOf))
-      value.anyOf = value.anyOf.map(validate)
+      return {
+        anyOf: value.anyOf.map(validate),
+      } satisfies Omit<SchemaAnyOf, "T"> as never
     } else {
       if ("enum" in value) {
         LE.assert(Array.isArray(value.enum))
         LE.assert(!("const" in value))
-        value.enum.forEach((v) => {
-          LE.assert(typeof v === "string")
-        })
-        ;(value as any).type = "string"
+        value.enum.forEach((v) => LE.assert(typeof v === "string"))
+        return {
+          type: "string",
+          enum: value.enum,
+        } satisfies Omit<SchemaString, "T"> as never
       } else if ("const" in value) {
         LE.assert(typeof value.const === "string")
-        ;(value as any).type = "string"
-      }
-      LE.assert("type" in value)
-      LE.assert(typeof value.type === "string")
-      LE.assert(SCHEMA_TYPE_NAMES[value.type])
-      switch (value.type) {
-        case "null":
-        case "boolean":
-        case "integer":
-        case "number": {
-          break
-        }
-        case "string": {
-          if ("const" in value) {
-            LE.assert(typeof value.const === "string")
+        return {
+          type: "string",
+          const: value.const,
+        } satisfies Omit<SchemaString, "T"> as never
+      } else if ("type" in value) {
+        LE.assert("type" in value)
+        LE.assert(typeof value.type === "string")
+        LE.assert(SCHEMA_TYPE_NAMES[value.type])
+        switch (value.type) {
+          case "null":
+          case "boolean":
+          case "integer":
+          case "number": {
+            break
           }
-          break
-        }
-        case "array": {
-          LE.assert("items" in value)
-          validate(value.items)
-          break
-        }
-        case "object": {
-          LE.assert("properties" in value)
-          LE.assert(typeof value.properties === "object")
-          const { properties } = value
-          LE.assert(properties !== null)
-          LE.assert("required" in value)
-          LE.assert(Array.isArray(value.required))
-          value.required.forEach((k) => {
-            LE.assert(typeof k === "string")
-            LE.assert(k in properties)
-          })
-          if ("additionalProperties" in value) {
-            LE.assert(value.additionalProperties === false)
-          } else {
-            ;(value as any).additionalProperties = false
+          case "string": {
+            if ("const" in value) {
+              LE.assert(typeof value.const === "string")
+            }
+            break
           }
-          Object.values(properties).forEach(validate)
+          case "array": {
+            LE.assert("items" in value)
+            return {
+              type: "array",
+              items: validate(value.items),
+            } satisfies Omit<SchemaArray, "T"> as never
+          }
+          case "object": {
+            LE.assert("properties" in value)
+            LE.assert(typeof value.properties === "object")
+            const { properties } = value
+            LE.assert(properties !== null)
+            return {
+              type: "object",
+              properties: Object.fromEntries(
+                Object.entries(properties).map(([key, value]) => [key, validate(value)]),
+              ),
+              required: Object.keys(properties),
+              additionalProperties: false,
+            } satisfies Omit<SchemaObject, "T"> as never
+          }
         }
       }
     }
