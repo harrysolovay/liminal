@@ -16,6 +16,7 @@
     ".": "./dist/index.js"
   },
   "dependencies": {
-    "liminal": "^0.5.12"
+    "liminal": "^0.5.12",
+    "liminal-arktype": "^0.0.5"
   }
 }

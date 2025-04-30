@@ -91,6 +91,7 @@
       "version": "0.0.1",
       "dependencies": {
         "liminal": "^0.5.12",
+        "liminal-arktype": "^0.0.5",
       },
     },
     "liminal.land": {
