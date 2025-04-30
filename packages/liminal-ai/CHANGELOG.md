@@ -1,5 +1,13 @@
 # liminal-ai
 
+## 0.0.13
+
+### Patch Changes
+
+- bbd0e74: Liminal schema and util now exist within the liminal package itself. Runtime type compatibility changes.
+- Updated dependencies [bbd0e74]
+  - liminal@0.5.13
+
 ## 0.0.12
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # liminal
 
+## 0.5.13
+
+### Patch Changes
+
+- bbd0e74: Liminal schema and util now exist within the liminal package itself. Runtime type compatibility changes.
+
 ## 0.5.12
 
 ### Patch Changes
