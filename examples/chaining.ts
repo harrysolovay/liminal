@@ -1,6 +1,6 @@
 import { L } from "liminal"
+import { compile } from "liminal-zod3"
 import { z } from "zod"
-import "liminal-zod3/register"
 import { gpt4oMini } from "./_models.ts"
 
 await L.run(function*() {
@@ -18,11 +18,11 @@ await L.run(function*() {
 
     Copy to evaluate: ${copy}
   `
-  const qualityMetrics = yield* L.assistant(z.object({
+  const qualityMetrics = yield* L.assistant(compile(z.object({
     hasCallToAction: z.boolean(),
     emotionalAppeal: z.number(),
     clarity: z.number(),
-  }))
+  })))
   if (!qualityMetrics.hasCallToAction || qualityMetrics.emotionalAppeal < 7 || qualityMetrics.clarity < 7) {
     yield* L.user`
       Rewrite this marketing copy with:

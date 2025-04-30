@@ -1,6 +1,6 @@
 import { type } from "arktype"
 import { L } from "liminal"
-import "liminal-arktype/register"
+import { compile } from "liminal-arktype"
 import { gpt4oMini } from "./_models.ts"
 
 const LANGUAGE = "typescript"
@@ -29,14 +29,14 @@ const result = await L.run(
         3. Preservation of nuance
         4. Cultural accuracy
       `
-      const evaluation = yield* L.assistant(type({
+      const evaluation = yield* L.assistant(compile(type({
         qualityScore: "number.integer",
         preservesTone: "boolean",
         preservesNuance: "boolean",
         culturallyAccurate: "boolean",
         specificIssues: "string[]",
         improvementSuggestions: "string[]",
-      }))
+      })))
       if (
         evaluation.qualityScore >= 8
         && evaluation.preservesTone

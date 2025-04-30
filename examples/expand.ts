@@ -13,7 +13,7 @@ await L.run(
         anything you to improve it or make it efficient inconsequential,
         unless you first reduce that risk of breaking.
       `,
-      size: 10,
+      size: 5,
       goals: [
         "Ensure that the ideas––while kept general––can be contextualized in commonplace scenarios.",
         "Be both a realist and an optimist.",

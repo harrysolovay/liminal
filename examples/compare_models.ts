@@ -1,6 +1,6 @@
 import { type } from "arktype"
 import { L } from "liminal"
-import "liminal-arktype/register"
+import { compile } from "liminal-arktype"
 import { gemma3, gpt4o, gpt4oMini, o1Mini } from "./_models.ts"
 
 await L.run(
@@ -29,10 +29,7 @@ await L.run(
 
         ${JSON.stringify(variants)}
       `
-      const { value } = yield* L.assistant(type({
-        value: "'a' | 'b' | 'c'",
-      }))
-      return value
+      return yield* L.assistant(compile(type("'a' | 'b' | 'c'")))
     })
     return variants[key]
   },

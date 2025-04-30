@@ -1,6 +1,6 @@
-import { L } from "liminal"
-import "liminal-arktype/register"
 import { type } from "arktype"
+import { L } from "liminal"
+import { compile } from "liminal-arktype"
 import { gpt4oMini } from "./_models.ts"
 
 const DEPARTURE_LOCATION = "New York City"
@@ -12,9 +12,7 @@ await L.run(
       I want to plan a weekend trip leaving from ${DEPARTURE_LOCATION}. I don't know where to go.
       Suggest some follow-up questions that will help you narrow down the possible destination.
     `
-    const { questions } = yield* L.assistant(type({
-      questions: "string[]",
-    }))
+    const questions = yield* L.assistant(compile(type.string.array()))
     yield* L.user`Here are my answers to those questions:`
     for (const question of questions) {
       yield* L.user`

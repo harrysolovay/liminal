@@ -1,8 +1,8 @@
 import { LiminalAssertionError } from "liminal"
 
-export type Value = null | boolean | number | string | ValueArray | ValueObject
-export namespace Value {
-  export function assert(value: unknown): asserts value is Value {
+export type JSONValue = null | boolean | number | string | JSONValueArray | JSONValueObject
+export namespace JSONValue {
+  export function assert(value: unknown): asserts value is JSONValue {
     if (value === null) {
       return
     } else if (Array.isArray(value)) {
@@ -15,6 +15,6 @@ export namespace Value {
   }
 }
 
-export type ValueArray = Array<Value>
+export type JSONValueArray = Array<JSONValue>
 
-export type ValueObject = { [key: string]: Value }
+export type JSONValueObject = { [key: string]: JSONValue }

@@ -1,12 +1,10 @@
 import { type } from "arktype"
-import "liminal-arktype/register"
-import { Definition, EventBase, L, LEvent } from "liminal"
+import { EventBase, L, LEvent } from "liminal"
+import { compile } from "liminal-arktype"
 import { gpt4oMini } from "./_models.ts"
 
 const SomethingTag = Symbol()
 class Something extends EventBase(SomethingTag, "something") {}
-
-type X = Definition.E<typeof g>
 
 await L.run(g, {
   handler(event) {
@@ -28,9 +26,9 @@ function* g() {
   yield* L.strand(function*() {
     yield* L.emit("event-a")
     yield* L.strand(function*() {
-      yield* L.assistant(type({
+      yield* L.assistant(compile(type({
         something: "string",
-      }))
+      })))
       yield* L.emit("event-b")
       yield* L.strand(function*() {
         yield* L.emit(new Something())

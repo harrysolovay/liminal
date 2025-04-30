@@ -13,7 +13,7 @@
   "type": "module",
   "sideEffects": true,
   "exports": {
-    "./register": "./dist/register.js"
+    ".": "./dist/index.js"
   },
   "peerDependencies": {
     "@valibot/to-json-schema": "^1.0.0",

@@ -1,21 +1,20 @@
 import type { LEvent } from "../LEvent.ts"
 import type { Rune } from "../Rune.ts"
-import { type LType, toJSONSchema, validate } from "../schema/LType.ts"
+import { Schema } from "../Schema.ts"
 import { continuation } from "./continuation.ts"
 import { infer } from "./infer.ts"
 import { message } from "./message.ts"
 
 export interface assistant extends Iterable<Rune<LEvent>, string> {
-  <T>(type: LType<T>): Generator<Rune<LEvent>, T>
+  <T>(schema: Schema<T>): Generator<Rune<LEvent>, T>
 }
 
 export const assistant: assistant = Object.assign(
-  function* assistant<T>(type: LType<T>): Generator<Rune<LEvent>, T> {
-    const schema = toJSONSchema(type)
+  function* assistant<T>(schema: Schema<T>): Generator<Rune<LEvent>, T> {
     const inference = yield* infer(schema)
     yield* message("assistant", [{ part: inference }])
     const input = JSON.parse(inference)
-    return yield* continuation("validate_assistant_message", () => validate(type, input))
+    return yield* continuation("validate_assistant_message", () => Schema.validateValue(schema, input))
   },
   {
     *[Symbol.iterator]() {

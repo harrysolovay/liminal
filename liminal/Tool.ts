@@ -1,20 +1,18 @@
-import { type LType, toJSONSchema, validate } from "./schema/LType.ts"
-import { Schema, type SchemaObject } from "./schema/Schema.ts"
-import type { Value, ValueObject } from "./schema/Value.ts"
+import { Schema } from "./Schema.ts"
+import type { JSONValue } from "./util/JSONValue.ts"
 
 export class Tool {
-  static async make<T extends ValueObject>(
+  static async make<T extends JSONValue>(
     description: string,
-    type: LType<T>,
-    f: (arg: T) => Value | Promise<Value>,
+    schema: Schema<T>,
+    f: (arg: T) => JSONValue | Promise<JSONValue>,
   ) {
-    const schema = toJSONSchema(type)
     return new Tool(
       await Schema.id(schema, description),
       description,
       schema,
       async (arg) => {
-        return await f(await validate(type, arg) as never)
+        return await f(await Schema.validateValue(schema, arg))
       },
     )
   }
@@ -22,7 +20,7 @@ export class Tool {
   constructor(
     readonly name: string,
     readonly description: string,
-    readonly parameterSchema: SchemaObject,
-    readonly f: (arg: any) => Value | Promise<Value>,
+    readonly parameterSchema: Schema,
+    readonly f: (arg: any) => JSONValue | Promise<JSONValue>,
   ) {}
 }
