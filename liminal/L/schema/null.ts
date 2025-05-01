@@ -1,7 +1,7 @@
 import type { SchemaNull } from "../../Schema.ts"
-import { type LSchemaBase, make } from "./_schema_common.ts"
+import { make, type TypeBase } from "./_schema_common.ts"
 
-export interface null_ extends SchemaNull<null>, LSchemaBase {}
+export interface null_ extends SchemaNull<null>, TypeBase {}
 
 const null_: null_ = make({ type: "null" })
 

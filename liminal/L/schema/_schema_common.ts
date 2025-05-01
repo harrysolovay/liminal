@@ -1,7 +1,7 @@
 import type { Schema } from "../../Schema.ts"
 import { isTemplateStringsArray } from "../../util/isTemplateStringsArray.ts"
 
-export function make<S extends Schema>(schema: Omit<S, "T">, description?: string) {
+export function make<S extends Schema>(schema: Omit<S, "T">, description?: string): S & TypeBase {
   const schema_ = {
     ...schema,
     ...description && { description },
@@ -20,10 +20,10 @@ export function make<S extends Schema>(schema: Omit<S, "T">, description?: strin
     },
     enumerable: false,
   })
-  return Type
+  return Type as never
 }
 
-export interface LSchemaBase {
+export interface TypeBase {
   (template: TemplateStringsArray, ...substitutions: Array<string>): this
   (...values: Array<string>): this
 }

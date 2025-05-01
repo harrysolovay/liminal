@@ -1,7 +1,7 @@
 import type { SchemaString } from "../../Schema.ts"
-import { type LSchemaBase, make } from "./_schema_common.ts"
+import { make, type TypeBase } from "./_schema_common.ts"
 
-interface enum_<V extends Array<string> = Array<string>> extends SchemaString<V[number]>, LSchemaBase {
+interface enum_<V extends Array<string> = Array<string>> extends SchemaString<V[number]>, TypeBase {
   enum: V
   const?: never
 }
