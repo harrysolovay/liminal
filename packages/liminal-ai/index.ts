@@ -60,7 +60,7 @@ export function adapter(model: LanguageModelV1): Model {
 function toCoreMessage(message: Message): CoreMessage {
   return {
     role: message.role,
-    content: message.content
+    content: message.parts
       .map((c) => {
         LiminalAssertionError.assert(typeof c.part === "string")
         return c.part

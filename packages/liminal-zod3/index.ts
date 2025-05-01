@@ -5,10 +5,10 @@ import { zodToJsonSchema } from "zod-to-json-schema"
 export function compile<T>(type: ZodType<T>): Schema<T> {
   return Schema.compile(type, {
     schema() {
-      return zodToJsonSchema(type) // TODO
+      return zodToJsonSchema(type)
     },
-    async validate(value) {
-      const result = await type.safeParseAsync(value)
+    validate(value) {
+      const result = type.safeParse(value)
       if (result.error) {
         throw new LiminalAssertionError(result.error.issues.map((issue) => issue.message).join("\n"))
       }

@@ -6,7 +6,7 @@ export function compile<T>(type: Type<T> | Type<(In: any) => Out<T>, {}>): Schem
     schema() {
       return type.toJsonSchema()
     },
-    async validate(value) {
+    validate(value) {
       return type.assert(value)
     },
   })

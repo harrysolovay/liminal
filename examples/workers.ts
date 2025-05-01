@@ -1,22 +1,20 @@
 import { openai } from "@ai-sdk/openai"
-import { type } from "arktype"
 import { L } from "liminal"
 import { adapter } from "liminal-ai"
-import { compile } from "liminal-arktype"
 
-const FileInfo = type({
-  changeType: "'create' | 'modify' | 'delete'",
-  filePath: "string",
-  purpose: "string",
+const FileInfo = L.object({
+  changeType: L.enum("create", "modify", "delete"),
+  filePath: L.string,
+  purpose: L.string,
 })
 
-function* implement(file: typeof FileInfo.infer) {
+function* implement(file: typeof FileInfo.T) {
   yield* L.system(IMPLEMENTATION_PROMPTS[file.changeType])
   yield* L.user`Implement the changes for ${file.filePath} to support: ${file.purpose}`
-  const implementation = yield* L.assistant(compile(type({
-    explanation: "string",
-    code: "string",
-  })))
+  const implementation = yield* L.assistant(L.object({
+    explanation: L.string,
+    code: L.string,
+  }))
   return { file, implementation }
 }
 
@@ -33,10 +31,10 @@ await L.run(function*() {
   yield* L.system`You are a senior software architect planning feature implementations.`
   yield* L.user`Analyze this feature request and create an implementation plan:`
   yield* L.user`Alert administrators via text whenever site traffic exceeds a certain threshold.`
-  const implementationPlan = yield* L.assistant(compile(type({
-    complexity: "'low' | 'medium' | 'high'",
-    files: FileInfo.array(),
-  })))
+  const implementationPlan = yield* L.assistant(L.object({
+    complexity: L.enum("low", "medium", "high"),
+    files: L.array(FileInfo),
+  }))
   const fileChanges = yield* L.all(implementationPlan.files.map(implement))
   return { fileChanges, implementationPlan }
 }, { handler: console.log })

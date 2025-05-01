@@ -55,14 +55,14 @@ export interface SchemaBase<T> {
 export namespace Schema {
   const ids = new WeakMap<Schema, Record<string, string>>()
   const schemas = new WeakMap<WeakKey, Schema>()
-  const validators = new WeakMap<Schema, (value: unknown) => Promise<unknown>>()
+  const validators = new WeakMap<Schema, (value: unknown) => unknown>()
 
   export function compile<T>(key: WeakKey, {
     schema: schema_,
     validate,
   }: {
     schema(): unknown
-    validate(value: unknown): Promise<T>
+    validate(value: unknown): T
   }) {
     let schema = schemas.get(key)
     if (!schema) {
@@ -73,10 +73,10 @@ export namespace Schema {
     return schema
   }
 
-  export async function validateValue<T>(schema: Schema<T>, value: unknown): Promise<T> {
+  export function validateValue<T>(schema: Schema<T>, value: unknown): T {
     const validator = validators.get(schema)
     LE.assert(validator)
-    return await validator(value) as never
+    return validator(value) as never
   }
 
   export async function id(schema: Schema, description?: string): Promise<string> {

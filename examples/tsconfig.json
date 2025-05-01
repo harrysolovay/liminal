@@ -6,10 +6,8 @@
     { "path": "../liminal" },
     { "path": "../liminal-strands" },
     { "path": "../packages/liminal-ai" },
-    { "path": "../packages/liminal-arktype" },
-    { "path": "../packages/liminal-effect" },
+    { "path": "../packages/liminal-inception" },
     { "path": "../packages/liminal-ollama" },
-    { "path": "../packages/liminal-openai" },
-    { "path": "../packages/liminal-zod3" }
+    { "path": "../packages/liminal-openai" }
   ]
 }

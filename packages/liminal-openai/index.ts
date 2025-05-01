@@ -3,16 +3,20 @@ import { OpenAI } from "openai"
 import type { ResponsesModel } from "openai/resources.mjs"
 import type { ResponseInputContent, ResponseInputItem } from "openai/resources/responses/responses.js"
 
-export function openai(model: ResponsesModel, client: OpenAI = new OpenAI()): Model {
+export interface AdapterConfig {
+  client?: OpenAI
+}
+
+export function adapter(model: ResponsesModel, config?: AdapterConfig): Model {
   return new Model(
     "openai",
     ({ messages, schema, signal }) => {
       return {
         async resolve() {
-          const response = await client.responses.create({
+          const response = await (config?.client ?? new OpenAI()).responses.create({
             input: messages.map((m): ResponseInputItem => ({
               role: m.role,
-              content: m.content.map((c): ResponseInputContent => ({
+              content: m.parts.map((c): ResponseInputContent => ({
                 type: m.role === "assistant" ? "output_text" as never : "input_text",
                 text: String(c.part),
               })),

@@ -1,15 +1,13 @@
-import { type } from "arktype"
 import { L } from "liminal"
-import { compile } from "liminal-arktype"
 import { gpt4oMini } from "./_models.ts"
 
-const Activity = compile(type({
-  title: "string",
-  description: "string",
-  location: "string",
-  estimatedCostUSD: "number[]",
-  forWhom: type("string").describe("Description of the kind of person that would enjoy this activity."),
-}))
+const Activity = L.object({
+  title: L.string,
+  description: L.string,
+  location: L.string,
+  estimatedCostUSD: L.array(L.string),
+  forWhom: L.string`Description of the kind of person that would enjoy this activity.`,
+})
 
 await L.run(
   function*() {

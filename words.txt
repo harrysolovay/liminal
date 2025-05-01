@@ -47,6 +47,7 @@ topk
 tsdocs
 twoslash
 typebox
+vali
 valibot
 vitepress
 vitest

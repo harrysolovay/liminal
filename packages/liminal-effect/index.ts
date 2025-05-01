@@ -7,7 +7,7 @@ export function compile<T>(type: Schema.Schema<T>): LiminalSchema<T> {
     schema() {
       return make(type.ast)
     },
-    async validate(value) {
+    validate(value) {
       return Schema.decodeSync(type as never)(value)
     },
   })
