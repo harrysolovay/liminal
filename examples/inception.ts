@@ -1,11 +1,6 @@
 import { L } from "liminal"
 import { adapter } from "liminal-inception"
 
-const g = L.object({
-  a: L.number,
-  b: L.string,
-})
-
 await L.run(
   function*() {
     yield* L.model(adapter("mercury-coder-small"))
