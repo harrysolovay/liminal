@@ -15,11 +15,11 @@ export function* infer(schema?: Schema): Generator<Rune<LEvent>, string> {
   let inference = yield* continuation("infer", () =>
     model.seal({
       messages,
-      schema: schema
-        ? schema.type === "object"
+      ...schema && {
+        schema: schema.type === "object"
           ? schema
-          : Schema.wrap(schema)
-        : undefined,
+          : Schema.wrap(schema),
+      },
       signal,
     }).resolve())
   if (schema?.type && schema.type !== "object") {

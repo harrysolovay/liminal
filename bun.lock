@@ -69,29 +69,27 @@
         "effect": "^3.14.12",
         "liminal": "workspace:*",
         "liminal-ai": "workspace:*",
-        "liminal-arktype": "workspace:*",
-        "liminal-effect": "workspace:*",
+        "liminal-inception": "workspace:*",
         "liminal-ollama": "workspace:*",
         "liminal-openai": "workspace:*",
         "liminal-strands": "workspace:*",
-        "liminal-zod3": "workspace:*",
         "mathjs": "^14.3.1",
         "zod": "^3.24.3",
       },
     },
     "liminal": {
       "name": "liminal",
-      "version": "0.5.12",
+      "version": "0.5.13",
       "devDependencies": {
         "conditional-type-checks": "^1.0.6",
       },
     },
     "liminal-strands": {
       "name": "liminal-strands",
-      "version": "0.0.1",
+      "version": "0.0.2",
       "dependencies": {
-        "liminal": "^0.5.12",
-        "liminal-arktype": "^0.0.5",
+        "liminal": "^0.5.13",
+        "liminal-arktype": "^0.0.6",
       },
     },
     "liminal.land": {
@@ -114,10 +112,10 @@
     },
     "packages/liminal-ai": {
       "name": "liminal-ai",
-      "version": "0.0.12",
+      "version": "0.0.13",
       "peerDependencies": {
         "ai": "^4.1.61",
-        "liminal": "^0.5.12",
+        "liminal": "^0.5.13",
       },
     },
     "packages/liminal-alchemy": {
@@ -129,39 +127,46 @@
     },
     "packages/liminal-arktype": {
       "name": "liminal-arktype",
-      "version": "0.0.5",
+      "version": "0.0.6",
       "peerDependencies": {
         "arktype": "^2.1.10",
-        "liminal": "^0.5.12",
+        "liminal": "^0.5.13",
       },
     },
     "packages/liminal-effect": {
       "name": "liminal-effect",
-      "version": "0.0.5",
+      "version": "0.0.6",
       "peerDependencies": {
         "effect": "^3.13.12",
-        "liminal": "^0.5.12",
+        "liminal": "^0.5.13",
+      },
+    },
+    "packages/liminal-inception": {
+      "name": "liminal-inception",
+      "version": "0.0.7",
+      "peerDependencies": {
+        "liminal": "^0.5.13",
       },
     },
     "packages/liminal-ollama": {
       "name": "liminal-ollama",
-      "version": "0.0.7",
+      "version": "0.0.8",
       "peerDependencies": {
-        "liminal": "^0.5.12",
+        "liminal": "^0.5.13",
         "ollama": "^0.5.14",
       },
     },
     "packages/liminal-openai": {
       "name": "liminal-openai",
-      "version": "0.0.6",
+      "version": "0.0.7",
       "peerDependencies": {
-        "liminal": "^0.5.12",
+        "liminal": "^0.5.13",
         "openai": "^4.95.1",
       },
     },
     "packages/liminal-typebox": {
       "name": "liminal-typebox",
-      "version": "0.0.5",
+      "version": "0.0.6",
       "peerDependencies": {
         "@sinclair/typebox": "^0.34.33",
         "ajv": "^8.17.1",
@@ -170,7 +175,7 @@
     },
     "packages/liminal-valibot": {
       "name": "liminal-valibot",
-      "version": "0.0.5",
+      "version": "0.0.6",
       "peerDependencies": {
         "@valibot/to-json-schema": "^1.0.0",
         "liminal": "^0.5.12",
@@ -179,9 +184,9 @@
     },
     "packages/liminal-zod3": {
       "name": "liminal-zod3",
-      "version": "0.0.7",
+      "version": "0.0.8",
       "peerDependencies": {
-        "liminal": "0.5.12",
+        "liminal": "0.5.13",
         "zod": "^3.24.2",
         "zod-to-json-schema": "^3.24.5",
       },
@@ -1223,6 +1228,8 @@
     "liminal-example-vite-react-app": ["liminal-example-vite-react-app@workspace:example-integrations/vite-react-app"],
 
     "liminal-examples": ["liminal-examples@workspace:examples"],
+
+    "liminal-inception": ["liminal-inception@workspace:packages/liminal-inception"],
 
     "liminal-ollama": ["liminal-ollama@workspace:packages/liminal-ollama"],
 

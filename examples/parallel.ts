@@ -1,11 +1,9 @@
-import { type } from "arktype"
 import { L } from "liminal"
-import { compile } from "liminal-arktype"
 import { readFile } from "node:fs/promises"
 import { fileURLToPath } from "node:url"
 import { gpt4oMini } from "./_models.ts"
 
-const LMH = type("'lower' | 'medium' | 'high'")
+const LMH = L.enum("lower", "medium", "high")
 
 const result = await L.run(
   async function*() {
@@ -31,32 +29,32 @@ console.log(result)
 function* security() {
   yield* L
     .system`You are an expert in code security. Focus on identifying security vulnerabilities, injection risks, and authentication issues.`
-  return yield* L.assistant(compile(type({
-    type: "'security'",
-    vulnerabilities: "string[]",
+  return yield* L.assistant(L.object({
+    type: L.const("security"),
+    vulnerabilities: L.array(L.string),
     riskLevel: LMH,
-    suggestions: "string[]",
-  })))
+    suggestions: L.array(L.string),
+  }))
 }
 
 function* performance() {
   yield* L
     .system`You are an expert in code performance. Focus on identifying performance bottlenecks, memory leaks, and optimization opportunities.`
-  return yield* L.assistant(compile(type({
-    type: "'performance'",
-    issues: "string[]",
+  return yield* L.assistant(L.object({
+    type: L.const("performance"),
+    issues: L.array(L.string),
     impact: LMH,
-    optimizations: "string[]",
-  })))
+    optimizations: L.array(L.string),
+  }))
 }
 
 function* maintainability() {
   yield* L
     .system`You are an expert in code quality. Focus on code structure, readability, and adherence to best practices.`
-  return yield* L.assistant(compile(type({
-    type: "'maintainability'",
-    concerns: "string[]",
-    qualityScore: "number.integer",
-    recommendations: "string[]",
-  })))
+  return yield* L.assistant(L.object({
+    type: L.const("maintainability"),
+    concerns: L.array(L.string),
+    qualityScore: L.integer,
+    recommendations: L.array(L.string),
+  }))
 }

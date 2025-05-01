@@ -10,7 +10,7 @@ export function compile<T>(type: TSchema & { static: T }): Schema<T> {
     schema() {
       return type
     },
-    async validate(value) {
+    validate(value) {
       let validate = ajvMemo.get(type)
       if (!validate) {
         validate = ajv.compile(type)

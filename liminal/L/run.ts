@@ -15,7 +15,7 @@ export interface RunConfig<Y extends Rune<any>> {
   signal?: AbortSignal | undefined
 }
 
-export function run<Y extends Rune<any>, T>(definition: Definition<Y, T>, config?: RunConfig<Y>): Strand {
+export function run<Y extends Rune<any>, T>(definition: Definition<Y, T>, config?: RunConfig<Y>): Strand<Y, T> {
   const context = Context({
     handler: config?.handler,
     models: config?.models ?? new ModelRegistry(),

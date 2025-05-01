@@ -12,6 +12,7 @@
     { "path": "./packages/liminal-alchemy" },
     { "path": "./packages/liminal-arktype" },
     { "path": "./packages/liminal-effect" },
+    { "path": "./packages/liminal-inception" },
     { "path": "./packages/liminal-ollama" },
     { "path": "./packages/liminal-openai" },
     { "path": "./packages/liminal-typebox" },

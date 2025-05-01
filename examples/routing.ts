@@ -1,6 +1,4 @@
-import { type } from "arktype"
 import { L } from "liminal"
-import { compile } from "liminal-arktype"
 import { gpt4oMini, o1Mini } from "./_models.ts"
 
 const USE_CLASSIFICATION_PROMPTS = {
@@ -11,33 +9,36 @@ const USE_CLASSIFICATION_PROMPTS = {
     "You are a technical support specialist with deep product knowledge. Focus on clear step-by-step troubleshooting.",
 }
 
-await L.run(function*() {
-  yield* L.model(gpt4oMini)
-  const classification = yield* L.strand(
-    function*() {
-      yield* L.system`
-        Classify this supplied customer query:
+await L.run(
+  function*() {
+    yield* L.model(gpt4oMini)
+    const classification = yield* L.strand(
+      function*() {
+        yield* L.system`
+          Classify this supplied customer query:
 
-        Determine:
+          Determine:
 
-        1. Query type (general, refund, or technical)
-        2. Complexity (simple or complex)
-        3. Brief reasoning for classification
-      `
-      yield* L.user`I'd like a refund please.`
-      return yield* L.assistant(compile(type({
-        reasoning: "string",
-        type: "'general' | 'refund' | 'technical'",
-        complexity: "'simple' | 'complex'",
-      })))
-    },
-  )
-  const response = yield* L.strand(function*() {
-    yield* L.system(USE_CLASSIFICATION_PROMPTS[classification.type])
-    if (classification.complexity === "complex") {
-      yield* L.model(o1Mini)
-    }
-    return yield* L.assistant
-  })
-  return { classification, response }
-}, { handler: console.log })
+          1. Query type (general, refund, or technical)
+          2. Complexity (simple or complex)
+          3. Brief reasoning for classification
+        `
+        yield* L.user`I'd like a refund please.`
+        return yield* L.assistant(L.object({
+          reasoning: L.string,
+          type: L.enum("general", "refund", "technical"),
+          complexity: L.enum("simple", "complex"),
+        }))
+      },
+    )
+    const response = yield* L.strand(function*() {
+      yield* L.system(USE_CLASSIFICATION_PROMPTS[classification.type])
+      if (classification.complexity === "complex") {
+        yield* L.model(o1Mini)
+      }
+      return yield* L.assistant
+    })
+    return { classification, response }
+  },
+  { handler: console.log },
+)

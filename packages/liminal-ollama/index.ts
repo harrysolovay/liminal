@@ -10,7 +10,7 @@ export function adapter(model: string, client: Ollama = new Ollama()): Model {
           const { message } = await client.chat({
             messages: messages.map((m): Message => ({
               role: m.role,
-              content: m.content
+              content: m.parts
                 .map((c) => {
                   LiminalAssertionError.assert(typeof c.part === "string")
                   return c.part
