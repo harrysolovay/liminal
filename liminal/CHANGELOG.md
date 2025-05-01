@@ -1,5 +1,11 @@
 # liminal
 
+## 0.5.14
+
+### Patch Changes
+
+- d12049c: Fix L.run return type. Add L.<type> for JSON-schema building.
+
 ## 0.5.13
 
 ### Patch Changes

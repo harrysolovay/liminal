@@ -1,5 +1,13 @@
 # liminal-ai
 
+## 0.0.14
+
+### Patch Changes
+
+- d12049c: Fix L.run return type. Add L.<type> for JSON-schema building.
+- Updated dependencies [d12049c]
+  - liminal@0.5.14
+
 ## 0.0.13
 
 ### Patch Changes

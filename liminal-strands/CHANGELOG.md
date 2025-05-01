@@ -1,5 +1,13 @@
 # liminal-strands
 
+## 0.0.3
+
+### Patch Changes
+
+- Updated dependencies [d12049c]
+  - liminal-arktype@0.0.7
+  - liminal@0.5.14
+
 ## 0.0.2
 
 ### Patch Changes
