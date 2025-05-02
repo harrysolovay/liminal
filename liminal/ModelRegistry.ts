@@ -1,14 +1,22 @@
 import type { Model } from "./Model.ts"
 
-/** An intrusive list for storing `Model`s. */
+/**
+ * An intrusive doubly-linked list for storing `Model`s.
+ * Provides efficient insertion, removal, and lookups.
+ */
 export class ModelRegistry {
   declare head?: ModelRegistryNode | undefined
   declare tail?: ModelRegistryNode | undefined
 
+  /** Returns the most recently registered model */
   peek() {
     return this.tail?.model
   }
 
+  /**
+   * Registers a new model and returns the created node
+   * @param value The model to register
+   */
   register(value: Model): ModelRegistryNode {
     const node: ModelRegistryNode = {
       prev: this.tail,
@@ -23,6 +31,7 @@ export class ModelRegistry {
     return node
   }
 
+  /** Remove a model from the registry. */
   remove(node: ModelRegistryNode) {
     if (node.prev) {
       node.prev.next = node.next
@@ -36,13 +45,17 @@ export class ModelRegistry {
     if (node === this.tail) {
       this.tail = node.prev
     }
-    node.prev = node.next = undefined
+    node.prev = undefined
+    delete node.next
   }
 
+  /** Creates a deep copy of this registry. */
   clone() {
     const instance = new ModelRegistry()
     for (let node = this.head; node; node = node.next) {
-      instance.register(node.model)
+      if (node.model) {
+        instance.register(node.model)
+      }
     }
     return instance
   }

@@ -1,5 +1,5 @@
 import { L } from "liminal"
-import { gpt4oMini } from "./_models.ts"
+import { gpt4oMini, handler } from "./_common.ts"
 
 const Activity = L.object({
   title: L.string,
@@ -22,5 +22,5 @@ await L.run(
       i++
     }
   },
-  { handler: console.log },
+  { handler },
 )

@@ -1,5 +1,5 @@
 import { L } from "liminal"
-import { gpt4oMini, o1Mini } from "./_models.ts"
+import { gpt4oMini, o1Mini } from "./_common.ts"
 
 const USE_CLASSIFICATION_PROMPTS = {
   general: "You are an expert customer service representative handling general inquiries.",

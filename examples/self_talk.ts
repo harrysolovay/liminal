@@ -1,9 +1,9 @@
 import { L } from "liminal"
-import { adapter } from "liminal-ollama"
+import { gemma3, handler } from "./_common.ts"
 
 await L.run(
   function*() {
-    yield* L.model(adapter("gemma3:1b"))
+    yield* L.model(gemma3)
     yield* L.system`
       When an instruction is given, don't ask any follow-up questions.
       Just reply to the best of your ability given the information you have.
@@ -25,5 +25,5 @@ await L.run(
     yield* L.user`Please summarize the key points from our conversation.`
     return yield* L.assistant
   },
-  { handler: console.log },
+  { handler },
 )

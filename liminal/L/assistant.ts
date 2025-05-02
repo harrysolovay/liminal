@@ -4,6 +4,10 @@ import { Schema } from "../Schema.ts"
 import { infer } from "./infer.ts"
 import { message } from "./message.ts"
 
+/**
+ * Produces an assistant message when yielded. Can be called with a schema
+ * for structured output. Otherwise produces a string.
+ */
 export interface assistant extends Iterable<Rune<LEvent>, string> {
   <T>(schema: Schema<T>): Generator<Rune<LEvent>, T>
 }

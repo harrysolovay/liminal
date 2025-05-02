@@ -22,6 +22,6 @@ export interface Envelope {
 }
 
 export interface SealedEnvelope {
-  resolve(): Promise<string>
-  stream(): ReadableStream<string>
+  resolve: () => Promise<string>
+  stream: () => ReadableStream<string>
 }

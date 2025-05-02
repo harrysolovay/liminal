@@ -1,7 +1,7 @@
 import { L } from "liminal"
 import { readFile } from "node:fs/promises"
 import { fileURLToPath } from "node:url"
-import { gpt4oMini } from "./_models.ts"
+import { gpt4oMini } from "./_common.ts"
 
 const LMH = L.enum("lower", "medium", "high")
 

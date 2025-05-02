@@ -5,6 +5,7 @@ import { continuation } from "./continuation.ts"
 import { emit } from "./emit.ts"
 import { reflect } from "./reflect.ts"
 
+/** Creates a readable stream of content from the current model. */
 export const stream: Iterable<Rune<LEvent>, ReadableStream<string>> = {
   *[Symbol.iterator]() {
     const { context: { models, messages }, signal } = yield* reflect
@@ -12,6 +13,6 @@ export const stream: Iterable<Rune<LEvent>, ReadableStream<string>> = {
     LiminalAssertionError.assert(model)
     const requestId = crypto.randomUUID()
     yield* emit(new InferenceRequested(requestId))
-    return yield* continuation("stream", () => model.seal({ messages, signal }).stream())
+    return yield* continuation("stream", model.seal({ messages, signal }).stream)
   },
 }

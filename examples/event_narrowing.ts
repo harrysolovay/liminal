@@ -1,5 +1,5 @@
 import { EventBase, L, LEvent } from "liminal"
-import { gpt4oMini } from "./_models.ts"
+import { gpt4oMini } from "./_common.ts"
 
 const SomethingTag = Symbol()
 class Something extends EventBase(SomethingTag, "something") {}

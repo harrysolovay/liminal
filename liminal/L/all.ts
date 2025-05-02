@@ -6,6 +6,10 @@ import { Strand } from "../Strand.ts"
 import { continuation } from "./continuation.ts"
 import { reflect } from "./reflect.ts"
 
+/**
+ * Runs multiple definitions in parallel and collects their results.
+ * Can be used with an array or object of definitions.
+ */
 export function all<A extends Array<Definition>>(
   definitions: A,
   context?: Context,
