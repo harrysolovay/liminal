@@ -7,6 +7,7 @@ import type { Rune } from "../Rune.ts"
 import { Strand } from "../Strand.ts"
 import type { Tool } from "../Tool.ts"
 
+/** Configuration options for running a definition. */
 export interface RunConfig<Y extends Rune<any>> {
   handler?: Handler<Y> | undefined
   models?: ModelRegistry | undefined

@@ -7,6 +7,10 @@ import { reflect } from "./reflect.ts"
 
 export { catch_ as catch }
 
+/**
+ * Error handling utility that catches exceptions from running a definition.
+ * Returns a result object indicating whether the operation succeeded or failed.
+ */
 function* catch_<Y extends Rune<any>, T>(
   definition: Definition<Y, T>,
 ): Generator<Rune<LEvent> | Rune<Y>, CatchResult<T>> {

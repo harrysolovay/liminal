@@ -1,7 +1,6 @@
 export * from "./all.ts"
 export * from "./assistant.ts"
 export * from "./catch.ts"
-export * from "./context.ts"
 export * from "./continuation.ts"
 export * from "./emit.ts"
 export * from "./infer.ts"

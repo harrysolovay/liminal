@@ -6,26 +6,53 @@ import { StrandStatusChanged } from "./LEvent.ts"
 import type { Rune } from "./Rune.ts"
 import { attachCustomInspect } from "./util/attachCustomInspect.ts"
 
+/** Configuration options for creating a new Strand. */
 export interface StrandConfig {
+  /** Optional parent strand that this strand will be a child of */
   parent?: Strand | undefined
+  /** Optional context for the strand execution */
   context?: Context | undefined
+  /** Optional abort signal that can be used to cancel strand execution */
   signal?: AbortSignal | undefined
 }
 
 let nextIndex: number = 0
 
+/**
+ * A "Strand" is the core unit of execution in Liminal.
+ *
+ * It represents a suspendable computation that can yield Runes to control conversation state.
+ * Strands implement both the Iterable and PromiseLike interfaces to enable both
+ * running (via awaiting) and joining to parent strands (via yielding).
+ *
+ * Strands maintain their own state and can be hierarchically organized with parent-child
+ * relationships. Child strands are bound to their parents, ensuring consistent
+ * cancellation behavior.
+ *
+ * @template Y The type of Runes this Strand can yield.
+ * @template T The result type of the Strand.
+ */
 export class Strand<Y extends Rune<any> = Rune<any>, T = any> implements Iterable<Y, T>, PromiseLike<T> {
   declare T: T
   declare Y: Y
 
+  /** Controls abort signal propagation. */
   readonly #controller: AbortController = new AbortController()
+  /** Signal that can be used to detect when this strand is aborted. */
   readonly signal: AbortSignal = this.#controller.signal
+  /** Optional event handler function. */
   #handle?: ((this: Strand, event: any) => void) | undefined
+  /** The definition (usually via generator function) that powers this strand. */
   #definition: Definition<Y, T>
+  /** Current status of the strand (untouched, pending, resolved, rejected) */
   status: StrandStatus<T> = { type: "untouched" }
+  /** Unique identifier for this strand. */
   readonly index: number = nextIndex++
+  /** Nesting depth in the strand hierarchy. */
   readonly depth: number
+  /** The parent strand or undefined. */
   declare readonly parent?: Strand
+  /** The conversation state with which the strand operates. */
   readonly context: Context
 
   constructor(definition: Definition<Y, T>, config: StrandConfig) {
@@ -185,6 +212,7 @@ export class Strand<Y extends Rune<any> = Rune<any>, T = any> implements Iterabl
       case "config_signal_aborted":
       case "parent_aborted":
       case "continuation_exception_thrown":
+      // case "model_error":
       case "handler_exception_thrown": {
         return Promise.reject(new StrandRejectedError(status))
       }
@@ -230,8 +258,6 @@ export namespace StrandStatus {
     | Rejected.ContinuationExceptionThrown
     | Rejected.HandlerExceptionThrown
   // | Rejected.ModelError
-  // | Rejected.ValidationError
-  // | Rejected.Timeout
   export namespace Rejected {
     export interface ConfigSignalAborted {
       type: "config_signal_aborted"
@@ -249,5 +275,10 @@ export namespace StrandStatus {
       type: "handler_exception_thrown"
       exception: unknown
     }
+    // export interface ModelError {
+    //   type: "model_error"
+    //   model: string
+    //   error: unknown
+    // }
   }
 }

@@ -5,6 +5,10 @@ import type { Rune } from "../Rune.ts"
 import { emit } from "./emit.ts"
 import { reflect } from "./reflect.ts"
 
+/**
+ * Registers a model in the current context and emits a model registration event.
+ * Returns the registered model instance.
+ */
 export function* model(model: Model): Generator<Rune<LEvent>, Model> {
   const { context: { models } } = yield* reflect
   models.register(model)
