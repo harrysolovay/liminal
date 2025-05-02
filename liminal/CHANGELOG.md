@@ -1,5 +1,11 @@
 # liminal
 
+## 0.5.15
+
+### Patch Changes
+
+- 9c276c3: Fix message list cloning, add streaming to ollama adapter.
+
 ## 0.5.14
 
 ### Patch Changes
