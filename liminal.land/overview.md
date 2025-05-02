@@ -1,5 +1,9 @@
 # Overview <Badge type="warning" text="beta" />
 
+> Liminal is in active development. See
+> [the roadmap](https://github.com/harrysolovay/liminal/issues/319) for more
+> information.
+
 Liminal provides building blocks for modeling conversations between language
 models.
 

@@ -64,6 +64,11 @@ export default defineConfig({
         target: "blank",
       },
       {
+        text: "Roadmap",
+        link: "https://github.com/harrysolovay/liminal/issues/319",
+        target: "blank",
+      },
+      {
         text: "Examples",
         link: "https://github.com/harrysolovay/liminal/tree/main/examples",
         target: "blank",
