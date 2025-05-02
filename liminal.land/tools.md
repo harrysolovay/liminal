@@ -1,32 +1,16 @@
 # Liminal Tools <Badge type="warning" text="beta" />
 
-## Prerequisite
-
-Schema
-
-## Compile Type
+## Make Tool
 
 ```ts
 const mathTool = await Tool.make(
   "A tool for evaluating mathematical expressions.",
-  type({
-    expression: "string[]",
-  }),
-  ({ expression }) => mathjs.evaluate(expression),
+  L.array(L.string),
+  mathjs.evaluate,
 )
 ```
 
-## Using ArkType
-
-```ts
-const mathTool = await Tool.make(
-  "A tool for evaluating mathematical expressions.",
-  type({
-    expression: "string[]",
-  }),
-  ({ expression }) => mathjs.evaluate(expression),
-)
-```
+## Use Tool
 
 ```ts
 import { type } from "arktype"

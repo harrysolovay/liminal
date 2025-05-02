@@ -19,6 +19,7 @@ ljson
 llms
 llmstxt
 logit
+mastra
 metaarray
 metaatom
 metaobject
@@ -26,6 +27,7 @@ metatype
 metatypes
 metatyping
 moderations
+multiagent
 multistep
 nullary
 ollama
@@ -39,9 +41,11 @@ shikijs
 shoutout
 solovay
 strandard
+subconversations
 subscope
 supabase
 theaetetus
+thenning
 tmpfs
 topk
 tsdocs

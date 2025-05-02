@@ -6,7 +6,7 @@ prev: false
 
 ## Installation
 
-Install Liminal with your package manager of choice.
+Install `liminal` with your JavaScript package manager of choice.
 
 ::: code-group
 
@@ -15,26 +15,58 @@ npm install liminal
 ```
 
 ```bash [bun]
-bun install liminal
+bun install liminal liminal-openai
 ```
 
 ```bash [deno]
-deno add npm:liminal
+deno add npm:liminal npm:liminal-openai
 ```
 
 ```bash [pnpm]
-pnpm install liminal
+pnpm install liminal liminal-openai
 ```
 
 ```bash [yarn]
-yarn add liminal
+yarn add liminal liminal-openai
 ```
 
 :::
 
-## First Steps
+Also install the adapter for your client of choice. Current options include
+OpenAI, Ollama and the Vercel AI SDK (see
+[the adapter documentation](./models.md)).
 
-### Example Problem
+## API Overview
+
+```ts
+import { L } from "liminal"
+import { adapter } from "liminal-openai"
+
+const reply = await L.run(function*() {
+  // Set the model.
+  yield* L.model(adapter("gpt-4o-mini"))
+
+  // Append a system message.
+  yield* L.system`<system-message-here>`
+
+  // Append a user message.
+  yield* L.user`<user-message-here>`
+
+  // Trigger an assistant reply.
+  const modelReply = yield* L.assistant
+
+  return modelReply
+})
+
+reply satisfies string
+```
+
+Within the generator function scope, we can yield these `L`-namespaced
+directives (called "[runes](./strands.md#runes)"). These statements allow us to
+control the underlying conversation state without manually managing structures
+such as conversation lists and toolboxes.
+
+## Use Case Example
 
 Let's consider a function that validates an email. Our initial implementation
 may look as follows.

@@ -5,12 +5,12 @@ import { attachCustomInspect } from "./util/attachCustomInspect.ts"
 
 export class Model {
   constructor(
-    readonly vendor: string,
+    readonly client: string,
     readonly seal: (envelope: Envelope) => SealedEnvelope,
   ) {}
 
   static {
-    attachCustomInspect(this, ({ vendor }) => ({ vendor }))
+    attachCustomInspect(this, ({ client }) => ({ client }))
   }
 }
 
