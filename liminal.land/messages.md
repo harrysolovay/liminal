@@ -46,7 +46,7 @@ we can use to append messages to the strand's message list.
 function* g() {
   yield* L.system`Message A.`
   yield* L.user`Message B.`
-  yield* L.assistant`Message C.`
+  yield* L.assistant
 }
 ```
 
@@ -65,7 +65,7 @@ be appended to its message list.
   },
   {
     "role": "assistant",
-    "content": "Message C."
+    "content": "..."
   }
 ]
 ```

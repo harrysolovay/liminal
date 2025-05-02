@@ -76,8 +76,8 @@ export default defineConfig({
       {
         text: "Introduction",
         items: [
-          { text: "Why?", link: "/why" },
-          { text: "Quickstart", link: "/getting_started" },
+          { text: "Overview", link: "/overview" },
+          { text: "Quickstart", link: "/start" },
           { text: "Strands", link: "/strands" },
         ],
       },
@@ -87,10 +87,10 @@ export default defineConfig({
           { text: "Messages", link: "/messages" },
           { text: "Models", link: "/models" },
           { text: "Tools", link: "/tools" },
-          { text: "Events", link: "/events" },
-          { text: "Schemas", link: "/schemas" },
+          // { text: "Events", link: "/events" },
+          // { text: "Schemas", link: "/schemas" },
           // { text: "State", link: "/state" },
-          { text: "Testing", link: "/testing" },
+          // { text: "Testing", link: "/testing" },
         ],
       },
       // {

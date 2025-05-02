@@ -3,16 +3,16 @@ layout: home
 title: Liminal
 hero:
   name: Liminal
-  text: Conversation Trees
-  image: /liminal_puzzle.png
-  tagline: Reusable, branchable, self-evolving conversations between language models.
+  text: Conversation Architecture
+  image: /liminal_tree.png
+  tagline: Reusable, branchable, self-evolving conversations.
   actions:
     - theme: brand
-      text: Getting Started
-      link: /getting_started
+      text: Quickstart
+      link: /start
     - theme: alt
-      text: Why Though?
-      link: /why
+      text: Overview
+      link: /overview
 features:
   - icon:
       src: /iconoir--chat-bubble-check.svg
@@ -30,6 +30,3 @@ features:
     details: Infer the static types of the events emitted from within a strand and its descendants.
     link: /events
 ---
-
-<br />
-<br />

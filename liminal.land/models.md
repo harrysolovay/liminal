@@ -1,6 +1,20 @@
-# Liminal Declaration <Badge type="warning" text="beta" />
+# Liminal Models <Badge type="warning" text="beta" />
 
-## AI SDK
+Focus a model anytime with `L.model`. The specified client adapter will be used
+for subsequent inference.
+
+```ts
+import { openai } from "liminal-openai"
+
+function* g() {
+  yield* L.model(openai("gpt-4o-mini"))
+  yield* L.infer // uses 4o mini
+  yield* L.model(openai("o4-mini-high"))
+  yield* L.infer // uses 4o mini high
+}
+```
+
+## AI SDK Integration
 
 ```ts
 import { openai } from "@ai-sdk/openai"
@@ -12,7 +26,7 @@ function* g() {
 }
 ```
 
-## Ollama
+## Ollama Integration
 
 ```ts
 import { L } from "liminal"
@@ -20,17 +34,6 @@ import { ollama } from "liminal-ollama"
 
 function* g() {
   yield* L.model(ollama("gemma3:1b"))
-}
-```
-
-## OpenAI
-
-```ts
-import { L } from "liminal"
-import { ollama } from "liminal-openai"
-
-function* g() {
-  yield* L.model(openai("gpt-4o-mini"))
 }
 ```
 
@@ -45,7 +48,7 @@ type YourConfig = any
 
 export function adapter(config: YourConfig): Model {
   return new Model(
-    "your_vendor_name",
+    "your_client_name",
     ({ messages, schema }) => {
       return {
         resolve() {
