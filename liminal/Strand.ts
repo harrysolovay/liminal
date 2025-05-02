@@ -150,22 +150,22 @@ export class Strand<Y extends Rune<any> = Rune<any>, T = any> implements Iterabl
         let current = await iterator.next()
         while (!current.done) {
           const rune = current.value
-          const { value } = rune
+          const { instruction: value } = rune
           switch (value.kind) {
             case "reflect": {
               nextArg = this
               break
             }
-            case "continuation": {
+            case "continue": {
               nextArg = await value.f()
               break
             }
-            case "event": {
+            case "emit": {
               this.#handle?.(value.event)
               nextArg = undefined
               break
             }
-            case "child": {
+            case "create_child": {
               nextArg = await new Strand(value.definition, {
                 parent: this,
                 context: value.context ?? this.context.clone(),

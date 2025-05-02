@@ -1,5 +1,5 @@
 import { L } from "liminal"
-import { gpt4oMini } from "./_models.ts"
+import { gpt4oMini } from "./_common.ts"
 
 const LANGUAGE = "typescript"
 const TEXT = "I love you!"

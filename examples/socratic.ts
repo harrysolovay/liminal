@@ -1,6 +1,6 @@
 import { L } from "liminal"
 import { socratic } from "liminal-strands"
-import { gpt4oMini } from "./_models.ts"
+import { gpt4oMini } from "./_common.ts"
 
 await L.run(
   function*() {

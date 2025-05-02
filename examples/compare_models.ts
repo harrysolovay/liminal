@@ -1,5 +1,5 @@
 import { L } from "liminal"
-import { gemma3, gpt4o, gpt4oMini, o1Mini } from "./_models.ts"
+import { gemma3, gpt4o, gpt4oMini, o1Mini } from "./_common.ts"
 
 await L.run(
   function*() {

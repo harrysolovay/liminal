@@ -1,6 +1,6 @@
 import { L, Tool } from "liminal"
 import * as mathjs from "mathjs"
-import { gpt4oMini } from "./_models.ts"
+import { gpt4oMini } from "./_common.ts"
 
 const mathTool = await Tool.make(
   "A tool for evaluating mathematical expressions.",

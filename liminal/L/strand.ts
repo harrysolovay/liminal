@@ -13,8 +13,8 @@ export function* strand<Y extends Rune<any>, T>(
 ): Generator<Rune<LEvent>, T> {
   return yield {
     [RuneKey]: true,
-    value: {
-      kind: "child",
+    instruction: {
+      kind: "create_child",
       definition,
       context,
     },
