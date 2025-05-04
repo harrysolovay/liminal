@@ -1,13 +1,13 @@
 import { openai } from "@ai-sdk/openai"
-import { LEvent, Model } from "liminal"
+import { Adapter, LEvent } from "liminal"
 import { adapter as aiAdapter } from "liminal-ai"
 import { adapter as ollamaAdapter } from "liminal-ollama"
 
-export const gpt4o: Model = aiAdapter(openai("gpt-4o-mini", { structuredOutputs: true }))
-export const gpt4oMini: Model = aiAdapter(openai("gpt-4o-mini", { structuredOutputs: true }))
-export const o1Mini: Model = aiAdapter(openai("o1-mini"))
-export const gemma3: Model = ollamaAdapter("gemma3:1b")
-export const mistralSmall31: Model = ollamaAdapter("mistral-small3.1")
+export const gpt4o: Adapter = aiAdapter(openai("gpt-4o-mini", { structuredOutputs: true }))
+export const gpt4oMini: Adapter = aiAdapter(openai("gpt-4o-mini", { structuredOutputs: true }))
+export const o1Mini: Adapter = aiAdapter(openai("o1-mini"))
+export const gemma3: Adapter = ollamaAdapter("gemma3:1b")
+export const mistralSmall31: Adapter = ollamaAdapter("mistral-small3.1")
 
 export function handler(event: any) {
   if (LEvent.is(event)) {

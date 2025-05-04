@@ -6,7 +6,7 @@ const TEXT = "I love you!"
 
 const result = await L.run(
   function*() {
-    yield* L.model(gpt4oMini)
+    yield* L.focus(gpt4oMini)
     yield* L
       .system`You are an expert literary translator. Translate the supplied text to the specified target language, preserving tone and cultural nuances.`
     yield* L.user`Target language: ${LANGUAGE}`

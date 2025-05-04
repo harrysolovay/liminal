@@ -11,8 +11,6 @@ models.
 these definitions, Liminal manages underlying state such as the list of
 messages.
 
-**We reason about function control flow and narrative development as one.**
-
 ```ts
 import { L } from "liminal"
 
@@ -30,6 +28,9 @@ function* g() {
   return inference
 }
 ```
+
+> [!NOTE] We reason about function control flow and narrative development as
+> one.
 
 ## State Management
 

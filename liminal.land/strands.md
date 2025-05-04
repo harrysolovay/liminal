@@ -31,7 +31,7 @@ declare const YourModel: Model
 
 // ---cut---
 function* g() {
-  yield* L.model(YourModel)
+  yield* L.adapter(YourModel)
 
   // For appending a user-role message to the conversation.
   yield* L.user`User message here.`
@@ -210,7 +210,7 @@ The following is a non-exhaustive list of Liminal's core runes.
 
 | Factory       | Description                                                                            | Returns                                     |
 | ------------- | -------------------------------------------------------------------------------------- | ------------------------------------------- |
-| `L.model`     | Push a new model to the model stack.                                                   | `Model`                                     |
+| `L.adapter`   | Push a new conversation adapter to the stack.                                          | `Adapter`                                   |
 | `L.system`    | Append a system-role message to the message list.                                      | `void`                                      |
 | `L.user`      | Append a user-role message to the message list.                                        | `void`                                      |
 | `L.assistant` | Append an assistant-role message to the message list.                                  | `void`                                      |

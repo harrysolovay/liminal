@@ -43,8 +43,8 @@ import { L } from "liminal"
 import { adapter } from "liminal-openai"
 
 const reply = await L.run(function*() {
-  // Set the model.
-  yield* L.model(adapter("gpt-4o-mini"))
+  // Focus the model's adapter.
+  yield* L.focus(adapter("gpt-4o-mini"))
 
   // Append a system message.
   yield* L.system`<system-message-here>`
@@ -95,7 +95,7 @@ import { openai } from "liminal-openai"
 export async function validateEmail(email: string) {
   return await L.strand(function*() {
     if (!EMAIL_REGEX.test(email)) {
-      yield* L.model(openai("gpt-4o-mini")) // 1. Specify the language model.
+      yield* L.focus(openai("gpt-4o-mini")) // 1. Specify the language model.
       yield* L.user`Why is the following email is invalid?: "${email}".` // 2. Ask a question.
       const error = yield* L.assistant // 3. Infer the answer.
       return { error }

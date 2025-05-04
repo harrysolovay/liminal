@@ -5,7 +5,7 @@ import { gpt4oMini } from "./_common.ts"
 
 await L.run(
   function*() {
-    yield* L.model(gpt4oMini)
+    yield* L.focus(gpt4oMini)
 
     return yield* expand({
       input: `

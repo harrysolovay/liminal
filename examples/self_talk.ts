@@ -3,7 +3,7 @@ import { gemma3, handler } from "./_common.ts"
 
 await L.run(
   function*() {
-    yield* L.model(gemma3)
+    yield* L.focus(gemma3)
     yield* L.system`
       When an instruction is given, don't ask any follow-up questions.
       Just reply to the best of your ability given the information you have.

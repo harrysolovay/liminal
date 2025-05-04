@@ -102,11 +102,11 @@ messages to a given model, they are transformed into the Model-specific format.
 
 ```ts
 function* g() {
-  yield* L.model(ai(openai("gpt-4o-mini")))
+  yield* L.focus(ai(openai("gpt-4o-mini")))
   yield* L.user`User message A.`
   yield* L.assistant
 
-  yield* L.model(xai("grok-3-mini-beta"))
+  yield* L.focus(xai("grok-3-mini-beta"))
   yield* L.user`User message B.`
   yield* L.assistant
 }

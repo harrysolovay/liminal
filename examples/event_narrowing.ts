@@ -17,7 +17,7 @@ await L.run(g, {
 })
 
 function* g() {
-  yield* L.model(gpt4oMini)
+  yield* L.focus(gpt4oMini)
   yield* L.user`Tell me a joke.`
   yield* L.assistant
   yield* L.emit("event-root")

@@ -11,7 +11,7 @@ const Activity = L.object({
 
 await L.run(
   function*() {
-    yield* L.model(gpt4oMini)
+    yield* L.focus(gpt4oMini)
     yield* L.system`When you are asked a question, answer without asking for clarification.`
     yield* L.user`I'm planning a trip to florida and want a suggestion for a fun activity.`
     let i = 0

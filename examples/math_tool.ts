@@ -11,7 +11,7 @@ const mathTool = await Tool.make(
 const tools = new Set([mathTool])
 
 const answer = await L.run(function*() {
-  yield* L.model(gpt4oMini)
+  yield* L.focus(gpt4oMini)
   yield* L.user`
     A taxi driver earns $9461 per 1-hour of work. If he works 12 hours a day and in 1 hour
     he uses 12 liters of petrol with a price  of $134 for 1 liter. How much money does he earn in one day?
