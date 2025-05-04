@@ -26,12 +26,12 @@ We yield "Runes" which instruct Liminal how to manage the conversation state and
 interact with language models.
 
 ```ts twoslash
-import { L, Model } from "liminal"
-declare const YourModel: Model
+import { Adapter, L } from "liminal"
+declare const adapter: Adapter
 
 // ---cut---
 function* g() {
-  yield* L.adapter(YourModel)
+  yield* L.focus(adapter)
 
   // For appending a user-role message to the conversation.
   yield* L.user`User message here.`
