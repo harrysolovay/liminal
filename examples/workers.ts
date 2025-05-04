@@ -25,7 +25,7 @@ const IMPLEMENTATION_PROMPTS = {
 }
 
 await L.run(function*() {
-  yield* L.model(adapter(openai("gpt-4o-mini", {
+  yield* L.focus(adapter(openai("gpt-4o-mini", {
     structuredOutputs: true,
   })))
   yield* L.system`You are a senior software architect planning feature implementations.`

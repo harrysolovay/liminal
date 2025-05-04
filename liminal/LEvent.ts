@@ -1,15 +1,15 @@
+import type { Adapter } from "./Adapter.ts"
 import { EventBase } from "./EventBase.ts"
 import type { Message } from "./Message.ts"
-import type { Model } from "./Model.ts"
 import type { Schema } from "./Schema.ts"
 import type { StrandStatus } from "./Strand.ts"
 
 export type LEvent =
-  | StrandStatusChanged
+  | AdapterFocused
   | InferenceRequested
   | Inferred
   | MessageAppended
-  | ModelRegistered
+  | StrandStatusChanged
 
 export namespace LEvent {
   export function is(value: unknown): value is LEvent {
@@ -20,8 +20,8 @@ export namespace LEvent {
 export const LEventTag: unique symbol = Symbol.for("liminal/LEvent")
 export type LEventTag = typeof LEventTag
 
-export class ModelRegistered extends EventBase(LEventTag, "model_registered") {
-  constructor(readonly model: Model) {
+export class AdapterFocused extends EventBase(LEventTag, "adapter_focused") {
+  constructor(readonly adapter: Adapter) {
     super()
   }
 }

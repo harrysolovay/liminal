@@ -1,4 +1,4 @@
-import { LiminalAssertionError, Model } from "liminal"
+import { Adapter, LiminalAssertionError } from "liminal"
 import { env } from "node:process"
 
 export type InceptionModel = "mercury-coder-small"
@@ -7,8 +7,8 @@ export interface AdapterConfig {
   INCEPTION_API_KEY?: string
 }
 
-export function adapter(model: InceptionModel, config?: AdapterConfig): Model {
-  return new Model(
+export function adapter(model: InceptionModel, config?: AdapterConfig): Adapter {
+  return new Adapter(
     "openai",
     ({ messages, signal }) => {
       return {

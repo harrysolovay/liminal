@@ -1,5 +1,4 @@
 import { InferenceRequested, Inferred, type LEvent } from "../LEvent.ts"
-import { LiminalAssertionError } from "../LiminalAssertionError.ts"
 import type { Rune } from "../Rune.ts"
 import { Schema } from "../Schema.ts"
 import { continuation } from "./continuation.ts"
@@ -11,9 +10,8 @@ import { reflect } from "./reflect.ts"
  * Emits inference-related events and returns the model's response as a string.
  */
 export function* infer(schema?: Schema): Generator<Rune<LEvent>, string> {
-  const { context: { models, messages }, signal } = yield* reflect
-  const model = models.peek()
-  LiminalAssertionError.assert(model)
+  const { context: { adapters: models, messages }, signal } = yield* reflect
+  const model = models.ensure()
   const requestId = crypto.randomUUID()
   yield* emit(new InferenceRequested(requestId, schema))
   let inference = yield* continuation(

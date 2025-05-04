@@ -1,7 +1,6 @@
 # Liminal Events <Badge type="warning" text="beta" />
 
-> [!WARNING] This portion of the documentation needs a rewrite. It's visible
-> solely for curiosity's sake.
+> [!WARNING] This portion of the documentation needs a rewrite.
 
 Yield events from your conversation definition.
 

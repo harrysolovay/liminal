@@ -27,7 +27,7 @@
 // })
 
 // export function* storyWorld(initialSeed?: string): Generator<Rune, any> {
-//   yield* L.model(gpt4o)
+//   yield* L.focus(gpt4o)
 //   yield* L.user`The world-building begins.`
 
 //   // Get the initial world seed from user if not provided
@@ -133,7 +133,7 @@
 // if (import.meta.main) {
 //   await L.record(
 //     function*() {
-//       yield* L.model(gpt4o)
+//       yield* L.focus(gpt4o)
 //       return yield* storyWorld()
 //     },
 //     {

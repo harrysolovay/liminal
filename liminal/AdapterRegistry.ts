@@ -1,26 +1,36 @@
-import type { Model } from "./Model.ts"
+import type { Adapter } from "./Adapter.ts"
+import { LiminalAssertionError } from "./LiminalAssertionError.ts"
 
 /**
  * An intrusive doubly-linked list for storing `Model`s.
  * Provides efficient insertion, removal, and lookups.
  */
-export class ModelRegistry {
+export class AdapterRegistry {
   declare head?: ModelRegistryNode | undefined
   declare tail?: ModelRegistryNode | undefined
 
   /** Returns the most recently registered model */
   peek() {
-    return this.tail?.model
+    return this.tail?.adapter
+  }
+
+  /** Ensure */
+  ensure(): Adapter {
+    LiminalAssertionError.assert(
+      this.tail,
+      "No conversation adapter registered. Use `L.focus` to focus a conversation adapter.",
+    )
+    return this.tail.adapter
   }
 
   /**
    * Registers a new model and returns the created node
    * @param value The model to register
    */
-  register(value: Model): ModelRegistryNode {
+  register(value: Adapter): ModelRegistryNode {
     const node: ModelRegistryNode = {
       prev: this.tail,
-      model: value,
+      adapter: value,
     }
     if (this.tail) {
       this.tail.next = node
@@ -51,10 +61,10 @@ export class ModelRegistry {
 
   /** Creates a deep copy of this registry. */
   clone() {
-    const instance = new ModelRegistry()
+    const instance = new AdapterRegistry()
     for (let node = this.head; node; node = node.next) {
-      if (node.model) {
-        instance.register(node.model)
+      if (node.adapter) {
+        instance.register(node.adapter)
       }
     }
     return instance
@@ -63,6 +73,6 @@ export class ModelRegistry {
 
 export interface ModelRegistryNode {
   prev: ModelRegistryNode | undefined
-  model: Model
+  adapter: Adapter
   next?: ModelRegistryNode | undefined
 }

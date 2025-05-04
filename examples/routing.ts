@@ -11,7 +11,7 @@ const USE_CLASSIFICATION_PROMPTS = {
 
 await L.run(
   function*() {
-    yield* L.model(gpt4oMini)
+    yield* L.focus(gpt4oMini)
     const classification = yield* L.strand(
       function*() {
         yield* L.system`
@@ -34,7 +34,7 @@ await L.run(
     const response = yield* L.strand(function*() {
       yield* L.system(USE_CLASSIFICATION_PROMPTS[classification.type])
       if (classification.complexity === "complex") {
-        yield* L.model(o1Mini)
+        yield* L.focus(o1Mini)
       }
       return yield* L.assistant
     })

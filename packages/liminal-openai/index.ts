@@ -1,4 +1,4 @@
-import { LiminalAssertionError, Model, Schema } from "liminal"
+import { Adapter, LiminalAssertionError, Schema } from "liminal"
 import { OpenAI } from "openai"
 import type { ResponsesModel } from "openai/resources.mjs"
 import type { ResponseInputContent, ResponseInputItem } from "openai/resources/responses/responses.js"
@@ -7,8 +7,8 @@ export interface AdapterConfig {
   client?: OpenAI
 }
 
-export function adapter(model: ResponsesModel, config?: AdapterConfig): Model {
-  return new Model(
+export function adapter(model: ResponsesModel, config?: AdapterConfig): Adapter {
+  return new Adapter(
     "openai",
     ({ messages, schema, signal }) => {
       return {

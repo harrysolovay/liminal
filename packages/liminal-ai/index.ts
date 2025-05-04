@@ -8,10 +8,10 @@ import {
   streamText,
   tool as aiTool,
 } from "ai"
-import { LiminalAssertionError, type Message, Model } from "liminal"
+import { Adapter, LiminalAssertionError, type Message } from "liminal"
 
-export function adapter(model: LanguageModelV1): Model {
-  return new Model(
+export function adapter(model: LanguageModelV1): Adapter {
+  return new Adapter(
     "ai-sdk",
     ({ messages, schema: lSchema, signal, tools: lTools }) => {
       const tools = Object.fromEntries(

@@ -44,7 +44,7 @@ import { adapter } from "liminal-ollama"
 await L.run(
   function*() {
     // Kick off the conversation.
-    yield* L.model(adapter("gemma3:1b"))
+    yield* L.focus(adapter("gemma3:1b"))
     yield* L.user`Decide on a topic for us to discuss.`
     yield* L.assistant
 

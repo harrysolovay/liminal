@@ -1,4 +1,4 @@
-import { LiminalAssertionError, Model } from "liminal"
+import { Adapter, LiminalAssertionError } from "liminal"
 import { type Message, Ollama } from "ollama"
 
 /**
@@ -7,8 +7,8 @@ import { type Message, Ollama } from "ollama"
  * @param client Optional Ollama client instance (creates a new one if not provided)
  * @returns A Liminal Model that can be used with the Liminal runtime
  */
-export function adapter(model: string, client: Ollama = new Ollama()): Model {
-  return new Model(
+export function adapter(model: string, client: Ollama = new Ollama()): Adapter {
+  return new Adapter(
     "ollama",
     ({ messages, schema }) => {
       return {

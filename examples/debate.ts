@@ -4,7 +4,7 @@ import { mistralSmall31 } from "./_common.ts"
 
 const result = await L.run(
   function*() {
-    yield* L.model(mistralSmall31)
+    yield* L.focus(mistralSmall31)
     return yield* debate({
       topic: "Should we use AI to write code?",
     })

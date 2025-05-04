@@ -1,18 +1,7 @@
 # Liminal Models <Badge type="warning" text="beta" />
 
-Focus a model anytime with `L.model`. The specified client adapter will be used
+Focus a model adapter with `L.focus`. The specified client adapter will be used
 for subsequent inference.
-
-```ts
-import { openai } from "liminal-openai"
-
-function* g() {
-  yield* L.model(openai("gpt-4o-mini"))
-  yield* L.infer // uses 4o mini
-  yield* L.model(openai("o4-mini-high"))
-  yield* L.infer // uses 4o mini high
-}
-```
 
 ## AI SDK Integration
 
@@ -22,7 +11,7 @@ import { L } from "liminal"
 import { ai } from "liminal-ai"
 
 function* g() {
-  yield* L.model(ai(openai("gpt-4o-mini")))
+  yield* L.focus(ai(openai("gpt-4o-mini")))
 }
 ```
 
@@ -33,7 +22,20 @@ import { L } from "liminal"
 import { ollama } from "liminal-ollama"
 
 function* g() {
-  yield* L.model(ollama("gemma3:1b"))
+  yield* L.focus(ollama("gemma3:1b"))
+}
+```
+
+## Switch Models
+
+```ts
+import { adapter } from "liminal-ollama"
+
+function* g() {
+  yield* L.focus(adapter("gpt-4o-mini"))
+  yield* L.assistant // uses 4o mini
+  yield* L.focus(adapter("o4-mini-high"))
+  yield* L.assistant // uses 4o mini high
 }
 ```
 

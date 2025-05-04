@@ -3,14 +3,14 @@ import type { SchemaObject } from "./Schema.ts"
 import type { Tool } from "./Tool.ts"
 import { attachCustomInspect } from "./util/attachCustomInspect.ts"
 
-export class Model {
+export class Adapter {
   constructor(
-    readonly client: string,
+    readonly name: string,
     readonly seal: (envelope: Envelope) => SealedEnvelope,
   ) {}
 
   static {
-    attachCustomInspect(this, ({ client }) => ({ client }))
+    attachCustomInspect(this, ({ name }) => ({ name }))
   }
 }
 

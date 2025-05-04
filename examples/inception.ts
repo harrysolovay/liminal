@@ -3,7 +3,7 @@ import { adapter } from "liminal-inception"
 
 await L.run(
   function*() {
-    yield* L.model(adapter("mercury-coder-small"))
+    yield* L.focus(adapter("mercury-coder-small"))
     yield* L.system`
       When an instruction is given, don't ask any follow-up questions.
       Just reply to the best of your ability given the information you have.

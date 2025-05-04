@@ -7,7 +7,7 @@ const LMH = L.enum("lower", "medium", "high")
 
 const result = await L.run(
   async function*() {
-    yield* L.model(gpt4oMini)
+    yield* L.focus(gpt4oMini)
     const code = await readFile(fileURLToPath(import.meta.url), "utf-8")
     yield* L.system`You are a technical lead summarizing multiple code reviews. Review the supplied code.`
     yield* L.user(code)

@@ -1,6 +1,6 @@
+import { AdapterRegistry } from "./AdapterRegistry.ts"
 import type { Handler } from "./Handler.ts"
 import type { Message } from "./Message.ts"
-import { ModelRegistry } from "./ModelRegistry.ts"
 import type { Tool } from "./Tool.ts"
 
 /**
@@ -16,7 +16,7 @@ export interface Context {
   /** Event handler for processing events during strand execution. */
   readonly handler: Handler | undefined
   /** Registry of available models for inference. */
-  readonly models: ModelRegistry
+  readonly adapters: AdapterRegistry
   /** Accumulated message history. */
   readonly messages: Array<Message>
   /** Set of tools available to the models. */
@@ -33,13 +33,13 @@ export interface Context {
 export function Context(context?: Omit<Context, "clone">): Context {
   return {
     handler: context?.handler,
-    models: context?.models?.clone() ?? new ModelRegistry(),
+    adapters: context?.adapters?.clone() ?? new AdapterRegistry(),
     messages: [...(context?.messages ?? [])],
     tools: new Set(context?.tools),
     clone(): Context {
       return {
         handler: this.handler,
-        models: this.models.clone(),
+        adapters: this.adapters.clone(),
         messages: [...this.messages],
         tools: new Set(this.tools),
         clone: this.clone,
