@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "0.5.15",
+  "version": "0.5.16",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",

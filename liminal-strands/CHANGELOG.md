@@ -1,5 +1,14 @@
 # liminal-strands
 
+## 0.0.4
+
+### Patch Changes
+
+- 6e70190: Renaming Model to Adapter and L.model to L.focus
+- Updated dependencies [6e70190]
+  - liminal@0.5.16
+  - liminal-arktype@0.0.8
+
 ## 0.0.3
 
 ### Patch Changes

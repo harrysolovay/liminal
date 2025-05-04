@@ -1,5 +1,13 @@
 # liminal-typebox
 
+## 0.0.8
+
+### Patch Changes
+
+- 6e70190: Renaming Model to Adapter and L.model to L.focus
+- Updated dependencies [6e70190]
+  - liminal@0.5.16
+
 ## 0.0.7
 
 ### Patch Changes

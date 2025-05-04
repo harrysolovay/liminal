@@ -1,5 +1,11 @@
 # liminal
 
+## 0.5.16
+
+### Patch Changes
+
+- 6e70190: Renaming Model to Adapter and L.model to L.focus
+
 ## 0.5.15
 
 ### Patch Changes

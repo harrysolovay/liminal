@@ -1,5 +1,13 @@
 # liminal-zod3
 
+## 0.0.11
+
+### Patch Changes
+
+- 6e70190: Renaming Model to Adapter and L.model to L.focus
+- Updated dependencies [6e70190]
+  - liminal@0.5.16
+
 ## 0.0.10
 
 ### Patch Changes
