@@ -210,7 +210,7 @@ The following is a non-exhaustive list of Liminal's core runes.
 
 | Factory       | Description                                                                            | Returns                                     |
 | ------------- | -------------------------------------------------------------------------------------- | ------------------------------------------- |
-| `L.adapter`   | Push a new conversation adapter to the stack.                                          | `Adapter`                                   |
+| `L.focus`     | Push a new (model) adapter to the stack.                                               | `Adapter`                                   |
 | `L.system`    | Append a system-role message to the message list.                                      | `void`                                      |
 | `L.user`      | Append a user-role message to the message list.                                        | `void`                                      |
 | `L.assistant` | Append an assistant-role message to the message list.                                  | `void`                                      |

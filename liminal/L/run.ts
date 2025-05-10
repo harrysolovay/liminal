@@ -10,7 +10,6 @@ import type { Tool } from "../Tool.ts"
 /** Configuration options for running a definition. */
 export interface RunConfig<Y extends Rune<any>> {
   handler?: Handler<Y> | undefined
-  models?: AdapterRegistry | undefined
   messages?: Array<Message> | undefined
   tools?: Set<Tool> | undefined
   signal?: AbortSignal | undefined
@@ -19,7 +18,7 @@ export interface RunConfig<Y extends Rune<any>> {
 export function run<Y extends Rune<any>, T>(definition: Definition<Y, T>, config?: RunConfig<Y>): Strand<Y, T> {
   const context = Context({
     handler: config?.handler,
-    adapters: config?.models ?? new AdapterRegistry(),
+    adapters: new AdapterRegistry(),
     messages: config?.messages ?? [],
     tools: config?.tools ?? new Set(),
   })

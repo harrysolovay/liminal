@@ -8,11 +8,11 @@ hero:
   tagline: Reusable, branchable, self-evolving conversations.
   actions:
     - theme: brand
-      text: Quickstart
-      link: /start
-    - theme: alt
       text: Overview
       link: /overview
+    - theme: alt
+      text: Quickstart
+      link: /start
 features:
   - icon:
       src: /iconoir--chat-bubble-check.svg

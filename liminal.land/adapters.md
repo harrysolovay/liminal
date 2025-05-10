@@ -1,4 +1,4 @@
-# Liminal Models <Badge type="warning" text="beta" />
+# Liminal (Model) Adapters <Badge type="warning" text="beta" />
 
 Focus a model adapter with `L.focus`. The specified client adapter will be used
 for subsequent inference.
@@ -42,14 +42,14 @@ function* g() {
 ## Creating Adapters
 
 ```ts
-import { Model } from "liminal"
+import { Adapter } from "liminal"
 import { type Message, Ollama } from "ollama"
 
 // Up to you. Could be a union of model name literals.
 type YourConfig = any
 
-export function adapter(config: YourConfig): Model {
-  return new Model(
+export function adapter(config: YourConfig): Adapter {
+  return new Adapter(
     "your_client_name",
     ({ messages, schema }) => {
       return {
