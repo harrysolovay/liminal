@@ -34,7 +34,7 @@ yarn add liminal liminal-openai
 
 Also install the adapter for your client of choice. Current options include
 OpenAI, Ollama and the Vercel AI SDK (see
-[the adapter documentation](./models.md)).
+[the adapter documentation](./adapters.md)).
 
 ## API Overview
 
