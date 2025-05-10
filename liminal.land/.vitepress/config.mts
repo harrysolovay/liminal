@@ -90,7 +90,7 @@ export default defineConfig({
         text: "Conversation",
         items: [
           { text: "Messages", link: "/messages" },
-          { text: "Models", link: "/models" },
+          { text: "Adapters", link: "/adapters" },
           { text: "Tools", link: "/tools" },
           // { text: "Events", link: "/events" },
           // { text: "Schemas", link: "/schemas" },

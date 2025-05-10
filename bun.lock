@@ -79,14 +79,14 @@
     },
     "liminal": {
       "name": "liminal",
-      "version": "0.5.13",
+      "version": "0.5.16",
       "devDependencies": {
         "conditional-type-checks": "^1.0.6",
       },
     },
     "liminal-strands": {
       "name": "liminal-strands",
-      "version": "0.0.2",
+      "version": "0.0.4",
       "dependencies": {
         "liminal": "^0.5.13",
         "liminal-arktype": "^0.0.6",
@@ -112,7 +112,7 @@
     },
     "packages/liminal-ai": {
       "name": "liminal-ai",
-      "version": "0.0.13",
+      "version": "0.0.15",
       "peerDependencies": {
         "ai": "^4.1.61",
         "liminal": "^0.5.13",
@@ -127,7 +127,7 @@
     },
     "packages/liminal-arktype": {
       "name": "liminal-arktype",
-      "version": "0.0.6",
+      "version": "0.0.8",
       "peerDependencies": {
         "arktype": "^2.1.10",
         "liminal": "^0.5.13",
@@ -135,7 +135,7 @@
     },
     "packages/liminal-effect": {
       "name": "liminal-effect",
-      "version": "0.0.6",
+      "version": "0.0.8",
       "peerDependencies": {
         "effect": "^3.13.12",
         "liminal": "^0.5.13",
@@ -143,14 +143,14 @@
     },
     "packages/liminal-inception": {
       "name": "liminal-inception",
-      "version": "0.0.7",
+      "version": "0.0.9",
       "peerDependencies": {
         "liminal": "^0.5.13",
       },
     },
     "packages/liminal-ollama": {
       "name": "liminal-ollama",
-      "version": "0.0.8",
+      "version": "0.0.11",
       "peerDependencies": {
         "liminal": "^0.5.13",
         "ollama": "^0.5.14",
@@ -158,7 +158,7 @@
     },
     "packages/liminal-openai": {
       "name": "liminal-openai",
-      "version": "0.0.7",
+      "version": "0.0.9",
       "peerDependencies": {
         "liminal": "^0.5.13",
         "openai": "^4.95.1",
@@ -166,7 +166,7 @@
     },
     "packages/liminal-typebox": {
       "name": "liminal-typebox",
-      "version": "0.0.6",
+      "version": "0.0.8",
       "peerDependencies": {
         "@sinclair/typebox": "^0.34.33",
         "ajv": "^8.17.1",
@@ -175,7 +175,7 @@
     },
     "packages/liminal-valibot": {
       "name": "liminal-valibot",
-      "version": "0.0.6",
+      "version": "0.0.8",
       "peerDependencies": {
         "@valibot/to-json-schema": "^1.0.0",
         "liminal": "^0.5.12",
@@ -184,7 +184,7 @@
     },
     "packages/liminal-zod3": {
       "name": "liminal-zod3",
-      "version": "0.0.8",
+      "version": "0.0.11",
       "peerDependencies": {
         "liminal": "0.5.13",
         "zod": "^3.24.2",

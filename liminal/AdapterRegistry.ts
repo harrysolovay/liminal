@@ -2,14 +2,14 @@ import type { Adapter } from "./Adapter.ts"
 import { LiminalAssertionError } from "./LiminalAssertionError.ts"
 
 /**
- * An intrusive doubly-linked list for storing `Model`s.
+ * An intrusive doubly-linked list for storing `Adapter`s.
  * Provides efficient insertion, removal, and lookups.
  */
 export class AdapterRegistry {
   declare head?: ModelRegistryNode | undefined
   declare tail?: ModelRegistryNode | undefined
 
-  /** Returns the most recently registered model */
+  /** Returns the most recently registered adapter */
   peek() {
     return this.tail?.adapter
   }
@@ -24,8 +24,8 @@ export class AdapterRegistry {
   }
 
   /**
-   * Registers a new model and returns the created node
-   * @param value The model to register
+   * Registers a new adapter and returns the created node
+   * @param value The adapter to register
    */
   register(value: Adapter): ModelRegistryNode {
     const node: ModelRegistryNode = {
@@ -41,7 +41,7 @@ export class AdapterRegistry {
     return node
   }
 
-  /** Remove a model from the registry. */
+  /** Remove a adapter from the registry. */
   remove(node: ModelRegistryNode) {
     if (node.prev) {
       node.prev.next = node.next
