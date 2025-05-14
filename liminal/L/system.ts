@@ -1,5 +1,6 @@
 import type { LEvent } from "../LEvent.ts"
 import type { Rune } from "../Rune.ts"
+import { fixTemplateStrings } from "../util/fixTemplateStrings.ts"
 import { isTemplateStringsArray } from "../util/isTemplateStringsArray.ts"
 import { message } from "./message.ts"
 
@@ -13,6 +14,6 @@ export function system(
   ...rest: Array<number | string>
 ): Generator<Rune<LEvent>, void> {
   return message("system", [{
-    part: isTemplateStringsArray(e0) ? String.raw(e0, ...rest) : e0,
+    part: isTemplateStringsArray(e0) ? String.raw(fixTemplateStrings(e0), ...rest) : e0,
   }])
 }
