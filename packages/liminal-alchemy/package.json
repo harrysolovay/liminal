@@ -13,6 +13,6 @@
   },
   "peerDependencies": {
     "alchemy": "^0.2.3",
-    "liminal": "^0.5.16"
+    "liminal": "^0.5.17"
   }
 }

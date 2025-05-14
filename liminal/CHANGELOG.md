@@ -1,5 +1,11 @@
 # liminal
 
+## 0.5.17
+
+### Patch Changes
+
+- 5c421c8: Re-add string dedenting for template-fn-style usage of user, system and schema.
+
 ## 0.5.16
 
 ### Patch Changes
