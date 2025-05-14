@@ -1,5 +1,12 @@
 # liminal-zod3
 
+## 0.0.12
+
+### Patch Changes
+
+- Updated dependencies [5c421c8]
+  - liminal@0.5.17
+
 ## 0.0.11
 
 ### Patch Changes
