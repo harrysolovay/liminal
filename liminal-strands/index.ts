@@ -1,5 +1,0 @@
-export * from "./alternatives.ts"
-export * from "./brainstorm.ts"
-export * from "./debate.ts"
-export * from "./expand.ts"
-export * from "./socratic.ts"

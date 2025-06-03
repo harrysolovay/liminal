@@ -1,20 +1,16 @@
 {
   "name": "liminal.land",
+  "private": true,
+  "type": "module",
   "devDependencies": {
-    "@ai-sdk/openai": "^1.3.9",
-    "@shikijs/vitepress-twoslash": "^1.23.1",
+    "@shikijs/vitepress-twoslash": "^3.4.2",
     "@types/markdown-it-footnote": "^3.0.4",
-    "arktype": "^2.1.15",
-    "effect": "^3.14.2",
+    "effect": "^3.16.2",
     "liminal": "workspace:^",
-    "liminal-ai": "workspace:^",
     "markdown-it-footnote": "^4.0.0",
     "markdown-it-steps": "^0.2.0",
-    "valibot": "^1.0.0",
-    "vitepress": "^1.5.0",
-    "vitepress-plugin-llmstxt": "^0.1.0",
-    "zod": "^3.24.2"
-  },
-  "private": true,
-  "type": "module"
+    "valibot": "^1.1.0",
+    "vitepress": "^1.6.3",
+    "vitepress-plugin-llmstxt": "^0.1.0"
+  }
 }

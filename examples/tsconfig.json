@@ -1,13 +1,6 @@
 {
   "extends": "../tsconfig.base",
-  "include": ["."],
+  "include": [".", "../cli.ts"],
   "exclude": [],
-  "references": [
-    { "path": "../liminal" },
-    { "path": "../liminal-strands" },
-    { "path": "../packages/liminal-ai" },
-    { "path": "../packages/liminal-inception" },
-    { "path": "../packages/liminal-ollama" },
-    { "path": "../packages/liminal-openai" }
-  ]
+  "references": [{ "path": "../liminal" }]
 }

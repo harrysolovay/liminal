@@ -1,60 +1,62 @@
-import { L } from "liminal"
-import { readFile } from "node:fs/promises"
-import { fileURLToPath } from "node:url"
-import { gpt4oMini } from "./_common.ts"
+import { Path } from "@effect/platform"
+import { BunPath } from "@effect/platform-bun"
+import { Effect, Schema } from "effect"
+import { L, strand } from "liminal"
+import { provideCommon } from "./_common.ts"
 
-const LMH = L.enum("lower", "medium", "high")
+const Lmh = Schema.Literal("lower", "medium", "high")
 
-const result = await L.run(
-  async function*() {
-    yield* L.focus(gpt4oMini)
-    const code = await readFile(fileURLToPath(import.meta.url), "utf-8")
-    yield* L.system`You are a technical lead summarizing multiple code reviews. Review the supplied code.`
-    yield* L.user(code)
-    const reviews = yield* L.all({
-      security,
-      performance,
-      maintainability,
-    })
-    yield* L.user(JSON.stringify(Object.values(reviews), null, 2))
-    yield* L.user`You are a technical lead summarizing multiple code reviews.`
-    const summary = yield* L.assistant
-    return { reviews, summary }
-  },
-  { handler: console.log },
+const security = L.assistant(Schema.Struct({
+  type: Schema.Literal("security"),
+  vulnerabilities: Schema.Array(Schema.String),
+  riskLevel: Lmh,
+  suggestions: Schema.Array(Schema.String),
+})).pipe(strand({
+  system:
+    `You are an expert in code security. Focus on identifying security vulnerabilities, injection risks, and authentication issues.`,
+  messages: undefined,
+}))
+
+const performance = L.assistant(Schema.Struct({
+  type: Schema.Literal("performance"),
+  issues: Schema.Array(Schema.String),
+  impact: Lmh,
+  optimizations: Schema.Array(Schema.String),
+})).pipe(strand({
+  system:
+    `You are an expert in code performance. Focus on identifying performance bottlenecks, memory leaks, and optimization opportunities.`,
+  messages: undefined,
+}))
+
+const maintainability = L.assistant(Schema.Struct({
+  type: Schema.Literal("maintainability"),
+  concerns: Schema.Array(Schema.String),
+  qualityScore: Schema.Int,
+  recommendations: Schema.Array(Schema.String),
+})).pipe(strand({
+  system: `You are an expert in code quality. Focus on code structure, readability, and adherence to best practices.`,
+  messages: undefined,
+}))
+
+Effect.gen(function*() {
+  const path = yield* Path.Path
+  const code = yield* path.fromFileUrl(new URL(import.meta.url))
+  yield* L.user(code)
+  const reviews = yield* Effect.all({
+    security,
+    performance,
+    maintainability,
+  })
+  yield* L.user(JSON.stringify(Object.values(reviews), null, 2))
+  yield* L.user`You are a technical lead summarizing multiple code reviews.`
+  const summary = yield* L.assistant()
+  return { reviews, summary }
+}).pipe(
+  strand({
+    system: `You are a technical lead summarizing multiple code reviews. Review the supplied code.`,
+    handler: Effect.log,
+  }),
+  provideCommon,
+  Effect.provide(BunPath.layer),
+  Effect.runPromise,
 )
-
-console.log(result)
-
-function* security() {
-  yield* L
-    .system`You are an expert in code security. Focus on identifying security vulnerabilities, injection risks, and authentication issues.`
-  return yield* L.assistant(L.object({
-    type: L.const("security"),
-    vulnerabilities: L.array(L.string),
-    riskLevel: LMH,
-    suggestions: L.array(L.string),
-  }))
-}
-
-function* performance() {
-  yield* L
-    .system`You are an expert in code performance. Focus on identifying performance bottlenecks, memory leaks, and optimization opportunities.`
-  return yield* L.assistant(L.object({
-    type: L.const("performance"),
-    issues: L.array(L.string),
-    impact: LMH,
-    optimizations: L.array(L.string),
-  }))
-}
-
-function* maintainability() {
-  yield* L
-    .system`You are an expert in code quality. Focus on code structure, readability, and adherence to best practices.`
-  return yield* L.assistant(L.object({
-    type: L.const("maintainability"),
-    concerns: L.array(L.string),
-    qualityScore: L.integer,
-    recommendations: L.array(L.string),
-  }))
-}
