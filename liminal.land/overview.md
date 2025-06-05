@@ -104,7 +104,10 @@ const maybeRefine = (initial: string) =>
   Effect.gen(function*() {
     yield* L.user`Does the following text require refinement?: ${initial}`
 
-    if (yield* L.assistant(L.boolean)) {
+    const { needsRefinement } = yield* L.assistant(Schema.Struct({
+      needsRefinement: Schema.Boolean,
+    }))
+    if (needsRefinement) {
       return yield* refine(initial)
     }
     return content
