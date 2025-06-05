@@ -8,7 +8,7 @@ await Effect.gen(function*() {
   yield* L.assistant()
   yield* L.user`Rewrite it in whatever way you think best.`
   const variants = yield* Effect.all({
-    a: L.assistant(),
+    a: L.assistant().pipe(strand()),
     b: L.assistant().pipe(
       strand(),
       Effect.provide(OpenAiLanguageModel.model("gpt-4-turbo")),

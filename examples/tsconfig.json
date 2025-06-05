@@ -1,6 +1,6 @@
 {
   "extends": "../tsconfig.base",
-  "include": [".", "../cli.ts"],
+  "include": ["."],
   "exclude": [],
   "references": [{ "path": "../liminal" }]
 }
