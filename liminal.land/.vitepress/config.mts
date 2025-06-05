@@ -64,11 +64,6 @@ export default defineConfig({
         target: "blank",
       },
       {
-        text: "Roadmap",
-        link: "https://github.com/harrysolovay/liminal/issues/319",
-        target: "blank",
-      },
-      {
         text: "Examples",
         link: "https://github.com/harrysolovay/liminal/tree/main/examples",
         target: "blank",
@@ -83,49 +78,8 @@ export default defineConfig({
         items: [
           { text: "Overview", link: "/overview" },
           { text: "Quickstart", link: "/start" },
-          { text: "Strands", link: "/strands" },
         ],
       },
-      {
-        text: "Conversation",
-        items: [
-          { text: "Messages", link: "/messages" },
-          { text: "Adapters", link: "/adapters" },
-          { text: "Tools", link: "/tools" },
-          // { text: "Events", link: "/events" },
-          // { text: "Schemas", link: "/schemas" },
-          // { text: "State", link: "/state" },
-          // { text: "Testing", link: "/testing" },
-        ],
-      },
-      // {
-      //   text: "Types",
-      //   base: "/types",
-      //   items: [
-      //     { text: "Supported Runtime Types", link: "/integrations" },
-      //     { text: "LSchema", link: "/lschema" },
-      //     {
-      //       text: "Type Factories",
-      //       collapsed: true,
-      //       items: [
-      //         { text: "Preface", link: "/preface" },
-      //         { text: "Intrinsics", link: "/intrinsics" },
-      //         { text: "Utilities", link: "/utilities" },
-      //         { text: "Metatype", link: "/metatypes" },
-      //         { text: "Transforms", link: "/transforms" },
-      //         { text: "Visitation", link: "/visitation" },
-      //       ],
-      //     },
-      //   ],
-      // },
-      // {
-      //   text: "Testing",
-      //   collapsed: true,
-      //   items: [
-      //     { text: "Model Proxy", link: "/model_proxy" },
-      //     { text: "Step-debugging", link: "/step_debugging" },
-      //   ],
-      // },
     ],
   },
   transformHead: ({ pageData: { frontmatter }, siteData }) => {

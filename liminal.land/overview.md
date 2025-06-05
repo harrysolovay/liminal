@@ -6,33 +6,34 @@
 > [the roadmap](https://github.com/harrysolovay/liminal/issues/319) for more
 > information. -->
 
-Liminal provides building blocks for modeling conversations between language
-models.
+Liminal provides building blocks for LLM-guided workflows with
+[Effect](https://effect.website/).
 
-**Conversation definitions are expressed as generator functions.** When we run
-these definitions, Liminal manages underlying state such as the list of
-messages.
+When using Liminal, **conversation definitions are expressed as effects.** When
+we execute these effects, the fiber runtime manages underlying state such as the
+list of messages.
+
+We reason about control flow and narrative development as one.
 
 ```ts
-import { L } from "liminal"
+import { Effect } from "effect"
+import { L, strand } from "liminal"
 
-function* g() {
-  // Append a system message.
-  yield* L.system`You are a Leprechaun.`
+const program = Effect
+  .gen(function*() {
+    // Append a user message.
+    yield* L.user`Where is the pot of gold?`
 
-  // Append a user message.
-  yield* L.user`Where is the pot of gold?`
+    // Infer and append a model reply.
+    const inference = yield* L.assistant
 
-  // Infer and append a model reply.
-  const inference = yield* L.assistant
-
-  // The conversation culminates in a string.
-  return inference
-}
+    // The conversation culminates in a string.
+    return inference
+  })
+  .pipe(strand({
+    system: `You are a Leprechaun.`,
+  }))
 ```
-
-> [!NOTE] We reason about function control flow and narrative development as
-> one.
 
 ## State Management
 
@@ -56,30 +57,10 @@ conversation may look as follows.
 ]
 ```
 
-## Standard JavaScript
-
-Conversation definitions can trigger arbitrary computations, such as loops and
-database queries. There are no cumbersome workflow abstractions like with Mastra
-or LangGraph.js.
-
-```ts {4,8}
-async function* g() {
-  yield* L.system`...`
-
-  while (Math.random() < .9) {
-    yield* L.assistant
-  }
-
-  const item = await db.getItem()
-
-  yield L.user`The retrieved item: ${item}`
-}
-```
-
 ## Pure Composition
 
 JavaScript iterables can be recursively spread into one another. This lets us
-express subsystems purely.
+express child workflows purely.
 
 ```ts {7}
 function* a() {
@@ -97,70 +78,58 @@ function* b() {
 Create reusable patterns such as iterative refinement loops.
 
 ```ts
-function* refine(content: string, i = 5) {
-  while (i-- > 0) {
-    yield* L.user`Improve the following text: ${content}`
-    content = yield* L.inference
-  }
-  return content
-}
+import { Effect } from "effect"
+import { L } from "liminal"
+
+export const refine = (content: string, i = 5) =>
+  Effect.gen(function*() {
+    while (i-- > 0) {
+      yield* L.user`Improve the following text: ${content}`
+      content = yield* L.assistant()
+    }
+    return content
+  })
 ```
 
 ## Pattern-Sharing
 
 Share your patterns with the world.
 
-```ts {1,6}
+```ts {1,10}
+import { Effect } from "effect"
+import { L } from "liminal"
 import { refine } from "liminal-definitions"
 
-function* maybeRefine(initial: string) {
-  yield* L.user`Does the following text require refinement?: ${initial}`
+const maybeRefine = (initial: string) =>
+  Effect.gen(function*() {
+    yield* L.user`Does the following text require refinement?: ${initial}`
 
-  if (yield* L.assistant(L.boolean)) {
-    return yield* refine(initial)
-  }
-  return content
-}
+    if (yield* L.assistant(L.boolean)) {
+      return yield* refine(initial)
+    }
+    return content
+  })
 ```
 
 ## Structured Output
 
-Use your runtime type library of choice to ensure inference conforms to the
-specified shape.
+Use Effect Schema to describe structured output requirements.
 
-```ts
-function* g() {
+```ts {7-10}
+import { Effect, Schema } from "effect"
+import { L } from "liminal"
+
+Effect.gen(function*() {
   yield* L.user`What day of the year is halloween?`
 
-  const result = yield* L.assistant(
-    L.object({
-      month: L.integer,
-      day: L.integer,
-    }),
-  )
+  const result = yield* L.assistant(Schema.Struct({
+    month: L.integer,
+    day: L.integer,
+  }))
 
   result satisfies { month: integer; day: number }
-}
+})
 ```
-
-<!-- ## Observability
-
-Yield event "runes." Then listen to for your events at runtime.
-
-```ts
-await L.strand(
-  function*() {
-    yield* L.event("event-name-here")
-  },
-  {
-    handler(event) {
-      if (event === "event-name-here") {
-        // ...
-      }
-    },
-  },
-)
-``` -->
 
 ## Next Steps
 
