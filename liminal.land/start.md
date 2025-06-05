@@ -59,10 +59,9 @@ const reply = Effect
 reply satisfies Effect.Effect<string, AiError, AiLanguageModel>
 ```
 
-Within the generator function scope, we can yield these `L`-namespaced
-directives (called "[runes](./strands.md#runes)"). These statements allow us to
-control the underlying conversation state without manually managing structures
-such as conversation lists and toolboxes.
+Within the generator function scope, we can yield these `L`-namespaced Effects.
+These effects allow us to control the underlying conversation state without
+manually managing structures such as conversation lists.
 
 ## Use Case Example
 
