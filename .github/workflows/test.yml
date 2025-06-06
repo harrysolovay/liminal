@@ -15,7 +15,6 @@ jobs:
       - uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
-          no-cache: true
       - run: bun i
       - uses: dprint/check@v2.2
       - run: bun run build

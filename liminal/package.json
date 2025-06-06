@@ -17,6 +17,6 @@
   },
   "peerDependencies": {
     "@effect/ai": "^0.18.2",
-    "effect": "^3.16.2"
+    "effect": "^3.16.3"
   }
 }

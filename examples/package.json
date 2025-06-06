@@ -7,7 +7,7 @@
     "@effect/ai-openai": "^0.21.2",
     "@effect/platform-bun": "^0.67.3",
     "@effect/platform-node": "^0.84.2",
-    "effect": "^3.16.2",
+    "effect": "^3.16.3",
     "liminal": "workspace:*"
   }
 }

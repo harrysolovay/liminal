@@ -5,7 +5,7 @@
   "devDependencies": {
     "@shikijs/vitepress-twoslash": "^3.4.2",
     "@types/markdown-it-footnote": "^3.0.4",
-    "effect": "^3.16.2",
+    "effect": "^3.16.3",
     "liminal": "workspace:^",
     "markdown-it-footnote": "^4.0.0",
     "markdown-it-steps": "^0.2.0",
