@@ -3,6 +3,7 @@ import { L, strand } from "liminal"
 import { provideCommon } from "./_common"
 
 await Effect.gen(function*() {
+  console.log("Here")
   yield* L.user`Please generate the first draft.`
   let copy = yield* L.assistant()
   yield* L.user`

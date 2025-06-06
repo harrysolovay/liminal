@@ -110,7 +110,11 @@ const validateEmail = (email: string) =>
       Effect.provide(OpenAiLanguageModel.model("gpt-4o-mini")),
       // 5. Specify the HTTP client.
       Effect.provide(
-        OpenAiClient.layerConfig({}).pipe(Layer.provide(FetchHttpClient.layer)),
+        OpenAiClient
+          .layerConfig({
+            apiKey: Config.redacted("OPENAI_API_KEY"),
+          })
+          .pipe(Layer.provide(FetchHttpClient.layer)),
       ),
       // 6. Run the effect.
       Effect.runPromise,

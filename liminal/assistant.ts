@@ -10,45 +10,44 @@ export const assistant: {
   <O, I>(
     schema: Schema.Schema<O, I, never>,
   ): Effect.Effect<O, AiError, AiLanguageModel.AiLanguageModel | MessagesRef | System | Handler>
-} = <O = string>(schema?: Schema.Schema<O, any>) =>
-  Effect.gen(function*() {
-    yield* _emit(new InferenceRequested())
-    const model = yield* AiLanguageModel.AiLanguageModel
-    const messagesRef = yield* MessagesRef
-    const toolkitOption = yield* Effect.serviceOption(Toolkit)
-    const prompt = yield* Ref.get(messagesRef)
-    const system = yield* System
-    if (schema) {
-      const response = yield* model.generateObject({
-        system,
-        schema,
-        prompt,
-      })
-      yield* _emit(new Inferred({ response }))
-      const { value, text } = response
-      yield* appendMessage(text)
-      return value
-    }
-    const response = yield* model.generateText({
+} = Effect.fn(function*(schema?: Schema.Schema<any>) {
+  yield* _emit(new InferenceRequested())
+  const model = yield* AiLanguageModel.AiLanguageModel
+  const messagesRef = yield* MessagesRef
+  const toolkitOption = yield* Effect.serviceOption(Toolkit)
+  const prompt = yield* Ref.get(messagesRef)
+  const system = yield* System
+  if (schema) {
+    const response = yield* model.generateObject({
       system,
+      schema,
       prompt,
-      ...Option.isSome(toolkitOption)
-        ? toolkitOption.value
-          ? { toolkit: toolkitOption.value }
-          : {}
-        : {},
     })
     yield* _emit(new Inferred({ response }))
-    const { text } = response
+    const { value, text } = response
     yield* appendMessage(text)
-    return text
-
-    function* appendMessage(text: string) {
-      yield* Ref.update(messagesRef, (prev) => [
-        ...prev,
-        new AiInput.AssistantMessage({
-          parts: [new AiInput.TextPart({ text })],
-        }),
-      ])
-    }
+    return value
+  }
+  const response = yield* model.generateText({
+    system,
+    prompt,
+    ...Option.isSome(toolkitOption)
+      ? toolkitOption.value
+        ? { toolkit: toolkitOption.value }
+        : {}
+      : {},
   })
+  yield* _emit(new Inferred({ response }))
+  const { text } = response
+  yield* appendMessage(text)
+  return text
+
+  function* appendMessage(text: string) {
+    yield* Ref.update(messagesRef, (prev) => [
+      ...prev,
+      new AiInput.AssistantMessage({
+        parts: [new AiInput.TextPart({ text })],
+      }),
+    ])
+  }
+})
