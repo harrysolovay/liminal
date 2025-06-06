@@ -1,5 +1,11 @@
 # liminal
 
+## 0.6.0
+
+### Minor Changes
+
+- e88b9af: Rewrite using Effect-TS.
+
 ## 0.5.17
 
 ### Patch Changes
