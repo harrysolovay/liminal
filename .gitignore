@@ -1,6 +1,5 @@
 *.tsbuildinfo
 .DS_Store
-.alchemy
 .env
 dist
 liminal.land/.vitepress/cache
