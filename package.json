@@ -11,7 +11,8 @@
     "watch": "tsc -b -w",
     "changeset": "changeset",
     "clean": "find . -type d \\( -name dist -o -name node_modules \\) -prune -exec rm -rf {} +",
-    "mix": "bunx repomix liminal --ignore '**/*.md'"
+    "mix": "bunx repomix liminal --ignore '**/*.md'",
+    "test": "vitest run"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.4",
@@ -20,6 +21,7 @@
     "@types/node": "^22.15.24",
     "conditional-type-checks": "^1.0.6",
     "dprint": "^0.50.0",
+    "sql-formatter": "^15.6.3",
     "typescript": "^5.8.3",
     "vitest": "^3.1.4"
   }

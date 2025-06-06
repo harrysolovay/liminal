@@ -15,7 +15,7 @@ jobs:
       - uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
-      - run: bun i
+      - run: bun install
       - uses: dprint/check@v2.2
       - run: bun run build
-      - run: bunx vitest run
+      - run: bun test
