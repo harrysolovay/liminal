@@ -1,5 +1,7 @@
-import { L } from "liminal"
-import { gpt4oMini, o1Mini } from "./_common.ts"
+import { OpenAiLanguageModel } from "@effect/ai-openai"
+import { Effect, Schema } from "effect"
+import { L, strand } from "liminal"
+import { provideCommon } from "./_common.ts"
 
 const USE_CLASSIFICATION_PROMPTS = {
   general: "You are an expert customer service representative handling general inquiries.",
@@ -9,36 +11,36 @@ const USE_CLASSIFICATION_PROMPTS = {
     "You are a technical support specialist with deep product knowledge. Focus on clear step-by-step troubleshooting.",
 }
 
-await L.run(
-  function*() {
-    yield* L.focus(gpt4oMini)
-    const classification = yield* L.strand(
-      function*() {
-        yield* L.system`
-          Classify this supplied customer query:
+await Effect.gen(function*() {
+  const classification = yield* Effect.gen(function*() {
+    yield* L.user`I'd like a refund please.`
+    return yield* L.assistant(Schema.Struct({
+      reasoning: Schema.String,
+      type: Schema.Literal("general", "refund", "technical"),
+      complexity: Schema.Literal("simple", "complex"),
+    }))
+  }).pipe(strand({
+    system: `
+      Classify this supplied customer query:
 
-          Determine:
+      Determine:
 
-          1. Query type (general, refund, or technical)
-          2. Complexity (simple or complex)
-          3. Brief reasoning for classification
-        `
-        yield* L.user`I'd like a refund please.`
-        return yield* L.assistant(L.object({
-          reasoning: L.string,
-          type: L.enum("general", "refund", "technical"),
-          complexity: L.enum("simple", "complex"),
-        }))
-      },
-    )
-    const response = yield* L.strand(function*() {
-      yield* L.system(USE_CLASSIFICATION_PROMPTS[classification.type])
-      if (classification.complexity === "complex") {
-        yield* L.focus(o1Mini)
-      }
-      return yield* L.assistant
-    })
-    return { classification, response }
-  },
-  { handler: console.log },
-)
+      1. Query type (general, refund, or technical)
+      2. Complexity (simple or complex)
+      3. Brief reasoning for classification
+    `,
+  }))
+  const response = L.assistant().pipe(
+    strand({
+      system: USE_CLASSIFICATION_PROMPTS[classification.type],
+    }),
+    classification.complexity === "complex"
+      ? Effect.provide(OpenAiLanguageModel.model("gpt-4o-mini"))
+      : (e) => e as never,
+  )
+  return { classification, response }
+}).pipe(
+  strand(),
+  provideCommon,
+  Effect.runPromise,
+).then(console.log)

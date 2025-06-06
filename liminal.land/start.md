@@ -11,60 +11,57 @@ Install `liminal` with your JavaScript package manager of choice.
 ::: code-group
 
 ```bash [npm]
-npm install liminal
+npm install @effect/ai @effect/ai-openai effect liminal
 ```
 
 ```bash [bun]
-bun install liminal liminal-openai
+bun install @effect/ai @effect/ai-openai effect liminal
 ```
 
 ```bash [deno]
-deno add npm:liminal npm:liminal-openai
+deno add npm:@effect/ai @effect/ai-openai npm:effect npm:liminal
 ```
 
 ```bash [pnpm]
-pnpm install liminal liminal-openai
+pnpm install @effect/ai @effect/ai-openai effect liminal
 ```
 
 ```bash [yarn]
-yarn add liminal liminal-openai
+yarn add @effect/ai @effect/ai-openai effect liminal
 ```
 
 :::
 
-Also install the adapter for your client of choice. Current options include
-OpenAI, Ollama and the Vercel AI SDK (see
-[the adapter documentation](./adapters.md)).
+> Note: you can install alternative providers if you'd prefer one other than
+> OpenAI. See
+> [packages here](https://effect.website/docs/ai/introduction/#packages).
 
 ## API Overview
 
 ```ts
-import { L } from "liminal"
-import { adapter } from "liminal-openai"
+import { Effect } from "effect"
+import { L, strand } from "liminal"
 
-const reply = await L.run(function*() {
-  // Focus the model's adapter.
-  yield* L.focus(adapter("gpt-4o-mini"))
+const reply = Effect
+  .gen(function*() {
+    // Append a user message.
+    yield* L.user`<user-message-here>`
 
-  // Append a system message.
-  yield* L.system`<system-message-here>`
+    // Trigger an assistant reply.
+    const modelReply = yield* L.assistant()
 
-  // Append a user message.
-  yield* L.user`<user-message-here>`
+    return modelReply
+  })
+  .pipe(strand({
+    system: "<system-message-here>",
+  }))
 
-  // Trigger an assistant reply.
-  const modelReply = yield* L.assistant
-
-  return modelReply
-})
-
-reply satisfies string
+reply satisfies Effect.Effect<string, AiError, AiLanguageModel>
 ```
 
-Within the generator function scope, we can yield these `L`-namespaced
-directives (called "[runes](./strands.md#runes)"). These statements allow us to
-control the underlying conversation state without manually managing structures
-such as conversation lists and toolboxes.
+Within the generator function scope, we can yield these `L`-namespaced Effects.
+These effects allow us to control the underlying conversation state without
+manually managing structures such as conversation lists.
 
 ## Use Case Example
 
@@ -88,21 +85,40 @@ validation failed.
 Let's turn our function into a Liminal strand and infer a helpful validation
 message.
 
-```ts {5,7-9}
-import { L } from "liminal"
-import { openai } from "liminal-openai"
+```ts
+import { OpenAiClient, OpenAiLanguageModel } from "@effect/ai-openai"
+import { FetchHttpClient } from "@effect/platform"
+import { Effect } from "effect"
+import { L, strand } from "liminal"
 
-export async function validateEmail(email: string) {
-  return await L.strand(function*() {
-    if (!EMAIL_REGEX.test(email)) {
-      yield* L.focus(openai("gpt-4o-mini")) // 1. Specify the language model.
-      yield* L.user`Why is the following email is invalid?: "${email}".` // 2. Ask a question.
-      const error = yield* L.assistant // 3. Infer the answer.
-      return { error }
-    }
-    return { valid: true }
-  })
-}
+const validateEmail = (email: string) =>
+  Effect
+    .gen(function*() {
+      if (!EMAIL_REGEX.test(email)) {
+        // 1. Ask a question.
+        yield* L.user`Why is the following email is invalid?: "${email}".`
+        // 2. Infer the answer.
+        const error = yield* L.assistant()
+        return { error }
+      }
+      return { valid: true }
+    })
+    .pipe(
+      // 3. Mark this effect as the boundary of the conversation.
+      strand(),
+      // 4. Specify the model.
+      Effect.provide(OpenAiLanguageModel.model("gpt-4o-mini")),
+      // 5. Specify the HTTP client.
+      Effect.provide(
+        OpenAiClient
+          .layerConfig({
+            apiKey: Config.redacted("OPENAI_API_KEY"),
+          })
+          .pipe(Layer.provide(FetchHttpClient.layer)),
+      ),
+      // 6. Run the effect.
+      Effect.runPromise,
+    )
 ```
 
 If the supplied email address is invalid, we may get error messages similar to
@@ -114,8 +130,3 @@ the following.
   extension.
 - `john@example..com`: Your email contains consecutive dots which aren't allowed
   in a valid address.
-
-## Next Steps
-
-In the next section, we dive deep into what makes something a Liminal
-definition.

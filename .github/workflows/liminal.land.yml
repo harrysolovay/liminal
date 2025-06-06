@@ -22,7 +22,7 @@ jobs:
       - uses: actions/configure-pages@v4
       - run: bun i
       - run: bun run build
-      - run: cd liminal.land && bunx vitepress build
+      - run: cd liminal.land && bun vitepress build
       - uses: actions/upload-pages-artifact@v3
         with:
           path: liminal.land/.vitepress/dist

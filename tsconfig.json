@@ -1,23 +1,9 @@
 {
   "files": [],
   "references": [
-    { "path": "./example-integrations/deploy-to-cf-worker" },
-    { "path": "./example-integrations/hono" },
-    { "path": "./example-integrations/vite-react-app" },
     { "path": "./examples" },
     { "path": "./liminal" },
-    { "path": "./liminal-strands" },
     { "path": "./liminal.land" },
-    { "path": "./packages/liminal-ai" },
-    { "path": "./packages/liminal-alchemy" },
-    { "path": "./packages/liminal-arktype" },
-    { "path": "./packages/liminal-effect" },
-    { "path": "./packages/liminal-inception" },
-    { "path": "./packages/liminal-ollama" },
-    { "path": "./packages/liminal-openai" },
-    { "path": "./packages/liminal-typebox" },
-    { "path": "./packages/liminal-valibot" },
-    { "path": "./packages/liminal-zod3" },
     { "path": "./tsconfig.root.json" }
   ]
 }

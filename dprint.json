@@ -2,7 +2,7 @@
   "exec": {
     "commands": [
       {
-        "command": "bunx sql-formatter -l postgresql",
+        "command": "bun sql-formatter -l postgresql",
         "exts": ["sql"]
       }
     ]
