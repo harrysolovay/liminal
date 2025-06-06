@@ -25,7 +25,7 @@ const program = Effect
     yield* L.user`Where is the pot of gold?`
 
     // Infer and append a model reply.
-    const inference = yield* L.assistant
+    const inference = yield* L.assistant()
 
     // The conversation culminates in a string.
     return inference
