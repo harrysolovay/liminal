@@ -1,7 +1,7 @@
 import { OpenAiLanguageModel } from "@effect/ai-openai"
 import { Effect, Schema } from "effect"
 import { L, strand } from "liminal"
-import { provideCommon } from "./_common.ts"
+import { common } from "./_common.ts"
 
 const USE_CLASSIFICATION_PROMPTS = {
   general: "You are an expert customer service representative handling general inquiries.",
@@ -41,6 +41,6 @@ await Effect.gen(function*() {
   return { classification, response }
 }).pipe(
   strand(),
-  provideCommon,
+  common,
   Effect.runPromise,
 ).then(console.log)

@@ -2,7 +2,7 @@ import { Terminal } from "@effect/platform"
 import { BunTerminal } from "@effect/platform-bun"
 import { Effect, Schema } from "effect"
 import { L, strand } from "liminal"
-import { provideCommon } from "./_common.ts"
+import { common } from "./_common.ts"
 
 const DEPARTURE_LOCATION = "New York City"
 
@@ -32,7 +32,7 @@ await Effect.gen(function*() {
   strand({
     handler: Effect.log,
   }),
-  provideCommon,
+  common,
   Effect.provide(BunTerminal.layer),
   Effect.runPromise,
 ).then(console.log)

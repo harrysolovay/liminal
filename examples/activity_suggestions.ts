@@ -1,6 +1,6 @@
 import { Effect, Schema } from "effect"
 import { L, strand } from "liminal"
-import { provideCommon } from "./_common.ts"
+import { common } from "./_common.ts"
 
 const Activity = Schema.Struct({
   title: Schema.String,
@@ -23,6 +23,6 @@ await Effect.gen(function*() {
   strand({
     system: `When you are asked a question, answer without asking for clarification.`,
   }),
-  provideCommon,
+  common,
   Effect.runPromise,
 )

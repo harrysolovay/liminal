@@ -1,6 +1,6 @@
 import { Effect } from "effect"
 import { L, strand } from "liminal"
-import { provideCommon } from "./_common.ts"
+import { common } from "./_common.ts"
 
 await Effect
   .gen(function*() {
@@ -30,7 +30,7 @@ await Effect
         Just reply to the best of your ability given the information you have.
       `,
     }),
-    provideCommon,
+    common,
     Effect.runPromise,
   )
   .then(console.log)

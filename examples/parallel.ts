@@ -2,7 +2,7 @@ import { Path } from "@effect/platform"
 import { BunPath } from "@effect/platform-bun"
 import { Effect, Schema } from "effect"
 import { L, strand } from "liminal"
-import { provideCommon } from "./_common.ts"
+import { common } from "./_common.ts"
 
 const Lmh = Schema.Literal("lower", "medium", "high")
 
@@ -56,7 +56,7 @@ Effect.gen(function*() {
     system: `You are a technical lead summarizing multiple code reviews. Review the supplied code.`,
     handler: Effect.log,
   }),
-  provideCommon,
+  common,
   Effect.provide(BunPath.layer),
   Effect.runPromise,
 )
