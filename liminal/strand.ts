@@ -11,7 +11,7 @@ export interface StrandOptions<E, R, in out T extends AiTool.Any> {
   /** The liminal event handler. */
   handler?: ((event: LEvent) => Effect.Effect<any, E, R>) | undefined
   /** The tools to use for by strand. */
-  tools?: AiToolkit.AiToolkit<T> | undefined
+  toolkit?: AiToolkit.AiToolkit<T> | undefined
 }
 
 /** Create an isolated clone of the current conversation to provide for an effect. */
@@ -33,6 +33,6 @@ export const strand: <HE = never, HR = never, T extends AiTool.Any = never>(
       Effect.provideService(MessagesRef, messagesRef),
       Effect.provideService(System, options?.system),
       Effect.provideService(Handler, options?.handler),
-      Effect.provideService(Toolkit, options?.tools),
+      Effect.provideService(Toolkit, options?.toolkit),
     ))
   }) as never // TODO

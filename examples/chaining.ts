@@ -1,6 +1,6 @@
 import { Console, Effect, Schema } from "effect"
 import { L, strand } from "liminal"
-import { provideCommon } from "./_common"
+import { common } from "./_common"
 
 await Effect.gen(function*() {
   console.log("Here")
@@ -38,6 +38,6 @@ await Effect.gen(function*() {
     system: `Write persuasive marketing copy for: Buffy The Vampire Slayer. Focus on benefits and emotional appeal.`,
     handler: Console.log,
   }),
-  provideCommon,
+  common,
   Effect.runPromise,
 ).then(console.log)

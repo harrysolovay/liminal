@@ -1,6 +1,6 @@
 import { Console, Effect, Schema } from "effect"
 import { L, strand } from "liminal"
-import { provideCommon } from "./_common.ts"
+import { common } from "./_common.ts"
 
 const IMPLEMENTATION_PROMPTS = {
   create: "You are an expert at implementing new files following best practices and project patterns.",
@@ -44,6 +44,6 @@ await Effect
       system: `You are a senior software architect planning feature implementations.`,
       handler: Console.log,
     }),
-    provideCommon,
+    common,
     Effect.runPromise,
   )

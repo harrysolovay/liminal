@@ -1,6 +1,6 @@
 import { Effect, Schema } from "effect"
 import { L, strand } from "liminal"
-import { provideCommon } from "./_common.ts"
+import { common } from "./_common.ts"
 
 const TEXT = "..."
 
@@ -60,6 +60,6 @@ Effect.gen(function*() {
     system:
       `You are an expert literary translator. Translate the supplied text to the specified target language, preserving tone and cultural nuances.`,
   }),
-  provideCommon,
+  common,
   Effect.runPromise,
 )

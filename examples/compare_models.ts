@@ -1,7 +1,7 @@
 import { OpenAiLanguageModel } from "@effect/ai-openai"
 import { Effect, Schema } from "effect"
 import { L, strand } from "liminal"
-import { provideCommon } from "./_common.ts"
+import { common } from "./_common.ts"
 
 await Effect.gen(function*() {
   yield* L.user`Write a rap about type-level programming in TypeScript`
@@ -29,6 +29,6 @@ await Effect.gen(function*() {
   return variants[key]
 }).pipe(
   strand(),
-  provideCommon,
+  common,
   Effect.runPromise,
 )
