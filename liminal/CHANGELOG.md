@@ -1,5 +1,11 @@
 # liminal
 
+## 0.7.0
+
+### Minor Changes
+
+- d6fe173: Remove approach to passing handlers to strands.
+
 ## 0.6.0
 
 ### Minor Changes
