@@ -2,9 +2,6 @@
   "[css]": {
     "editor.defaultFormatter": "dprint.dprint"
   },
-  "[dockercompose]": {
-    "editor.defaultFormatter": "dprint.dprint"
-  },
   "[github-actions-workflow]": {
     "editor.defaultFormatter": "dprint.dprint"
   },
@@ -20,9 +17,6 @@
   "[markdown]": {
     "editor.defaultFormatter": "dprint.dprint"
   },
-  "[sql]": {
-    "editor.defaultFormatter": "dprint.dprint"
-  },
   "[typescript]": {
     "editor.defaultFormatter": "dprint.dprint"
   },
@@ -33,21 +27,7 @@
     "editor.defaultFormatter": "dprint.dprint"
   },
   "editor.formatOnSave": true,
-  "editor.quickSuggestions": {
-    "strings": "on"
-  },
   "editor.tabSize": 2,
   "dprint.path": "node_modules/.bin/dprint",
-  "sqltools.connections": [
-    {
-      "server": "localhost",
-      "port": 54321,
-      "driver": "PostgreSQL",
-      "name": "liminal",
-      "database": "db",
-      "username": "username",
-      "password": "password"
-    }
-  ],
-  "typescript.preferences.autoImportSpecifierExcludeRegexes": ["^(node:)?os$"]
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

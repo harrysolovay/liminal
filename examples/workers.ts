@@ -1,4 +1,5 @@
-import { Console, Effect, Schema } from "effect"
+import * as Effect from "effect/Effect"
+import * as Schema from "effect/Schema"
 import { L, strand } from "liminal"
 import { common } from "./_common.ts"
 
@@ -42,7 +43,6 @@ await Effect
   .pipe(
     strand({
       system: `You are a senior software architect planning feature implementations.`,
-      handler: Console.log,
     }),
     common,
     Effect.runPromise,

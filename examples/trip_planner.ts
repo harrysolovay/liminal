@@ -1,6 +1,7 @@
 import { Terminal } from "@effect/platform"
 import { BunTerminal } from "@effect/platform-bun"
-import { Effect, Schema } from "effect"
+import * as Effect from "effect/Effect"
+import * as Schema from "effect/Schema"
 import { L, strand } from "liminal"
 import { common } from "./_common.ts"
 
@@ -29,9 +30,7 @@ await Effect.gen(function*() {
   yield* L.user`Where can I stay there, what can I do there, how do I get there?`
   return yield* L.assistant()
 }).pipe(
-  strand({
-    handler: Effect.log,
-  }),
+  strand(),
   common,
   Effect.provide(BunTerminal.layer),
   Effect.runPromise,
