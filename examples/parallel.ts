@@ -1,6 +1,7 @@
 import { Path } from "@effect/platform"
 import { BunPath } from "@effect/platform-bun"
-import { Effect, Schema } from "effect"
+import * as Effect from "effect/Effect"
+import * as Schema from "effect/Schema"
 import { L, strand } from "liminal"
 import { common } from "./_common.ts"
 
@@ -54,7 +55,6 @@ Effect.gen(function*() {
 }).pipe(
   strand({
     system: `You are a technical lead summarizing multiple code reviews. Review the supplied code.`,
-    handler: Effect.log,
   }),
   common,
   Effect.provide(BunPath.layer),

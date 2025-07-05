@@ -19,6 +19,16 @@
     "noUncheckedIndexedAccess": true,
     "noUncheckedSideEffectImports": true,
     "noUnusedParameters": true,
+    "plugins": [
+      {
+        "name": "@effect/language-service",
+        "transform": "@effect/language-service/transform",
+        "namespaceImportPackages": ["effect"],
+        "diagnosticSeverity": {
+          "importFromBarrel": "error"
+        }
+      }
+    ],
     "resolveJsonModule": true,
     "rewriteRelativeImportExtensions": true,
     "allowImportingTsExtensions": true,

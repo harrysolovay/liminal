@@ -1,17 +1,18 @@
-import { AiInput, AiLanguageModel } from "@effect/ai"
 import type { AiError } from "@effect/ai/AiError"
-import { Effect, Option, Ref, type Schema } from "effect"
-import { _emit } from "./_emit.ts"
-import { Handler, MessagesRef, System, Toolkit } from "./Context.ts"
-import { InferenceRequested, Inferred } from "./LEvent.ts"
+import * as AiInput from "@effect/ai/AiInput"
+import * as AiLanguageModel from "@effect/ai/AiLanguageModel"
+import * as Effect from "effect/Effect"
+import * as Option from "effect/Option"
+import * as Ref from "effect/Ref"
+import type * as Schema from "effect/Schema"
+import { MessagesRef, System, Toolkit } from "./Context.ts"
 
 export const assistant: {
-  (): Effect.Effect<string, AiError, AiLanguageModel.AiLanguageModel | MessagesRef | System | Handler>
+  (): Effect.Effect<string, AiError, AiLanguageModel.AiLanguageModel | MessagesRef | System>
   <O, I>(
     schema: Schema.Schema<O, I, never>,
-  ): Effect.Effect<O, AiError, AiLanguageModel.AiLanguageModel | MessagesRef | System | Handler>
+  ): Effect.Effect<O, AiError, AiLanguageModel.AiLanguageModel | MessagesRef | System>
 } = Effect.fn(function*(schema?: Schema.Schema<any>) {
-  yield* _emit(new InferenceRequested())
   const model = yield* AiLanguageModel.AiLanguageModel
   const messagesRef = yield* MessagesRef
   const toolkitOption = yield* Effect.serviceOption(Toolkit)
@@ -23,7 +24,6 @@ export const assistant: {
       schema,
       prompt,
     })
-    yield* _emit(new Inferred({ response }))
     const { value, text } = response
     yield* appendMessage(text)
     return value
@@ -37,7 +37,6 @@ export const assistant: {
         : {}
       : {},
   })
-  yield* _emit(new Inferred({ response }))
   const { text } = response
   yield* appendMessage(text)
   return text

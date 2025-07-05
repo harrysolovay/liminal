@@ -1,6 +1,9 @@
-import { OpenAiClient, OpenAiLanguageModel } from "@effect/ai-openai"
+import * as OpenAiClient from "@effect/ai-openai/OpenAiClient"
+import * as OpenAiLanguageModel from "@effect/ai-openai/OpenAiLanguageModel"
 import { FetchHttpClient } from "@effect/platform"
-import { Config, Effect, flow } from "effect"
+import * as Config from "effect/Config"
+import * as Effect from "effect/Effect"
+import { flow } from "effect/Function"
 
 export const common = flow(
   Effect.onError((cause) => Effect.logError(cause.toString())),
