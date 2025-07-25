@@ -1,2 +1,2 @@
 export * as L from "./L.ts"
-export * as Strand from "./Strand1.ts"
+export * as Strand from "./Strand.ts"

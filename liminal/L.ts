@@ -4,7 +4,7 @@ import * as AiLanguageModel from "@effect/ai/AiLanguageModel"
 import * as AiToolkit from "@effect/ai/AiToolkit"
 import * as Effect from "effect/Effect"
 import * as Schema from "effect/Schema"
-import * as Strand from "./Strand1.ts"
+import * as Strand from "./Strand.ts"
 import { isTemplateStringsArray } from "./util/isTemplateStringsArray.ts"
 
 export const user: {
