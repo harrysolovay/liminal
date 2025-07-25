@@ -1,6 +1,7 @@
+import * as Console from "effect/Console"
 import * as Effect from "effect/Effect"
 import * as Schema from "effect/Schema"
-import { L, strand } from "liminal"
+import { L, Strand } from "liminal"
 import { common } from "./_common.ts"
 
 const TEXT = "..."
@@ -57,10 +58,11 @@ Effect.gen(function*() {
     iterationsRequired: iterations,
   }
 }).pipe(
-  strand({
+  Effect.provide(Strand.layer({
     system:
       `You are an expert literary translator. Translate the supplied text to the specified target language, preserving tone and cultural nuances.`,
-  }),
+    onMessage: Console.log,
+  })),
   common,
   Effect.runPromise,
 )

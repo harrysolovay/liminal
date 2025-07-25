@@ -6,7 +6,6 @@ import * as Effect from "effect/Effect"
 import { flow } from "effect/Function"
 
 export const common = flow(
-  Effect.onError((cause) => Effect.logError(cause.toString())),
   Effect.provide(OpenAiLanguageModel.model("gpt-4o-mini")),
   Effect.provide(
     OpenAiClient.layerConfig({

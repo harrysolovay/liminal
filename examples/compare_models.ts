@@ -1,7 +1,8 @@
 import { OpenAiLanguageModel } from "@effect/ai-openai"
+import * as Console from "effect/Console"
 import * as Effect from "effect/Effect"
 import * as Schema from "effect/Schema"
-import { L, strand } from "liminal"
+import { L, Strand } from "liminal"
 import { common } from "./_common.ts"
 
 await Effect.gen(function*() {
@@ -9,13 +10,13 @@ await Effect.gen(function*() {
   yield* L.assistant()
   yield* L.user`Rewrite it in whatever way you think best.`
   const variants = yield* Effect.all({
-    a: L.assistant().pipe(strand()),
+    a: L.assistant().pipe(Effect.provide(Strand.layer())),
     b: L.assistant().pipe(
-      strand(),
+      Effect.provide(Strand.layer()),
       Effect.provide(OpenAiLanguageModel.model("gpt-4-turbo")),
     ),
     c: L.assistant().pipe(
-      strand(),
+      Effect.provide(Strand.layer()),
       Effect.provide(OpenAiLanguageModel.model("gpt-3.5-turbo")),
     ),
   }, { concurrency: "unbounded" })
@@ -29,7 +30,9 @@ await Effect.gen(function*() {
   })
   return variants[key]
 }).pipe(
-  strand(),
+  Effect.provide(Strand.layer({
+    onMessage: Console.log,
+  })),
   common,
   Effect.runPromise,
 )

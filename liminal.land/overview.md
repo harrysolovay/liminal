@@ -17,7 +17,7 @@ We reason about control flow and narrative development as one.
 
 ```ts
 import { Effect } from "effect"
-import { L, strand } from "liminal"
+import { L, Strand } from "liminal"
 
 const program = Effect
   .gen(function*() {
@@ -25,20 +25,20 @@ const program = Effect
     yield* L.user`Where is the pot of gold?`
 
     // Infer and append a model reply.
-    const inference = yield* L.assistant()
+    const reply = yield* L.assistant()
 
     // The conversation culminates in a string.
-    return inference
+    return reply
   })
-  .pipe(strand({
+  .pipe(Effect.provide(Strand.layer({
     system: `You are a Leprechaun.`,
-  }))
+  })))
 ```
 
 ## State Management
 
 With every yield, Liminal updates the underlying conversation state. The final
-conversation may look as follows.
+conversation may look as follows (but as an `@effect/ai` `AiInput.Message`).
 
 ```json
 [

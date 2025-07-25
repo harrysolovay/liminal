@@ -40,7 +40,7 @@ yarn add @effect/ai @effect/ai-openai effect liminal
 
 ```ts
 import { Effect } from "effect"
-import { L, strand } from "liminal"
+import { L, Strand } from "liminal"
 
 const reply = Effect
   .gen(function*() {
@@ -52,9 +52,9 @@ const reply = Effect
 
     return modelReply
   })
-  .pipe(strand({
+  .pipe(Effect.provide(Strand.layer({
     system: "<system-message-here>",
-  }))
+  })))
 
 reply satisfies Effect.Effect<string, AiError, AiLanguageModel>
 ```
@@ -89,7 +89,7 @@ message.
 import { OpenAiClient, OpenAiLanguageModel } from "@effect/ai-openai"
 import { FetchHttpClient } from "@effect/platform"
 import { Effect } from "effect"
-import { L, strand } from "liminal"
+import { L, Strand } from "liminal"
 
 const validateEmail = (email: string) =>
   Effect
@@ -105,7 +105,7 @@ const validateEmail = (email: string) =>
     })
     .pipe(
       // 3. Mark this effect as the boundary of the conversation.
-      strand(),
+      Effect.provide(Strand.layer()),
       // 4. Specify the model.
       Effect.provide(OpenAiLanguageModel.model("gpt-4o-mini")),
       // 5. Specify the HTTP client.
