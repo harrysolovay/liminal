@@ -1,5 +1,11 @@
 # liminal
 
+## 0.8.0
+
+### Minor Changes
+
+- bf980fb: Major redesign of the Liminal API to be more effect-idiomatic.
+
 ## 0.7.0
 
 ### Minor Changes
