@@ -1,6 +1,7 @@
+import * as Console from "effect/Console"
 import * as Effect from "effect/Effect"
 import * as Schema from "effect/Schema"
-import { L, strand } from "liminal"
+import { L, Strand } from "liminal"
 import { common } from "./_common.ts"
 
 const Activity = Schema.Struct({
@@ -21,9 +22,10 @@ await Effect.gen(function*() {
     i++
   }
 }).pipe(
-  strand({
+  Effect.provide(Strand.layer({
     system: `When you are asked a question, answer without asking for clarification.`,
-  }),
+    onMessage: Console.log,
+  })),
   common,
   Effect.runPromise,
 )

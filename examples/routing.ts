@@ -1,7 +1,8 @@
 import { OpenAiLanguageModel } from "@effect/ai-openai"
+import * as Console from "effect/Console"
 import * as Effect from "effect/Effect"
 import * as Schema from "effect/Schema"
-import { L, strand } from "liminal"
+import { L, Strand } from "liminal"
 import { common } from "./_common.ts"
 
 const USE_CLASSIFICATION_PROMPTS = {
@@ -20,7 +21,7 @@ await Effect.gen(function*() {
       type: Schema.Literal("general", "refund", "technical"),
       complexity: Schema.Literal("simple", "complex"),
     }))
-  }).pipe(strand({
+  }).pipe(Effect.provide(Strand.layer({
     system: `
       Classify this supplied customer query:
 
@@ -30,18 +31,20 @@ await Effect.gen(function*() {
       2. Complexity (simple or complex)
       3. Brief reasoning for classification
     `,
-  }))
+  })))
   const response = L.assistant().pipe(
-    strand({
+    Effect.provide(Strand.layer({
       system: USE_CLASSIFICATION_PROMPTS[classification.type],
-    }),
+    })),
     classification.complexity === "complex"
       ? Effect.provide(OpenAiLanguageModel.model("gpt-4o-mini"))
       : (e) => e as never,
   )
   return { classification, response }
 }).pipe(
-  strand(),
+  Effect.provide(Strand.layer({
+    onMessage: Console.log,
+  })),
   common,
   Effect.runPromise,
 ).then(console.log)

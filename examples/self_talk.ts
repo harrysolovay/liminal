@@ -1,5 +1,6 @@
+import * as Console from "effect/Console"
 import * as Effect from "effect/Effect"
-import { L, strand } from "liminal"
+import { L, Strand } from "liminal"
 import { common } from "./_common.ts"
 
 await Effect
@@ -15,7 +16,7 @@ await Effect
           yield* L.user`Please reply to the last message on my behalf.`
           return yield* L.assistant()
         })
-        .pipe(strand())
+        .pipe(Effect.provide(Strand.layer()))
       yield* L.user(reply)
       yield* L.assistant()
       i++
@@ -24,12 +25,13 @@ await Effect
     return yield* L.assistant()
   })
   .pipe(
-    strand({
+    Effect.provide(Strand.layer({
       system: `
         When an instruction is given, don't ask any follow-up questions.
         Just reply to the best of your ability given the information you have.
       `,
-    }),
+      onMessage: Console.log,
+    })),
     common,
     Effect.runPromise,
   )

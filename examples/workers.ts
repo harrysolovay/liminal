@@ -1,6 +1,7 @@
+import * as Console from "effect/Console"
 import * as Effect from "effect/Effect"
 import * as Schema from "effect/Schema"
-import { L, strand } from "liminal"
+import { L, Strand } from "liminal"
 import { common } from "./_common.ts"
 
 const IMPLEMENTATION_PROMPTS = {
@@ -32,18 +33,19 @@ await Effect
             }))
             return { file, implementation }
           })
-          .pipe(strand({
+          .pipe(Effect.provide(Strand.layer({
             system: IMPLEMENTATION_PROMPTS[file.changeType],
-          }))
+          })))
       ),
       { concurrency: "unbounded" },
     )
     return { fileChanges, implementationPlan }
   })
   .pipe(
-    strand({
+    Effect.provide(Strand.layer({
       system: `You are a senior software architect planning feature implementations.`,
-    }),
+      onMessage: Console.log,
+    })),
     common,
     Effect.runPromise,
   )

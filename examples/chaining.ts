@@ -1,7 +1,8 @@
+import * as Console from "effect/Console"
 import * as Effect from "effect/Effect"
 import * as Schema from "effect/Schema"
-import { L, strand } from "liminal"
-import { common } from "./_common"
+import { L, Strand } from "liminal"
+import { common } from "./_common.ts"
 
 await Effect.gen(function*() {
   yield* L.user`Please generate the first draft.`
@@ -34,9 +35,10 @@ await Effect.gen(function*() {
   }
   return { copy, qualityMetrics }
 }).pipe(
-  strand({
+  Effect.provide(Strand.layer({
     system: `Write persuasive marketing copy for: Buffy The Vampire Slayer. Focus on benefits and emotional appeal.`,
-  }),
+    onMessage: Console.log,
+  })),
   common,
   Effect.runPromise,
 ).then(console.log)
