@@ -6,7 +6,7 @@ import { common } from "./_common.ts"
 
 await Effect.gen(function*() {
   yield* L.user`Please generate the first draft.`
-  let copy = yield* L.assistant()
+  let copy = yield* L.assistant
   yield* L.user`
     Now evaluate this marketing copy for:
 
@@ -16,7 +16,7 @@ await Effect.gen(function*() {
 
     Copy to evaluate: ${copy}
   `
-  const qualityMetrics = yield* L.assistant(Schema.Struct({
+  const qualityMetrics = yield* L.assistantStruct(Schema.Struct({
     hasCallToAction: Schema.Boolean,
     emotionalAppeal: Schema.Number,
     clarity: Schema.Number,
@@ -31,7 +31,7 @@ await Effect.gen(function*() {
 
       Original copy: ${copy}
     `
-    copy = yield* L.assistant()
+    copy = yield* L.assistant
   }
   return { copy, qualityMetrics }
 }).pipe(

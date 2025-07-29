@@ -16,7 +16,7 @@ const USE_CLASSIFICATION_PROMPTS = {
 await Effect.gen(function*() {
   const classification = yield* Effect.gen(function*() {
     yield* L.user`I'd like a refund please.`
-    return yield* L.assistant(Schema.Struct({
+    return yield* L.assistantStruct(Schema.Struct({
       reasoning: Schema.String,
       type: Schema.Literal("general", "refund", "technical"),
       complexity: Schema.Literal("simple", "complex"),
@@ -32,7 +32,7 @@ await Effect.gen(function*() {
       3. Brief reasoning for classification
     `,
   })))
-  const response = L.assistant().pipe(
+  const response = L.assistant.pipe(
     Effect.provide(Strand.layer({
       system: USE_CLASSIFICATION_PROMPTS[classification.type],
     })),
