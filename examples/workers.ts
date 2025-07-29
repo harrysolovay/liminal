@@ -14,7 +14,7 @@ await Effect
   .gen(function*() {
     yield* L.user`Analyze this feature request and create an implementation plan:`
     yield* L.user`Alert administrators via text whenever site traffic exceeds a certain threshold.`
-    const implementationPlan = yield* L.assistant(Schema.Struct({
+    const implementationPlan = yield* L.assistantStruct(Schema.Struct({
       complexity: Schema.Literal("low", "medium", "high"),
       files: Schema.Array(Schema.Struct({
         changeType: Schema.Literal("create", "modify", "delete"),
@@ -27,7 +27,7 @@ await Effect
         Effect
           .gen(function*() {
             yield* L.user`Implement the changes for ${file.filePath} to support: ${file.purpose}`
-            const implementation = yield* L.assistant(Schema.Struct({
+            const implementation = yield* L.assistantStruct(Schema.Struct({
               explanation: Schema.String,
               code: Schema.String,
             }))

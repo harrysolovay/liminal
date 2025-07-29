@@ -8,7 +8,7 @@ import { common } from "./_common.ts"
 
 const Lmh = Schema.Literal("lower", "medium", "high")
 
-const security = L.assistant(Schema.Struct({
+const security = L.assistantStruct(Schema.Struct({
   type: Schema.Literal("security"),
   vulnerabilities: Schema.Array(Schema.String),
   riskLevel: Lmh,
@@ -19,7 +19,7 @@ const security = L.assistant(Schema.Struct({
   messages: undefined,
 })))
 
-const performance = L.assistant(Schema.Struct({
+const performance = L.assistantStruct(Schema.Struct({
   type: Schema.Literal("performance"),
   issues: Schema.Array(Schema.String),
   impact: Lmh,
@@ -30,7 +30,7 @@ const performance = L.assistant(Schema.Struct({
   messages: undefined,
 })))
 
-const maintainability = L.assistant(Schema.Struct({
+const maintainability = L.assistantStruct(Schema.Struct({
   type: Schema.Literal("maintainability"),
   concerns: Schema.Array(Schema.String),
   qualityScore: Schema.Int,
@@ -51,7 +51,7 @@ Effect.gen(function*() {
   })
   yield* L.user(JSON.stringify(Object.values(reviews), null, 2))
   yield* L.user`You are a technical lead summarizing multiple code reviews.`
-  const summary = yield* L.assistant()
+  const summary = yield* L.assistantText
   return { reviews, summary }
 }).pipe(
   Effect.provide(Strand.layer({

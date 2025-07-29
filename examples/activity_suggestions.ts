@@ -17,7 +17,7 @@ await Effect.gen(function*() {
   let i = 0
   const activities: Array<typeof Activity.Type> = []
   while (i < 5) {
-    activities.push(yield* L.assistant(Activity))
+    activities.push(yield* L.assistantStruct(Activity))
     yield* L.user`Another please.`
     i++
   }

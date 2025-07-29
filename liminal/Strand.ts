@@ -17,7 +17,7 @@ export interface StrandConfig<E, R> {
 export class Strand extends Context.Tag("liminal/Strand")<Strand, {
   system?: string | undefined
   messages: Array<AiInput.Message>
-  tools?: Array<AiTool.AiTool<any>>
+  tools?: Array<AiTool.AiTool<string>>
   onMessage: (message: AiInput.Message) => Effect.Effect<void>
 }>() {}
 

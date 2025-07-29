@@ -37,38 +37,45 @@ export const setMessages: (
   },
 )
 
-export const assistant: {
-  (): Effect.Effect<string, AiError.AiError, AiLanguageModel.AiLanguageModel | Strand.Strand>
-  <O, I>(
-    schema: Schema.Schema<O, I, never>,
-  ): Effect.Effect<O, AiError.AiError, AiLanguageModel.AiLanguageModel | Strand.Strand>
-} = Effect.fn(function*(schema?: Schema.Schema<any>) {
+export const assistantText: Effect.Effect<
+  string,
+  AiError.AiError,
+  AiLanguageModel.AiLanguageModel | Strand.Strand
+> = Effect.gen(function*() {
   const model = yield* AiLanguageModel.AiLanguageModel
-  const { system, messages, tools, onMessage } = yield* Strand.Strand
-  if (schema) {
-    const response = yield* model.generateObject({
-      system,
-      schema,
-      prompt: messages,
-    })
-    const { value, text } = response
-    yield* appendMessage(text)
-    return value
-  }
+  const { system, messages, tools } = yield* Strand.Strand
   const response = yield* model.generateText({
     system,
     prompt: messages,
     toolkit: AiToolkit.make(...tools ?? []) as never,
   })
   const { text } = response
-  yield* appendMessage(text)
+  yield* append(text)
   return text
+})
 
-  function* appendMessage(text: string) {
-    const message = new AiInput.AssistantMessage({
-      parts: [new AiInput.TextPart({ text })],
+export const assistantStruct: <O, I extends Record<string, unknown>>(
+  schema: Schema.Schema<O, I, never>,
+) => Effect.Effect<O, AiError.AiError, AiLanguageModel.AiLanguageModel | Strand.Strand> = Effect.fnUntraced(
+  function*(schema) {
+    const model = yield* AiLanguageModel.AiLanguageModel
+    const { system, messages } = yield* Strand.Strand
+    const response = yield* model.generateObject({
+      system,
+      schema,
+      prompt: messages,
     })
-    yield* onMessage(message)
-    messages.push(message)
-  }
+    const { value, text } = response
+    yield* append(text)
+    return value
+  },
+)
+
+const append = Effect.fnUntraced(function*(text: string) {
+  const { messages, onMessage } = yield* Strand.Strand
+  const message = new AiInput.AssistantMessage({
+    parts: [new AiInput.TextPart({ text })],
+  })
+  yield* onMessage(message)
+  messages.push(message)
 })
