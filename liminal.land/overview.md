@@ -85,7 +85,7 @@ export const refine = (content: string, i = 5) =>
   Effect.gen(function*() {
     while (i-- > 0) {
       yield* L.user`Improve the following text: ${content}`
-      content = yield* L.assistant
+      content = yield* L.assistantText
     }
     return content
   })
