@@ -29,9 +29,9 @@ await Effect.gen(function*() {
     `
   }
   yield* L.user`Now that we've refined the destination criteria, please provide a single recommendation.`
-  yield* L.assistant
+  yield* L.assistantText
   yield* L.user`Where can I stay there, what can I do there, how do I get there?`
-  return yield* L.assistant
+  return yield* L.assistantText
 }).pipe(
   Effect.provide(Strand.layer({
     onMessage: Console.log,

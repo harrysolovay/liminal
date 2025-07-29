@@ -32,7 +32,7 @@ await Effect.gen(function*() {
       3. Brief reasoning for classification
     `,
   })))
-  const response = L.assistant.pipe(
+  const response = L.assistantText.pipe(
     Effect.provide(Strand.layer({
       system: USE_CLASSIFICATION_PROMPTS[classification.type],
     })),

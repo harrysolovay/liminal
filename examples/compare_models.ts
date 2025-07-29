@@ -7,15 +7,15 @@ import { common } from "./_common.ts"
 
 await Effect.gen(function*() {
   yield* L.user`Write a rap about type-level programming in TypeScript`
-  yield* L.assistant
+  yield* L.assistantText
   yield* L.user`Rewrite it in whatever way you think best.`
   const variants = yield* Effect.all({
-    a: L.assistant.pipe(Effect.provide(Strand.layer())),
-    b: L.assistant.pipe(
+    a: L.assistantText.pipe(Effect.provide(Strand.layer())),
+    b: L.assistantText.pipe(
       Effect.provide(Strand.layer()),
       Effect.provide(OpenAiLanguageModel.model("gpt-4-turbo")),
     ),
-    c: L.assistant.pipe(
+    c: L.assistantText.pipe(
       Effect.provide(Strand.layer()),
       Effect.provide(OpenAiLanguageModel.model("gpt-3.5-turbo")),
     ),

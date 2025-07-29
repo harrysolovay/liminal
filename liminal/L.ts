@@ -37,7 +37,7 @@ export const setMessages: (
   },
 )
 
-export const assistant: Effect.Effect<
+export const assistantText: Effect.Effect<
   string,
   AiError.AiError,
   AiLanguageModel.AiLanguageModel | Strand.Strand

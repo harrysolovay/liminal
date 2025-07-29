@@ -9,7 +9,7 @@ const TEXT = "..."
 Effect.gen(function*() {
   yield* L.user`Target language: typescript`
   yield* L.user`Text:\n\n${TEXT}`
-  let currentTranslation = yield* L.assistant
+  let currentTranslation = yield* L.assistantText
   let iterations = 0
   const MAX_ITERATIONS = 3
   while (iterations < MAX_ITERATIONS) {
@@ -50,7 +50,7 @@ Effect.gen(function*() {
       Original: ${TEXT}
       Current Translation: ${currentTranslation}
     `
-    currentTranslation = yield* L.assistant
+    currentTranslation = yield* L.assistantText
     iterations += 1
   }
   return {

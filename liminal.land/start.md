@@ -48,7 +48,7 @@ const reply = Effect
     yield* L.user`<user-message-here>`
 
     // Trigger an assistant reply.
-    const modelReply = yield* L.assistant
+    const modelReply = yield* L.assistantText
 
     return modelReply
   })
@@ -99,7 +99,7 @@ const validateEmail = (email: string) =>
         yield* L.user`Why is the following email is invalid?: "${email}".`
 
         // 2. Infer the answer.
-        const error = yield* L.assistant
+        const error = yield* L.assistantText
 
         return { error }
       }

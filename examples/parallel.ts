@@ -51,7 +51,7 @@ Effect.gen(function*() {
   })
   yield* L.user(JSON.stringify(Object.values(reviews), null, 2))
   yield* L.user`You are a technical lead summarizing multiple code reviews.`
-  const summary = yield* L.assistant
+  const summary = yield* L.assistantText
   return { reviews, summary }
 }).pipe(
   Effect.provide(Strand.layer({
