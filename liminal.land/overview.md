@@ -25,7 +25,7 @@ const program = Effect
     yield* L.user`Where is the pot of gold?`
 
     // Infer and append a model reply.
-    const reply = yield* L.assistant()
+    const reply = yield* L.assistant
 
     // The conversation culminates in a string.
     return reply
@@ -85,7 +85,7 @@ export const refine = (content: string, i = 5) =>
   Effect.gen(function*() {
     while (i-- > 0) {
       yield* L.user`Improve the following text: ${content}`
-      content = yield* L.assistant()
+      content = yield* L.assistant
     }
     return content
   })
@@ -104,9 +104,11 @@ const maybeRefine = (initial: string) =>
   Effect.gen(function*() {
     yield* L.user`Does the following text require refinement?: ${initial}`
 
-    const { needsRefinement } = yield* L.assistant(Schema.Struct({
-      needsRefinement: Schema.Boolean,
-    }))
+    const { needsRefinement } = yield* L.assistantStruct(
+      Schema.Struct({
+        needsRefinement: Schema.Boolean,
+      }),
+    )
     if (needsRefinement) {
       return yield* refine(initial)
     }
@@ -125,10 +127,12 @@ import { L } from "liminal"
 Effect.gen(function*() {
   yield* L.user`What day of the year is halloween?`
 
-  const result = yield* L.assistant(Schema.Struct({
-    month: L.integer,
-    day: L.integer,
-  }))
+  const result = yield* L.assistantStruct(
+    Schema.Struct({
+      month: L.integer,
+      day: L.integer,
+    }),
+  )
 
   result satisfies { month: integer; day: number }
 })
