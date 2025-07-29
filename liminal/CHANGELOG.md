@@ -1,5 +1,11 @@
 # liminal
 
+## 0.9.0
+
+### Minor Changes
+
+- df8861a: Separate L.assistant into L.assistantText and L.assistantStruct.
+
 ## 0.8.0
 
 ### Minor Changes
