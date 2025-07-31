@@ -1,9 +1,8 @@
 import { OpenAiLanguageModel } from "@effect/ai-openai"
-import * as Console from "effect/Console"
-import * as Effect from "effect/Effect"
-import * as Schema from "effect/Schema"
+import { Effect, Layer, Schema, Stream } from "effect"
 import { L, Strand } from "liminal"
-import { common } from "./_common.ts"
+import { model } from "./_layers.ts"
+import { logLEvent } from "./_logLEvent.ts"
 
 const USE_CLASSIFICATION_PROMPTS = {
   general: "You are an expert customer service representative handling general inquiries.",
@@ -13,16 +12,21 @@ const USE_CLASSIFICATION_PROMPTS = {
     "You are a technical support specialist with deep product knowledge. Focus on clear step-by-step troubleshooting.",
 }
 
-await Effect.gen(function*() {
+Effect.gen(function*() {
+  yield* L.events.pipe(
+    Stream.runForEach(logLEvent),
+    Effect.fork,
+  )
+
   const classification = yield* Effect.gen(function*() {
     yield* L.user`I'd like a refund please.`
-    return yield* L.assistantStruct(Schema.Struct({
+    return yield* L.assistantStruct({
       reasoning: Schema.String,
       type: Schema.Literal("general", "refund", "technical"),
       complexity: Schema.Literal("simple", "complex"),
-    }))
-  }).pipe(Effect.provide(Strand.layer({
-    system: `
+    })
+  }).pipe(Effect.provide(
+    Strand.new`
       Classify this supplied customer query:
 
       Determine:
@@ -31,20 +35,18 @@ await Effect.gen(function*() {
       2. Complexity (simple or complex)
       3. Brief reasoning for classification
     `,
-  })))
-  const response = L.assistantText.pipe(
-    Effect.provide(Strand.layer({
-      system: USE_CLASSIFICATION_PROMPTS[classification.type],
-    })),
+  ))
+  const response = L.assistant.pipe(
+    Effect.provide(
+      Strand.new(USE_CLASSIFICATION_PROMPTS[classification.type]),
+    ),
     classification.complexity === "complex"
       ? Effect.provide(OpenAiLanguageModel.model("gpt-4o-mini"))
-      : (e) => e as never,
+      : Effect.provide(Layer.empty),
   )
   return { classification, response }
 }).pipe(
-  Effect.provide(Strand.layer({
-    onMessage: Console.log,
-  })),
-  common,
+  Effect.provide(Strand.new()),
+  Effect.provide(model),
   Effect.runPromise,
 ).then(console.log)

@@ -1,8 +1,7 @@
-import * as Console from "effect/Console"
-import * as Effect from "effect/Effect"
-import * as Schema from "effect/Schema"
+import { Effect, Schema, Stream } from "effect"
 import { L, Strand } from "liminal"
-import { common } from "./_common.ts"
+import { model } from "./_layers.ts"
+import { logLEvent } from "./_logLEvent.ts"
 
 const Activity = Schema.Struct({
   title: Schema.String,
@@ -12,7 +11,12 @@ const Activity = Schema.Struct({
   forWhom: Schema.String,
 })
 
-await Effect.gen(function*() {
+Effect.gen(function*() {
+  yield* L.events.pipe(
+    Stream.runForEach(logLEvent),
+    Effect.fork,
+  )
+
   yield* L.user`I'm planning a trip to florida and want a suggestion for a fun activity.`
   let i = 0
   const activities: Array<typeof Activity.Type> = []
@@ -22,10 +26,9 @@ await Effect.gen(function*() {
     i++
   }
 }).pipe(
-  Effect.provide(Strand.layer({
-    system: `When you are asked a question, answer without asking for clarification.`,
-    onMessage: Console.log,
-  })),
-  common,
+  Effect.provide(
+    Strand.new`When you are asked a question, answer without asking for clarification.`,
+  ),
+  Effect.provide(model),
   Effect.runPromise,
 )

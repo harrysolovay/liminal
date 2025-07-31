@@ -2,7 +2,17 @@
   "extends": "../tsconfig.base",
   "compilerOptions": {
     "noEmit": false,
-    "outDir": "dist"
+    "outDir": "dist",
+    "plugins": [
+      {
+        "name": "@effect/language-service",
+        "transform": "@effect/language-service/transform",
+        "namespaceImportPackages": ["effect", "@effect/ai"],
+        "diagnosticSeverity": {
+          "importFromBarrel": "error"
+        }
+      }
+    ]
   },
   "include": ["."]
 }

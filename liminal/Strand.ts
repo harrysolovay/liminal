@@ -3,44 +3,77 @@ import * as AiTool from "@effect/ai/AiTool"
 import * as Context from "effect/Context"
 import * as Effect from "effect/Effect"
 import * as Layer from "effect/Layer"
-import * as Option from "effect/Option"
-
-export interface StrandConfig<E, R> {
-  /** The system prompt. */
-  system?: string | undefined
-  /** The initial list of AI input messages. */
-  messages?: Array<AiInput.Message> | undefined
-  /** Handler to be execute when messages are appended. */
-  onMessage?: (message: AiInput.Message) => Effect.Effect<void, E, R>
-}
+import * as PubSub from "effect/PubSub"
+import type { LEvent } from "./LEvent.ts"
 
 export class Strand extends Context.Tag("liminal/Strand")<Strand, {
-  system?: string | undefined
+  readonly system?: string | undefined
   messages: Array<AiInput.Message>
-  tools?: Array<AiTool.AiTool<string>>
-  onMessage: (message: AiInput.Message) => Effect.Effect<void>
-}>() {}
-
-/** Create an isolated clone of the current conversation to provide for an effect. */
-export const make: <E = never, R = never>(
-  config?: StrandConfig<E, R>,
-) => Effect.Effect<Strand["Type"], E, R> = (config) =>
-  Effect.map(
-    Effect.serviceOption(Strand),
-    Option.match({
-      onSome: ({ system, messages, tools, onMessage }) => ({
-        system: config ? config?.system : system,
-        messages: [...config ? config?.messages ?? [] : messages],
-        tools: [...tools ?? []],
-        onMessage: onMessage ?? (() => Effect.succeed(undefined)),
+  tools?: Array<AiTool.AiTool<string>> | undefined
+  readonly events: PubSub.PubSub<LEvent>
+}>() {
+  /** Create a layer for a Strand, which represents an conversation isolate. */
+  static new: {
+    (value?: string | undefined): Layer.Layer<Strand>
+    (template: TemplateStringsArray, ...substitutions: Array<unknown>): Layer.Layer<Strand>
+  } = (template, ...substitutions) =>
+    Layer.effect(
+      Strand,
+      this.make({
+        system: {
+          template,
+          substitutions,
+        },
+        messages: [],
+        tools: [],
       }),
-      onNone: () => ({
-        system: config?.system,
-        messages: config?.messages ?? [],
-        onMessage: (config?.onMessage ?? (() => Effect.succeed(undefined))) as never,
-      }),
-    }),
-  )
+    )
 
-export const layer: <E = never, R = never>(config?: StrandConfig<E, R>) => Layer.Layer<Strand, E, R> = (config) =>
-  Layer.effect(Strand, make(config))
+  /** Create a layer for a Strand, which represents an conversation isolate. */
+  static clone: {
+    (value?: string | undefined): Layer.Layer<Strand, never, Strand>
+    (template: TemplateStringsArray, ...substitutions: Array<unknown>): Layer.Layer<Strand, never, Strand>
+  } = (template, ...substitutions) =>
+    Layer.effect(
+      Strand,
+      Effect.gen(this, function*() {
+        const { system, messages, tools } = yield* Strand
+        return yield* this.make({
+          system: template
+            ? {
+              template,
+              substitutions,
+            }
+            : {
+              template: system,
+              substitutions: [],
+            },
+          messages: [...messages],
+          tools,
+        })
+      }),
+    )
+
+  private static make: (
+    config: {
+      system: {
+        template: TemplateStringsArray | string | undefined
+        substitutions: Array<unknown>
+      }
+      messages: Array<AiInput.Message>
+      tools: Array<AiTool.AiTool<string>> | undefined
+    },
+  ) => Effect.Effect<Strand["Type"]> = ({ system, messages, tools }) =>
+    Effect.gen(function*() {
+      return Strand.of({
+        system: typeof system.template === "string"
+          ? system.template
+          : system.template
+          ? String.raw(system.template, ...system.substitutions)
+          : undefined,
+        messages,
+        tools,
+        events: yield* PubSub.unbounded<LEvent>(),
+      })
+    })
+}
