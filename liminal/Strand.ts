@@ -1,46 +1,45 @@
-import * as AiInput from "@effect/ai/AiInput"
+import { Message } from "@effect/ai/AiInput"
 import * as AiTool from "@effect/ai/AiTool"
 import * as Context from "effect/Context"
 import * as Effect from "effect/Effect"
 import * as Layer from "effect/Layer"
-import * as Option from "effect/Option"
-
-export interface StrandConfig<E, R> {
-  /** The system prompt. */
-  system?: string | undefined
-  /** The initial list of AI input messages. */
-  messages?: Array<AiInput.Message> | undefined
-  /** Handler to be execute when messages are appended. */
-  onMessage?: (message: AiInput.Message) => Effect.Effect<void, E, R>
-}
+import * as PubSub from "effect/PubSub"
+import type { LEvent } from "./LEvent.ts"
+import { normalize, type OptionallyTaggable } from "./Taggable.ts"
 
 export class Strand extends Context.Tag("liminal/Strand")<Strand, {
-  system?: string | undefined
-  messages: Array<AiInput.Message>
-  tools?: Array<AiTool.AiTool<string>>
-  onMessage: (message: AiInput.Message) => Effect.Effect<void>
-}>() {}
+  readonly system?: string | undefined
+  messages: Array<Message>
+  tools?: Array<AiTool.AiTool<string>> | undefined
+  readonly events: PubSub.PubSub<LEvent>
+}>() {
+  /** Create a layer for a Strand, which represents an conversation isolate. */
+  static new: OptionallyTaggable<Layer.Layer<Strand>> = (a0, ...aRest) =>
+    Layer.effect(
+      Strand,
+      PubSub.unbounded<LEvent>().pipe(
+        Effect.map((events) =>
+          Strand.of({
+            system: normalize(a0, aRest),
+            messages: [],
+            events,
+          })
+        ),
+      ),
+    )
 
-/** Create an isolated clone of the current conversation to provide for an effect. */
-export const make: <E = never, R = never>(
-  config?: StrandConfig<E, R>,
-) => Effect.Effect<Strand["Type"], E, R> = (config) =>
-  Effect.map(
-    Effect.serviceOption(Strand),
-    Option.match({
-      onSome: ({ system, messages, tools, onMessage }) => ({
-        system: config ? config?.system : system,
-        messages: [...config ? config?.messages ?? [] : messages],
-        tools: [...tools ?? []],
-        onMessage: onMessage ?? (() => Effect.succeed(undefined)),
+  /** Create a layer for a Strand, which represents an conversation isolate. */
+  static clone: OptionallyTaggable<Layer.Layer<Strand, never, Strand>> = (a0, ...aRest) =>
+    Layer.effect(
+      Strand,
+      Effect.gen(function*() {
+        const { system, messages, tools } = yield* Strand
+        return Strand.of({
+          system: a0 ? normalize(a0, aRest) : system,
+          messages: [...messages],
+          tools,
+          events: yield* PubSub.unbounded<LEvent>(),
+        })
       }),
-      onNone: () => ({
-        system: config?.system,
-        messages: config?.messages ?? [],
-        onMessage: (config?.onMessage ?? (() => Effect.succeed(undefined))) as never,
-      }),
-    }),
-  )
-
-export const layer: <E = never, R = never>(config?: StrandConfig<E, R>) => Layer.Layer<Strand, E, R> = (config) =>
-  Layer.effect(Strand, make(config))
+    )
+}

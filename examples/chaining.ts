@@ -1,12 +1,16 @@
-import * as Console from "effect/Console"
-import * as Effect from "effect/Effect"
-import * as Schema from "effect/Schema"
+import { Effect, Schema, Stream } from "effect"
 import { L, Strand } from "liminal"
-import { common } from "./_common.ts"
+import { model } from "./_layers.ts"
+import { logLEvent } from "./_logLEvent.ts"
 
-await Effect.gen(function*() {
+Effect.gen(function*() {
+  yield* L.events.pipe(
+    Stream.runForEach(logLEvent),
+    Effect.fork,
+  )
+
   yield* L.user`Please generate the first draft.`
-  let copy = yield* L.assistantText
+  let copy = yield* L.assistant
   yield* L.user`
     Now evaluate this marketing copy for:
 
@@ -16,11 +20,11 @@ await Effect.gen(function*() {
 
     Copy to evaluate: ${copy}
   `
-  const qualityMetrics = yield* L.assistantStruct(Schema.Struct({
+  const qualityMetrics = yield* L.assistantStruct({
     hasCallToAction: Schema.Boolean,
     emotionalAppeal: Schema.Number,
     clarity: Schema.Number,
-  }))
+  })
   if (!qualityMetrics.hasCallToAction || qualityMetrics.emotionalAppeal < 7 || qualityMetrics.clarity < 7) {
     yield* L.user`
       Rewrite this marketing copy with:
@@ -31,14 +35,13 @@ await Effect.gen(function*() {
 
       Original copy: ${copy}
     `
-    copy = yield* L.assistantText
+    copy = yield* L.assistant
   }
   return { copy, qualityMetrics }
 }).pipe(
-  Effect.provide(Strand.layer({
-    system: `Write persuasive marketing copy for: Buffy The Vampire Slayer. Focus on benefits and emotional appeal.`,
-    onMessage: Console.log,
-  })),
-  common,
+  Effect.provide(
+    Strand.new`Write persuasive marketing copy for: Buffy The Vampire Slayer. Focus on benefits and emotional appeal.`,
+  ),
+  Effect.provide(model),
   Effect.runPromise,
 ).then(console.log)

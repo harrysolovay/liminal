@@ -1,15 +1,19 @@
-import * as Console from "effect/Console"
-import * as Effect from "effect/Effect"
-import * as Schema from "effect/Schema"
+import { Effect, Schema, Stream } from "effect"
 import { L, Strand } from "liminal"
-import { common } from "./_common.ts"
+import { model } from "./_layers.ts"
+import { logLEvent } from "./_logLEvent.ts"
 
 const TEXT = "..."
 
 Effect.gen(function*() {
+  yield* L.events.pipe(
+    Stream.runForEach(logLEvent),
+    Effect.fork,
+  )
+
   yield* L.user`Target language: typescript`
   yield* L.user`Text:\n\n${TEXT}`
-  let currentTranslation = yield* L.assistantText
+  let currentTranslation = yield* L.assistant
   let iterations = 0
   const MAX_ITERATIONS = 3
   while (iterations < MAX_ITERATIONS) {
@@ -25,14 +29,14 @@ Effect.gen(function*() {
       3. Preservation of nuance
       4. Cultural accuracy
     `
-    const evaluation = yield* L.assistantStruct(Schema.Struct({
+    const evaluation = yield* L.assistantStruct({
       qualityScore: Schema.Int,
       preservesTone: Schema.Boolean,
       preservesNuance: Schema.Boolean,
       culturallyAccurate: Schema.Boolean,
       specificIssues: Schema.Array(Schema.String),
       improvementSuggestions: Schema.Array(Schema.String),
-    }))
+    })
     if (
       evaluation.qualityScore >= 8
       && evaluation.preservesTone
@@ -50,7 +54,7 @@ Effect.gen(function*() {
       Original: ${TEXT}
       Current Translation: ${currentTranslation}
     `
-    currentTranslation = yield* L.assistantText
+    currentTranslation = yield* L.assistant
     iterations += 1
   }
   return {
@@ -58,11 +62,12 @@ Effect.gen(function*() {
     iterationsRequired: iterations,
   }
 }).pipe(
-  Effect.provide(Strand.layer({
-    system:
-      `You are an expert literary translator. Translate the supplied text to the specified target language, preserving tone and cultural nuances.`,
-    onMessage: Console.log,
-  })),
-  common,
+  Effect.provide(
+    Strand.new`
+      You are an expert literary translator. Translate the supplied text to the
+      specified target language, preserving tone and cultural nuances.
+    `,
+  ),
+  Effect.provide(model),
   Effect.runPromise,
 )

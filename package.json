@@ -20,7 +20,7 @@
     "@types/bun": "^1.2.19",
     "dprint": "^0.50.1",
     "ts-patch": "^3.3.0",
-    "typescript": "^5.8.3",
+    "typescript": "^5.9.2",
     "vitest": "^3.2.4"
   }
 }

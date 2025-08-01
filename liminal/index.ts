@@ -1,2 +1,3 @@
 export * as L from "./L.ts"
-export * as Strand from "./Strand.ts"
+export * from "./LEvent.ts"
+export * from "./Strand.ts"
