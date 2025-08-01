@@ -1,7 +1,7 @@
-import { Effect, Schema, Stream } from "effect"
+import { Effect, Schema } from "effect"
 import { L, Strand } from "liminal"
 import { model } from "./_layers.ts"
-import { logLEvent } from "./_logLEvent.ts"
+import { logger } from "./_logger.ts"
 
 const Activity = Schema.Struct({
   title: Schema.String,
@@ -12,10 +12,7 @@ const Activity = Schema.Struct({
 })
 
 Effect.gen(function*() {
-  yield* L.events.pipe(
-    Stream.runForEach(logLEvent),
-    Effect.fork,
-  )
+  yield* logger
 
   yield* L.user`I'm planning a trip to florida and want a suggestion for a fun activity.`
   let i = 0

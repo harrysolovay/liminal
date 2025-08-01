@@ -1,24 +1,10 @@
-import { Console, Effect, Stream } from "effect"
+import { Effect } from "effect"
 import { L, Strand } from "liminal"
 import { model } from "./_layers.ts"
-import { logLEvent } from "./_logLEvent.ts"
+import { logger } from "./_logger.ts"
 
 Effect.gen(function*() {
-  yield* L.events.pipe(
-    Stream.runForEach(logLEvent),
-    Effect.fork,
-  )
-
-  yield* L.reduce(function*() {
-    return Effect.gen(function*() {})
-  })
-
-  yield* L.rolling(function*() {
-    // yield* L.user`Please summarize the following`
-  }).pipe(
-    Stream.runForEach(Console.log),
-    Effect.fork,
-  )
+  yield* logger
 
   yield* L.user`Decide on a subtopic for us to discuss within the domain of technological futurism.`
   yield* L.assistant

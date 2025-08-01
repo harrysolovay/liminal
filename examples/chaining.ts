@@ -1,13 +1,10 @@
-import { Effect, Schema, Stream } from "effect"
+import { Effect, Schema } from "effect"
 import { L, Strand } from "liminal"
 import { model } from "./_layers.ts"
-import { logLEvent } from "./_logLEvent.ts"
+import { logger } from "./_logger.ts"
 
 Effect.gen(function*() {
-  yield* L.events.pipe(
-    Stream.runForEach(logLEvent),
-    Effect.fork,
-  )
+  yield* logger
 
   yield* L.user`Please generate the first draft.`
   let copy = yield* L.assistant
@@ -44,4 +41,4 @@ Effect.gen(function*() {
   ),
   Effect.provide(model),
   Effect.runPromise,
-).then(console.log)
+)

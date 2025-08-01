@@ -117,6 +117,7 @@ html.dark .VPFeatures img {
   --vp-c-bg-soft: #000000;
 }
 
+.VPLink.link.pager-link.prev,
 .VPLink.link.pager-link.next {
   border-radius: 0;
 }

@@ -1,8 +1,11 @@
 {
   "name": "liminal",
   "homepage": "https://liminal.land",
+  "llms": "https://liminal.land/llms.txt",
+  "llmsFull": "https://liminal.land/llmsFull.txt",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "version": "0.10.0",
   "license": "Apache-2.0",
@@ -12,12 +15,11 @@
     "directory": "liminal"
   },
   "type": "module",
+  "sideEffects": false,
   "description": "Primitives for composing conversation trees with language models and TypeScript iterators.",
   "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./index.ts"
-    }
+    ".": "./index.ts",
+    "./package.json": "./package.json"
   },
   "peerDependencies": {
     "@effect/ai": "^0.18.16",

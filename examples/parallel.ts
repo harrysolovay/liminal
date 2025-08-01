@@ -1,9 +1,9 @@
 import { Path } from "@effect/platform"
 import { BunPath } from "@effect/platform-bun"
-import { Effect, Schema, Stream } from "effect"
+import { Effect, Schema } from "effect"
 import { L, Strand } from "liminal"
 import { model } from "./_layers.ts"
-import { logLEvent } from "./_logLEvent.ts"
+import { logger } from "./_logger.ts"
 
 const Lmh = Schema.Literal("lower", "medium", "high")
 
@@ -48,10 +48,7 @@ const maintainability = L.assistantStruct({
 )
 
 Effect.gen(function*() {
-  yield* L.events.pipe(
-    Stream.runForEach(logLEvent),
-    Effect.fork,
-  )
+  yield* logger
 
   const path = yield* Path.Path
   const code = yield* path.fromFileUrl(new URL(import.meta.url))

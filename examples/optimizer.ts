@@ -1,15 +1,12 @@
-import { Effect, Schema, Stream } from "effect"
+import { Effect, Schema } from "effect"
 import { L, Strand } from "liminal"
 import { model } from "./_layers.ts"
-import { logLEvent } from "./_logLEvent.ts"
+import { logger } from "./_logger.ts"
 
 const TEXT = "..."
 
 Effect.gen(function*() {
-  yield* L.events.pipe(
-    Stream.runForEach(logLEvent),
-    Effect.fork,
-  )
+  yield* logger
 
   yield* L.user`Target language: typescript`
   yield* L.user`Text:\n\n${TEXT}`
