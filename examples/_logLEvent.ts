@@ -8,7 +8,7 @@ const formatLEvent: (event: LEvent) => string = (event) => {
       return event.messages.map(formatMessage).join("\n")
     }
     case "MessagesReduced": {
-      return `Reduced ${event.messages}`
+      return `Reduced:\n\n${event.messages.map(formatMessage).join("\n")}`
     }
   }
 }
