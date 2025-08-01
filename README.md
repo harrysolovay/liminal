@@ -3,7 +3,7 @@
 > Liminal is a work in progress. The documentation may not reflect the current
 > implementation.
 
-Liminal is an [Effect-based](https://effect.website/) library for composing
+Liminal is an [Effect](https://effect.website/)-based library for composing
 conversation trees with language models.
 
 - [Documentation &rarr;](https://liminal.land)<br />Usage guide intended for

@@ -14,7 +14,7 @@ const security = L.assistantStruct({
   suggestions: Schema.Array(Schema.String),
 }).pipe(
   Effect.provide(
-    Strand.new`
+    Strand.clone`
       You are an expert in code security. Focus on identifying security
       vulnerabilities, injection risks, and authentication issues.
     `,
@@ -27,7 +27,7 @@ const performance = L.assistantStruct({
   impact: Lmh,
   optimizations: Schema.Array(Schema.String),
 }).pipe(Effect.provide(
-  Strand.new`
+  Strand.clone`
     You are an expert in code performance. Focus on identifying performance
     bottlenecks, memory leaks, and optimization opportunities.
   `,
@@ -40,7 +40,7 @@ const maintainability = L.assistantStruct({
   recommendations: Schema.Array(Schema.String),
 }).pipe(
   Effect.provide(
-    Strand.new`
+    Strand.clone`
       You are an expert in code quality. Focus on code structure,
       readability, and adherence to best practices.
     `,
