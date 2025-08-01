@@ -4,11 +4,8 @@ import type { LEvent } from "liminal"
 
 const formatLEvent: (event: LEvent) => string = (event) => {
   switch (event._tag) {
-    case "MessageAppended": {
-      return formatMessage(event.message)
-    }
-    case "MessagesConcatenated": {
-      return ""
+    case "MessagesAppended": {
+      return event.messages.map(formatMessage).join("\n")
     }
     case "MessagesReduced": {
       return `Reduced ${event.messages}`

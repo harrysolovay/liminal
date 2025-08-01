@@ -1,4 +1,4 @@
-import * as AiInput from "@effect/ai/AiInput"
+import { Message } from "@effect/ai/AiInput"
 import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
 import * as PubSub from "effect/PubSub"
@@ -6,7 +6,7 @@ import type { YieldWrap } from "effect/Utils"
 import { append } from "./append.ts"
 import { LEvent, MessagesReduced } from "./LEvent.ts"
 import { Strand } from "./Strand.ts"
-import { set } from "./unsafeSet.ts"
+import { unsafeSet } from "./unsafeSet.ts"
 
 /** Reduce the current strand's messages. */
 export const reduce: <Y extends YieldWrap<Effect.Effect<any, any, any>>, A, E, R>(
@@ -40,7 +40,7 @@ export const reduce: <Y extends YieldWrap<Effect.Effect<any, any, any>>, A, E, R
         Effect.provide(Strand.new()),
       )
   }
-  const messages: Array<AiInput.Message> = []
+  const messages: Array<Message> = []
   yield* prelude.pipe(Effect.provideService(
     Strand,
     Strand.of({
@@ -48,7 +48,7 @@ export const reduce: <Y extends YieldWrap<Effect.Effect<any, any, any>>, A, E, R
       events: yield* PubSub.unbounded<LEvent>(),
     }),
   ))
-  const previous = yield* set(messages)
+  const previous = yield* unsafeSet(messages)
   yield* strand.events.publish(
     MessagesReduced.make({ previous, messages }),
   )
