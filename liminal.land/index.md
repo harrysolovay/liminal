@@ -5,7 +5,7 @@ hero:
   name: Liminal
   text: Effects for Managing Conversation State
   image: /liminal_tree.png
-  tagline: Reusable, branchable, self-evolving conversations.
+  tagline: Liminal turns effects into LLM-powered conversations, which can be intuitively evolved and branched into trees of possibilities.
   actions:
     - theme: brand
       text: Overview

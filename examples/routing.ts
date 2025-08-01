@@ -1,8 +1,8 @@
 import { OpenAiLanguageModel } from "@effect/ai-openai"
-import { Effect, Layer, Schema, Stream } from "effect"
+import { Effect, Layer, Schema } from "effect"
 import { L, Strand } from "liminal"
 import { model } from "./_layers.ts"
-import { logLEvent } from "./_logLEvent.ts"
+import { logger } from "./_logger.ts"
 
 const USE_CLASSIFICATION_PROMPTS = {
   general: "You are an expert customer service representative handling general inquiries.",
@@ -13,10 +13,7 @@ const USE_CLASSIFICATION_PROMPTS = {
 }
 
 Effect.gen(function*() {
-  yield* L.events.pipe(
-    Stream.runForEach(logLEvent),
-    Effect.fork,
-  )
+  yield* logger
 
   const classification = yield* Effect.gen(function*() {
     yield* L.user`I'd like a refund please.`
@@ -49,4 +46,4 @@ Effect.gen(function*() {
   Effect.provide(Strand.new()),
   Effect.provide(model),
   Effect.runPromise,
-).then(console.log)
+)
