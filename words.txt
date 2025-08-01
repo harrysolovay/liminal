@@ -35,6 +35,7 @@ ollama
 ossp
 pglite
 pgvector
+pipeable
 repomix
 rica
 rootable

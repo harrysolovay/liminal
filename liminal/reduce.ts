@@ -1,22 +1,20 @@
 import { Message } from "@effect/ai/AiInput"
 import * as Effect from "effect/Effect"
-import * as Option from "effect/Option"
 import * as PubSub from "effect/PubSub"
-import type { YieldWrap } from "effect/Utils"
 import { append } from "./append.ts"
 import { LEvent, MessagesReduced } from "./LEvent.ts"
+import type { Reduce } from "./Reducer1.ts"
 import { Strand } from "./Strand.ts"
 import { unsafeSet } from "./unsafeSet.ts"
+import type * as YieldUnwrap from "./YieldUnwrap.ts"
 
 /** Reduce the current strand's messages. */
-export const reduce: <Y extends YieldWrap<Effect.Effect<any, any, any>>, A, E, R>(
-  reducer: () => Generator<Y, Effect.Effect<Option.Option<A>, E, R>, never>,
+export const reduce: <Y extends YieldUnwrap.Any, E1, R1>(
+  reducer: Reduce<Y, E1, R1>,
 ) => Effect.Effect<
   void,
-  ([Y] extends [never] ? never : [Y] extends [YieldWrap<Effect.Effect<infer _A, infer E, infer _R>>] ? E : never) | E,
-  | Strand
-  | ([Y] extends [never] ? never : [Y] extends [YieldWrap<Effect.Effect<infer _A, infer _E, infer R>>] ? R : never)
-  | R
+  YieldUnwrap.E<Y> | E1,
+  YieldUnwrap.R<Y> | R1 | Strand
 > = Effect.fnUntraced(function*(reducer) {
   const strand = yield* Strand
   if (!strand.messages.length || strand.messages.length === 1) return
