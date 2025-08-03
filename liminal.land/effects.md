@@ -23,15 +23,12 @@ decouple our random number factory implementation from its usage.
 ```ts twoslash
 import { Context, Effect } from "effect"
 
-class Random extends Context.Tag("Random")<
-  Random,
-  { next: () => number }
->() {}
+class Random extends Context.Tag("Random")<Random, () => number>() {}
 
 const program = Effect.gen(function*() {
   const random = yield* Random
 
-  return random.next()
+  return random()
 })
 
 program
@@ -92,23 +89,19 @@ the boundary of the conversation.
 ```ts twoslash
 import { Effect } from "effect"
 declare const conversation: Effect.Effect<void>
-import { Strand } from "liminal"
+import { L } from "liminal"
 // ---cut---
 Effect.gen(function*() {
   // Run in the current conversation.
   yield* conversation
 
   // Run isolated with an untouched state.
-  yield* conversation.pipe(
-    Effect.provide(Strand.new()),
-  )
+  yield* conversation.pipe(L.strand)
 
   // Run isolated with a copy of the current state.
-  yield* conversation.pipe(
-    Effect.provide(Strand.clone()),
-  )
+  yield* conversation.pipe(L.branch)
 }).pipe(
-  Effect.provide(Strand.new()),
+  L.strand,
 )
 ```
 

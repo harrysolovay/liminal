@@ -11,35 +11,22 @@ A strand is a container for a conversation. Each strand tracks a few properties:
 4. A pubsub with which we can subscribe to conversation events such as the
    appending of a new message.
 
-## `Strand.new`
+## `L.strand`
 
-`Strand.new` produces a layer, which provides a strand with an empty list of
+`L.strand` produces a layer, which provides a strand with an empty list of
 messages and no tools.
 
 ```ts twoslash
 import { Effect } from "effect"
-import { Strand } from "liminal"
+import { L } from "liminal"
 declare const conversation: Effect.Effect<void>
 // ---cut---
-conversation.pipe(
-  Effect.provide(
-    Strand.new`You are a helpful assistant...`,
-  ),
-)
+L.strand(conversation)
 ```
 
-It is overloaded to accept a system prompt through tagged template or ordinary
-function call.
+## `L.branch`
 
-```ts
-Strand.new()
-Strand.new`System prompt`
-Strand.new("System prompt")
-```
-
-## `Strand.clone`
-
-`Strand.clone` produces a layer, which provides a strand containing a clone of
+`L.branch` produces a layer, which provides a strand containing a clone of
 current strand's messages, tools and system unless otherwise specified.
 
 ```ts twoslash
@@ -51,20 +38,8 @@ Effect.gen(function*() {
   yield* L.user`...`
   yield* L.assistant
 
-  yield* conversation.pipe(
-    Effect.provide(
-      Strand.clone(),
-    ),
-  )
+  yield* conversation.pipe(L.branch)
 })
-```
-
-`Strand.clone` is overloaded similarly to `Strand.new`.
-
-```ts
-Strand.clone()
-Strand.clone`System prompt`
-Strand.clone("System prompt")
 ```
 
 ## `Strand.make`

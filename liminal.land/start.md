@@ -81,6 +81,10 @@ L.
 <br />
 <br />
 <br />
+<br />
+<br />
+<br />
+<br />
 
 We yield Liminal Effects within an `Effect.gen` body to control the underlying
 conversation state without manually managing structures the list of messages.
@@ -137,6 +141,9 @@ declare const EMAIL_REGEX: RegExp
 const validateEmail = Effect.fn(function*(email: string) {
   if (EMAIL_REGEX.test(email)) return
 
+  // Provide a system prompt.
+  yield* L.system`You are an email-validating assistant.`
+
   // If invalid, ask why.
   yield* L.user`Why is the following email is invalid?: "${email}".`
 
@@ -149,20 +156,17 @@ const validateEmail = Effect.fn(function*(email: string) {
 
 We mark the boundary of the Effect's conversation by providing a `Strand`.
 
-```ts {7-9} twoslash
+```ts {6} twoslash
 import { Effect } from "effect"
+import { L } from "liminal"
 // ---cut---
-import { Strand } from "liminal"
-
-const validateEmail = Effect.fn(
-  function*(email: string) {
+const validateEmail = (email: string) =>
+  Effect.gen(function*() {
     // Same as above...
     return yield* L.assistant
-  },
-  Effect.provide(
-    Strand.new`You are an email-validating assistant.`,
-  ),
-)
+  }).pipe(
+    L.strand,
+  )
 ```
 
 ## Specifying Models
@@ -195,27 +199,25 @@ may want to satisfy requirements once at the root of your effect program.
 Alternatively, you can use it in the leaves of your program, such as in
 `validateEmail`.
 
-```ts{9} twoslash
+```ts twoslash {7}
 import { AiLanguageModel } from "@effect/ai/AiLanguageModel"
 import { Effect, Layer } from "effect"
 import type { ConfigError } from "effect/ConfigError"
-import { L, Strand } from "liminal"
+import { L } from "liminal"
 
 declare const model: Layer.Layer<AiLanguageModel, ConfigError, never>
 // ---cut---
-const validateEmail = Effect.fn(
-  function*(email: string) {
+const validateEmail = (email: string) =>
+  Effect.gen(function*() {
     // Same as above...
     return yield* L.assistant
-  },
-  Effect.provide(
-    Strand.new`You are an email-validating assistant.`,
-  ),
-  Effect.provide(model),
-)
+  }).pipe(
+    L.strand,
+    Effect.provide(model),
+  )
 
 const errorMessage = await validateEmail("≽^•⩊•^≼").pipe(
-  Effect.runPromise
+  Effect.runPromise,
 )
 ```
 
