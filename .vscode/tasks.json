@@ -1,0 +1,26 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "tsc",
+      "type": "shell",
+      "command": "tsc -b -w",
+      "problemMatcher": []
+    },
+    {
+      "label": "vite",
+      "type": "shell",
+      "command": "bunx vitepress",
+      "options": {
+        "cwd": "liminal.land"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "dev",
+      "type": "shell",
+      "dependsOn": ["tsc", "vite"],
+      "problemMatcher": []
+    }
+  ]
+}

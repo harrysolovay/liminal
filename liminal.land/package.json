@@ -1,5 +1,6 @@
 {
   "name": "liminal.land",
+  "homepage": "https://liminal.land",
   "private": true,
   "type": "module",
   "devDependencies": {

@@ -15,6 +15,7 @@ iconoir
 inferencing
 inheritables
 initdb
+langgraphjs
 ljson
 llms
 llmstxt
@@ -35,6 +36,7 @@ ollama
 ossp
 pglite
 pgvector
+pipeable
 repomix
 rica
 rootable

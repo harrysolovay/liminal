@@ -4,7 +4,7 @@ export type Taggable<T> = {
   (template: string | TemplateStringsArray, ...substitutions: Array<unknown>): T
 }
 
-export type OptionallyTaggable<T> = {
+export type TaggableNullable<T> = {
   (value?: string | undefined): T
   (template: TemplateStringsArray, ...substitutions: Array<unknown>): T
   (template?: string | TemplateStringsArray | undefined, ...substitutions: Array<unknown>): T

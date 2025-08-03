@@ -3,9 +3,9 @@ layout: home
 title: Liminal
 hero:
   name: Liminal
-  text: Effects for Managing Conversation State
+  text: Effect-based Conversation Runtime
   image: /liminal_tree.png
-  tagline: Reusable, branchable, self-evolving conversations.
+  tagline: A mental model and Effect AI toolkit for conversation-modeling and LLM integration.
   actions:
     - theme: brand
       text: Overview

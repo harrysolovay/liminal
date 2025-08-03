@@ -1,9 +1,11 @@
 import { transformerTwoslash } from "@shikijs/vitepress-twoslash"
 import footnotePlugin from "markdown-it-footnote"
 import markdownSteps from "markdown-it-steps"
-import { defineConfig, HeadConfig } from "vitepress"
+import { defineConfig } from "vitepress"
 import { llmstxtPlugin } from "vitepress-plugin-llmstxt"
-import packageJson from "../../liminal/package.json" with { type: "json" }
+import liminalRootPackageJson from "../../liminal/package.json" with { type: "json" }
+import liminalLandPackageJson from "../package.json" with { type: "json" }
+import { sidebar } from "./sidebar.ts"
 
 // cspell:disable
 const GOOGLE_ANALYTICS = `
@@ -16,12 +18,17 @@ const GOOGLE_ANALYTICS = `
 
 export default defineConfig({
   title: "Liminal",
-  description: packageJson.description,
+  description: liminalRootPackageJson.description,
   vite: {
-    plugins: [llmstxtPlugin()],
+    plugins: [
+      llmstxtPlugin({
+        llmsFullFile: true,
+        hostname: liminalLandPackageJson.homepage,
+      }),
+    ],
   },
   markdown: {
-    codeTransformers: [transformerTwoslash()],
+    codeTransformers: [transformerTwoslash() as never],
     theme: {
       light: "light-plus",
       dark: "dracula",
@@ -57,47 +64,21 @@ export default defineConfig({
       { icon: "x", link: "https://x.com/harrysolovay" },
     ],
     search: { provider: "local" },
-    sidebar: [
-      {
-        text: "llms.txt",
-        link: "llms.txt",
-        target: "blank",
-      },
-      {
-        text: "Examples",
-        link: "https://github.com/harrysolovay/liminal/tree/main/examples",
-        target: "blank",
-      },
-      // {
-      //   text: "Contribute",
-      //   link: "https://github.com/harrysolovay/liminal/tree/main/CONTRIBUTING.md",
-      //   target: "blank",
-      // },
-      {
-        text: "Introduction",
-        items: [
-          { text: "Overview", link: "/overview" },
-          { text: "Quickstart", link: "/start" },
-        ],
-      },
-    ],
+    sidebar,
   },
   transformHead: ({ pageData: { frontmatter }, siteData }) => {
-    const head: Array<HeadConfig> = []
     const title = `${frontmatter.title || siteData.title} | ${frontmatter.titleTemplate || "Liminal"}`
     const description = frontmatter.description || siteData.description
     const image = `https://liminal.land${frontmatter.image || "/ogp.png"}`
-
-    head.push(["meta", { property: "og:type", content: "website" }])
-    head.push(["meta", { property: "og:title", content: title }])
-    head.push(["meta", { property: "og:image", content: image }])
-    head.push(["meta", { property: "og:description", content: description }])
-
-    head.push(["meta", { name: "twitter:title", content: title }])
-    head.push(["meta", { name: "twitter:image", content: image }])
-    head.push(["meta", { name: "twitter:description", content: description }])
-    head.push(["meta", { name: "twitter:card", content: "summary_large_image" }])
-
-    return head
+    return [
+      ["meta", { property: "og:type", content: "website" }],
+      ["meta", { property: "og:title", content: title }],
+      ["meta", { property: "og:description", content: description }],
+      ["meta", { property: "og:image", content: image }],
+      ["meta", { name: "twitter:title", content: title }],
+      ["meta", { name: "twitter:description", content: description }],
+      ["meta", { name: "twitter:image", content: image }],
+      ["meta", { name: "twitter:card", content: "summary_large_image" }],
+    ]
   },
 })

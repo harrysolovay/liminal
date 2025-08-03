@@ -1,16 +1,17 @@
-import { Effect, Schema, Stream } from "effect"
-import { L, Strand } from "liminal"
+import { Effect, Schema } from "effect"
+import { L } from "liminal"
 import { model } from "./_layers.ts"
-import { logLEvent } from "./_logLEvent.ts"
+import { logger } from "./_logger.ts"
 
 const TEXT = "..."
 
 Effect.gen(function*() {
-  yield* L.events.pipe(
-    Stream.runForEach(logLEvent),
-    Effect.fork,
-  )
+  yield* logger
 
+  yield* L.user`
+    You are an expert literary translator. Translate the supplied text to the
+    specified target language, preserving tone and cultural nuances.
+  `
   yield* L.user`Target language: typescript`
   yield* L.user`Text:\n\n${TEXT}`
   let currentTranslation = yield* L.assistant
@@ -62,12 +63,7 @@ Effect.gen(function*() {
     iterationsRequired: iterations,
   }
 }).pipe(
-  Effect.provide(
-    Strand.new`
-      You are an expert literary translator. Translate the supplied text to the
-      specified target language, preserving tone and cultural nuances.
-    `,
-  ),
+  L.strand,
   Effect.provide(model),
   Effect.runPromise,
 )

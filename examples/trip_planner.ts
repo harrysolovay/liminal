@@ -1,17 +1,14 @@
 import { Terminal } from "@effect/platform"
 import { BunTerminal } from "@effect/platform-bun"
-import { Effect, Schema, Stream } from "effect"
-import { L, Strand } from "liminal"
+import { Effect, Layer, Schema } from "effect"
+import { L } from "liminal"
 import { model } from "./_layers.ts"
-import { logLEvent } from "./_logLEvent.ts"
+import { logger } from "./_logger.ts"
 
 const DEPARTURE_LOCATION = "New York City"
 
 Effect.gen(function*() {
-  yield* L.events.pipe(
-    Stream.runForEach(logLEvent),
-    Effect.fork,
-  )
+  yield* logger
 
   yield* L.user`
     I want to plan a weekend trip leaving from ${DEPARTURE_LOCATION}. I don't know where to go.
@@ -35,8 +32,9 @@ Effect.gen(function*() {
   yield* L.user`Where can I stay there, what can I do there, how do I get there?`
   return yield* L.assistant
 }).pipe(
-  Effect.provide(Strand.new()),
-  Effect.provide(model),
-  Effect.provide(BunTerminal.layer),
+  L.strand,
+  Effect.provide(
+    Layer.merge(model, BunTerminal.layer),
+  ),
   Effect.runPromise,
-).then(console.log)
+)

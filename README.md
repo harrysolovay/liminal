@@ -3,54 +3,47 @@
 > Liminal is a work in progress. The documentation may not reflect the current
 > implementation.
 
-Liminal is an [Effect-based](https://effect.website/) library for composing
+Liminal is an [Effect](https://effect.website/)-based library for composing
 conversation trees with language models.
 
 - [Documentation &rarr;](https://liminal.land)<br />Usage guide intended for
   human readers.
 - [Examples &rarr;](https://github.com/harrysolovay/liminal/tree/main/examples)<br />Examples
   illustrating common use cases.
-- [llms.txt &rarr;](https://liminal.land/llms.txt)<br />Chunks of truth to be
-  fed into LLMs.
+- [llms.txt &rarr;](https://liminal.land/llms-full.txt)<br />Chunks of truth to
+  be fed into LLMs.
 
 ## Overview
 
-Model a conversation as a generator function. Yield Liminal Effects to interact
-with the underlying state of the conversation strand.
+An effect is a conversation.
+
+`example.ts`
 
 ```ts
-import { Effect } from "effect"
-import { L, Strand } from "liminal"
+import { FileSystem } from "@effect/platform"
+import { Console, Effect } from "effect"
+import { L } from "liminal"
 
 const conversation = Effect.gen(function*() {
-  yield* L
-    .user`Decide on a subtopic for us to discuss within the domain of technological futurism.`
-  yield* L.assistant
-  yield* L
-    .user`Great, please teach something interesting about this choice of subtopic.`
-  yield* L.assistant
-  let i = 0
-  while (i < 3) {
-    const reply = yield* Effect
-      .gen(function*() {
-        yield* L.user`Please reply to the last message on my behalf.`
-        return yield* L.assistant
-      })
-      .pipe(Effect.provide(Strand.clone()))
-    yield* L.user(reply)
-    yield* L.assistant
-    i++
-  }
-  yield* L.user`Please summarize the key points from our conversation.`
-  return yield* L.assistant
-}).pipe(
-  Effect.provide(
-    Strand.new`
-      When an instruction is given, don't ask any follow-up questions.
-      Just reply to the best of your ability given the information you have.
-    `,
-  ),
-)
+  // Set system.
+  yield* L.system`You are an expert TypeScript developer.`
+
+  // Append messages.
+  yield* L.user`
+    It seems as though a new mental model may arise for
+    LLM conversation state management.
+
+    What are your thoughts on the following DX?
+  `
+  const fs = yield* FileSystem.FileSystem
+  const code = yield* fs.readFileString("example.ts")
+  yield* L.user(code)
+
+  // Infer and append the assistant message.
+  const reply = yield* L.assistant
+
+  reply satisfies string
+}).pipe(L.strand)
 ```
 
 ## Running Examples Locally
