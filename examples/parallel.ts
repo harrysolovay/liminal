@@ -3,7 +3,6 @@ import { BunContext } from "@effect/platform-bun"
 import { Effect, Layer, Schema } from "effect"
 import { L } from "liminal"
 import { model } from "./_layers.ts"
-import { logger } from "./_logger.ts"
 
 const Lmh = Schema.Literal("lower", "medium", "high")
 
@@ -55,7 +54,6 @@ Effect.gen(function*() {
   )
 
   const reviews = yield* L.strand(
-    logger,
     L.system`
       You are a technical lead summarizing multiple code reviews. Review the supplied code.
     `,
@@ -66,10 +64,9 @@ Effect.gen(function*() {
   )
 
   const summary = yield* L.strand(
-    logger,
     L.system`You are a technical lead summarizing multiple code reviews.`,
     L.user`Please summarize the following code reviews.`,
-    L.user(JSON.stringify(reviews, null, 2)),
+    L.userJson(reviews),
     L.assistant,
   )
 
@@ -79,4 +76,4 @@ Effect.gen(function*() {
     Layer.merge(BunContext.layer, model),
   ),
   Effect.runPromise,
-)
+).then(console.log)

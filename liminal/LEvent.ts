@@ -8,17 +8,16 @@ export class MessagesAppended extends Schema.TaggedClass<MessagesAppended>("Mess
   messages: Messages,
 }) {}
 
-/** An event in which a reducer was applied to the current strand's message list. */
-export class MessagesReduced extends Schema.TaggedClass<MessagesReduced>("MessagesReduced")("MessagesReduced", {
-  previous: Messages,
-  messages: Messages,
+/** An event in which the current strand's message list is cleared. */
+export class MessagesCleared extends Schema.TaggedClass<MessagesCleared>("MessagesCleared")("MessagesCleared", {
+  cleared: Messages,
 }) {}
 
 export type LEvent = typeof LEvent["Type"]
 export const LEvent: Schema.Union<[
   typeof MessagesAppended,
-  typeof MessagesReduced,
+  typeof MessagesCleared,
 ]> = Schema.Union(
   MessagesAppended,
-  MessagesReduced,
+  MessagesCleared,
 )

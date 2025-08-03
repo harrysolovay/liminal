@@ -1,37 +1,24 @@
-import * as Effect from "effect/Effect"
+import { Message } from "@effect/ai/AiInput"
+import type { AiTool } from "@effect/ai/AiTool"
+import * as Context from "effect/Context"
 import * as Option from "effect/Option"
 import * as PubSub from "effect/PubSub"
-import type { Last } from "./_Tuple.ts"
-import { Strand } from "./Conversation.ts"
 import type { LEvent } from "./LEvent.ts"
 
-/** Isolate the effect with a new strand in context. */
-export const strand: <L extends Array<Effect.All.EffectAny>>(...steps: L) => Effect.Effect<
-  [L] extends [] ? void
-    : [Last<L>] extends [Effect.Effect<infer A, infer _E, infer _R>] ? A
-    : never,
-  [L[number]] extends [never] ? never : [L[number]] extends [Effect.Effect<infer _A, infer E, infer _R>] ? E : never,
-  ([L[number]] extends [never] ? never
-    : [L[number]] extends [Effect.Effect<infer _A, infer _E, infer R>] ? Exclude<R, Strand>
-    : never)
-> = (...steps) =>
-  Effect.gen(function*() {
-    if (!steps.length) return
-    let current = yield* steps.pop()!
-    while (steps.length) {
-      current = yield* steps.pop()!
-    }
-    return current
-  }).pipe(
-    Effect.provideServiceEffect(
-      Strand,
-      Effect.gen(function*() {
-        return Strand.of({
-          parent: yield* Effect.serviceOption(Strand),
-          events: yield* PubSub.unbounded<LEvent>(),
-          system: Option.none(),
-          messages: [],
-        })
-      }),
-    ),
-  )
+export declare namespace Strand {
+  export interface Service {
+    /** The parent strand. */
+    readonly parent: Option.Option<Service>
+    /** The pubsub with which the current strand's events are emitted. */
+    readonly events: PubSub.PubSub<LEvent>
+    /** The current system prompt to be passed along to the model. */
+    system: Option.Option<string>
+    /** The list of messages that the model uses to infer the next message. */
+    messages: Array<Message>
+    /** The tools available to the model. */
+    tools: Array<AiTool<string>>
+  }
+}
+
+/** A context tag that denotes the boundary of a conversation isolate. */
+export class Strand extends Context.Tag("liminal/Strand")<Strand, Strand.Service>() {}

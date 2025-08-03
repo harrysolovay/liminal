@@ -5,7 +5,7 @@ import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
 import * as Schema from "effect/Schema"
 import { append } from "./append.ts"
-import { Strand } from "./Conversation.ts"
+import { Strand } from "./Strand.ts"
 
 /** Infer a structured assistant message and append its JSON representation to the conversation. */
 export const assistantStruct: {

@@ -6,7 +6,6 @@ import { logger } from "./_logger.ts"
 
 Effect.gen(function*() {
   yield* logger
-
   yield* L.user`Write a rap about type-level programming in TypeScript`
   yield* L.assistant
   yield* L.user`Rewrite it in whatever way you think best.`

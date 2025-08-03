@@ -13,8 +13,8 @@ export const pretty: (event: typeof LEvent["Type"]) => string = (event) => {
       text += event.messages.map(formatMessage).join("\n")
       break
     }
-    case "MessagesReduced": {
-      text += event.messages.map(formatMessage).join("\n")
+    case "MessagesCleared": {
+      text += `${event.cleared.length} messages cleared.`
       break
     }
   }

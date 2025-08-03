@@ -20,8 +20,10 @@ Effect.gen(function*() {
   yield* L.assistant
 
   yield* Effect.gen(function*() {
-    yield* L.user`Please summarize our conversation.`
-    const summary = yield* L.assistant
+    const summary = yield* L.strand(
+      L.user`Please summarize our conversation.`,
+      L.assistant,
+    )
 
     // @effect-diagnostics-next-line returnEffectInGen:off
     return Effect.gen(function*() {
