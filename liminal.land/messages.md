@@ -4,6 +4,8 @@
 
 ## `L.user`
 
+## `L.userJson`
+
 ## `L.assistant`
 
 ## `L.assistantStruct`
