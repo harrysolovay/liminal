@@ -12,11 +12,3 @@ export type Sequence<P = never, R1 = never> = <Arg extends Array<Effect.Effect<a
     P
   > | R1
 >
-
-// TODO: maybe ditch `Effect.all`?
-export const ab: Sequence = (...steps) =>
-  Effect.all(steps, {
-    concurrency: 1,
-  }).pipe(
-    Effect.map((v: Array<never>) => v.pop()!) as never,
-  )

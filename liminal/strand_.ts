@@ -2,13 +2,14 @@ import * as Effect from "effect/Effect"
 import { flow } from "effect/Function"
 import * as Option from "effect/Option"
 import * as PubSub from "effect/PubSub"
-import { ab, type Sequence } from "./internal/Sequence.ts"
 import type { LEvent } from "./LEvent.ts"
+import { type Sequence } from "./Sequence.ts"
+import { sequence } from "./sequence_.ts"
 import { Strand } from "./Strand.ts"
 
 /** Isolate the effect with a new strand in context. */
 export const strand: Sequence<Strand> = flow(
-  ab,
+  sequence,
   Effect.provideServiceEffect(
     Strand,
     Effect.gen(function*() {
