@@ -1,13 +1,17 @@
 import { Message } from "@effect/ai/AiInput"
 import * as Schema from "effect/Schema"
 
+export class Messages extends Schema.Array(Message) {}
+
+/** An event in which one or more messages were added to the current strand's message list. */
 export class MessagesAppended extends Schema.TaggedClass<MessagesAppended>("MessagesAppended")("MessagesAppended", {
-  messages: Schema.Array(Message),
+  messages: Messages,
 }) {}
 
+/** An event in which a reducer was applied to the current strand's message list. */
 export class MessagesReduced extends Schema.TaggedClass<MessagesReduced>("MessagesReduced")("MessagesReduced", {
-  previous: Schema.Array(Message),
-  messages: Schema.Array(Message),
+  previous: Messages,
+  messages: Messages,
 }) {}
 
 export type LEvent = typeof LEvent["Type"]
@@ -18,42 +22,3 @@ export const LEvent: Schema.Union<[
   MessagesAppended,
   MessagesReduced,
 )
-
-const GRAY = "\x1b[90m"
-const RESET = "\x1b[0m"
-const BOLD = "\x1b[1m"
-const GRAY_BG = "\x1b[47m"
-
-export const pretty: (event: typeof LEvent["Type"]) => string = (event) => {
-  let text = `${GRAY}${event._tag}${RESET}`
-  switch (event._tag) {
-    case "MessagesAppended": {
-      text += event.messages.map(formatMessage).join("\n")
-      break
-    }
-    case "MessagesReduced": {
-      text += event.messages.map(formatMessage).join("\n")
-      break
-    }
-  }
-  return text
-}
-
-const formatMessage = ({ _tag, parts }: Message): string => {
-  let value = ""
-  for (const part of parts) {
-    value += `\n${BOLD}${_tag}\n${GRAY_BG}`
-    switch (part._tag) {
-      case "TextPart": {
-        value += `${part.text}`
-        break
-      }
-      default: {
-        value += `${JSON.stringify(part, null, 2)}`
-        break
-      }
-    }
-    value += RESET
-  }
-  return value
-}

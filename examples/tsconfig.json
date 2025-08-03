@@ -1,5 +1,13 @@
 {
   "extends": "../tsconfig.base",
+  "compilerOptions": {
+    "plugins": [
+      {
+        "name": "@effect/language-service",
+        "transform": "@effect/language-service/transform"
+      }
+    ]
+  },
   "include": ["."],
   "exclude": [],
   "references": [{ "path": "../liminal" }]

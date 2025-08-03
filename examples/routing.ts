@@ -1,10 +1,9 @@
 import { OpenAiLanguageModel } from "@effect/ai-openai"
 import { Effect, Layer, Schema } from "effect"
-import { L, Strand } from "liminal"
-import { model } from "./_layers.ts"
-import { logger } from "./_logger.ts"
+import { L } from "liminal"
+import { client, model } from "./_layers.ts"
 
-const USE_CLASSIFICATION_PROMPTS = {
+const CLASSIFICATION_SYSTEM_PROMPTS = {
   general: "You are an expert customer service representative handling general inquiries.",
   refund:
     "You are a customer service representative specializing in refund requests. Follow company policy and collect necessary information.",
@@ -13,17 +12,8 @@ const USE_CLASSIFICATION_PROMPTS = {
 }
 
 Effect.gen(function*() {
-  yield* logger
-
-  const classification = yield* Effect.gen(function*() {
-    yield* L.user`I'd like a refund please.`
-    return yield* L.assistantStruct({
-      reasoning: Schema.String,
-      type: Schema.Literal("general", "refund", "technical"),
-      complexity: Schema.Literal("simple", "complex"),
-    })
-  }).pipe(Effect.provide(
-    Strand.new`
+  const classification = yield* L.strand(
+    L.system`
       Classify this supplied customer query:
 
       Determine:
@@ -32,18 +22,27 @@ Effect.gen(function*() {
       2. Complexity (simple or complex)
       3. Brief reasoning for classification
     `,
-  ))
-  const response = L.assistant.pipe(
-    Effect.provide(
-      Strand.new(USE_CLASSIFICATION_PROMPTS[classification.type]),
-    ),
-    classification.complexity === "complex"
-      ? Effect.provide(OpenAiLanguageModel.model("gpt-4o-mini"))
-      : Effect.provide(Layer.empty),
+    L.user`I'd like a refund please.`,
+    L.assistantStruct({
+      reasoning: Schema.String,
+      type: Schema.Literal("general", "refund", "technical"),
+      complex: Schema.Boolean,
+    }),
   )
-  return { classification, response }
+
+  const specialist = yield* L.strand(
+    L.system(CLASSIFICATION_SYSTEM_PROMPTS[classification.type]),
+    L.assistant,
+  ).pipe(
+    Effect.provide(
+      classification.complex ? OpenAiLanguageModel.model("gpt-4o-mini") : Layer.empty,
+    ),
+  )
+
+  return { classification, specialist }
 }).pipe(
-  Effect.provide(Strand.new()),
-  Effect.provide(model),
+  Effect.provide(
+    Layer.merge(model, client),
+  ),
   Effect.runPromise,
-)
+).then(console.log)

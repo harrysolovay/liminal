@@ -6,14 +6,13 @@ import { Strand } from "./Conversation.ts"
 import type { LEvent } from "./LEvent.ts"
 
 /** Isolate the effect with a new strand in context. */
-export const strand: <L extends Array<Effect.All.EffectAny>>(...steps: L) => Effect.Effect<
+export const branch: <L extends Array<Effect.All.EffectAny>>(...steps: L) => Effect.Effect<
   [L] extends [] ? void
     : [Last<L>] extends [Effect.Effect<infer A, infer _E, infer _R>] ? A
     : never,
   [L[number]] extends [never] ? never : [L[number]] extends [Effect.Effect<infer _A, infer E, infer _R>] ? E : never,
-  ([L[number]] extends [never] ? never
-    : [L[number]] extends [Effect.Effect<infer _A, infer _E, infer R>] ? Exclude<R, Strand>
-    : never)
+  | ([L[number]] extends [never] ? never : [L[number]] extends [Effect.Effect<infer _A, infer _E, infer R>] ? R : never)
+  | Strand
 > = (...steps) =>
   Effect.gen(function*() {
     if (!steps.length) return
@@ -26,10 +25,11 @@ export const strand: <L extends Array<Effect.All.EffectAny>>(...steps: L) => Eff
     Effect.provideServiceEffect(
       Strand,
       Effect.gen(function*() {
+        const parent = yield* Strand
         return Strand.of({
-          parent: yield* Effect.serviceOption(Strand),
-          events: yield* PubSub.unbounded<LEvent>(),
+          parent: Option.some(parent),
           system: Option.none(),
+          events: yield* PubSub.unbounded<LEvent>(),
           messages: [],
         })
       }),

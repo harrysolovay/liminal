@@ -2,9 +2,10 @@ import type { AiError } from "@effect/ai/AiError"
 import { AssistantMessage, TextPart } from "@effect/ai/AiInput"
 import { AiLanguageModel } from "@effect/ai/AiLanguageModel"
 import * as Effect from "effect/Effect"
+import * as Option from "effect/Option"
 import * as Schema from "effect/Schema"
 import { append } from "./append.ts"
-import { Strand } from "./Strand.ts"
+import { Strand } from "./Conversation.ts"
 
 /** Infer a structured assistant message and append its JSON representation to the conversation. */
 export const assistantStruct: {
@@ -19,7 +20,7 @@ export const assistantStruct: {
     const model = yield* AiLanguageModel
     const { system, messages } = yield* Strand
     const { value, text } = yield* model.generateObject({
-      system,
+      system: Option.getOrUndefined(system),
       schema: Schema.isSchema(schema) ? schema as Schema.Schema.AnyNoContext : Schema.Struct(schema),
       prompt: messages,
     })

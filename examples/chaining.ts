@@ -1,10 +1,12 @@
 import { Effect, Schema } from "effect"
-import { L, Strand } from "liminal"
+import { L } from "liminal"
 import { model } from "./_layers.ts"
 import { logger } from "./_logger.ts"
 
 Effect.gen(function*() {
   yield* logger
+
+  yield* L.system`Write persuasive marketing copy for: Buffy The Vampire Slayer.`
 
   yield* L.user`Please generate the first draft.`
   let copy = yield* L.assistant
@@ -36,9 +38,7 @@ Effect.gen(function*() {
   }
   return { copy, qualityMetrics }
 }).pipe(
-  Effect.provide(
-    Strand.new`Write persuasive marketing copy for: Buffy The Vampire Slayer. Focus on benefits and emotional appeal.`,
-  ),
+  L.strand,
   Effect.provide(model),
   Effect.runPromise,
 )

@@ -16,7 +16,6 @@ export const sidebar: DefaultTheme.Sidebar = [
     items: [
       { text: "Overview", link: "/overview" },
       { text: "Quickstart", link: "/start" },
-      { text: "Testing", link: "/testing" },
     ],
   },
   {
@@ -29,10 +28,10 @@ export const sidebar: DefaultTheme.Sidebar = [
   {
     text: "Conversation",
     items: [
-      { text: "Messages", link: "/message" },
+      { text: "Messages", link: "/messages" },
+      { text: "Reducers", link: "/reducers" },
       { text: "Events", link: "/events" },
       { text: "Tools", link: "/tools" },
-      { text: "Reduction", link: "/reduction" },
     ],
   },
   {
@@ -41,9 +40,8 @@ export const sidebar: DefaultTheme.Sidebar = [
     items: [
       { text: "Documentation QA", link: "/documentation-qa" },
       { text: "Routing", link: "/routing" },
-      { text: "Arbiter", link: "/arbiter" },
+      { text: "Model Amalgamation", link: "/model-amalgamation" },
       { text: "Iterative Refinement", link: "/iterative-refinement" },
-      { text: "Summarize", link: "/summarize" },
       { text: "File-editing", link: "/file-editing" },
     ],
   },

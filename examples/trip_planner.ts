@@ -1,7 +1,7 @@
 import { Terminal } from "@effect/platform"
 import { BunTerminal } from "@effect/platform-bun"
-import { Effect, Schema } from "effect"
-import { L, Strand } from "liminal"
+import { Effect, Layer, Schema } from "effect"
+import { L } from "liminal"
 import { model } from "./_layers.ts"
 import { logger } from "./_logger.ts"
 
@@ -32,8 +32,9 @@ Effect.gen(function*() {
   yield* L.user`Where can I stay there, what can I do there, how do I get there?`
   return yield* L.assistant
 }).pipe(
-  Effect.provide(Strand.new()),
-  Effect.provide(model),
-  Effect.provide(BunTerminal.layer),
+  L.strand,
+  Effect.provide(
+    Layer.merge(model, BunTerminal.layer),
+  ),
   Effect.runPromise,
 )

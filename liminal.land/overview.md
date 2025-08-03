@@ -1,15 +1,13 @@
-# Overview <Badge type="warning" text="beta" />
+---
+prev: false
+---
 
-Liminal provides building effects for managing LLM-powered conversations with
-[Effect](https://effect.website/).
+# Liminal Overview <Badge type="warning" text="beta" />
 
-When using Liminal, **conversation definitions are expressed as effects.** When
-we execute these effects, the fiber runtime manages underlying state such as the
-list of messages.
+**Liminal enables the expression of reusable conversations as
+[effects](/effects.md).**
 
-We reason about control flow and conversation as one.
-
-```ts
+```ts twoslash
 import { Effect } from "effect"
 import { L } from "liminal"
 
@@ -25,10 +23,33 @@ const conversation = Effect.gen(function*() {
 })
 ```
 
+This allows us to reason about the progression of the conversation with ordinary
+function control flow.
+
+```ts twoslash
+declare const condition: boolean
+import { Effect, Schema } from "effect"
+import { L } from "liminal"
+// ---cut---
+Effect.gen(function*() {
+  while (true) {
+    // Ask the assistant whether to move on.
+    yield* L.user`Are we done with this part of the conversation?`
+    const { finished } = yield* L.assistantStruct({
+      finished: Schema.Boolean,
+    })
+
+    // If finished, move onto the next part of the conversation.
+    if (finished) break
+  }
+  // The conversation continues...
+})
+```
+
 ## State Management
 
 With every `yield*`, Liminal updates the underlying conversation state. The
-final conversation may look as follows.
+final conversation of the first example may look as follows.
 
 ```json
 [
@@ -49,28 +70,28 @@ final conversation may look as follows.
 
 ## Reusable Patterns
 
-Express reusable conversational patterns, such as iterative refinement loops.
+Liminal effects are reusable conversational patterns. For example, we can
+express an iterative refinement loop as follows.
 
-```ts
+```ts twoslash
 import { Effect } from "effect"
 import { L } from "liminal"
 
-export const refine = Effect.fn(function*(content: string, i = 5) {
-  // For `i` iterations.
-  while (i-- > 0) {
+export const refine = Effect.fnUntraced(function*(content: string) {
+  // For 5 iterations.
+  for (let i = 0; i < 5; i++) {
     // Append a message asking for the refinement.
     yield* L.user`Refine the following text: ${content}`
     // Infer and reassign `content` to an assistant message.
     content = yield* L.assistant
   }
-  // Return the `i`th `content`.
+  // Return the final `content`.
   return content
 })
 ```
 
-## Pattern Libraries
-
-Share your conversational patterns with the world.
+We can share and consumed this pattern––or any Liminal effect––as we would any
+other JavaScript library.
 
 ```ts {3,15}
 import { Effect } from "effect"
@@ -94,29 +115,7 @@ const maybeRefine = Effect.fn(function*(content: string) {
 })
 ```
 
-## Structured Output
-
-Use Effect Schema to describe structured output requirements.
-
-```ts {7-10}
-import { Effect, Schema } from "effect"
-import { L } from "liminal"
-
-Effect.gen(function*() {
-  yield* L.user`What day of the year is halloween?`
-
-  const result = yield* L.assistantStruct(
-    Schema.Struct({
-      month: L.integer,
-      day: L.integer,
-    }),
-  )
-
-  result satisfies { month: integer; day: number }
-})
-```
-
-## Next Steps
+---
 
 In the next section we cover Liminal's installation and a basic example of its
 usage.

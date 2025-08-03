@@ -1,5 +1,5 @@
 import { Effect, Schema } from "effect"
-import { L, Strand } from "liminal"
+import { L } from "liminal"
 import { model } from "./_layers.ts"
 import { logger } from "./_logger.ts"
 
@@ -14,6 +14,7 @@ const Activity = Schema.Struct({
 Effect.gen(function*() {
   yield* logger
 
+  yield* L.system`When you are asked a question, answer without asking for clarification.`
   yield* L.user`I'm planning a trip to florida and want a suggestion for a fun activity.`
   let i = 0
   const activities: Array<typeof Activity.Type> = []
@@ -23,9 +24,7 @@ Effect.gen(function*() {
     i++
   }
 }).pipe(
-  Effect.provide(
-    Strand.new`When you are asked a question, answer without asking for clarification.`,
-  ),
+  L.strand,
   Effect.provide(model),
   Effect.runPromise,
 )
