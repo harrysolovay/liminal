@@ -4,7 +4,13 @@
     {
       "label": "tsc",
       "type": "shell",
-      "command": "tsc -b -w",
+      "command": "bun build:watch",
+      "problemMatcher": []
+    },
+    {
+      "label": "vitest",
+      "type": "shell",
+      "command": "bun test:watch",
       "problemMatcher": []
     },
     {
@@ -19,7 +25,7 @@
     {
       "label": "dev",
       "type": "shell",
-      "dependsOn": ["tsc", "vite"],
+      "dependsOn": ["tsc", "vitest", "vite"],
       "problemMatcher": []
     }
   ]

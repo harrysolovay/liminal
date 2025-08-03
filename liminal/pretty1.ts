@@ -6,11 +6,11 @@ const RESET = "\x1b[0m"
 const BOLD = "\x1b[1m"
 const GRAY_BG = "\x1b[47m"
 
-export const pretty: (event: typeof LEvent["Type"]) => string = (event) => {
+export const event: (event: typeof LEvent["Type"]) => string = (event) => {
   let text = `${GRAY}${event._tag}${RESET}`
   switch (event._tag) {
     case "MessagesAppended": {
-      text += event.messages.map(formatMessage).join("\n")
+      text += event.messages.map(message).join("\n")
       break
     }
     case "MessagesCleared": {
@@ -21,7 +21,7 @@ export const pretty: (event: typeof LEvent["Type"]) => string = (event) => {
   return text
 }
 
-const formatMessage = ({ _tag, parts }: Message): string => {
+const message = ({ _tag, parts }: Message): string => {
   let value = ""
   for (const part of parts) {
     value += `\n${BOLD}${_tag}\n${GRAY_BG}`

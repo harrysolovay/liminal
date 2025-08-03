@@ -9,14 +9,16 @@
   "scripts": {
     "prepare": "ts-patch install -s",
     "build": "tsc -b",
-    "watch": "tsc -b -w",
-    "changeset": "changeset",
-    "test": "vitest run"
+    "build:watch": "tsc -b -w",
+    "test": "vitest run",
+    "test:watch": "vitest run -w",
+    "changeset": "changeset"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.5",
     "@effect/language-service": "^0.23.5",
     "@effect/platform-bun": "^0.77.0",
+    "@effect/vitest": "^0.25.0",
     "@types/bun": "^1.2.19",
     "dprint": "^0.50.1",
     "ts-patch": "^3.3.0",

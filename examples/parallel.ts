@@ -1,6 +1,6 @@
 import { FileSystem, Path } from "@effect/platform"
 import { BunContext } from "@effect/platform-bun"
-import { Effect, Layer, Schema } from "effect"
+import { Effect, Schema } from "effect"
 import { L } from "liminal"
 import { model } from "./_layers.ts"
 
@@ -72,8 +72,6 @@ Effect.gen(function*() {
 
   return { reviews, summary }
 }).pipe(
-  Effect.provide(
-    Layer.merge(BunContext.layer, model),
-  ),
+  Effect.provide([BunContext.layer, model]),
   Effect.runPromise,
 ).then(console.log)

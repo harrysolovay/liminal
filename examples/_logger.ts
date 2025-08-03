@@ -1,10 +1,10 @@
 import { Console, Effect, flow, Stream } from "effect"
-import { L, pretty } from "liminal"
+import { event, L } from "liminal"
 
 export const logger = L.events.pipe(
   Stream.runForEach(
     flow(
-      pretty,
+      event,
       Console.log,
       Effect.andThen(Console.log()),
     ),

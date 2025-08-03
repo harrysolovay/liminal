@@ -1,5 +1,5 @@
 import { OpenAiLanguageModel } from "@effect/ai-openai"
-import { Effect, Layer, Schema } from "effect"
+import { Effect, Schema } from "effect"
 import { L } from "liminal"
 import { client, model } from "./_layers.ts"
 import { logger } from "./_logger.ts"
@@ -32,8 +32,6 @@ Effect.gen(function*() {
   return variants[key]
 }).pipe(
   L.strand,
-  Effect.provide(
-    Layer.merge(model, client),
-  ),
+  Effect.provide([model, client]),
   Effect.runPromise,
 )

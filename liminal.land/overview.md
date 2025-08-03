@@ -23,7 +23,7 @@ const conversation = Effect.gen(function*() {
 })
 ```
 
-This allows us to reason about the progression of the conversation with ordinary
+This allows us to reason about the progression of the conversation as ordinary
 function control flow.
 
 ```ts twoslash
@@ -48,7 +48,7 @@ Effect.gen(function*() {
 
 ## State Management
 
-With every `yield*`, Liminal updates the underlying conversation state. The
+The conversation state is updated with every `yield*` of a Liminal effect. The
 final conversation of the first example may look as follows.
 
 ```json
@@ -70,24 +70,32 @@ final conversation of the first example may look as follows.
 
 ## Reusable Patterns
 
-Liminal effects are reusable conversational patterns. For example, we can
-express an iterative refinement loop as follows.
+We can compose patterns that abstract over the low-level back-and-forth of
+user-assistant messaging. The conversation becomes the keys consideration, not
+the messages.
+
+For example, we can express a reusable iterative refinement loop as follows.
 
 ```ts twoslash
 import { Effect } from "effect"
 import { L } from "liminal"
 
-export const refine = Effect.fnUntraced(function*(content: string) {
-  // For 5 iterations.
-  for (let i = 0; i < 5; i++) {
-    // Append a message asking for the refinement.
-    yield* L.user`Refine the following text: ${content}`
-    // Infer and reassign `content` to an assistant message.
-    content = yield* L.assistant
-  }
-  // Return the final `content`.
-  return content
-})
+export const refine = (content: string) =>
+  Effect.gen(function*() {
+    // For 5 iterations.
+    for (let i = 0; i < 5; i++) {
+      // Append a message asking for the refinement.
+      yield* L.user`Refine the following text: ${content}`
+      // Infer and reassign `content` to an assistant message.
+      content = yield* L.assistant
+    }
+    // Return the final `content`.
+    return content
+  }).pipe(
+    // Denotes the boundary of the conversation.
+    // Conceptually similar to `Effect.scoped`.
+    L.strand,
+  )
 ```
 
 We can share and consumed this pattern––or any Liminal effect––as we would any

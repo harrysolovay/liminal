@@ -1,4 +1,5 @@
 export * as L from "./L.ts"
 export * from "./LEvent.ts"
-export * from "./pretty.ts"
+export * as Pretty from "./pretty1.ts"
+export * from "./pretty1.ts"
 export * from "./Strand.ts"

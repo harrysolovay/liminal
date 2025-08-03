@@ -1,5 +1,6 @@
 export * from "./append.ts"
 export * from "./assistant.ts"
+export * from "./assistantStream.ts"
 export * from "./assistantStruct.ts"
 export * from "./branch.ts"
 export * from "./clear.ts"

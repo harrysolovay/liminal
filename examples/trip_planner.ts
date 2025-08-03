@@ -1,6 +1,6 @@
 import { Terminal } from "@effect/platform"
 import { BunTerminal } from "@effect/platform-bun"
-import { Effect, Layer, Schema } from "effect"
+import { Effect, Schema } from "effect"
 import { L } from "liminal"
 import { model } from "./_layers.ts"
 import { logger } from "./_logger.ts"
@@ -33,8 +33,6 @@ Effect.gen(function*() {
   return yield* L.assistant
 }).pipe(
   L.strand,
-  Effect.provide(
-    Layer.merge(model, BunTerminal.layer),
-  ),
+  Effect.provide([model, BunTerminal.layer]),
   Effect.runPromise,
 )

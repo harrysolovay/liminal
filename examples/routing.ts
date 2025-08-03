@@ -41,8 +41,6 @@ Effect.gen(function*() {
 
   return { classification, specialist }
 }).pipe(
-  Effect.provide(
-    Layer.merge(model, client),
-  ),
+  Effect.provide([model, client]),
   Effect.runPromise,
 ).then(console.log)
