@@ -10,12 +10,12 @@ conversation trees with language models.
   human readers.
 - [Examples &rarr;](https://github.com/harrysolovay/liminal/tree/main/examples)<br />Examples
   illustrating common use cases.
-- [llms.txt &rarr;](https://liminal.land/llms.txt)<br />Chunks of truth to be
-  fed into LLMs.
+- [llms.txt &rarr;](https://liminal.land/llms-full.txt)<br />Chunks of truth to
+  be fed into LLMs.
 
 ## Overview
 
-Model a conversation as an Effect.
+An effect is a conversation.
 
 `example.ts`
 
@@ -25,25 +25,24 @@ import { Console, Effect } from "effect"
 import { L } from "liminal"
 
 const conversation = Effect.gen(function*() {
-  // Initial context.
+  // Set system.
   yield* L.system`You are an expert TypeScript developer.`
+
+  // Append messages.
   yield* L.user`
     It seems as though a new mental model may arise for
     LLM conversation state management.
 
     What are your thoughts on the following DX?
   `
-
-  // Provide the currently-executing code for the assistant.
   const fs = yield* FileSystem.FileSystem
-  yield* L.user(
-    yield* fs.readFileString("example.ts"),
-  )
+  const code = yield* fs.readFileString("example.ts")
+  yield* L.user(code)
 
-  // Have the assistant reply.
+  // Infer and append the assistant message.
   const reply = yield* L.assistant
 
-  // ...
+  reply satisfies string
 }).pipe(L.strand)
 ```
 
