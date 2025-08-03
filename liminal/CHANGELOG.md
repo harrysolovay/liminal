@@ -1,5 +1,11 @@
 # liminal
 
+## 0.11.0
+
+### Minor Changes
+
+- 48aa187: Rework mechanism of denoting strand boundary.
+
 ## 0.10.0
 
 ### Minor Changes
