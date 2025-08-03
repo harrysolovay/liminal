@@ -1,5 +1,11 @@
 # liminal
 
+## 0.11.1
+
+### Patch Changes
+
+- feee30f: Testing provenance capture in changeset-driven publishes.
+
 ## 0.11.0
 
 ### Minor Changes
