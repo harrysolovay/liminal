@@ -15,6 +15,7 @@ iconoir
 inferencing
 inheritables
 initdb
+langgraphjs
 ljson
 llms
 llmstxt
