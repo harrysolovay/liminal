@@ -13,11 +13,10 @@ export type Sequence<P = never, R1 = never> = <Arg extends Array<Effect.Effect<a
   > | R1
 >
 
-export const ab: Sequence = Effect.fnUntraced(function*(...steps) {
-  if (!steps.length) return
-  let current = yield* steps.pop()!
-  while (steps.length) {
-    current = yield* steps.pop()!
-  }
-  return current
-})
+// TODO: maybe ditch `Effect.all`?
+export const ab: Sequence = (...steps) =>
+  Effect.all(steps, {
+    concurrency: 1,
+  }).pipe(
+    Effect.map((v: Array<never>) => v.pop()!) as never,
+  )

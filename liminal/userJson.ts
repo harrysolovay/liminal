@@ -1,6 +1,6 @@
 import * as Effect from "effect/Effect"
 import * as Schema from "effect/Schema"
-import type { JsonValueObject } from "./JsonValue.ts"
+import type { JsonValueObject } from "./internal/JsonValue.ts"
 import * as Strand from "./Strand.ts"
 import { user } from "./user.ts"
 

@@ -14,7 +14,7 @@ export const pretty: (event: typeof LEvent["Type"]) => string = (event) => {
       break
     }
     case "MessagesCleared": {
-      text += `${event.cleared.length} messages cleared.`
+      text += `\n${event.cleared.length} messages cleared.`
       break
     }
   }
