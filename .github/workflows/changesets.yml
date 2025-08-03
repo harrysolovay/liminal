@@ -6,6 +6,9 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   changesets:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v3
