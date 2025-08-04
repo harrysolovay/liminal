@@ -1,6 +1,7 @@
 import type { AiError } from "@effect/ai/AiError"
 import { AiLanguageModel } from "@effect/ai/AiLanguageModel"
 import type { AiResponse } from "@effect/ai/AiResponse"
+import * as AiToolkit from "@effect/ai/AiToolkit"
 import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
 import * as Stream from "effect/Stream"
@@ -14,10 +15,11 @@ export const assistantStream: Stream.Stream<
 > = Stream.unwrap(
   Effect.gen(function*() {
     const model = yield* AiLanguageModel
-    const { system, messages } = yield* Strand
+    const { system, messages, tools } = yield* Strand
     return model.streamText({
       system: Option.getOrUndefined(system),
       prompt: messages,
+      toolkit: AiToolkit.merge(...tools) as never,
     })
   }),
 )

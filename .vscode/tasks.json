@@ -14,7 +14,7 @@
       "problemMatcher": []
     },
     {
-      "label": "vite",
+      "label": "docs",
       "type": "shell",
       "command": "bunx vitepress",
       "options": {
@@ -25,7 +25,7 @@
     {
       "label": "dev",
       "type": "shell",
-      "dependsOn": ["tsc", "vitest", "vite"],
+      "dependsOn": ["tsc", "vitest", "docs"],
       "problemMatcher": []
     }
   ]

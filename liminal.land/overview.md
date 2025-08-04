@@ -7,7 +7,7 @@ prev: false
 **Liminal enables the expression of reusable conversations as
 [effects](/effects.md).**
 
-<<< ./overview_tldr.ts
+<<< @/_blocks/a_taste.ts
 
 ## State Management
 
@@ -37,7 +37,7 @@ We reason about the progression of the conversation as one with ordinary
 function control flow. We can utilize ordinary control flow operators, such as
 `for` and `while` loops .
 
-<<< ./unifying.ts
+<<< @/_blocks/while_looping.ts
 
 ## Reusable Patterns
 
@@ -50,14 +50,14 @@ as follows.
 
 `refine.ts`
 
-<<< ./refine.ts
+<<< @/_blocks/refine.ts
 
 We can then share and consume this pattern––or any Liminal effect––as we would
 any other TypeScript file or library.
 
 `refine_consumer.ts`
 
-<<< ./refine_consumer.ts
+<<< @/_blocks/refine_consumer.ts
 
 ## Branching
 
@@ -67,7 +67,7 @@ explore alternative outcomes from any given state.
 In the following example, the `Rap`, `Rock` and `Pop` branches all inherit an
 isolated copy of the parent's messages, which contain the initial user message.
 
-<<< ./song_branches.ts
+<<< @/_blocks/song_branches.ts
 
 ---
 

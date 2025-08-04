@@ -23,6 +23,9 @@
   "[typescriptreact]": {
     "editor.defaultFormatter": "dprint.dprint"
   },
+  "[vue]": {
+    "editor.defaultFormatter": "dprint.dprint"
+  },
   "[yaml]": {
     "editor.defaultFormatter": "dprint.dprint"
   },

@@ -32,8 +32,9 @@ yarn install liminal
 > Depending on whether you package manager auto-installs peer dependencies, you
 > may need to also install `effect`, `@effect/platform` and `@effect/ai`.
 
-Additionally, install the Effect AI model-provider-specific package that we'll
-use to execute our conversations.
+Additionally, install
+[an Effect AI model provider](https://effect.website/docs/ai/introduction/#packages),
+which we'll use to execute our conversations.
 
 ::: code-group
 
@@ -59,8 +60,6 @@ yarn add @effect/ai-openai
 
 :::
 
-> [Alternative providers here](https://effect.website/docs/ai/introduction/#packages).
-
 ## Conversation Effects
 
 Liminal's effects and effect factories are accessible from the `L` namespace.
@@ -73,49 +72,29 @@ L.
 //^|
 ```
 
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
+<LCompletionsBottomMargin />
 
 We yield Liminal Effects within an `Effect.gen` body to control the underlying
 conversation state without manually managing structures the list of messages.
 
-<<< ./tldr.ts
+<<< @/_blocks/messaging_101.ts
 
 ## Example Use Case
 
 Let's consider a function that validates an email address and returns either a
 validation error message or undefined if the supplies address is valid.
 
-<<< ./validateEmail_initial.ts
+<<< @/_blocks/validateEmail_initial.ts
 
 The error message we return is opaque; the caller lacks information about why
-validation failed. Let's use Liminal to infer a helpful validation error
-message.
+validation failed.
 
-<<< ./validateEmail.ts{5,8}
+Let's use Liminal to infer a helpful validation error message. Also note how we
+`pipe` the effect into `L.strand` to mark the boundary of the conversation.
 
-## Conversation Boundary
+<<< @/_blocks/validateEmail.ts{7,10,13,15}
 
-We mark the boundary of the Effect's conversation by providing a `Strand`.
-
-```ts {6} twoslash
-```
-
-## Specifying Models
+## Configuring Model Layer
 
 Some Liminal effects require a language model to specified. This is provided
 using the Effect AI `AiLanguageModel` tag.
@@ -124,16 +103,15 @@ Let's create a layer to provide an OpenAI `AiLanguageModel`.
 
 `_model.ts`
 
-```ts twoslash
-```
+<<< @/_blocks/ModelLive.ts
+
+## Running the Conversation
 
 We can now provide the `model` layer to any effect's we're ready to execute. You
 may want to satisfy requirements once at the root of your effect program.
-Alternatively, you can use it in the leaves of your program, such as in
-`validateEmail`.
+Alternatively, you can use it in the leaves of your program.
 
-```ts twoslash {7}
-```
+<<< @/_blocks/validateEmail_run.ts {5}
 
 If the supplied email address is invalid, we may get error messages similar to
 the following.

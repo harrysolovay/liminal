@@ -3,7 +3,7 @@ import { flow } from "effect/Function"
 import * as Option from "effect/Option"
 import * as PubSub from "effect/PubSub"
 import type { LEvent } from "./LEvent.ts"
-import { sequence } from "./sequence_.ts"
+import { sequence } from "./sequence.ts"
 import { Strand } from "./Strand.ts"
 import { type Sequence } from "./util/Sequence.ts"
 

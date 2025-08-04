@@ -31,7 +31,7 @@ export default defineConfig({
     codeTransformers: [transformerTwoslash({
       explicitTrigger: false,
       twoslashOptions: {
-        vfsRoot: path.resolve(__dirname, "../blocks"),
+        vfsRoot: path.resolve(__dirname, "../_blocks/"),
         compilerOptions: {
           allowImportingTsExtensions: true,
           noEmit: true,

@@ -1,6 +1,6 @@
 import * as Effect from "effect/Effect"
 
-export type Sequence<P = never, R1 = never> = <Arg extends Array<Effect.Effect<any, any, any>>>(
+export type Sequence<I = never, O = never> = <Arg extends Array<Effect.Effect<any, any, any>>>(
   ...steps: Arg
 ) => Effect.Effect<
   Arg extends [] ? void
@@ -9,6 +9,6 @@ export type Sequence<P = never, R1 = never> = <Arg extends Array<Effect.Effect<a
   Arg[number] extends never ? never : [Arg[number]] extends [Effect.Effect<infer _A, infer E, infer _R>] ? E : never,
   Exclude<
     Arg[number] extends never ? never : [Arg[number]] extends [Effect.Effect<infer _A, infer _E, infer R>] ? R : never,
-    P
-  > | R1
+    I
+  > | O
 >
