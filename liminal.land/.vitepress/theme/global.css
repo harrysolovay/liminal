@@ -123,6 +123,6 @@ html.dark .VPFeatures img {
 }
 
 /* Disable all pointer events on the completion popover */
-.v-popper__popper.twoslash-completion {
+.v-popper__popper {
   pointer-events: none !important;
 }

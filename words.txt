@@ -43,10 +43,12 @@ pipeable
 repomix
 rica
 rootable
+serde
 shikijs
 shoutout
 solovay
 strandard
+stringifying
 subconversations
 subscope
 supabase

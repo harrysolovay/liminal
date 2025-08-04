@@ -2,7 +2,7 @@ import { FileSystem, Path } from "@effect/platform"
 import { BunContext } from "@effect/platform-bun"
 import { Effect, Schema } from "effect"
 import { L } from "liminal"
-import { model } from "./_layers.ts"
+import { ModelLive } from "./_layers.ts"
 
 const Lmh = Schema.Literal("lower", "medium", "high")
 
@@ -72,6 +72,6 @@ Effect.gen(function*() {
 
   return { reviews, summary }
 }).pipe(
-  Effect.provide([BunContext.layer, model]),
+  Effect.provide([BunContext.layer, ModelLive]),
   Effect.runPromise,
 ).then(console.log)

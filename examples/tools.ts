@@ -4,7 +4,7 @@ import { FetchHttpClient } from "@effect/platform"
 import { Effect, Layer, Schema } from "effect"
 import { NoSuchElementException } from "effect/Cause"
 import { L } from "liminal"
-import { client, model } from "./_layers.ts"
+import { ClientLive, ModelLive } from "./_layers.ts"
 
 class DadJokeTools extends AiToolkit.make(
   AiTool.make("GetDadJoke", {
@@ -67,7 +67,7 @@ await L.strand(
   L.user`Generate a dad joke about pirates`,
   L.assistant,
 ).pipe(
-  Effect.provide(model),
+  Effect.provide(ModelLive),
   Effect.runPromise,
 )
 
@@ -77,8 +77,8 @@ AiLanguageModel.generateText({
 }).pipe(
   Effect.map((response) => [...response.results.values()].pop()!),
   Effect.provide([
-    model,
-    client,
+    ModelLive,
+    ClientLive,
     DadJokeToolHandlers,
   ]),
   Effect.runPromise,

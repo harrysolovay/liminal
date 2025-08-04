@@ -1,6 +1,6 @@
 import { Effect, Schema } from "effect"
 import { L } from "liminal"
-import { model } from "./_layers.ts"
+import { ModelLive } from "./_layers.ts"
 import { logger } from "./_logger.ts"
 
 const Activity = Schema.Struct({
@@ -24,6 +24,6 @@ Effect.gen(function*() {
   }
 }).pipe(
   L.strand,
-  Effect.provide(model),
+  Effect.provide(ModelLive),
   Effect.runPromise,
 )

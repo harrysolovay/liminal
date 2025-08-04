@@ -1,6 +1,6 @@
 import { Effect, Schema } from "effect"
 import { L } from "liminal"
-import { model } from "./_layers.ts"
+import { ModelLive } from "./_layers.ts"
 
 const IMPLEMENTATION_PROMPTS = {
   create: "You are an expert at implementing new files following best practices and project patterns.",
@@ -46,6 +46,6 @@ Effect
   })
   .pipe(
     L.strand,
-    Effect.provide(model),
+    Effect.provide(ModelLive),
     Effect.runPromise,
   ).then(console.log)

@@ -1,7 +1,7 @@
 import { OpenAiLanguageModel } from "@effect/ai-openai"
 import { Effect, Schema } from "effect"
 import { L } from "liminal"
-import { client, model } from "./_layers.ts"
+import { ClientLive, ModelLive } from "./_layers.ts"
 import { logger } from "./_logger.ts"
 
 Effect.gen(function*() {
@@ -32,6 +32,6 @@ Effect.gen(function*() {
   return variants[key]
 }).pipe(
   L.strand,
-  Effect.provide([model, client]),
+  Effect.provide([ModelLive, ClientLive]),
   Effect.runPromise,
 )

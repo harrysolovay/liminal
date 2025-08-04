@@ -101,7 +101,7 @@ using the Effect AI `AiLanguageModel` tag.
 
 Let's create a layer to provide an OpenAI `AiLanguageModel`.
 
-`_model.ts`
+`ModelLive.ts`
 
 <<< @/_blocks/ModelLive.ts
 
@@ -111,7 +111,7 @@ We can now provide the `model` layer to any effect's we're ready to execute. You
 may want to satisfy requirements once at the root of your effect program.
 Alternatively, you can use it in the leaves of your program.
 
-<<< @/_blocks/validateEmail_run.ts {5}
+<<< @/_blocks/validateEmail_run.ts {5-6}
 
 If the supplied email address is invalid, we may get error messages similar to
 the following.

@@ -1,6 +1,6 @@
 import { Effect } from "effect"
 import { L } from "liminal"
-import { model } from "./_layers.ts"
+import { ModelLive } from "./_layers.ts"
 import { logger } from "./_logger.ts"
 
 Effect.gen(function*() {
@@ -36,6 +36,6 @@ Effect.gen(function*() {
   yield* L.assistant
 }).pipe(
   L.strand,
-  Effect.provide(model),
+  Effect.provide(ModelLive),
   Effect.runPromise,
 )

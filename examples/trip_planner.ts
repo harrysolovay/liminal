@@ -2,7 +2,7 @@ import { Terminal } from "@effect/platform"
 import { BunTerminal } from "@effect/platform-bun"
 import { Effect, Schema } from "effect"
 import { L } from "liminal"
-import { model } from "./_layers.ts"
+import { ModelLive } from "./_layers.ts"
 import { logger } from "./_logger.ts"
 
 const DEPARTURE_LOCATION = "New York City"
@@ -33,6 +33,6 @@ Effect.gen(function*() {
   return yield* L.assistant
 }).pipe(
   L.strand,
-  Effect.provide([model, BunTerminal.layer]),
+  Effect.provide([ModelLive, BunTerminal.layer]),
   Effect.runPromise,
 )

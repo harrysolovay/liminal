@@ -1,7 +1,7 @@
 import { OpenAiLanguageModel } from "@effect/ai-openai"
 import { Effect, Layer, Schema } from "effect"
 import { L } from "liminal"
-import { client, model } from "./_layers.ts"
+import { ClientLive, ModelLive } from "./_layers.ts"
 
 const CLASSIFICATION_SYSTEM_PROMPTS = {
   general: "You are an expert customer service representative handling general inquiries.",
@@ -41,6 +41,6 @@ Effect.gen(function*() {
 
   return { classification, specialist }
 }).pipe(
-  Effect.provide([model, client]),
+  Effect.provide([ModelLive, ClientLive]),
   Effect.runPromise,
 ).then(console.log)
