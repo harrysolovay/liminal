@@ -1,6 +1,10 @@
 {
   "extends": "../tsconfig.base",
+  "compilerOptions": {
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
+  },
   "include": ["."],
-  "exclude": [".vitepress/cache"],
+  "exclude": [".vitepress"],
   "references": [{ "path": "../liminal" }]
 }

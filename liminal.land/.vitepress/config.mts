@@ -1,8 +1,9 @@
 import { transformerTwoslash } from "@shikijs/vitepress-twoslash"
 import footnotePlugin from "markdown-it-footnote"
 import markdownSteps from "markdown-it-steps"
+import path from "node:path"
 import { defineConfig } from "vitepress"
-import { llmstxtPlugin } from "vitepress-plugin-llmstxt"
+import llmstext from "vitepress-plugin-llms"
 import liminalRootPackageJson from "../../liminal/package.json" with { type: "json" }
 import liminalLandPackageJson from "../package.json" with { type: "json" }
 import { sidebar } from "./sidebar.ts"
@@ -20,15 +21,21 @@ export default defineConfig({
   title: "Liminal",
   description: liminalRootPackageJson.description,
   vite: {
-    plugins: [
-      llmstxtPlugin({
-        llmsFullFile: true,
-        hostname: liminalLandPackageJson.homepage,
-      }),
-    ],
+    plugins: [llmstext({
+      domain: liminalLandPackageJson.homepage,
+    })],
   },
   markdown: {
-    codeTransformers: [transformerTwoslash() as never],
+    codeTransformers: [transformerTwoslash({
+      explicitTrigger: false,
+      twoslashOptions: {
+        vfsRoot: path.resolve(__dirname, "../blocks"),
+        compilerOptions: {
+          allowImportingTsExtensions: true,
+          noEmit: true,
+        },
+      },
+    }) as never],
     theme: {
       light: "light-plus",
       dark: "dracula",
@@ -38,7 +45,9 @@ export default defineConfig({
       md.use(footnotePlugin)
     },
   },
-  sitemap: { hostname: "http://liminal.land" },
+  sitemap: {
+    hostname: "http://liminal.land",
+  },
   lastUpdated: true,
   cleanUrls: true,
   metaChunk: true,
@@ -63,7 +72,9 @@ export default defineConfig({
       { icon: "github", link: "https://github.com/harrysolovay/liminal" },
       { icon: "x", link: "https://x.com/harrysolovay" },
     ],
-    search: { provider: "local" },
+    search: {
+      provider: "local",
+    },
     sidebar,
   },
   transformHead: ({ pageData: { frontmatter }, siteData }) => {

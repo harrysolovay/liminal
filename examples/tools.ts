@@ -1,42 +1,10 @@
 import { AiLanguageModel, AiTool, AiToolkit } from "@effect/ai"
 import { HttpClient, HttpClientRequest, HttpClientResponse } from "@effect/platform"
 import { FetchHttpClient } from "@effect/platform"
-import { Array, Console, Effect, Layer, Schema } from "effect"
-import { event } from "liminal"
+import { Effect, Layer, Schema } from "effect"
+import { NoSuchElementException } from "effect/Cause"
+import { L } from "liminal"
 import { client, model } from "./_layers.ts"
-
-class ICanHazDadJoke extends Effect.Service<ICanHazDadJoke>()("ICanHazDadJoke", {
-  dependencies: [FetchHttpClient.layer],
-  effect: Effect.gen(function*() {
-    const httpClient = yield* HttpClient.HttpClient
-    const httpClientOk = httpClient.pipe(
-      HttpClient.filterStatusOk,
-      HttpClient.mapRequest(
-        HttpClientRequest.prependUrl("https://icanhazdadjoke.com"),
-      ),
-    )
-
-    const search = Effect.fn("ICanHazDadJoke.search")(function*(searchTerm: string) {
-      return yield* httpClientOk.get("/search", {
-        acceptJson: true,
-        urlParams: { searchTerm },
-      }).pipe(
-        Effect.flatMap(HttpClientResponse.schemaBodyJson(Schema.Struct({
-          results: Schema.Array(Schema.Struct({
-            id: Schema.String,
-            joke: Schema.String,
-          })),
-        }))),
-        Effect.flatMap(({ results }) => Array.head(results)),
-        Effect.map(({ joke }) => joke),
-        Effect.scoped,
-        Effect.orDie,
-      )
-    })
-
-    return { search }
-  }),
-}) {}
 
 class DadJokeTools extends AiToolkit.make(
   AiTool.make("GetDadJoke", {
@@ -51,6 +19,38 @@ class DadJokeTools extends AiToolkit.make(
   }),
 ) {}
 
+class ICanHazDadJoke extends Effect.Service<ICanHazDadJoke>()("ICanHazDadJoke", {
+  dependencies: [FetchHttpClient.layer],
+  effect: Effect.gen(function*() {
+    const client = yield* HttpClient.HttpClient.pipe(
+      Effect.map((v) =>
+        v.pipe(
+          HttpClient.filterStatusOk,
+          HttpClient.mapRequest(
+            HttpClientRequest.prependUrl("https://icanhazdadjoke.com"),
+          ),
+        )
+      ),
+    )
+    const search = Effect.fn("ICanHazDadJoke.search")(function*(searchTerm: string) {
+      const { results: [{ joke } = {}] } = yield* client.get("/search", {
+        acceptJson: true,
+        urlParams: { searchTerm },
+      }).pipe(
+        Effect.flatMap(HttpClientResponse.schemaBodyJson(Schema.Struct({
+          results: Schema.Array(Schema.Struct({
+            id: Schema.String,
+            joke: Schema.String,
+          })),
+        }))),
+        Effect.orDie,
+      )
+      return joke ?? (yield* Effect.die(new NoSuchElementException()))
+    })
+    return { search }
+  }),
+}) {}
+
 const DadJokeToolHandlers = DadJokeTools.toLayer(
   Effect.gen(function*() {
     const { search } = yield* ICanHazDadJoke
@@ -62,12 +62,20 @@ const DadJokeToolHandlers = DadJokeTools.toLayer(
   Layer.provide(ICanHazDadJoke.Default),
 )
 
+await L.strand(
+  L.enable(DadJokeTools),
+  L.user`Generate a dad joke about pirates`,
+  L.assistant,
+).pipe(
+  Effect.provide(model),
+  Effect.runPromise,
+)
+
 AiLanguageModel.generateText({
   prompt: "Generate a dad joke about pirates",
   toolkit: DadJokeTools,
 }).pipe(
-  Effect.tap((v) => Console.log(event())),
-  Effect.flatMap((response) => Console.log(response.text)),
+  Effect.map((response) => [...response.results.values()].pop()!),
   Effect.provide([
     model,
     client,

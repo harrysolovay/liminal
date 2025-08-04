@@ -18,7 +18,7 @@ export const strand: Sequence<Strand> = flow(
         events: yield* PubSub.unbounded<LEvent>(),
         system: Option.none(),
         messages: [],
-        tools: [],
+        tools: new Set(),
       })
     }),
   ),

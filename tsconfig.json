@@ -4,6 +4,7 @@
     { "path": "./examples" },
     { "path": "./liminal" },
     { "path": "./liminal.land" },
+    { "path": "./liminal.land/.vitepress" },
     { "path": "./tsconfig.root.json" }
   ]
 }

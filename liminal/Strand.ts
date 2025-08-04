@@ -1,5 +1,6 @@
 import { Message } from "@effect/ai/AiInput"
 import type { AiTool } from "@effect/ai/AiTool"
+import type { AiToolkit } from "@effect/ai/AiToolkit"
 import * as Context from "effect/Context"
 import * as Option from "effect/Option"
 import * as PubSub from "effect/PubSub"
@@ -16,7 +17,7 @@ export declare namespace Strand {
     /** The list of messages that the model uses to infer the next message. */
     messages: Array<Message>
     /** The tools available to the model. */
-    tools: Array<AiTool<string>>
+    tools: Set<AiToolkit<AiTool<string>>>
   }
 }
 

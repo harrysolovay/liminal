@@ -121,3 +121,8 @@ html.dark .VPFeatures img {
 .VPLink.link.pager-link.next {
   border-radius: 0;
 }
+
+/* Disable all pointer events on the completion popover */
+.v-popper__popper.twoslash-completion {
+  pointer-events: none !important;
+}

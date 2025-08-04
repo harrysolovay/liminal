@@ -19,6 +19,7 @@ initdb
 langgraphjs
 ljson
 llms
+llmstext
 llmstxt
 logit
 mastra

@@ -19,7 +19,7 @@ export const branch: Sequence<never, Strand> = flow(
         system: Option.map(parent.system, identity),
         events: yield* PubSub.unbounded<LEvent>(),
         messages: parent.messages.slice(),
-        tools: parent.tools.slice(),
+        tools: new Set(parent.tools),
       })
     }),
   ),

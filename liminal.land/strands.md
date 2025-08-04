@@ -43,3 +43,8 @@ Effect.gen(function*() {
 ```
 
 ## `Strand.make`
+
+In the unusual case that you wish to manually create and provide a strand, you
+can do so as follows.
+
+<!-- <<< @/blocks/strand_layer.ts#snippet{ts twoslash} -->

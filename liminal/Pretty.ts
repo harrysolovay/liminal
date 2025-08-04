@@ -21,7 +21,7 @@ export const event: (event: typeof LEvent["Type"]) => string = (event) => {
   return text
 }
 
-const message = ({ _tag, parts }: Message): string => {
+export const message = ({ _tag, parts }: Message): string => {
   let value = ""
   for (const part of parts) {
     value += `\n${BOLD}${_tag}\n${GRAY_BG}`
