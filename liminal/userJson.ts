@@ -1,8 +1,8 @@
-import * as Effect from "effect/Effect"
-import * as Schema from "effect/Schema"
-import type { JsonValueObject } from "./internal/JsonValue.ts"
-import * as Strand from "./Strand.ts"
+import type * as Effect from "effect/Effect"
+import type * as Schema from "effect/Schema"
+import type * as Strand from "./Strand.ts"
 import { user } from "./user.ts"
+import type { JsonValueObject } from "./util/JsonValue.ts"
 
 // TODO: serialize with comments from schema
 /** Stringify and append some JSON as a user message to the conversation. */

@@ -5,7 +5,7 @@ hero:
   name: Liminal
   text: Effect-based Conversations
   image: /liminal_tree.png
-  tagline: A mental model and Effect AI toolkit for LLM integration and conversation state management.
+  tagline: An Effect AI toolkit for LLM integration and conversation state management.
   actions:
     - theme: brand
       text: Overview

@@ -1,6 +1,6 @@
-import { AiError } from "@effect/ai/AiError"
+import type { AiError } from "@effect/ai/AiError"
 import { AiLanguageModel } from "@effect/ai/AiLanguageModel"
-import { AiResponse } from "@effect/ai/AiResponse"
+import type { AiResponse } from "@effect/ai/AiResponse"
 import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
 import * as Stream from "effect/Stream"

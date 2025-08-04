@@ -16,7 +16,7 @@
   },
   "type": "module",
   "sideEffects": false,
-  "description": "Primitives for composing conversation trees with language models and TypeScript iterators.",
+  "description": "An Effect AI toolkit for LLM integration and conversation state management.",
   "exports": {
     ".": "./index.ts",
     "./package.json": "./package.json"

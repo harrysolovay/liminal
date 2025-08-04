@@ -1,5 +1,5 @@
 import * as Effect from "effect/Effect"
-import type { Sequence } from "./Sequence"
+import type { Sequence } from "./util/Sequence"
 
 export const sequence: Sequence = (...steps) =>
   Effect.all(steps, {

@@ -4,7 +4,7 @@ import markdownSteps from "markdown-it-steps"
 import path from "node:path"
 import { defineConfig } from "vitepress"
 import llmstext from "vitepress-plugin-llms"
-import liminalRootPackageJson from "../../liminal/package.json" with { type: "json" }
+import liminalPackageJson from "../../liminal/package.json" with { type: "json" }
 import liminalLandPackageJson from "../package.json" with { type: "json" }
 import { sidebar } from "./sidebar.ts"
 
@@ -19,10 +19,12 @@ const GOOGLE_ANALYTICS = `
 
 export default defineConfig({
   title: "Liminal",
-  description: liminalRootPackageJson.description,
+  description: liminalPackageJson.description,
   vite: {
     plugins: [llmstext({
+      title: "Liminal",
       domain: liminalLandPackageJson.homepage,
+      description: liminalPackageJson.description,
     })],
   },
   markdown: {

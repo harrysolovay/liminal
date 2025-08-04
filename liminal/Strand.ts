@@ -1,9 +1,9 @@
-import { Message } from "@effect/ai/AiInput"
+import type { Message } from "@effect/ai/AiInput"
 import type { AiTool } from "@effect/ai/AiTool"
 import type { AiToolkit } from "@effect/ai/AiToolkit"
 import * as Context from "effect/Context"
-import * as Option from "effect/Option"
-import * as PubSub from "effect/PubSub"
+import type * as Option from "effect/Option"
+import type * as PubSub from "effect/PubSub"
 import type { LEvent } from "./LEvent.ts"
 
 export declare namespace Strand {

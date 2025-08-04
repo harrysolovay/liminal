@@ -1,6 +1,7 @@
 agentic
 arktype
 branchable
+buildinfo
 bunx
 codegen
 combinators

@@ -3,5 +3,6 @@
 .env
 dist
 liminal.land/.vitepress/cache
+liminal.land/.vitepress/dist
 node_modules
 repomix-output.xml
