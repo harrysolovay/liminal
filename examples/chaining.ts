@@ -38,5 +38,5 @@ Effect.gen(function*() {
 }).pipe(
   L.strand,
   Effect.provide(ModelLive),
-  Effect.runPromise,
+  Effect.runFork,
 )

@@ -1,5 +1,5 @@
 {
   "extends": "./tsconfig.base",
   "references": [{ "path": "./liminal" }],
-  "include": ["vitest.ts"]
+  "include": ["alchemy.run.ts", "vitest.ts"]
 }

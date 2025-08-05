@@ -1,5 +1,5 @@
 {
-  "name": "@liminal.im/server",
+  "name": "@liminal.im/worker",
   "private": true,
   "type": "module",
   "dependencies": {

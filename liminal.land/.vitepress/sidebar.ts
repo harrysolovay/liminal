@@ -29,21 +29,9 @@ export const sidebar: DefaultTheme.Sidebar = [
     text: "Conversation",
     items: [
       { text: "Messages", link: "/messages" },
-      { text: "Reducers", link: "/reducers" },
       { text: "Tools", link: "/tools" },
       { text: "Streaming", link: "/streaming" },
       { text: "Events", link: "/events" },
-    ],
-  },
-  {
-    text: "Guides",
-    base: "/guides",
-    items: [
-      { text: "Documentation QA", link: "/documentation-qa" },
-      { text: "Routing", link: "/routing" },
-      { text: "Model Amalgamation", link: "/model-amalgamation" },
-      { text: "Iterative Refinement", link: "/iterative-refinement" },
-      { text: "File-editing", link: "/file-editing" },
     ],
   },
 ]

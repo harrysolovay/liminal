@@ -3,7 +3,7 @@ import { BunHttpServer } from "@effect/platform-bun"
 import { Api } from "@liminal.im/domain"
 import { Effect, Layer } from "effect"
 import { ApiLive } from "./ApiLive.ts"
-// import { AuthLive } from "./AuthLive.ts"
+import { AuthLive } from "./AuthLive.ts"
 import { config } from "./config.ts"
 
 const CorsLive = Layer.unwrapEffect(
@@ -26,10 +26,7 @@ HttpApiBuilder.serve().pipe(
     HttpApiBuilder.api(Api).pipe(
       Layer.provide(
         ApiLive.pipe(
-          Layer.provide([
-            // AuthLive,
-            CorsLive,
-          ]),
+          Layer.provide([AuthLive, CorsLive]),
         ),
       ),
     ),
@@ -40,5 +37,5 @@ HttpApiBuilder.serve().pipe(
     }),
   ),
   Layer.launch,
-  Effect.runPromise,
+  Effect.runFork,
 )

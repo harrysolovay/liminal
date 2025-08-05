@@ -1,5 +1,5 @@
 import { OpenAiLanguageModel } from "@effect/ai-openai"
-import { Effect, Layer, Schema } from "effect"
+import { Console, Effect, Layer, Schema } from "effect"
 import { L } from "liminal"
 import { ClientLive, ModelLive } from "./_layers.ts"
 
@@ -39,8 +39,8 @@ Effect.gen(function*() {
     ),
   )
 
-  return { classification, specialist }
+  yield* Console.log({ classification, specialist })
 }).pipe(
   Effect.provide([ModelLive, ClientLive]),
-  Effect.runPromise,
-).then(console.log)
+  Effect.runFork,
+)

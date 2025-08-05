@@ -1,3 +1,5 @@
+import { Terminal } from "@effect/platform"
+import { BunContext } from "@effect/platform-bun"
 import { Effect, Schema } from "effect"
 import { L } from "liminal"
 import { ModelLive } from "./_layers.ts"
@@ -13,7 +15,8 @@ Effect.gen(function*() {
     specified target language, preserving tone and cultural nuances.
   `
   yield* L.user`Target language: typescript`
-  yield* L.user`Text:\n\n${TEXT}`
+  const term = yield* Terminal.Terminal
+  yield* L.user`Text:\n\n${term.readLine}`
   let currentTranslation = yield* L.assistant
   let iterations = 0
   const MAX_ITERATIONS = 3
@@ -64,6 +67,6 @@ Effect.gen(function*() {
   }
 }).pipe(
   L.strand,
-  Effect.provide(ModelLive),
-  Effect.runPromise,
+  Effect.provide([ModelLive, BunContext.layer]),
+  Effect.runFork,
 )

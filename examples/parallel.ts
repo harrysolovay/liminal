@@ -1,6 +1,6 @@
 import { FileSystem, Path } from "@effect/platform"
 import { BunContext } from "@effect/platform-bun"
-import { Effect, Schema } from "effect"
+import { Console, Effect, Schema } from "effect"
 import { L } from "liminal"
 import { ModelLive } from "./_layers.ts"
 
@@ -70,8 +70,8 @@ Effect.gen(function*() {
     L.assistant,
   )
 
-  return { reviews, summary }
+  yield* Console.log({ reviews, summary })
 }).pipe(
-  Effect.provide([BunContext.layer, ModelLive]),
-  Effect.runPromise,
-).then(console.log)
+  Effect.provide([ModelLive, BunContext.layer]),
+  Effect.runFork,
+)

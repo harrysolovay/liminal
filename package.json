@@ -21,6 +21,7 @@
     "@effect/platform-bun": "^0.77.0",
     "@effect/vitest": "^0.25.0",
     "@types/bun": "^1.2.19",
+    "alchemy": "^0.57.0",
     "dprint": "^0.50.1",
     "ts-patch": "^3.3.0",
     "typescript": "^5.9.2",

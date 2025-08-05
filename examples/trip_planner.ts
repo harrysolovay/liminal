@@ -5,26 +5,24 @@ import { L } from "liminal"
 import { ModelLive } from "./_layers.ts"
 import { logger } from "./_logger.ts"
 
-const DEPARTURE_LOCATION = "New York City"
-
 Effect.gen(function*() {
   yield* logger
 
+  const term = yield* Terminal.Terminal
+  yield* term.display("From which city are you departing?\n")
   yield* L.user`
-    I want to plan a weekend trip leaving from ${DEPARTURE_LOCATION}. I don't know where to go.
+    I want to plan a weekend trip leaving from ${term.readLine}. I don't know where to go.
     Suggest some follow-up questions that will help you narrow down the possible destination.
   `
   const { questions } = yield* L.assistantStruct({
     questions: Schema.Array(Schema.String),
   })
   yield* L.user`Here are my answers to those questions:`
-  const terminal = yield* Terminal.Terminal
   for (const question of questions) {
-    yield* terminal.display(question + "\n")
-    const answer = yield* terminal.readLine
+    yield* term.display(question + "\n")
     yield* L.user`
       Question: ${question}
-      Answer: ${answer}
+      Answer: ${term.readLine}
     `
   }
   yield* L.user`Now that we've refined the destination criteria, please provide a single recommendation.`
@@ -34,5 +32,5 @@ Effect.gen(function*() {
 }).pipe(
   L.strand,
   Effect.provide([ModelLive, BunTerminal.layer]),
-  Effect.runPromise,
+  Effect.runFork,
 )

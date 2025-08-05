@@ -6,7 +6,9 @@ bunx
 codegen
 combinators
 cspotcode
+decaly
 deepseek
+delish
 dotenvx
 dprint
 eventsource

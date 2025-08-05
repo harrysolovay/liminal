@@ -1,6 +1,6 @@
 import { HttpApi, HttpApiEndpoint, HttpApiGroup } from "@effect/platform"
 import { Schema } from "effect"
-// import { Auth } from "./middleware.ts"
+import { Auth } from "./middleware.ts"
 
 export class Api extends HttpApi.make("api").add(
   HttpApiGroup
@@ -12,6 +12,6 @@ export class Api extends HttpApi.make("api").add(
           message: Schema.String,
         }))
         .addSuccess(Schema.String),
-    ),
-  // .middleware(Auth),
+    )
+    .middleware(Auth),
 ) {}

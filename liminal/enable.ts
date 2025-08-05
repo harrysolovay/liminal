@@ -5,4 +5,4 @@ import type { Strand } from "./Strand.ts"
 
 export declare const enable: <Tools extends AiTool.Any>(
   toolkit: AiToolkit<Tools>,
-) => Effect.Effect<void, never, Strand>
+) => Effect.Effect<never, never, AiTool.Handler<Tools["name"]> | Strand>

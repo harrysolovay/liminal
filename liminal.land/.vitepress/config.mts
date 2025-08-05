@@ -20,12 +20,16 @@ const GOOGLE_ANALYTICS = `
 export default defineConfig({
   title: "Liminal",
   description: liminalPackageJson.description,
+  // TODO: fix https://github.com/okineadev/vitepress-plugin-llms/issues/69#issuecomment-3151358653
   vite: {
+    server: {
+      port: 5174,
+    },
     plugins: [llmstext({
       title: "Liminal",
-      domain: liminalLandPackageJson.homepage,
+      domain: "https://liminal.land",
       description: liminalPackageJson.description,
-    })],
+    }) as never],
   },
   markdown: {
     codeTransformers: [transformerTwoslash({
@@ -39,7 +43,7 @@ export default defineConfig({
       },
     }) as never],
     theme: {
-      light: "light-plus",
+      light: "github-light",
       dark: "dracula",
     },
     config: (md) => {
