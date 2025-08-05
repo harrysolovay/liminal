@@ -1,13 +1,12 @@
 {
   "name": "liminal.land",
-  "homepage": "https://liminal.land",
   "private": true,
   "type": "module",
   "devDependencies": {
     "@shikijs/vitepress-twoslash": "^3.9.1",
     "@types/markdown-it-footnote": "^3.0.4",
     "effect": "^3.17.5",
-    "liminal": "workspace:^",
+    "liminal": "workspace:*",
     "markdown-it-footnote": "^4.0.0",
     "markdown-it-steps": "^0.2.0",
     "valibot": "^1.1.0",

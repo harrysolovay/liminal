@@ -3,9 +3,9 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@effect/ai": "^0.18.16",
+    "@effect/ai": "^0.25.0",
     "@effect/ai-openai": "^0.21.16",
-    "@effect/platform-bun": "^0.67.3",
+    "@effect/platform-bun": "^0.77.0",
     "effect": "^3.17.5",
     "liminal": "workspace:*"
   }

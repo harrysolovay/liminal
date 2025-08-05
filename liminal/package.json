@@ -22,7 +22,7 @@
     "./package.json": "./package.json"
   },
   "peerDependencies": {
-    "@effect/ai": "^0.18.16",
-    "effect": "^3.17.5"
+    "@effect/ai": "^0.25.0",
+    "effect": "^3.17.6"
   }
 }

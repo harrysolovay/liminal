@@ -1,6 +1,6 @@
 import { Command, FileSystem } from "@effect/platform"
 import { BunContext } from "@effect/platform-bun"
-import { Context, Effect, flow, Schema } from "effect"
+import { Effect, flow, Schema } from "effect"
 import * as Console from "effect/Console"
 import { L } from "liminal"
 import { ModelLive } from "./ModelLive.ts"
@@ -35,7 +35,7 @@ Effect.gen(function*() {
         Specifically I'd like to know:
 
         A. Is the document sufficient for the purposes of this library?
-        B. if not, what suggestions do you have for improvement?
+        B. If not, what suggestions do you have for improvement?
 
         The document:
 

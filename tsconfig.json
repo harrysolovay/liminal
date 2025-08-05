@@ -3,6 +3,9 @@
   "references": [
     { "path": "./examples" },
     { "path": "./liminal" },
+    { "path": "./liminal.im/client" },
+    { "path": "./liminal.im/domain" },
+    { "path": "./liminal.im/server" },
     { "path": "./liminal.land/_blocks" },
     { "path": "./liminal.land/.vitepress" },
     { "path": "./tsconfig.root.json" }

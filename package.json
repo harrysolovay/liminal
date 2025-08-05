@@ -4,6 +4,7 @@
   "workspaces": [
     "examples",
     "liminal",
+    "liminal.im/*",
     "liminal.land"
   ],
   "scripts": {

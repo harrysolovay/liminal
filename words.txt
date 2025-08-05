@@ -57,11 +57,13 @@ theaetetus
 thenning
 tmpfs
 topk
+traceparent
 tsdocs
 twoslash
 typebox
 vali
 valibot
+vite
 vitepress
 vitest
 vtype

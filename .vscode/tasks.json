@@ -23,9 +23,27 @@
       "problemMatcher": []
     },
     {
+      "label": "client",
+      "type": "shell",
+      "command": "bunx vite",
+      "options": {
+        "cwd": "liminal.im/client"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "server",
+      "type": "shell",
+      "command": "bun --env-file '../../.env' main",
+      "options": {
+        "cwd": "liminal.im/server"
+      },
+      "problemMatcher": []
+    },
+    {
       "label": "dev",
       "type": "shell",
-      "dependsOn": ["tsc", "vitest", "docs"],
+      "dependsOn": ["tsc", "vitest", "docs", "server", "client"],
       "problemMatcher": []
     }
   ]
