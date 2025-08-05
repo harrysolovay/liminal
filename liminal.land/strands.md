@@ -4,17 +4,17 @@
 
 A strand is a container for a conversation. Each strand tracks a few properties:
 
-1. A system prompt or lack thereof.
+1. A option of a system instruction.
 2. A list of model-agnostic messages. The messages can be of varying role and
-   content types.
-3. A set of tools with which the model can perform tool-calling.
-4. A pubsub with which we can subscribe to conversation events such as the
-   appending of a new message.
+   content part types.
+3. A set of enabled tool kits with which the model can perform tool-calling.
+4. A pubsub with which we can subscribe to conversation events such as
+   messaging.
 
 ## `L.strand`
 
-`L.strand` produces a layer, which provides a strand with an empty list of
-messages and no tools.
+`L.strand` isolates the target effect with a new strand containing an empty
+message list and no system instruction nor tools.
 
 ```ts twoslash
 import { Effect } from "effect"
@@ -26,8 +26,8 @@ L.strand(conversation)
 
 ## `L.branch`
 
-`L.branch` produces a layer, which provides a strand containing a clone of
-current strand's messages, tools and system unless otherwise specified.
+`L.branch` isolates the target effect with a new strand containing a copy of
+current strand's messages, tools and system.
 
 ```ts twoslash
 import { Effect } from "effect"
@@ -42,4 +42,9 @@ Effect.gen(function*() {
 })
 ```
 
-## `Strand.make`
+## `Strand.layer`
+
+In the case that you wish to manually create and provide a strand, you can do so
+as follows.
+
+<<< @/_blocks/StrandLive.ts

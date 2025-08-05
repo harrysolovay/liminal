@@ -1,6 +1,6 @@
 import { Effect, Schema } from "effect"
 import { L } from "liminal"
-import { model } from "./_layers.ts"
+import { ModelLive } from "./_layers.ts"
 import { logger } from "./_logger.ts"
 
 Effect.gen(function*() {
@@ -37,6 +37,6 @@ Effect.gen(function*() {
   return { copy, qualityMetrics }
 }).pipe(
   L.strand,
-  Effect.provide(model),
-  Effect.runPromise,
+  Effect.provide(ModelLive),
+  Effect.runFork,
 )

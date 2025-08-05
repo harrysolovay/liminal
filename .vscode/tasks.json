@@ -4,11 +4,17 @@
     {
       "label": "tsc",
       "type": "shell",
-      "command": "tsc -b -w",
+      "command": "bun build:watch",
       "problemMatcher": []
     },
     {
-      "label": "vite",
+      "label": "vitest",
+      "type": "shell",
+      "command": "bun test:watch",
+      "problemMatcher": []
+    },
+    {
+      "label": "docs",
       "type": "shell",
       "command": "bunx vitepress",
       "options": {
@@ -17,9 +23,27 @@
       "problemMatcher": []
     },
     {
+      "label": "client",
+      "type": "shell",
+      "command": "bunx vite",
+      "options": {
+        "cwd": "liminal.im/client"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "server",
+      "type": "shell",
+      "command": "bun --env-file '../../.env' main",
+      "options": {
+        "cwd": "liminal.im/server"
+      },
+      "problemMatcher": []
+    },
+    {
       "label": "dev",
       "type": "shell",
-      "dependsOn": ["tsc", "vite"],
+      "dependsOn": ["tsc", "vitest", "docs", "server", "client"],
       "problemMatcher": []
     }
   ]

@@ -7,49 +7,12 @@ prev: false
 **Liminal enables the expression of reusable conversations as
 [effects](/effects.md).**
 
-```ts twoslash
-import { Effect } from "effect"
-import { L } from "liminal"
-
-const conversation = Effect.gen(function*() {
-  // Append a user message.
-  yield* L.user`Where is the pot of gold?`
-
-  // Infer and append an assistant message.
-  const loc = yield* L.assistant
-
-  // Use the reply.
-  loc satisfies string
-})
-```
-
-This allows us to reason about the progression of the conversation with ordinary
-function control flow.
-
-```ts twoslash
-declare const condition: boolean
-import { Effect, Schema } from "effect"
-import { L } from "liminal"
-// ---cut---
-Effect.gen(function*() {
-  while (true) {
-    // Ask the assistant whether to move on.
-    yield* L.user`Are we done with this part of the conversation?`
-    const { finished } = yield* L.assistantStruct({
-      finished: Schema.Boolean,
-    })
-
-    // If finished, move onto the next part of the conversation.
-    if (finished) break
-  }
-  // The conversation continues...
-})
-```
+<<< @/_blocks/a_taste.ts
 
 ## State Management
 
-With every `yield*`, Liminal updates the underlying conversation state. The
-final conversation of the first example may look as follows.
+We `yield*` Liminal effects to manage the underlying conversation state. The
+final conversation of the previous example may look as follows.
 
 ```json
 [
@@ -68,52 +31,43 @@ final conversation of the first example may look as follows.
 ]
 ```
 
+## Unifying Conversation and Control Flow
+
+We reason about the progression of the conversation as one with ordinary
+function control flow. We can utilize ordinary control flow operators, such as
+`for` and `while` loops .
+
+<<< @/_blocks/while_looping.ts
+
 ## Reusable Patterns
 
-Liminal effects are reusable conversational patterns. For example, we can
-express an iterative refinement loop as follows.
+We can compose patterns that abstract over the low-level back-and-forth of
+user-assistant messaging. Conversations become our units of composition; we no
+longer think solely in terms of messages.
 
-```ts twoslash
-import { Effect } from "effect"
-import { L } from "liminal"
+For example, we can express a reusable iterative refinement conversation pattern
+as follows.
 
-export const refine = Effect.fnUntraced(function*(content: string) {
-  // For 5 iterations.
-  for (let i = 0; i < 5; i++) {
-    // Append a message asking for the refinement.
-    yield* L.user`Refine the following text: ${content}`
-    // Infer and reassign `content` to an assistant message.
-    content = yield* L.assistant
-  }
-  // Return the final `content`.
-  return content
-})
-```
+`refine.ts`
 
-We can share and consumed this pattern––or any Liminal effect––as we would any
-other JavaScript library.
+<<< @/_blocks/refine.ts
 
-```ts {3,15}
-import { Effect } from "effect"
-import { L } from "liminal"
-import { refine } from "liminal-foo"
+We can then share and consume this pattern––or any Liminal effect––as we would
+any other TypeScript file or library.
 
-const maybeRefine = Effect.fn(function*(content: string) {
-  // Ask whether to utilize the pattern.
-  yield* L.user`Does the following text require refinement?: ${content}`
-  // Have the model answer our question.
-  const { needsRefinement } = yield* L.assistantStruct({
-    needsRefinement: Schema.Boolean,
-  })
-  // If so...
-  if (needsRefinement) {
-    // Refine and return.
-    return yield* refine(content)
-  }
-  // Otherwise, return the initial content.
-  return content
-})
-```
+`refine_consumer.ts`
+
+<<< @/_blocks/refine_consumer.ts
+
+## Branching
+
+Liminal provides mechanisms for branching conversations so that we can easily
+explore alternative outcomes from any given state.
+
+In the following example, the `Rap`, `Rock` and `Pop` branches all inherit an
+isolated copy of the parent's messages, which contain the initial user message.
+
+<<< @/_blocks/song_branches.ts
 
 ---
 

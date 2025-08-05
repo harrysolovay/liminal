@@ -1,8 +1,8 @@
 import { FileSystem, Path } from "@effect/platform"
 import { BunContext } from "@effect/platform-bun"
-import { Effect, Layer, Schema } from "effect"
+import { Console, Effect, Schema } from "effect"
 import { L } from "liminal"
-import { model } from "./_layers.ts"
+import { ModelLive } from "./_layers.ts"
 
 const Lmh = Schema.Literal("lower", "medium", "high")
 
@@ -70,10 +70,8 @@ Effect.gen(function*() {
     L.assistant,
   )
 
-  return { reviews, summary }
+  yield* Console.log({ reviews, summary })
 }).pipe(
-  Effect.provide(
-    Layer.merge(BunContext.layer, model),
-  ),
-  Effect.runPromise,
-).then(console.log)
+  Effect.provide([ModelLive, BunContext.layer]),
+  Effect.runFork,
+)

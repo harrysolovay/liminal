@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
+    "allowImportingTsExtensions": true,
     "composite": true,
     "declaration": true,
+    "erasableSyntaxOnly": true,
     "esModuleInterop": true,
     "exactOptionalPropertyTypes": true,
     "forceConsistentCasingInFileNames": true,
@@ -14,15 +16,15 @@
     "noErrorTruncation": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
-    "noImplicitThis": true,
+    "noImplicitOverride": true,
     "noImplicitReturns": true,
+    "noImplicitThis": true,
     "noUncheckedIndexedAccess": true,
     "noUncheckedSideEffectImports": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "resolveJsonModule": true,
     "rewriteRelativeImportExtensions": true,
-    "allowImportingTsExtensions": true,
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
@@ -33,6 +35,7 @@
     "target": "ESNext",
     "typeRoots": ["node_modules/@types"],
     "useDefineForClassFields": true,
+    "useUnknownInCatchVariables": true,
     "verbatimModuleSyntax": true
   },
   "exclude": ["**/dist", "node_modules"]

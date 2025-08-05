@@ -3,9 +3,9 @@ import { flow, identity } from "effect/Function"
 import * as Option from "effect/Option"
 import * as PubSub from "effect/PubSub"
 import type { LEvent } from "./LEvent.ts"
-import type { Sequence } from "./Sequence.ts"
-import { sequence } from "./sequence_.ts"
+import { sequence } from "./sequence.ts"
 import { Strand } from "./Strand.ts"
+import type { Sequence } from "./util/Sequence.ts"
 
 /** Isolate the effect with a new strand in context. */
 export const branch: Sequence<never, Strand> = flow(
@@ -19,7 +19,7 @@ export const branch: Sequence<never, Strand> = flow(
         system: Option.map(parent.system, identity),
         events: yield* PubSub.unbounded<LEvent>(),
         messages: parent.messages.slice(),
-        tools: parent.tools.slice(),
+        tools: new Set(parent.tools),
       })
     }),
   ),

@@ -1,6 +1,6 @@
 import { Effect } from "effect"
 import { L } from "liminal"
-import { model } from "./_layers.ts"
+import { ModelLive } from "./_layers.ts"
 import { logger } from "./_logger.ts"
 
 Effect.gen(function*() {
@@ -19,23 +19,17 @@ Effect.gen(function*() {
   yield* L.user`Any advice for me as I further-explore this project?`
   yield* L.assistant
 
-  yield* Effect.gen(function*() {
-    const summary = yield* L.strand(
-      L.user`Please summarize our conversation.`,
-      L.assistant,
-    )
-
-    // @effect-diagnostics-next-line returnEffectInGen:off
-    return Effect.gen(function*() {
-      yield* L.user`Let's resume our discussion from the following summary`
-      yield* L.user(summary)
-    })
-  }).pipe(L.reduce)
+  const summary = yield* L.strand(
+    L.user`Please summarize our conversation.`,
+    L.assistant,
+  )
+  yield* L.clear
+  yield* L.user`Let's resume our discussion from the following summary: ${summary}`
 
   yield* L.user`So please reiterate your thoughts on this creative journey.`
   yield* L.assistant
 }).pipe(
   L.strand,
-  Effect.provide(model),
-  Effect.runPromise,
+  Effect.provide(ModelLive),
+  Effect.runFork,
 )

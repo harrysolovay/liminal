@@ -1,4 +1,4 @@
-import { Message } from "@effect/ai/AiInput"
+import type { Message } from "@effect/ai/AiInput"
 import * as Effect from "effect/Effect"
 import { MessagesCleared } from "./LEvent.ts"
 import { Strand } from "./Strand.ts"

@@ -20,20 +20,7 @@ execute.
 For example, we can define a `Random` context tag, which will allow us to
 decouple our random number factory implementation from its usage.
 
-```ts twoslash
-import { Context, Effect } from "effect"
-
-class Random extends Context.Tag("Random")<Random, () => number>() {}
-
-const program = Effect.gen(function*() {
-  const random = yield* Random
-
-  return random()
-})
-
-program
-// ^?
-```
+<<< @/_blocks/effect_di.ts
 
 <br />
 
@@ -86,24 +73,7 @@ We provide strands (represented as Effect
 [layers](https://effect.website/docs/requirements-management/layers/)) to denote
 the boundary of the conversation.
 
-```ts twoslash
-import { Effect } from "effect"
-declare const conversation: Effect.Effect<void>
-import { L } from "liminal"
-// ---cut---
-Effect.gen(function*() {
-  // Run in the current conversation.
-  yield* conversation
-
-  // Run isolated with an untouched state.
-  yield* conversation.pipe(L.strand)
-
-  // Run isolated with a copy of the current state.
-  yield* conversation.pipe(L.branch)
-}).pipe(
-  L.strand,
-)
-```
+<<< @/_blocks/conversation_boundaries.ts
 
 ---
 

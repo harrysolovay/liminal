@@ -1,9 +1,10 @@
 import { transformerTwoslash } from "@shikijs/vitepress-twoslash"
 import footnotePlugin from "markdown-it-footnote"
 import markdownSteps from "markdown-it-steps"
+import path from "node:path"
 import { defineConfig } from "vitepress"
-import { llmstxtPlugin } from "vitepress-plugin-llmstxt"
-import liminalRootPackageJson from "../../liminal/package.json" with { type: "json" }
+import llmstext from "vitepress-plugin-llms"
+import liminalPackageJson from "../../liminal/package.json" with { type: "json" }
 import liminalLandPackageJson from "../package.json" with { type: "json" }
 import { sidebar } from "./sidebar.ts"
 
@@ -18,19 +19,31 @@ const GOOGLE_ANALYTICS = `
 
 export default defineConfig({
   title: "Liminal",
-  description: liminalRootPackageJson.description,
+  description: liminalPackageJson.description,
+  // TODO: fix https://github.com/okineadev/vitepress-plugin-llms/issues/69#issuecomment-3151358653
   vite: {
-    plugins: [
-      llmstxtPlugin({
-        llmsFullFile: true,
-        hostname: liminalLandPackageJson.homepage,
-      }),
-    ],
+    server: {
+      port: 5174,
+    },
+    plugins: [llmstext({
+      title: "Liminal",
+      domain: "https://liminal.land",
+      description: liminalPackageJson.description,
+    }) as never],
   },
   markdown: {
-    codeTransformers: [transformerTwoslash() as never],
+    codeTransformers: [transformerTwoslash({
+      explicitTrigger: false,
+      twoslashOptions: {
+        vfsRoot: path.resolve(__dirname, "../_blocks/"),
+        compilerOptions: {
+          allowImportingTsExtensions: true,
+          noEmit: true,
+        },
+      },
+    }) as never],
     theme: {
-      light: "light-plus",
+      light: "github-light",
       dark: "dracula",
     },
     config: (md) => {
@@ -38,7 +51,9 @@ export default defineConfig({
       md.use(footnotePlugin)
     },
   },
-  sitemap: { hostname: "http://liminal.land" },
+  sitemap: {
+    hostname: "http://liminal.land",
+  },
   lastUpdated: true,
   cleanUrls: true,
   metaChunk: true,
@@ -63,7 +78,9 @@ export default defineConfig({
       { icon: "github", link: "https://github.com/harrysolovay/liminal" },
       { icon: "x", link: "https://x.com/harrysolovay" },
     ],
-    search: { provider: "local" },
+    search: {
+      provider: "local",
+    },
     sidebar,
   },
   transformHead: ({ pageData: { frontmatter }, siteData }) => {
