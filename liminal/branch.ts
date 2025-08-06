@@ -1,19 +1,15 @@
 import * as Effect from "effect/Effect"
-import * as ExecutionStrategy from "effect/ExecutionStrategy"
 import { flow, identity } from "effect/Function"
 import * as Option from "effect/Option"
 import * as PubSub from "effect/PubSub"
-import * as Scope from "effect/Scope"
 import type { LEvent } from "./LEvent.ts"
 import { sequence } from "./sequence.ts"
 import { Strand } from "./Strand.ts"
-import { strandScoped } from "./strandScoped.ts"
 import type { Sequence } from "./util/Sequence.ts"
 
 /** Isolate the effect with a new strand in context. */
 export const branch: Sequence<never, Strand> = flow(
   sequence,
-  strandScoped,
   Effect.provideServiceEffect(
     Strand,
     Effect.gen(function*() {
@@ -22,7 +18,6 @@ export const branch: Sequence<never, Strand> = flow(
         parent: Option.some(parent),
         system: Option.map(parent.system, identity),
         events: yield* PubSub.unbounded<LEvent>(),
-        scope: yield* Scope.make(ExecutionStrategy.parallel),
         messages: parent.messages.slice(),
         tools: new Set(parent.tools),
       })

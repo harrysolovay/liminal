@@ -19,11 +19,12 @@ Effect.gen(function*() {
 
   let i = 0
   while (i < 3) {
-    const reply = yield* L.branch(
+    yield* L.branch(
       L.user`Please reply to the last message on my behalf.`,
       L.assistant,
+    ).pipe(
+      L.user,
     )
-    yield* L.user(reply)
     yield* L.assistant
     i++
   }
@@ -31,6 +32,7 @@ Effect.gen(function*() {
   return yield* L.assistant
 }).pipe(
   L.strand,
+  Effect.scoped,
   Effect.provide(ModelLive),
   Effect.runFork,
 )

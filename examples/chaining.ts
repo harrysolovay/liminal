@@ -38,6 +38,7 @@ Effect.gen(function*() {
   return { copy, qualityMetrics }
 }).pipe(
   L.strand,
+  Effect.scoped,
   Effect.provide(ModelLive),
   Effect.runFork,
 )

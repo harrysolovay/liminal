@@ -8,12 +8,10 @@ import { Strand } from "./Strand.ts"
 /** Attach an event handler to process the events of the current strand. */
 export const handle: <A, E, R>(
   f: (event: LEvent) => Effect.Effect<A, E, R>,
-) => Effect.Effect<RuntimeFiber<void, E>, never, Strand | R> = Effect.fnUntraced(function*(f) {
+) => Effect.Effect<RuntimeFiber<void, E>, never, Strand | R | Scope.Scope> = Effect.fnUntraced(function*(f) {
   const latch = yield* Effect.makeLatch(false)
-  const { events, scope } = yield* Strand
-  const dequeue = yield* events.subscribe.pipe(
-    Scope.extend(scope),
-  )
+  const { events } = yield* Strand
+  const dequeue = yield* events.subscribe
   const fiber = yield* latch.open.pipe(
     Effect.zipRight(
       Stream.fromQueue(dequeue).pipe(

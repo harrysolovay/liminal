@@ -2,11 +2,9 @@ import type { Message } from "@effect/ai/AiInput"
 import type * as AiToolkit from "@effect/ai/AiToolkit"
 import * as Context from "effect/Context"
 import * as Effect from "effect/Effect"
-import * as ExecutionStrategy from "effect/ExecutionStrategy"
 import * as Layer from "effect/Layer"
 import * as Option from "effect/Option"
 import * as PubSub from "effect/PubSub"
-import * as Scope from "effect/Scope"
 import type { LEvent } from "./LEvent.ts"
 
 export declare namespace Strand {
@@ -15,8 +13,6 @@ export declare namespace Strand {
     readonly parent: Option.Option<Service>
     /** The pubsub with which the current strand's events are emitted. */
     readonly events: PubSub.PubSub<LEvent>
-    /** The scope in which the event subscribers live. */
-    readonly scope: Scope.CloseableScope
     /** The current system prompt to be passed along to the model. */
     system: Option.Option<string>
     /** The list of messages that the model uses to infer the next message. */
@@ -39,7 +35,6 @@ export class Strand extends Context.Tag("liminal/Strand")<Strand, Strand.Service
         return Strand.of({
           parent: yield* Effect.serviceOption(Strand),
           events: yield* PubSub.unbounded<LEvent>(),
-          scope: yield* Scope.make(ExecutionStrategy.parallel),
           system: Option.fromNullable(system),
           messages: [...messages ?? []],
           tools: new Set(tools ?? []),
