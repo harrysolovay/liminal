@@ -27,7 +27,7 @@ class EncodeJsoncContext {
   next = () => new EncodeJsoncContext(this.depth + 1)
 
   comment = (type: SchemaAST.AST): string => {
-    const { description } = type.annotations
+    const { [SchemaAST.DescriptionAnnotationId]: description } = type.annotations
     if (typeof description === "string") {
       const trimmed = description.trim()
       if (trimmed) {
@@ -111,11 +111,13 @@ const encodeAst: (ast: SchemaAST.AST) => (value: unknown, ctx: EncodeJsoncContex
 
 const v = encodeJsonc(Schema.Struct({
   a: Schema.Boolean.annotations({
-    description: "Hey there.",
+    description: "The first field description.",
   }),
-  b: Schema.Int,
+  b: Schema.Int.annotations({
+    description: "LLMs are gonna love this.",
+  }),
   c: Schema.Any.annotations({
-    description: "Hey there.",
+    description: "Hi gcanti!",
   }),
 }))({
   a: true,
