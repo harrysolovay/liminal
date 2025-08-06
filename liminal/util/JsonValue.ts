@@ -10,7 +10,7 @@ export type JsonValueObject = { [key: string]: JsonValue }
 export const encodeJsonc: <A, I extends JsonValue>(schema: Schema.Schema<A, I>) => (value: A) => string = (
   schema,
 ) => {
-  const encoder = encodeAstJsonc(SchemaAST.encodedAST(schema.ast))
+  const encoder = encodeAst(SchemaAST.encodedAST(schema.ast))
   return (value) => encoder(value, new EncodeJsoncContext(0))
 }
 
@@ -35,7 +35,7 @@ class EncodeJsoncContext {
   }
 }
 
-const encodeAstJsonc: (ast: SchemaAST.AST) => (value: unknown, ctx: EncodeJsoncContext) => string = (ast) => {
+const encodeAst: (ast: SchemaAST.AST) => (value: unknown, ctx: EncodeJsoncContext) => string = (ast) => {
   switch (ast._tag) {
     case "TypeLiteral": {
       return (value, ctx) => {
@@ -43,7 +43,7 @@ const encodeAstJsonc: (ast: SchemaAST.AST) => (value: unknown, ctx: EncodeJsoncC
           .map(({ name, type }) => {
             if (typeof name === "symbol") throw 0
 
-            const child = encodeAstJsonc(type)((value as never)[name], ctx.next())
+            const child = encodeAst(type)((value as never)[name], ctx.next())
             return `${ctx.comment(type)}${name}: ${child}`
           })
           .join(`,\n${ctx.childIndentation}`)
@@ -53,34 +53,56 @@ const encodeAstJsonc: (ast: SchemaAST.AST) => (value: unknown, ctx: EncodeJsoncC
     case "StringKeyword": {
       return (value) => `"${value}"`
     }
+    case "BooleanKeyword":
     case "NumberKeyword": {
-      return (value) => `${value}`
+      return String
+    }
+    case "AnyKeyword": {
+      return (value, ctx) =>
+        JSON
+          .stringify(value, null, 2)
+          .split("\n")
+          .map((line, i) => i ? ctx.indentation.concat(line) : line)
+          .join("\n")
+    }
+    case "Union": {
+      // TODO
+      throw 0
     }
     case "Literal": {
       const { literal } = ast
-      if (typeof literal === "string") {
-        return () => `"${literal}"`
-      }
-      if (typeof literal === "number" || typeof literal === "boolean") {
-        return () => String(literal)
-      }
-      if (literal === null) {
-        return () => "null"
-      }
-      throw 0
+      const v = (() => {
+        switch (typeof literal) {
+          case "boolean":
+          case "number": {
+            return String(literal)
+          }
+          case "string": {
+            return `"${literal}"`
+          }
+        }
+        if (literal === null) {
+          return "null"
+        }
+        console.log({ literal })
+        throw 0
+      })()
+      return () => v
     }
     case "TupleType": {
       const { elements, rest } = ast
       return (value, ctx) => {
-        const e = (elements.length ? elements : rest).map((element, i) => {
-          const child = encodeAstJsonc(element.type)((value as never)[i]!, ctx.next())
-          return `${ctx.comment(element.type)}${child}`
-        }).join(`,\n${ctx.childIndentation}`)
+        const e = (elements.length ? elements : rest)
+          .map((element, i) => {
+            const child = encodeAst(element.type)((value as never)[i]!, ctx.next())
+            return `${ctx.comment(element.type)}${child}`
+          })
+          .join(`,\n${ctx.childIndentation}`)
         return `[\n${ctx.childIndentation}${e}\n${ctx.indentation}]`
       }
     }
   }
-  console.log(ast._tag)
+  console.log({ ast })
   throw 0
 }
 
@@ -95,3 +117,26 @@ const extractAnnotation = ({ annotations }: SchemaAST.AST): string | undefined =
   }
   return
 }
+
+const v = encodeJsonc(Schema.Struct({
+  a: Schema.Boolean.annotations({
+    jsonSchema: {
+      description: "Hey there.",
+    },
+  }),
+  b: Schema.Int,
+  c: Schema.Any.annotations({
+    jsonSchema: {
+      description: "Hey there.",
+    },
+  }),
+}))({
+  a: true,
+  b: 101,
+  c: {
+    hi: {
+      there: "SUP",
+    },
+  },
+})
+console.log(v)
