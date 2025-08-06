@@ -65,8 +65,8 @@
         "effect": "^3.17.6",
       },
     },
-    "liminal.im/server": {
-      "name": "@liminal.im/server",
+    "liminal.im/worker": {
+      "name": "@liminal.im/worker",
       "dependencies": {
         "@clerk/backend": "^2.6.2",
         "@effect/platform": "^0.90.0",
@@ -533,7 +533,7 @@
 
     "@liminal.im/domain": ["@liminal.im/domain@workspace:liminal.im/domain"],
 
-    "@liminal.im/server": ["@liminal.im/server@workspace:liminal.im/server"],
+    "@liminal.im/worker": ["@liminal.im/worker@workspace:liminal.im/worker"],
 
     "@manypkg/find-root": ["@manypkg/find-root@1.1.0", "", { "dependencies": { "@babel/runtime": "^7.5.5", "@types/node": "^12.7.1", "find-up": "^4.1.0", "fs-extra": "^8.1.0" } }, "sha512-mki5uBvhHzO8kYYix/WRy2WX8S3B5wdVSc9D6KcU5lQNglP2yt58/VfLuAK49glRXChosY8ap2oJ1qgma3GUVA=="],
 
