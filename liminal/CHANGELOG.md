@@ -1,5 +1,11 @@
 # liminal
 
+## 0.12.1
+
+### Patch Changes
+
+- 6df720c: Fix NPM publish.
+
 ## 0.12.0
 
 ### Minor Changes
