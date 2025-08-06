@@ -1,5 +1,11 @@
 # liminal
 
+## 0.12.0
+
+### Minor Changes
+
+- a04ae8b: Introduce L.handle / rework strand event-handling mechanism.
+
 ## 0.11.1
 
 ### Patch Changes
