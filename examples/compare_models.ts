@@ -26,7 +26,7 @@ Effect.gen(function*() {
 
     ${JSON.stringify(variants)}
   `
-  const { key } = yield* L.assistantStruct({
+  const { key } = yield* L.assistantSchema({
     key: Schema.Literal("a", "b", "c"),
   })
   return variants[key]

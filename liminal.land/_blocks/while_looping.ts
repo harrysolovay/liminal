@@ -6,7 +6,7 @@ Effect.gen(function*() {
   while (true) {
     // Ask the assistant whether to move on.
     yield* L.user`Are we done with this part of the conversation?`
-    const { finished } = yield* L.assistantStruct({
+    const { finished } = yield* L.assistantSchema({
       finished: Schema.Boolean,
     })
 

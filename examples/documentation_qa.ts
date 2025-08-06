@@ -41,7 +41,7 @@ Effect.gen(function*() {
 
         ${fs.readFileString(docPath)}
       `
-      const maybeChanges = yield* L.assistantStruct(Suggestions)
+      const maybeChanges = yield* L.assistantSchema(Suggestions)
       return [docPath, maybeChanges] as const
     }),
     L.branch,

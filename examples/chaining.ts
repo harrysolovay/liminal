@@ -18,7 +18,7 @@ Effect.gen(function*() {
 
     Copy to evaluate: ${copy}
   `
-  const qualityMetrics = yield* L.assistantStruct({
+  const qualityMetrics = yield* L.assistantSchema({
     hasCallToAction: Schema.Boolean,
     emotionalAppeal: Schema.Number,
     clarity: Schema.Number,

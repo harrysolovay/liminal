@@ -13,7 +13,7 @@ export type JsonValueObject = { [key: string]: JsonValue }
 export const encodeJsonc: <A, I extends JsonValue>(
   schema: Schema.Schema<A, I>,
 ) => (value: A) => Effect.Effect<string> = (schema) => {
-  const encoder = encodeAst(SchemaAST.encodedAST(schema.ast))
+  const encoder = encodeAst(SchemaAST.encodedBoundAST(schema.ast))
   return (value) => encoder(value, new EncodeJsoncContext(0))
 }
 
@@ -42,7 +42,10 @@ class EncodeJsoncContext {
     })
 }
 
-const encodeAst: (ast: SchemaAST.AST) => (value: unknown, ctx: EncodeJsoncContext) => Effect.Effect<string> = (ast) => {
+const encodeAst: (
+  ast: SchemaAST.AST,
+  refinement?: SchemaAST.Refinement,
+) => (value: unknown, ctx: EncodeJsoncContext) => Effect.Effect<string> = (ast, refinement) => {
   switch (ast._tag) {
     case "TypeLiteral": {
       return Effect.fnUntraced(function*(value, ctx) {
@@ -51,7 +54,7 @@ const encodeAst: (ast: SchemaAST.AST) => (value: unknown, ctx: EncodeJsoncContex
             Effect.fnUntraced(function*({ name, type }) {
               if (typeof name === "symbol") throw 0
               const child = yield* encodeAst(type)((value as never)[name], ctx.next())
-              return `${ctx.comment(type)}${name}: ${child}`
+              return `${ctx.comment(refinement ?? type)}${name}: ${child}`
             }),
           ),
         ).pipe(
@@ -66,6 +69,9 @@ const encodeAst: (ast: SchemaAST.AST) => (value: unknown, ctx: EncodeJsoncContex
     case "BooleanKeyword":
     case "NumberKeyword": {
       return (value) => Effect.succeed(String(value))
+    }
+    case "Refinement": {
+      return encodeAst(ast.from, refinement ?? ast)
     }
     case "UnknownKeyword":
     case "AnyKeyword": {
@@ -119,15 +125,15 @@ const encodeAst: (ast: SchemaAST.AST) => (value: unknown, ctx: EncodeJsoncContex
     }
     case "TupleType": {
       const { elements, rest } = ast
-      return (value, ctx) => {
-        const e = (elements.length ? elements : rest)
-          .map((element, i) => {
-            const child = encodeAst(element.type)((value as never)[i]!, ctx.next())
-            return `${ctx.comment(element.type)}${child}`
-          })
-          .join(`,\n${ctx.childIndentation}`)
-        return Effect.succeed(`[\n${ctx.childIndentation}${e}\n${ctx.indentation}]`)
-      }
+      return (value, ctx) =>
+        Effect.all((elements.length ? elements : rest).map(
+          Effect.fnUntraced(function*(element, i) {
+            const child = yield* encodeAst(element.type)((value as never)[i]!, ctx.next())
+            return `${ctx.comment(refinement ?? element.type)}${child}`
+          }),
+        )).pipe(
+          Effect.map((v) => `[\n${ctx.childIndentation}${v.join(`,\n${ctx.childIndentation}`)}\n${ctx.indentation}]`),
+        )
     }
     case "Suspend": {
       return encodeAst(ast.f())
@@ -137,39 +143,39 @@ const encodeAst: (ast: SchemaAST.AST) => (value: unknown, ctx: EncodeJsoncContex
   throw 0
 }
 
-encodeJsonc(Schema.Struct({
-  a: Schema.Boolean.annotations({
-    description: "The first field description.",
-  }),
-  b: Schema.Int.annotations({
-    description: "LLMs are gonna love this.",
-  }),
-  c: Schema.Any.annotations({
-    description: "Hi gcanti!",
-  }),
-  d: Schema.Union(
-    Schema.String,
-    Schema.Number,
-    Schema.Struct({
-      sup: Schema.Boolean.annotations({
-        description: "SUP THIS IS GONNA BE COOL",
-      }),
-    }),
-  ).annotations({
-    description: "YET ANOTHER",
-  }),
-}))({
-  a: true,
-  b: 101,
-  c: {
-    hi: {
-      there: "SUP",
-    },
-  },
-  d: {
-    sup: true,
-  },
-}).pipe(
-  Effect.runSync,
-  console.log,
-)
+// encodeJsonc(Schema.Struct({
+//   a: Schema.Boolean.annotations({
+//     description: "The first field description.",
+//   }),
+//   b: Schema.Int.annotations({
+//     description: "LLMs are gonna love this.",
+//   }),
+//   c: Schema.Any.annotations({
+//     description: "Hi gcanti!",
+//   }),
+//   d: Schema.Union(
+//     Schema.String,
+//     Schema.Number,
+//     Schema.Struct({
+//       sup: Schema.Boolean.annotations({
+//         description: "SUP THIS IS GONNA BE COOL",
+//       }),
+//     }),
+//   ).annotations({
+//     description: "YET ANOTHER",
+//   }),
+// }))({
+//   a: true,
+//   b: 101,
+//   c: {
+//     hi: {
+//       there: "SUP",
+//     },
+//   },
+//   d: {
+//     sup: true,
+//   },
+// }).pipe(
+//   Effect.runSync,
+//   console.log,
+// )

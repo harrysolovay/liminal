@@ -6,7 +6,7 @@ import type { LEvent } from "./LEvent.ts"
 import { Strand } from "./Strand.ts"
 
 /** Attach an event handler to process the events of the current strand. */
-export const handle: <A, E, R>(
+export const listen: <A, E, R>(
   f: (event: LEvent) => Effect.Effect<A, E, R>,
 ) => Effect.Effect<RuntimeFiber<void, E>, never, Strand | R | Scope.Scope> = Effect.fnUntraced(function*(f) {
   const latch = yield* Effect.makeLatch(false)

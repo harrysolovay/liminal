@@ -15,7 +15,11 @@ Effect.gen(function*() {
     specified target language, preserving tone and cultural nuances.
   `
   yield* L.user`Target language: typescript`
+  yield* Effect.sleep(100)
+
   const term = yield* Terminal.Terminal
+  yield* term.display("Please input the text to be translated:\n")
+
   yield* L.user`Text:\n\n${term.readLine}`
   let currentTranslation = yield* L.assistant
   let iterations = 0
@@ -33,7 +37,7 @@ Effect.gen(function*() {
       3. Preservation of nuance
       4. Cultural accuracy
     `
-    const evaluation = yield* L.assistantStruct({
+    const evaluation = yield* L.assistantSchema({
       qualityScore: Schema.Int,
       preservesTone: Schema.Boolean,
       preservesNuance: Schema.Boolean,
@@ -42,9 +46,7 @@ Effect.gen(function*() {
       improvementSuggestions: Schema.Array(Schema.String),
     })
     if (
-      evaluation.qualityScore >= 8
-      && evaluation.preservesTone
-      && evaluation.preservesNuance
+      evaluation.qualityScore >= 8 && evaluation.preservesTone && evaluation.preservesNuance
       && evaluation.culturallyAccurate
     ) {
       break

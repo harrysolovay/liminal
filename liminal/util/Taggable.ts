@@ -25,8 +25,8 @@ export const normalize: <
   L extends Array<unknown>,
 >(
   a0: A0,
-  ...aRest: L
-) => Effect.Effect<string | (undefined extends A0 ? undefined : never)> = Effect.fnUntraced(function*(a0, ...aRest) {
+  aRest: L,
+) => Effect.Effect<string | (undefined extends A0 ? undefined : never)> = Effect.fnUntraced(function*(a0, aRest) {
   let a0_: TemplateStringsArray | string | undefined
   if (Effect.isEffect(a0)) {
     a0_ = yield* a0 as Effect.Effect<TemplateStringsArray | string | undefined>
@@ -35,7 +35,11 @@ export const normalize: <
   }
   if (!a0_) return undefined as never
   const aRest_ = yield* Effect.all(
-    aRest.map((v) => Effect.isEffect(v) ? v : Effect.succeed(v)),
+    aRest.map((v) =>
+      Effect.isEffect(v)
+        ? v
+        : Effect.succeed(v)
+    ),
   ) as never as Effect.Effect<Array<unknown>>
   if (typeof a0_ === "string") {
     if (aRest_.length === 0) {
@@ -43,5 +47,5 @@ export const normalize: <
     }
     return [a0_, ...aRest_].join("")
   }
-  return String.raw(a0_, ...aRest)
+  return String.raw(a0_, ...aRest_)
 })
