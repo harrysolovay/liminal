@@ -31,6 +31,7 @@ Effect.gen(function*() {
   return yield* L.assistant
 }).pipe(
   L.strand,
+  Effect.scoped,
   Effect.provide([ModelLive, BunTerminal.layer]),
   Effect.runFork,
 )

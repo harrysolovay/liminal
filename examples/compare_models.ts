@@ -32,6 +32,7 @@ Effect.gen(function*() {
   return variants[key]
 }).pipe(
   L.strand,
+  Effect.scoped,
   Effect.provide([ModelLive, ClientLive]),
   Effect.runFork,
 )

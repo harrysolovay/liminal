@@ -13,7 +13,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 1
+    timeout-minutes: 2
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v1
@@ -28,7 +28,7 @@ jobs:
           path: liminal.land/.vitepress/dist
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 1
+    timeout-minutes: 2
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

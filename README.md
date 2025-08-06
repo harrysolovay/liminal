@@ -21,12 +21,15 @@ An effect is a conversation.
 
 ```ts
 import { FileSystem } from "@effect/platform"
-import { Console, Effect } from "effect"
+import { Effect } from "effect"
 import { L } from "liminal"
 
 const conversation = Effect.gen(function*() {
-  // Set system.
+  // Set system instruction.
   yield* L.system`You are an expert TypeScript developer.`
+
+  // Get a file system service.
+  const fs = yield* FileSystem.FileSystem
 
   // Append messages.
   yield* L.user`
@@ -34,16 +37,26 @@ const conversation = Effect.gen(function*() {
     LLM conversation state management.
 
     What are your thoughts on the following DX?
+
+    ${fs.readFileString("example.ts")}
   `
-  const fs = yield* FileSystem.FileSystem
-  const code = yield* fs.readFileString("example.ts")
-  yield* L.user(code)
 
   // Infer and append the assistant message.
-  const reply = yield* L.assistant
+  const answer = yield* L.assistant
 
-  reply satisfies string
-}).pipe(L.strand)
+  answer satisfies string
+
+  // List all messages.
+  const messages = yield* L.messages
+
+  // Clear all messages.
+  yield* L.clear
+
+  // Re-append messages.
+  yield* L.append(...messages)
+}).pipe(
+  L.strand,
+)
 ```
 
 ## Running Examples Locally

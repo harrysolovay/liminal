@@ -67,6 +67,7 @@ Effect.gen(function*() {
   }
 }).pipe(
   L.strand,
+  Effect.scoped,
   Effect.provide([ModelLive, BunContext.layer]),
   Effect.runFork,
 )
