@@ -1,15 +1,17 @@
 import { OpenAiLanguageModel } from "@effect/ai-openai"
-import { Effect, Schema } from "effect"
+import { Console, Effect, Schema } from "effect"
 import { L } from "liminal"
 import { ClientLive, ModelLive } from "./_layers.ts"
 import { logger } from "./_logger.ts"
 
 Effect.gen(function*() {
   yield* logger
+
   yield* L.user`Write a rap about type-level programming in TypeScript`
   yield* L.assistant
   yield* L.user`Rewrite it in whatever way you think best.`
-  const variants = yield* Effect.all({
+
+  const rewrites = yield* Effect.all({
     a: L.branch(L.assistant),
     b: L.assistant.pipe(
       L.branch,
@@ -20,16 +22,16 @@ Effect.gen(function*() {
       Effect.provide(OpenAiLanguageModel.model("gpt-3.5-turbo")),
     ),
   }, { concurrency: "unbounded" })
+
   yield* L.clear
   yield* L.user`
     Out of the following variants, which is your favorite?:
 
-    ${JSON.stringify(variants)}
+    ${JSON.stringify(rewrites)}
   `
-  const { key } = yield* L.assistantSchema({
-    key: Schema.Literal("a", "b", "c"),
-  })
-  return variants[key]
+  yield* L.assistantSchema(Schema.Literal("a", "b", "c")).pipe(
+    Effect.flatMap((key) => Console.log(rewrites[key])),
+  )
 }).pipe(
   L.strand,
   Effect.scoped,

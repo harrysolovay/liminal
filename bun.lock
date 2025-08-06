@@ -20,6 +20,9 @@
       "name": "liminal-examples",
       "dependencies": {
         "@effect/ai": "^0.25.0",
+        "@effect/ai-amazon-bedrock": "^0.5.0",
+        "@effect/ai-anthropic": "^0.15.0",
+        "@effect/ai-google": "^0.4.0",
         "@effect/ai-openai": "^0.21.16",
         "@effect/platform-bun": "^0.77.0",
         "effect": "^3.17.5",
@@ -28,7 +31,7 @@
     },
     "liminal": {
       "name": "liminal",
-      "version": "0.11.1",
+      "version": "0.12.2",
       "peerDependencies": {
         "@effect/ai": "^0.25.0",
         "effect": "^3.17.6",
@@ -140,6 +143,8 @@
     "@algolia/requester-node-http": ["@algolia/requester-node-http@5.35.0", "", { "dependencies": { "@algolia/client-common": "5.35.0" } }, "sha512-RgLX78ojYOrThJHrIiPzT4HW3yfQa0D7K+MQ81rhxqaNyNBu4F1r+72LNHYH/Z+y9I1Mrjrd/c/Ue5zfDgAEjQ=="],
 
     "@ampproject/remapping": ["@ampproject/remapping@2.3.0", "", { "dependencies": { "@jridgewell/gen-mapping": "^0.3.5", "@jridgewell/trace-mapping": "^0.3.24" } }, "sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw=="],
+
+    "@anthropic-ai/tokenizer": ["@anthropic-ai/tokenizer@0.0.4", "", { "dependencies": { "@types/node": "^18.11.18", "tiktoken": "^1.0.10" } }, "sha512-EHRKbxlxlc8W4KCBEseByJ7YwyYCmgu9OyN59H9+IYIGPoKv8tXyQXinkeGDI+cI8Tiuz9wk2jZb/kK7AyvL7g=="],
 
     "@ark/schema": ["@ark/schema@0.46.0", "", { "dependencies": { "@ark/util": "0.46.0" } }, "sha512-c2UQdKgP2eqqDArfBqQIJppxJHvNNXuQPeuSPlDML4rjw+f1cu0qAlzOG4b8ujgm9ctIDWwhpyw6gjG5ledIVQ=="],
 
@@ -358,6 +363,12 @@
     "@effect-rx/rx-react": ["@effect-rx/rx-react@0.40.15", "", { "dependencies": { "@effect-rx/rx": "^0.48.1" }, "peerDependencies": { "effect": "^3.17", "react": ">=18 <20", "scheduler": "*" } }, "sha512-wlYWJtCgYTtKQuSVU+VQhczi9Ei+hIKpQLi1zKYqshg1aVMUy+wDC9iLJpgyZ4vGxDaWXShYKsfy8bYtbjwbbA=="],
 
     "@effect/ai": ["@effect/ai@0.25.0", "", { "dependencies": { "find-my-way-ts": "^0.1.6" }, "peerDependencies": { "@effect/experimental": "^0.54.0", "@effect/platform": "^0.90.0", "@effect/rpc": "^0.68.0", "effect": "^3.17.1" } }, "sha512-TreU0B0tLm4RgC7sd8ACJuqnL3Uk8qvZFKgIT+KJkYG0+809Mn5Jlx6IXe450rMcOh7Zd/1+sYZEU8G/n7eWsA=="],
+
+    "@effect/ai-amazon-bedrock": ["@effect/ai-amazon-bedrock@0.5.0", "", { "dependencies": { "@smithy/eventstream-codec": "^4.0.4", "@smithy/util-utf8": "^4.0.0", "aws4fetch": "^1.0.20", "gpt-tokenizer": "^2.9.0" }, "peerDependencies": { "@effect/ai": "^0.25.0", "@effect/experimental": "^0.54.0", "@effect/platform": "^0.90.0", "effect": "^3.17.1" } }, "sha512-5kg9AKQWItDKeY2c11hP4ISmiVAMDAcER4jt/VHMDYUCt4quNPpsuylb+E8Mp7e802vynLrd4teabJ+kfEkXpA=="],
+
+    "@effect/ai-anthropic": ["@effect/ai-anthropic@0.15.0", "", { "dependencies": { "@anthropic-ai/tokenizer": "^0.0.4" }, "peerDependencies": { "@effect/ai": "^0.25.0", "@effect/experimental": "^0.54.0", "@effect/platform": "^0.90.0", "effect": "^3.17.1" } }, "sha512-m4+RQXgkEV+wdBF+82HgL6qiFNURvLgz93Ppem2dspp4DVCHrowUkp51qF7cixbLDlKRI7aODvDExDTuEx1QiA=="],
+
+    "@effect/ai-google": ["@effect/ai-google@0.4.0", "", { "peerDependencies": { "@effect/ai": "^0.25.0", "@effect/experimental": "^0.54.0", "@effect/platform": "^0.90.0", "effect": "^3.17.1" } }, "sha512-M4H7+ifzPHhgjuFatAD+nNoxY5Lp3+DndGqk3Nn62KBDdMuPmcNvTpWuXxlRajpNoqexGIL4EMgR0NwGQK++Bg=="],
 
     "@effect/ai-openai": ["@effect/ai-openai@0.21.16", "", { "dependencies": { "gpt-tokenizer": "^2.9.0" }, "peerDependencies": { "@effect/ai": "^0.18.16", "@effect/experimental": "^0.48.12", "@effect/platform": "^0.84.11", "effect": "^3.16.7" } }, "sha512-UPB/MiUFluodTRmLNuXffDHpfhyPKkXILcKVr++Vl4P2S8DAJ0UJY6uqH17aYM/Nriz8fMPk6EqccQ1WjMdBvw=="],
 
@@ -1771,6 +1782,8 @@
 
     "throttleit": ["throttleit@2.1.0", "", {}, "sha512-nt6AMGKW1p/70DF/hGBdJB57B8Tspmbp5gfJ8ilhLnt7kkr2ye7hzD6NVG8GGErk2HWF34igrL2CXmNIkzKqKw=="],
 
+    "tiktoken": ["tiktoken@1.0.21", "", {}, "sha512-/kqtlepLMptX0OgbYD9aMYbM7EFrMZCL7EoHM8Psmg2FuhXoo/bH64KqOiZGGwa6oS9TPdSEDKBnV2LuB8+5vQ=="],
+
     "tinybench": ["tinybench@2.9.0", "", {}, "sha512-0+DUvqWMValLmha6lr4kD8iAMK1HzV0/aKnCtWb9v9641TnP/MFb7Pc2bxoxQjTXAErryXVgUOfv2YqNllqGeg=="],
 
     "tinyexec": ["tinyexec@0.3.2", "", {}, "sha512-KQQR9yN7R5+OSwaK0XQoj22pwHoTlgYqmUscPYoknOoWCWfj/5/ABTMRi69FrKU5ffPVh5QcFikpWJI/P1ocHA=="],
@@ -1917,6 +1930,8 @@
 
     "@ampproject/remapping/@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.29", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.1.0", "@jridgewell/sourcemap-codec": "^1.4.14" } }, "sha512-uw6guiW/gcAGPDhLmd77/6lW8QLeiV5RUTsAX46Db6oLhGaVj4lhnPwb184s1bkc8kdVg/+h988dro8GRDpmYQ=="],
 
+    "@anthropic-ai/tokenizer/@types/node": ["@types/node@18.19.121", "", { "dependencies": { "undici-types": "~5.26.4" } }, "sha512-bHOrbyztmyYIi4f1R0s17QsPs1uyyYnGcXeZoGEd227oZjry0q6XQBQxd82X1I57zEfwO8h9Xo+Kl5gX1d9MwQ=="],
+
     "@aws-crypto/sha1-browser/@smithy/util-utf8": ["@smithy/util-utf8@2.3.0", "", { "dependencies": { "@smithy/util-buffer-from": "^2.2.0", "tslib": "^2.6.2" } }, "sha512-R8Rdn8Hy72KKcebgLiv8jQcQkXoLMOGGv5uI1/k0l+snqkOzQ1R0ChUBCxWMlBsFMekWjq0wRudIweFs7sKT5A=="],
 
     "@aws-crypto/sha256-browser/@smithy/util-utf8": ["@smithy/util-utf8@2.3.0", "", { "dependencies": { "@smithy/util-buffer-from": "^2.2.0", "tslib": "^2.6.2" } }, "sha512-R8Rdn8Hy72KKcebgLiv8jQcQkXoLMOGGv5uI1/k0l+snqkOzQ1R0ChUBCxWMlBsFMekWjq0wRudIweFs7sKT5A=="],
@@ -2040,6 +2055,8 @@
     "wrap-ansi/string-width": ["string-width@5.1.2", "", { "dependencies": { "eastasianwidth": "^0.2.0", "emoji-regex": "^9.2.2", "strip-ansi": "^7.0.1" } }, "sha512-HnLOCR3vjcY8beoNLtcjZ5/nxn2afmME6lhrDrebokqMap+XbeW8n9TXpPDOqdGK5qcI3oT0GKTW6wC7EMiVqA=="],
 
     "wrap-ansi/strip-ansi": ["strip-ansi@7.1.0", "", { "dependencies": { "ansi-regex": "^6.0.1" } }, "sha512-iq6eVVI64nQQTRYq2KtEg2d2uU7LElhTJwsH4YzIHZshxlgZms/wIc4VoDQTlG/IvVIrBKG06CrZnp0qv7hkcQ=="],
+
+    "@anthropic-ai/tokenizer/@types/node/undici-types": ["undici-types@5.26.5", "", {}, "sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA=="],
 
     "@aws-crypto/sha1-browser/@smithy/util-utf8/@smithy/util-buffer-from": ["@smithy/util-buffer-from@2.2.0", "", { "dependencies": { "@smithy/is-array-buffer": "^2.2.0", "tslib": "^2.6.2" } }, "sha512-IJdWBbTcMQ6DA0gdNhh/BwrLkDR+ADW5Kr1aZmd4k3DIF6ezMV4R2NIAmT08wQJ3yUK82thHWmC/TnK/wpMMIA=="],
 

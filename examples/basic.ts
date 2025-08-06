@@ -9,7 +9,7 @@ Effect.gen(function*() {
   yield* L.assistant
 }).pipe(
   L.strand,
-  Effect.scoped,
   Effect.provide(ModelLive),
+  Effect.scoped,
   Effect.runFork,
 )
