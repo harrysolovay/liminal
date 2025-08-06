@@ -1,3 +1,6 @@
+import * as Effect from "effect/Effect"
+import { pipe } from "effect/Function"
+import * as Option from "effect/Option"
 import * as Schema from "effect/Schema"
 import * as SchemaAST from "effect/SchemaAST"
 
@@ -7,9 +10,9 @@ export type JsonValueArray = Array<JsonValue> | ReadonlyArray<JsonValue>
 
 export type JsonValueObject = { [key: string]: JsonValue }
 
-export const encodeJsonc: <A, I extends JsonValue>(schema: Schema.Schema<A, I>) => (value: A) => string = (
-  schema,
-) => {
+export const encodeJsonc: <A, I extends JsonValue>(
+  schema: Schema.Schema<A, I>,
+) => (value: A) => Effect.Effect<string> = (schema) => {
   const encoder = encodeAst(SchemaAST.encodedAST(schema.ast))
   return (value) => encoder(value, new EncodeJsoncContext(0))
 }
@@ -26,51 +29,73 @@ class EncodeJsoncContext {
 
   next = () => new EncodeJsoncContext(this.depth + 1)
 
-  comment = (type: SchemaAST.AST): string => {
-    const { [SchemaAST.DescriptionAnnotationId]: description } = type.annotations
-    if (typeof description === "string") {
-      const trimmed = description.trim()
-      if (trimmed) {
-        return `// ${trimmed}\n${this.childIndentation}`
-      }
-    }
-    return ""
-  }
+  comment = (type: SchemaAST.AST): string =>
+    Option.match(SchemaAST.getDescriptionAnnotation(type), {
+      onSome: (v) => {
+        v = v.trim()
+        if (v) {
+          return `// ${v}\n${this.childIndentation}`
+        }
+        return ""
+      },
+      onNone: () => "",
+    })
 }
 
-const encodeAst: (ast: SchemaAST.AST) => (value: unknown, ctx: EncodeJsoncContext) => string = (ast) => {
+const encodeAst: (ast: SchemaAST.AST) => (value: unknown, ctx: EncodeJsoncContext) => Effect.Effect<string> = (ast) => {
   switch (ast._tag) {
     case "TypeLiteral": {
-      return (value, ctx) => {
-        const props = ast.propertySignatures
-          .map(({ name, type }) => {
-            if (typeof name === "symbol") throw 0
-
-            const child = encodeAst(type)((value as never)[name], ctx.next())
-            return `${ctx.comment(type)}${name}: ${child}`
-          })
-          .join(`,\n${ctx.childIndentation}`)
+      return Effect.fnUntraced(function*(value, ctx) {
+        const props = yield* Effect.all(
+          ast.propertySignatures.map(
+            Effect.fnUntraced(function*({ name, type }) {
+              if (typeof name === "symbol") throw 0
+              const child = yield* encodeAst(type)((value as never)[name], ctx.next())
+              return `${ctx.comment(type)}${name}: ${child}`
+            }),
+          ),
+        ).pipe(
+          Effect.map((v) => v.join(`,\n${ctx.childIndentation}`)),
+        )
         return `{\n${ctx.childIndentation}${props}\n${ctx.indentation}}`
-      }
+      })
     }
     case "StringKeyword": {
-      return (value) => `"${value}"`
+      return (value) => Effect.succeed(`"${value}"`)
     }
     case "BooleanKeyword":
     case "NumberKeyword": {
-      return String
+      return (value) => Effect.succeed(String(value))
     }
+    case "UnknownKeyword":
     case "AnyKeyword": {
       return (value, ctx) =>
-        JSON
-          .stringify(value, null, 2)
-          .split("\n")
-          .map((line, i) => i ? ctx.indentation.concat(line) : line)
-          .join("\n")
+        Effect.succeed(
+          JSON
+            .stringify(value, null, 2)
+            .split("\n")
+            .map((line, i) => i ? ctx.indentation.concat(line) : line)
+            .join("\n"),
+        )
     }
     case "Union": {
-      // TODO
-      throw 0
+      const { types } = ast
+      const guards = types.map((ast) =>
+        pipe(
+          ast,
+          Schema.make,
+          Schema.is,
+        )
+      )
+      return (value, ctx) => {
+        for (let i = 0; i < types.length; i++) {
+          const guard = guards[i]!
+          if (guard(value)) {
+            return encodeAst(types[i]!)(value, ctx)
+          }
+        }
+        throw 0
+      }
     }
     case "Literal": {
       const { literal } = ast
@@ -90,7 +115,7 @@ const encodeAst: (ast: SchemaAST.AST) => (value: unknown, ctx: EncodeJsoncContex
         console.log({ literal })
         throw 0
       })()
-      return () => v
+      return () => Effect.succeed(v)
     }
     case "TupleType": {
       const { elements, rest } = ast
@@ -101,15 +126,18 @@ const encodeAst: (ast: SchemaAST.AST) => (value: unknown, ctx: EncodeJsoncContex
             return `${ctx.comment(element.type)}${child}`
           })
           .join(`,\n${ctx.childIndentation}`)
-        return `[\n${ctx.childIndentation}${e}\n${ctx.indentation}]`
+        return Effect.succeed(`[\n${ctx.childIndentation}${e}\n${ctx.indentation}]`)
       }
+    }
+    case "Suspend": {
+      return encodeAst(ast.f())
     }
   }
   console.log({ ast })
   throw 0
 }
 
-const v = encodeJsonc(Schema.Struct({
+encodeJsonc(Schema.Struct({
   a: Schema.Boolean.annotations({
     description: "The first field description.",
   }),
@@ -119,6 +147,17 @@ const v = encodeJsonc(Schema.Struct({
   c: Schema.Any.annotations({
     description: "Hi gcanti!",
   }),
+  d: Schema.Union(
+    Schema.String,
+    Schema.Number,
+    Schema.Struct({
+      sup: Schema.Boolean.annotations({
+        description: "SUP THIS IS GONNA BE COOL",
+      }),
+    }),
+  ).annotations({
+    description: "YET ANOTHER",
+  }),
 }))({
   a: true,
   b: 101,
@@ -127,5 +166,10 @@ const v = encodeJsonc(Schema.Struct({
       there: "SUP",
     },
   },
-})
-console.log(v)
+  d: {
+    sup: true,
+  },
+}).pipe(
+  Effect.runSync,
+  console.log,
+)
