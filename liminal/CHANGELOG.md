@@ -1,5 +1,11 @@
 # liminal
 
+## 0.13.0
+
+### Minor Changes
+
+- 0e4954e: Rename `L.assistantStruct` to `L.assistantSchema`, is it now supports all schemas, not just struct schemas. Template tag calls are properly dedented and normalized. Additionally, `L.userJson` now uses the optional schema to JSONC-encode with description annotations as comments on corresponding fields.
+
 ## 0.12.1
 
 ### Patch Changes
