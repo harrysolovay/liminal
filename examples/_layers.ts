@@ -11,3 +11,7 @@ export const ClientLive = OpenAiClient.layerConfig({
 export const ModelLive = OpenAiLanguageModel.model("gpt-4o-mini").pipe(
   Layer.provide(ClientLive),
 )
+
+export const TurboLive = OpenAiLanguageModel.model("gpt-3.5-turbo").pipe(
+  Layer.provide(ClientLive),
+)

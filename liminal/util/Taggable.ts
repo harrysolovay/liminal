@@ -1,4 +1,5 @@
 import * as Effect from "effect/Effect"
+import { fixRaw } from "./fixRaw.ts"
 
 /** Append a user message to the conversation. */
 export type Taggable<A, E, R> = <L extends Array<unknown>, E1 = never, R1 = never>(
@@ -47,5 +48,5 @@ export const normalize: <
     }
     return [a0_, ...aRest_].join("")
   }
-  return String.raw(a0_, ...aRest_)
+  return fixRaw(a0_, aRest_)
 })
