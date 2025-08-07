@@ -5,18 +5,9 @@ import * as Console from "effect/Console"
 import { L } from "liminal"
 import { ModelLive } from "./_layers.ts"
 
+// TODO: use this for actual docs
 declare const LIB_DIR: string
 declare const DOCS_DIR: string
-
-const Suggestions = Schema.Struct({
-  suggestions: Schema.Option(
-    Schema.Array(
-      Schema.String.pipe(Schema.annotations({
-        description: "Improvements to be made to the document.",
-      })),
-    ),
-  ),
-})
 
 Effect.gen(function*() {
   yield* L.user`I'm about to provide you with a repomix summary of the current codebase.`
@@ -41,7 +32,13 @@ Effect.gen(function*() {
 
         ${fs.readFileString(docPath)}
       `
-      const maybeChanges = yield* L.assistantStruct(Suggestions)
+      const maybeChanges = yield* L.assistantSchema(Schema.Option(
+        Schema.Array(
+          Schema.String.pipe(Schema.annotations({
+            description: "Improvements to be made to the document.",
+          })),
+        ),
+      ))
       return [docPath, maybeChanges] as const
     }),
     L.branch,

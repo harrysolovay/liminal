@@ -8,5 +8,7 @@ import { encodeJsonc, type JsonValue } from "./util/JsonValue.ts"
 export const userJson: <A, I extends JsonValue>(
   value: A,
   schema?: Schema.Schema<A, I>,
-) => Effect.Effect<void, never, Strand.Strand> = (value, schema) =>
-  user`\`\`\`json${schema ? "c" : ""}\n${schema ? encodeJsonc(schema)(value) : JSON.stringify(value, null, 2)}\n\`\`\``
+) => Effect.Effect<void, never, Strand.Strand> = Effect.fnUntraced(function*(value, schema) {
+  const encoded = schema ? encodeJsonc(schema)(value) : JSON.stringify(value, null, 2)
+  return yield* user`\`\`\`json${schema ? "c" : ""}${"\n"}${encoded}${"\n"}\`\`\``
+})

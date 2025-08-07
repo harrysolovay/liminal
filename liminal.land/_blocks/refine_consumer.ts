@@ -8,7 +8,7 @@ const maybeRefine = Effect.fn(function*(content: string) {
   // Ask whether to utilize the pattern.
   yield* L.user`Does the following text require refinement?: ${content}`
   // Have the model answer our question.
-  const { needsRefinement } = yield* L.assistantStruct({
+  const { needsRefinement } = yield* L.assistantSchema({
     needsRefinement: Schema.Boolean,
   })
   // If so...

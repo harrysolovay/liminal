@@ -14,9 +14,7 @@ Effect.gen(function*() {
     I want to plan a weekend trip leaving from ${term.readLine}. I don't know where to go.
     Suggest some follow-up questions that will help you narrow down the possible destination.
   `
-  const { questions } = yield* L.assistantStruct({
-    questions: Schema.Array(Schema.String),
-  })
+  const questions = yield* L.assistantSchema(Schema.Array(Schema.String))
   yield* L.user`Here are my answers to those questions:`
   for (const question of questions) {
     yield* term.display(question + "\n")

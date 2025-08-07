@@ -4,7 +4,7 @@ import { ModelLive } from "./ModelLive"
 
 Effect.gen(function*() {
   // For each event...
-  yield* L.handle(
+  yield* L.listen(
     // Prettify & log.
     flow(LPretty.event, Console.log),
   )

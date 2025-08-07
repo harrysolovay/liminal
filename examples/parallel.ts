@@ -11,7 +11,7 @@ const security = L.branch(
     You are an expert in code security. Focus on identifying security
     vulnerabilities, injection risks, and authentication issues.
   `,
-  L.assistantStruct({
+  L.assistantSchema({
     type: Schema.Literal("security"),
     vulnerabilities: Schema.Array(Schema.String),
     riskLevel: Lmh,
@@ -24,7 +24,7 @@ const performance = L.branch(
     You are an expert in code performance. Focus on identifying performance
     bottlenecks, memory leaks, and optimization opportunities.
   `,
-  L.assistantStruct({
+  L.assistantSchema({
     type: Schema.Literal("performance"),
     issues: Schema.Array(Schema.String),
     impact: Lmh,
@@ -37,7 +37,7 @@ const maintainability = L.branch(
     You are an expert in code quality. Focus on code structure,
     readability, and adherence to best practices.
   `,
-  L.assistantStruct({
+  L.assistantSchema({
     type: Schema.Literal("maintainability"),
     concerns: Schema.Array(Schema.String),
     qualityScore: Schema.Int,
@@ -73,5 +73,5 @@ Effect.gen(function*() {
   yield* Console.log({ reviews, summary })
 }).pipe(
   Effect.provide([ModelLive, BunContext.layer]),
-  Effect.runFork,
+  Effect.runPromise,
 )

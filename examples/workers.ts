@@ -13,7 +13,7 @@ Effect.gen(function*() {
   yield* L.user`Analyze this feature request and create an implementation plan:`
   yield* L.user`Alert administrators via text whenever site traffic exceeds a certain threshold.`
 
-  const plan = yield* L.assistantStruct({
+  const plan = yield* L.assistantSchema({
     complexity: Schema.Literal("low", "medium", "high"),
     files: Schema.Array(
       Schema.Struct({
@@ -29,7 +29,7 @@ Effect.gen(function*() {
       Effect.gen(function*() {
         yield* L.system(IMPLEMENTATION_PROMPTS[file.changeType])
         yield* L.user`Implement the changes for ${file.filePath} to support: ${file.purpose}`
-        const implementation = yield* L.assistantStruct({
+        const implementation = yield* L.assistantSchema({
           explanation: Schema.String,
           code: Schema.String,
         })

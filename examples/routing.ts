@@ -23,7 +23,7 @@ Effect.gen(function*() {
       3. Brief reasoning for classification
     `,
     L.user`I'd like a refund please.`,
-    L.assistantStruct({
+    L.assistantSchema({
       reasoning: Schema.String,
       type: Schema.Literal("general", "refund", "technical"),
       complex: Schema.Boolean,

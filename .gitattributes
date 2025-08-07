@@ -1,2 +1,3 @@
 *.css linguist-vendored
 *.html linguist-vendored
+*.vue linguist-vendored

@@ -5,11 +5,11 @@ import { logger } from "./_logger.ts"
 
 Effect.gen(function*() {
   yield* logger
-  yield* L.user`Hey`
+  yield* L.user`Hey.`
   yield* L.assistant
 }).pipe(
   L.strand,
-  Effect.scoped,
   Effect.provide(ModelLive),
+  Effect.scoped,
   Effect.runFork,
 )

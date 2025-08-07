@@ -1,3 +1,6 @@
+import * as Effect from "effect/Effect"
+import { pipe } from "effect/Function"
+import * as Option from "effect/Option"
 import * as Schema from "effect/Schema"
 import * as SchemaAST from "effect/SchemaAST"
 
@@ -7,10 +10,10 @@ export type JsonValueArray = Array<JsonValue> | ReadonlyArray<JsonValue>
 
 export type JsonValueObject = { [key: string]: JsonValue }
 
-export const encodeJsonc: <A, I extends JsonValue>(schema: Schema.Schema<A, I>) => (value: A) => string = (
-  schema,
-) => {
-  const encoder = encodeAstJsonc(SchemaAST.encodedAST(schema.ast))
+export const encodeJsonc: <A, I extends JsonValue>(
+  schema: Schema.Schema<A, I>,
+) => (value: A) => Effect.Effect<string> = (schema) => {
+  const encoder = encodeAst(SchemaAST.encodedBoundAST(schema.ast))
   return (value) => encoder(value, new EncodeJsoncContext(0))
 }
 
@@ -26,72 +29,116 @@ class EncodeJsoncContext {
 
   next = () => new EncodeJsoncContext(this.depth + 1)
 
-  comment = (type: SchemaAST.AST): string => {
-    const description = extractAnnotation(type)?.trim()
-    if (description) {
-      return `// ${description}\n${this.childIndentation}`
-    }
-    return ""
-  }
+  comment = (type: SchemaAST.AST): string =>
+    Option.match(SchemaAST.getDescriptionAnnotation(type), {
+      onSome: (v) => {
+        v = v.trim()
+        if (v) {
+          return `// ${v}\n${this.childIndentation}`
+        }
+        return ""
+      },
+      onNone: () => "",
+    })
 }
 
-const encodeAstJsonc: (ast: SchemaAST.AST) => (value: unknown, ctx: EncodeJsoncContext) => string = (ast) => {
+const encodeAst: (
+  ast: SchemaAST.AST,
+  refinement?: SchemaAST.Refinement,
+) => (value: unknown, ctx: EncodeJsoncContext) => Effect.Effect<string> = (ast, refinement) => {
   switch (ast._tag) {
     case "TypeLiteral": {
-      return (value, ctx) => {
-        const props = ast.propertySignatures
-          .map(({ name, type }) => {
-            if (typeof name === "symbol") throw 0
-
-            const child = encodeAstJsonc(type)((value as never)[name], ctx.next())
-            return `${ctx.comment(type)}${name}: ${child}`
-          })
-          .join(`,\n${ctx.childIndentation}`)
+      return Effect.fnUntraced(function*(value, ctx) {
+        const props = yield* Effect.all(
+          ast.propertySignatures.map(
+            Effect.fnUntraced(function*({ name, type }) {
+              if (typeof name === "symbol") throw 0
+              const child = yield* encodeAst(type)((value as never)[name], ctx.next())
+              return `${ctx.comment(refinement ?? type)}${name}: ${child}`
+            }),
+          ),
+        ).pipe(
+          Effect.map((v) => v.join(`,\n${ctx.childIndentation}`)),
+        )
         return `{\n${ctx.childIndentation}${props}\n${ctx.indentation}}`
-      }
+      })
     }
     case "StringKeyword": {
-      return (value) => `"${value}"`
+      return (value) => Effect.succeed(`"${value}"`)
     }
+    case "BooleanKeyword":
     case "NumberKeyword": {
-      return (value) => `${value}`
+      return (value) => Effect.succeed(String(value))
+    }
+    case "Refinement": {
+      return encodeAst(ast.from, refinement ?? ast)
+    }
+    case "UnknownKeyword":
+    case "AnyKeyword": {
+      return (value, ctx) =>
+        Effect.succeed(
+          JSON
+            .stringify(value, null, 2)
+            .split("\n")
+            .map((line, i) => i ? ctx.indentation.concat(line) : line)
+            .join("\n"),
+        )
+    }
+    case "Union": {
+      const { types } = ast
+      const guards = types.map((ast) =>
+        pipe(
+          ast,
+          Schema.make,
+          Schema.is,
+        )
+      )
+      return (value, ctx) => {
+        for (let i = 0; i < types.length; i++) {
+          const guard = guards[i]!
+          if (guard(value)) {
+            return encodeAst(types[i]!)(value, ctx)
+          }
+        }
+        throw 0
+      }
     }
     case "Literal": {
       const { literal } = ast
-      if (typeof literal === "string") {
-        return () => `"${literal}"`
-      }
-      if (typeof literal === "number" || typeof literal === "boolean") {
-        return () => String(literal)
-      }
-      if (literal === null) {
-        return () => "null"
-      }
-      throw 0
+      const v = (() => {
+        switch (typeof literal) {
+          case "boolean":
+          case "number": {
+            return String(literal)
+          }
+          case "string": {
+            return `"${literal}"`
+          }
+        }
+        if (literal === null) {
+          return "null"
+        }
+        console.log({ literal })
+        throw 0
+      })()
+      return () => Effect.succeed(v)
     }
     case "TupleType": {
       const { elements, rest } = ast
-      return (value, ctx) => {
-        const e = (elements.length ? elements : rest).map((element, i) => {
-          const child = encodeAstJsonc(element.type)((value as never)[i]!, ctx.next())
-          return `${ctx.comment(element.type)}${child}`
-        }).join(`,\n${ctx.childIndentation}`)
-        return `[\n${ctx.childIndentation}${e}\n${ctx.indentation}]`
-      }
+      return (value, ctx) =>
+        Effect.all((elements.length ? elements : rest).map(
+          Effect.fnUntraced(function*(element, i) {
+            const child = yield* encodeAst(element.type)((value as never)[i]!, ctx.next())
+            return `${ctx.comment(refinement ?? element.type)}${child}`
+          }),
+        )).pipe(
+          Effect.map((v) => `[\n${ctx.childIndentation}${v.join(`,\n${ctx.childIndentation}`)}\n${ctx.indentation}]`),
+        )
+    }
+    case "Suspend": {
+      return encodeAst(ast.f())
     }
   }
-  console.log(ast._tag)
+  console.log({ ast })
   throw 0
-}
-
-const extractAnnotation = ({ annotations }: SchemaAST.AST): string | undefined => {
-  if (SchemaAST.JSONSchemaAnnotationId in annotations) {
-    const jsonSchemaAnnotations = annotations[SchemaAST.JSONSchemaAnnotationId] as
-      | SchemaAST.Annotations
-      | undefined
-    if (jsonSchemaAnnotations) {
-      return jsonSchemaAnnotations.description as string
-    }
-  }
-  return
 }
