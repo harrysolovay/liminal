@@ -3,8 +3,8 @@ const INDENTATION_RE = /^\n([ \t]+)/
 const ESCAPE_SEQ_RE = /\\([`${\\]|\n)/g
 const LAST_INDENTATION_RE = /\n[ \t]+$/
 
-export const fixRaw = (strings: TemplateStringsArray, values: Array<unknown>): string => {
-  const fixedStrings = fixTemplateStrings(strings)
+export const normalizeRaw = (strings: TemplateStringsArray, values: Array<unknown>): string => {
+  const fixedStrings = normalizeTemplateStrings(strings)
   const rawArr = fixedStrings.raw
   const valuesLength = values.length
 
@@ -54,8 +54,8 @@ export const fixRaw = (strings: TemplateStringsArray, values: Array<unknown>): s
   return resultParts.slice(0, resultIndex).join("")
 }
 
-export const fixTemplateStrings = (template: TemplateStringsArray): {
-  readonly raw: readonly string[]
+export const normalizeTemplateStrings = (template: TemplateStringsArray): {
+  readonly raw: ReadonlyArray<string>
 } => {
   const leadingIndentMatch = INDENTATION_RE.exec(template.raw[0]!)
   const indentation = leadingIndentMatch?.[1]

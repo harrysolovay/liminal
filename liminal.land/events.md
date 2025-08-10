@@ -4,7 +4,7 @@
 
 ```ts
 // ---cut---
-import { LEvent } from "liminal"
+import type { LEvent } from "liminal"
 
 declare const lEvent: LEvent
 //            ^?

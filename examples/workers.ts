@@ -25,16 +25,19 @@ Effect.gen(function*() {
   })
 
   const changes = yield* Effect.all(
-    plan.files.map((file) =>
-      Effect.gen(function*() {
-        yield* L.system(IMPLEMENTATION_PROMPTS[file.changeType])
-        yield* L.user`Implement the changes for ${file.filePath} to support: ${file.purpose}`
-        const implementation = yield* L.assistantSchema({
-          explanation: Schema.String,
-          code: Schema.String,
-        })
-        return { file, implementation }
-      }).pipe(L.strand)
+    plan.files.map(
+      Effect.fn(
+        function*(file) {
+          yield* L.system(IMPLEMENTATION_PROMPTS[file.changeType])
+          yield* L.user`Implement the changes for ${file.filePath} to support: ${file.purpose}`
+          const implementation = yield* L.assistantSchema({
+            explanation: Schema.String,
+            code: Schema.String,
+          })
+          return { file, implementation }
+        },
+        (e) => L.strand(e),
+      ),
     ),
     { concurrency: "unbounded" },
   )

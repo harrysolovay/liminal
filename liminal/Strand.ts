@@ -27,7 +27,7 @@ export class Strand extends Context.Tag("liminal/Strand")<Strand, Strand.Service
   static layer: (init?: {
     system?: string | undefined
     messages?: Array<Message> | undefined
-    tools?: Set<AiToolkit.Any>
+    tools?: Set<AiToolkit.Any> | undefined
   }) => Layer.Layer<Strand> = ({ system, messages, tools } = {}) =>
     Layer.effect(
       Strand,
