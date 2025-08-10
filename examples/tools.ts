@@ -1,7 +1,7 @@
 import { AiTool, AiToolkit } from "@effect/ai"
 import { HttpClient, HttpClientRequest, HttpClientResponse } from "@effect/platform"
 import { FetchHttpClient } from "@effect/platform"
-import { Console, Effect, Layer, Schema } from "effect"
+import { Console, Effect, flow, Layer, Schema } from "effect"
 import { L } from "liminal"
 import { ModelLive } from "./_layers.ts"
 
@@ -22,14 +22,12 @@ class ICanHazDadJoke extends Effect.Service<ICanHazDadJoke>()("ICanHazDadJoke", 
   dependencies: [FetchHttpClient.layer],
   effect: Effect.gen(function*() {
     const client = yield* HttpClient.HttpClient.pipe(
-      Effect.map((v) =>
-        v.pipe(
-          HttpClient.filterStatusOk,
-          HttpClient.mapRequest(
-            HttpClientRequest.prependUrl("https://icanhazdadjoke.com"),
-          ),
-        )
-      ),
+      Effect.map(flow(
+        HttpClient.filterStatusOk,
+        HttpClient.mapRequest(
+          HttpClientRequest.prependUrl("https://icanhazdadjoke.com"),
+        ),
+      )),
     )
     const search = Effect.fn(function*(searchTerm: string) {
       const { results: [{ joke } = {}] } = yield* client.get("/search", {
