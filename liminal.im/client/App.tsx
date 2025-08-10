@@ -1,30 +1,33 @@
-import { Rx, useRx, useRxSetPromise } from "@effect-rx/rx-react"
-import { Effect } from "effect"
+import { Atom, useAtom, useAtomSet } from "@effect-atom/atom-react"
+import { Effect, Exit } from "effect"
 import { ImClient } from "./ImClient.ts"
 
-const runtimeRx: Rx.RxRuntime<ImClient, never> = Rx.runtime(ImClient.Default)
+const runtimeRx: Atom.AtomRuntime<ImClient, never> = Atom.runtime(ImClient.Default)
 
-const postRx = runtimeRx.fn(Effect.fnUntraced(function*(message: string) {
+const messageRx = Atom.make<string | undefined>(undefined)
+
+const postAtom = runtimeRx.fn(Effect.fnUntraced(function*(message: string) {
   const im = yield* ImClient
   return yield* im.v1.sendMessage({
     payload: { message },
   })
 }))
 
-const messageRx = Rx.make<string | undefined>(undefined)
-
 export const App = () => {
-  const [message, setMessage] = useRx(messageRx)
-  const sendMessage = useRxSetPromise(postRx)
+  const [message, setMessage] = useAtom(messageRx)
+  const sendMessage = useAtomSet(postAtom, {
+    mode: "promiseExit",
+  })
   return (
     <div>
       <button
         onClick={async () => {
-          const result = await sendMessage("the message here")
-          console.log({ result })
-          if (result._tag === "Success") {
-            setMessage(result.value)
-          }
+          Exit.match(await sendMessage("the message here"), {
+            onSuccess: setMessage,
+            onFailure: (cause) => {
+              console.log(cause)
+            },
+          })
         }}
       >
         GO!

@@ -11,11 +11,15 @@ import { Strand } from "./Strand.ts"
 export const assistant: Effect.Effect<string, AiError, AiLanguageModel | Strand> = Effect.gen(function*() {
   const model = yield* AiLanguageModel
   const { system, messages, tools } = yield* Strand
-  const { text } = yield* model.generateText({
+  let { text, results } = yield* model.generateText({
     system: Option.getOrUndefined(system),
     prompt: messages,
     toolkit: AiToolkit.merge(...tools) as never,
   })
+  // TODO: this shouldn't be necessary. Bug in Effect AI?
+  if (!text.trim()) {
+    text = results.values().next().value?.result as never as string
+  }
   yield* append(
     new AssistantMessage({
       parts: [new TextPart({ text })],

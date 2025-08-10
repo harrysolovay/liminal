@@ -16,6 +16,7 @@ jobs:
         with:
           bun-version: latest
       - run: bun install
-      - uses: dprint/check@v2.2
+      - uses: dprint/check@v2.3
+      - run: bun ensure-no-cycles
       - run: bun run build
       - run: bun run test

@@ -1,28 +1,29 @@
 {
   "name": "liminal",
+  "version": "0.13.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/harrysolovay/liminal.git",
+    "directory": "liminal"
+  },
+  "peerDependencies": {
+    "@effect/ai": "^0.25.2",
+    "effect": "^3.17.7"
+  },
+  "exports": {
+    ".": "./index.ts",
+    "./package.json": "./package.json",
+    "./patterns": "./patterns/index.ts"
+  },
+  "description": "An Effect AI toolkit for conversation state management.",
   "homepage": "https://liminal.land",
+  "license": "Apache-2.0",
   "llms": "https://liminal.land/llms.txt",
   "llmsFull": "https://liminal.land/llmsFull.txt",
   "publishConfig": {
     "access": "public",
     "provenance": true
   },
-  "version": "0.13.0",
-  "license": "Apache-2.0",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/harrysolovay/liminal.git",
-    "directory": "liminal"
-  },
-  "type": "module",
   "sideEffects": false,
-  "description": "An Effect AI toolkit for LLM integration and conversation state management.",
-  "exports": {
-    ".": "./index.ts",
-    "./package.json": "./package.json"
-  },
-  "peerDependencies": {
-    "@effect/ai": "^0.25.0",
-    "effect": "^3.17.6"
-  }
+  "type": "module"
 }

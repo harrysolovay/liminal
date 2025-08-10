@@ -3,10 +3,10 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@clerk/backend": "^2.6.2",
-    "@effect/platform": "^0.90.0",
+    "@clerk/backend": "^2.7.0",
+    "@effect/platform": "^0.90.1",
     "@liminal.im/domain": "workspace:*",
-    "effect": "^3.17.6",
+    "effect": "^3.17.7",
     "liminal": "workspace:*"
   }
 }

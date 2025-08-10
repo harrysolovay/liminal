@@ -13,15 +13,18 @@
     "build:watch": "tsc -b -w",
     "test": "vitest run",
     "test:watch": "vitest run -w",
-    "changeset": "changeset"
+    "changeset": "changeset",
+    "ensure-no-cycles": "dpdm --exit-code circular:1 -T ./liminal/index.ts"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.5",
+    "@cloudflare/workers-types": "^4.20250810.0",
     "@effect/language-service": "^0.23.5",
-    "@effect/platform-bun": "^0.77.0",
+    "@effect/platform-bun": "^0.77.1",
     "@effect/vitest": "^0.25.0",
     "@types/bun": "^1.2.19",
-    "alchemy": "^0.57.0",
+    "alchemy": "^0.57.2",
+    "dpdm": "^3.14.0",
     "dprint": "^0.50.1",
     "ts-patch": "^3.3.0",
     "typescript": "^5.9.2",
