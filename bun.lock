@@ -33,7 +33,7 @@
     },
     "liminal": {
       "name": "liminal",
-      "version": "0.13.0",
+      "version": "0.14.0",
       "peerDependencies": {
         "@effect/ai": "^0.25.2",
         "effect": "^3.17.7",
@@ -86,11 +86,11 @@
         "@shikijs/vitepress-twoslash": "^3.9.2",
         "@types/markdown-it-footnote": "^3.0.4",
         "effect": "^3.17.7",
-        "vitepress-plugin-llms": "https://pkg.pr.new/vitepress-plugin-llms@c31226e",
         "liminal": "workspace:*",
         "markdown-it-footnote": "^4.0.0",
         "markdown-it-steps": "^0.2.0",
         "vitepress": "^1.6.4",
+        "vitepress-plugin-llms": "^1.7.2",
       },
     },
   },
@@ -2068,8 +2068,6 @@
     "jsondiffpatch/chalk": ["chalk@5.5.0", "", {}, "sha512-1tm8DTaJhPBG3bIkVeZt1iZM9GfSX2lzOeDVZH9R9ffRHpmHvxZ/QhgQH/aDTkswQVt+YHdXAdS/In/30OjCbg=="],
 
     "libsql/detect-libc": ["detect-libc@2.0.2", "", {}, "sha512-UX6sGumvvqSaXgdKGUsgZWqcUyIXZ/vZTrlRT/iobiKhGL0zL4d3osHj3uqllWJK+i+sixDS/3COVEOFbupFyw=="],
-
-    "liminal.land/vitepress-plugin-llms": ["vitepress-plugin-llms@https://pkg.pr.new/vitepress-plugin-llms@c31226e", { "dependencies": { "byte-size": "^9.0.1", "gray-matter": "^4.0.3", "markdown-it": "^14.1.0", "markdown-title": "^1.0.2", "millify": "^6.1.0", "minimatch": "^10.0.3", "path-to-regexp": "^8.2.0", "picocolors": "^1.1.1", "remark": "^15.0.1", "remark-frontmatter": "^5.0.0", "tokenx": "^1.1.0", "unist-util-remove": "^4.0.0", "unist-util-visit": "^5.0.0" } }],
 
     "micromatch/picomatch": ["picomatch@2.3.1", "", {}, "sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA=="],
 

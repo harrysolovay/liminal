@@ -13,7 +13,8 @@
   "exports": {
     ".": "./index.ts",
     "./package.json": "./package.json",
-    "./patterns": "./patterns/index.ts"
+    "./patterns/coalesce_models": "./patterns/coalesce_models.ts",
+    "./patterns/match_gist": "./patterns/match_gist.ts"
   },
   "description": "An Effect AI toolkit for conversation state management.",
   "homepage": "https://liminal.land",
