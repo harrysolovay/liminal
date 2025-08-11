@@ -1,24 +1,22 @@
 import { AiTool, AiToolkit } from "@effect/ai"
-import { HttpClient, HttpClientRequest, HttpClientResponse } from "@effect/platform"
-import { FetchHttpClient } from "@effect/platform"
-import { Console, Effect, flow, Layer, Schema } from "effect"
+import { FetchHttpClient, HttpClient, HttpClientRequest, HttpClientResponse } from "@effect/platform"
+import { Console, Effect, flow, Option, Schema } from "effect"
 import { L } from "liminal"
 import { ModelLive } from "./_layers.ts"
 
-class DadJokeTools extends AiToolkit.make(
-  AiTool.make("GetDadJoke", {
-    description: "Get a hilarious dad joke from the ICanHazDadJoke API",
-    success: Schema.String,
-    failure: Schema.Never,
-    parameters: {
-      searchTerm: Schema.String.annotations({
-        description: "The search term to use to find dad jokes",
-      }),
-    },
-  }),
-) {}
+const DadJokeTool = AiTool.make("GetDadJoke", {
+  description: "Get a hilarious dad joke from the ICanHazDadJoke API",
+  success: Schema.String,
+  failure: Schema.Never,
+  parameters: {
+    searchTerm: Schema.String.annotations({
+      description: "The search term to use to find dad jokes",
+    }),
+  },
+})
 
 class ICanHazDadJoke extends Effect.Service<ICanHazDadJoke>()("ICanHazDadJoke", {
+  accessors: true,
   dependencies: [FetchHttpClient.layer],
   effect: Effect.gen(function*() {
     const client = yield* HttpClient.HttpClient.pipe(
@@ -29,38 +27,38 @@ class ICanHazDadJoke extends Effect.Service<ICanHazDadJoke>()("ICanHazDadJoke", 
         ),
       )),
     )
-    const search = Effect.fn(function*(searchTerm: string) {
-      const { results: [{ joke } = {}] } = yield* client.get("/search", {
-        acceptJson: true,
-        urlParams: { searchTerm },
-      }).pipe(
-        Effect.flatMap(HttpClientResponse.schemaBodyJson(Schema.Struct({
-          results: Schema.Array(Schema.Struct({
-            id: Schema.String,
-            joke: Schema.String,
-          })),
-        }))),
-        Effect.orDie,
-      )
-      return yield* Effect.fromNullable(joke).pipe(Effect.orDie)
-    })
+    const search: (searchTerm: string) => Effect.Effect<string> = Effect.fn(
+      function*(searchTerm) {
+        const { results: [{ joke } = {}] } = yield* client.get("/search", {
+          acceptJson: true,
+          urlParams: { searchTerm },
+        }).pipe(
+          Effect.flatMap(HttpClientResponse.schemaBodyJson(Schema.Struct({
+            results: Schema.Array(Schema.Struct({
+              id: Schema.String,
+              joke: Schema.String,
+            })),
+          }))),
+        )
+        return yield* Option.fromNullable(joke)
+      },
+      (e) => e.pipe(Effect.orDie),
+    )
     return { search }
   }),
 }) {}
 
-const DadJokeToolHandlers = DadJokeTools.toLayer(
-  Effect.gen(function*() {
-    const { search } = yield* ICanHazDadJoke
-    return {
-      GetDadJoke: ({ searchTerm }) => search(searchTerm),
-    }
+const DadJokeToolHandlers = AiToolkit.make(DadJokeTool).toLayer(
+  AiToolkit.make(DadJokeTool).of({
+    GetDadJoke: ({ searchTerm }) =>
+      ICanHazDadJoke.search(searchTerm).pipe(
+        Effect.provide(ICanHazDadJoke.Default),
+      ),
   }),
-).pipe(
-  Layer.provide(ICanHazDadJoke.Default),
 )
 
 await L.strand(
-  L.enable(DadJokeTools),
+  L.enable(DadJokeTool),
   L.user`Generate a dad joke about pirates.`,
   L.assistant,
 ).pipe(

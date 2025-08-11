@@ -2,11 +2,12 @@ import { Effect } from "effect"
 import { L } from "liminal"
 
 // ---cut---
-import { DadJokeTools } from "./DadJokeTools.ts"
+import { AiToolkit } from "@effect/ai"
+import { DadJokeTool } from "./DadJokeTools.ts"
 import { ModelLive } from "./ModelLive.ts"
 
 // Implement the `GetDadJoke` handler.
-const HandlerLive = DadJokeTools.toLayer(Effect.gen(function*() {
+const HandlerLive = AiToolkit.make(DadJokeTool).toLayer(Effect.gen(function*() {
   return {
     GetDadJoke: Effect.fn(function*() {
       return "Delish pish decaly dish!"
@@ -16,7 +17,7 @@ const HandlerLive = DadJokeTools.toLayer(Effect.gen(function*() {
 
 Effect.gen(function*() {
   // Enable the tool.
-  yield* L.enable(DadJokeTools)
+  yield* L.enable(DadJokeTool)
 
   // Converse. The model will use the tool as it sees fit.
   yield* L.user`Generate a dad joke about pirates.`

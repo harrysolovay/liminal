@@ -5,7 +5,6 @@ import path from "node:path"
 import { defineConfig } from "vitepress"
 import llmstext from "vitepress-plugin-llms"
 import liminalPackageJson from "../../liminal/package.json" with { type: "json" }
-import liminalLandPackageJson from "../package.json" with { type: "json" }
 import { sidebar } from "./sidebar.ts"
 
 // cspell:disable
@@ -20,11 +19,11 @@ const GOOGLE_ANALYTICS = `
 export default defineConfig({
   title: "Liminal",
   description: liminalPackageJson.description,
-  // TODO: fix https://github.com/okineadev/vitepress-plugin-llms/issues/69#issuecomment-3151358653
   vite: {
     server: {
       port: 5174,
     },
+    // TODO:  https://github.com/okineadev/vitepress-plugin-llms/issues/69#issuecomment-3151358653
     plugins: [llmstext({
       title: "Liminal",
       domain: "https://liminal.land",

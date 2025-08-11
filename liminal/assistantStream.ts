@@ -19,7 +19,7 @@ export const assistantStream: Stream.Stream<
     return model.streamText({
       system: Option.getOrUndefined(system),
       prompt: messages,
-      toolkit: AiToolkit.merge(...tools) as never,
+      toolkit: AiToolkit.make(...tools),
     })
   }),
 )
