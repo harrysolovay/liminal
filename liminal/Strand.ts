@@ -1,10 +1,11 @@
 import type { Message } from "@effect/ai/AiInput"
-import type * as AiToolkit from "@effect/ai/AiToolkit"
+import type * as AiTool from "@effect/ai/AiTool"
 import * as Context from "effect/Context"
 import * as Effect from "effect/Effect"
 import * as Layer from "effect/Layer"
 import * as Option from "effect/Option"
 import * as PubSub from "effect/PubSub"
+import type { Schema } from "effect/Schema"
 import type { LEvent } from "./LEvent.ts"
 
 export declare namespace Strand {
@@ -18,17 +19,21 @@ export declare namespace Strand {
     /** The list of messages that the model uses to infer the next message. */
     messages: Array<Message>
     /** The tools available to the model. */
-    tools: Set<AiToolkit.Any>
+    tools: Set<AiTool.AiTool<string, AiTool.AnyStructSchema, Schema.Any, Schema.Any, never>>
   }
 }
 
 /** A context tag that denotes the boundary of a conversation isolate. */
 export class Strand extends Context.Tag("liminal/Strand")<Strand, Strand.Service>() {
-  static layer: (init?: {
+  static layer: <T extends AiTool.Any = never>(init?: {
     system?: string | undefined
     messages?: Array<Message> | undefined
-    tools?: Set<AiToolkit.Any> | undefined
-  }) => Layer.Layer<Strand> = ({ system, messages, tools } = {}) =>
+    tools?: Set<T> | undefined
+  }) => Layer.Layer<
+    Strand,
+    [T] extends [AiTool.Any] ? AiTool.Failure<T> : never,
+    [T] extends [AiTool.Any] ? AiTool.Context<T> : never
+  > = ({ system, messages, tools } = {}) =>
     Layer.effect(
       Strand,
       Effect.gen(function*() {
@@ -37,7 +42,7 @@ export class Strand extends Context.Tag("liminal/Strand")<Strand, Strand.Service
           events: yield* PubSub.unbounded<LEvent>(),
           system: Option.fromNullable(system),
           messages: [...messages ?? []],
-          tools: new Set(tools ?? []),
+          tools: new Set(tools as never ?? []),
         })
       }),
     )

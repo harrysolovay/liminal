@@ -1,9 +1,8 @@
 import * as AiTool from "@effect/ai/AiTool"
-import type { AiToolkit } from "@effect/ai/AiToolkit"
 import * as Effect from "effect/Effect"
 import { Strand } from "./Strand"
 
-export const disable: (toolkit: AiToolkit<AiTool.Any>) => Effect.Effect<void, never, Strand> = (toolkit) =>
+export const disable: (tool: AiTool.Any) => Effect.Effect<void, never, Strand> = (tool) =>
   Effect.map(Strand, ({ tools }) => {
-    tools.delete(toolkit)
+    tools.delete(tool as never)
   })

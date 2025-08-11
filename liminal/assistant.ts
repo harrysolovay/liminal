@@ -14,7 +14,7 @@ export const assistant: Effect.Effect<string, AiError, AiLanguageModel | Strand>
   let { text, results } = yield* model.generateText({
     system: Option.getOrUndefined(system),
     prompt: messages,
-    toolkit: AiToolkit.merge(...tools) as never,
+    toolkit: AiToolkit.make(...tools) as never,
   })
   // TODO: this shouldn't be necessary. Bug in Effect AI?
   if (!text.trim()) {

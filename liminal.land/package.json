@@ -10,6 +10,6 @@
     "markdown-it-footnote": "^4.0.0",
     "markdown-it-steps": "^0.2.0",
     "vitepress": "^1.6.4",
-    "vitepress-plugin-llmstxt": "^0.1.0"
+    "vitepress-plugin-llms": "^1.7.2"
   }
 }
