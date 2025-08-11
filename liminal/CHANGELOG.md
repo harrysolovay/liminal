@@ -1,5 +1,12 @@
 # liminal
 
+## 0.15.0
+
+### Minor Changes
+
+- 3b4ec1a: - Instead of providing `AiToolkit` to `L.enable`/`L.disable`, we now provide tools directly.
+  - Also includes the beginnings of a `coalesceModels` pattern.
+
 ## 0.14.0
 
 ### Minor Changes
