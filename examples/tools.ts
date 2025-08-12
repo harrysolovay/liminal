@@ -1,6 +1,6 @@
 import { AiTool, AiToolkit } from "@effect/ai"
 import { FetchHttpClient, HttpClient, HttpClientRequest, HttpClientResponse } from "@effect/platform"
-import { Console, Effect, flow, Option, Schema } from "effect"
+import { Effect, flow, Option, Schema } from "effect"
 import L from "liminal"
 import { ModelLive } from "./_layers.ts"
 import { logger } from "./_logger.ts"
@@ -49,14 +49,12 @@ class ICanHazDadJoke extends Effect.Service<ICanHazDadJoke>()("ICanHazDadJoke", 
   }),
 }) {}
 
-const DadJokeToolHandlers = AiToolkit.make(DadJokeTool).toLayer(
-  AiToolkit.make(DadJokeTool).of({
-    GetDadJoke: ({ searchTerm }) =>
-      ICanHazDadJoke.search(searchTerm).pipe(
-        Effect.provide(ICanHazDadJoke.Default),
-      ),
-  }),
-)
+const DadJokeToolHandlers = AiToolkit.make(DadJokeTool).toLayer({
+  GetDadJoke: ({ searchTerm }) =>
+    ICanHazDadJoke.search(searchTerm).pipe(
+      Effect.provide(ICanHazDadJoke.Default),
+    ),
+})
 
 Effect.gen(function*() {
   yield* logger
@@ -66,7 +64,6 @@ Effect.gen(function*() {
 }).pipe(
   L.thread,
   Effect.scoped,
-  Effect.flatMap(Console.log),
   Effect.provide([ModelLive, DadJokeToolHandlers]),
   Effect.runFork,
 )
