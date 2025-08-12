@@ -8,7 +8,9 @@ export const raw: <
 >(
   a0: A0,
   ...aRest: L
-) => Effect.Effect<string | (undefined extends A0 ? undefined : never)> = Effect.fnUntraced(function*(a0, ...aRest) {
+) => Effect.Effect<
+  string | (undefined extends A0 ? undefined : never)
+> = Effect.fnUntraced(function*(a0, ...aRest) {
   const a0_: TaggableArg0 = Effect.isEffect(a0)
     ? yield* a0 as Effect.Effect<TaggableArg0>
     : a0

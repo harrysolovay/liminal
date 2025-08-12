@@ -3,6 +3,7 @@ import { FetchHttpClient, HttpClient, HttpClientRequest, HttpClientResponse } fr
 import { Console, Effect, flow, Option, Schema } from "effect"
 import L from "liminal"
 import { ModelLive } from "./_layers.ts"
+import { logger } from "./_logger.ts"
 
 const DadJokeTool = AiTool.make("GetDadJoke", {
   description: "Get a hilarious dad joke from the ICanHazDadJoke API",
@@ -57,12 +58,15 @@ const DadJokeToolHandlers = AiToolkit.make(DadJokeTool).toLayer(
   }),
 )
 
-await L.thread(
-  L.enable(DadJokeTool),
-  L.user`Generate a dad joke about pirates.`,
-  L.assistant,
-).pipe(
+Effect.gen(function*() {
+  yield* logger
+  yield* L.enable(DadJokeTool)
+  yield* L.user`Generate a dad joke about pirates.`
+  yield* L.assistant
+}).pipe(
+  L.thread,
+  Effect.scoped,
   Effect.flatMap(Console.log),
   Effect.provide([ModelLive, DadJokeToolHandlers]),
-  Effect.runPromise,
+  Effect.runFork,
 )
