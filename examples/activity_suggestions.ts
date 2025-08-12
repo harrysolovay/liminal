@@ -23,7 +23,7 @@ Effect.gen(function*() {
     i++
   }
 }).pipe(
-  L.scoped,
+  L.root,
   Effect.scoped,
   Effect.provide(ModelLive),
   Effect.runFork,

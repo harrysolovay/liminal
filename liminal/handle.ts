@@ -3,14 +3,14 @@ import type { RuntimeFiber } from "effect/Fiber"
 import * as Scope from "effect/Scope"
 import * as Stream from "effect/Stream"
 import type { LEvent } from "./LEvent.ts"
-import { Thread } from "./ThreadInitial.ts"
+import { Thread, threadTag } from "./Thread.ts"
 
 /** Attach an event handler to process the events of the current strand. */
 export const listen: <A, E, R>(
   f: (event: LEvent) => Effect.Effect<A, E, R>,
 ) => Effect.Effect<RuntimeFiber<void, E>, never, Thread | R | Scope.Scope> = Effect.fnUntraced(function*(f) {
   const latch = yield* Effect.makeLatch(false)
-  const { events } = yield* Thread
+  const { events } = yield* threadTag
   const dequeue = yield* events.subscribe
   const fiber = yield* latch.open.pipe(
     Effect.zipRight(

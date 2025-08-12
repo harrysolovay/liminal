@@ -1,4 +1,14 @@
 import * as Effect from "effect/Effect"
-import type { Thread } from "./ThreadInitial.ts"
+import * as Option from "effect/Option"
+import * as PubSub from "effect/PubSub"
+import type { LEvent } from "./LEvent.ts"
+import { Thread, ThreadState, threadTag } from "./Thread.ts"
 
-export declare const thread: Effect.Effect<Thread.Service>
+export const thread: Effect.Effect<Thread> = Effect.gen(function*() {
+  return Thread({
+    parent: yield* Effect.serviceOption(threadTag),
+    events: yield* PubSub.unbounded<LEvent>(),
+    state: ThreadState.default(),
+    tools: Option.none(),
+  })
+})

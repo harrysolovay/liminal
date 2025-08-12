@@ -12,7 +12,7 @@ Effect.gen(function*() {
     Effect.forkDaemon,
   )
 }).pipe(
-  L.scoped,
+  L.root,
   Effect.provide([BunTerminal.layer, ModelLive]),
   Effect.runFork,
 )

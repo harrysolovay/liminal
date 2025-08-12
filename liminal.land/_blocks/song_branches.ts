@@ -7,7 +7,7 @@ Effect.gen(function*() {
 
   const variants = yield* Effect.all(
     ["Rap", "Rock", "Pop"].map((genre) =>
-      L.branched(
+      L.branch(
         L.user(genre),
         L.assistant,
       )

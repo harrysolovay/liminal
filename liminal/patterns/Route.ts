@@ -1,8 +1,8 @@
 import * as Effect from "effect/Effect"
 import * as Schema from "effect/Schema"
 import { assistantSchema } from "../assistantSchema.ts"
-import { branched } from "../branched.ts"
-import { Thread } from "../ThreadInitial.ts"
+import { branch } from "../branch.ts"
+import { Thread } from "../Thread.ts"
 import { user } from "../user.ts"
 
 export const byDescription: <R extends Record<string, Effect.All.EffectAny>>(routes: R) => Effect.Effect<
@@ -11,7 +11,7 @@ export const byDescription: <R extends Record<string, Effect.All.EffectAny>>(rou
   ([R[keyof R]] extends [never] ? never : Effect.Effect.Context<R[keyof R]>) | Thread
 > = Effect.fnUntraced(function*(routes) {
   const descriptions = Object.keys(routes)
-  const description = yield* branched(
+  const description = yield* branch(
     user`
       Which of the following descriptions best matches the current conversation?
 

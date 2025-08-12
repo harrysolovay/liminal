@@ -24,7 +24,7 @@ Effect.gen(function*() {
   const reply = yield* L.assistant
   reply satisfies string
 }).pipe(
-  L.scoped,
+  L.root,
   Effect.provide([ModelLive, HandlerLive]),
   Effect.runFork,
 )

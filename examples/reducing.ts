@@ -19,7 +19,7 @@ Effect.gen(function*() {
   yield* L.user`Any advice for me as I further-explore this project?`
   yield* L.assistant
 
-  const summary = yield* L.scoped(
+  const summary = yield* L.branch(
     L.user`Please summarize our conversation.`,
     L.assistant,
   )
@@ -29,7 +29,7 @@ Effect.gen(function*() {
   yield* L.user`So please reiterate your thoughts on this creative journey.`
   yield* L.assistant
 }).pipe(
-  L.scoped,
+  L.root,
   Effect.scoped,
   Effect.provide(ModelLive),
   Effect.runFork,

@@ -1,6 +1,6 @@
 import * as Effect from "effect/Effect"
 import type * as Schema from "effect/Schema"
-import type * as Strand from "./ThreadInitial.ts"
+import type * as Strand from "./Thread.ts"
 import { user } from "./user.ts"
 import { encodeJsonc, type JsonValue } from "./util/JsonValue.ts"
 

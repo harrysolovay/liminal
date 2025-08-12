@@ -11,7 +11,7 @@ Effect.gen(function*() {
   yield* L.user`Welcome to the cotton club.`
   yield* L.assistant
 }).pipe(
-  L.scoped,
+  L.root,
   Effect.scoped,
   Effect.provide(ModelLive),
   Effect.runFork,

@@ -3,6 +3,8 @@ import { L } from "liminal"
 import { ModelLive } from "./_layers.ts"
 
 Effect.gen(function*() {
+  yield* L.user``
+
   const daniel = yield* L.thread
   const julia = yield* L.thread
 
@@ -16,6 +18,7 @@ Effect.gen(function*() {
     L.assistant.pipe(L.to(daniel)),
   )
 }).pipe(
+  L.root,
   Effect.provide(ModelLive),
   Effect.runFork,
 )

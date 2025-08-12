@@ -3,6 +3,8 @@ import { L } from "liminal"
 import { ModelLive } from "./_layers.ts"
 import { logger } from "./_logger.ts"
 
+// TODO: common system message parts for desirable behavior such as not asking for follow up questions.
+
 Effect.gen(function*() {
   yield* logger
 
@@ -19,7 +21,7 @@ Effect.gen(function*() {
 
   let i = 0
   while (i < 3) {
-    yield* L.branched(
+    yield* L.branch(
       L.user`Please reply to the last message on my behalf.`,
       L.assistant,
     ).pipe(
@@ -29,9 +31,9 @@ Effect.gen(function*() {
     i++
   }
   yield* L.user`Please summarize the key points from our conversation.`
-  return yield* L.assistant
+  yield* L.assistant
 }).pipe(
-  L.scoped,
+  L.root,
   Effect.scoped,
   Effect.provide(ModelLive),
   Effect.runFork,
