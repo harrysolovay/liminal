@@ -46,7 +46,7 @@ Effect.gen(function*() {
 
   yield* Console.log(suggestions)
 }).pipe(
-  L.root,
+  L.thread,
   Effect.provide([ModelLive, BunContext.layer]),
   Effect.runFork,
 )

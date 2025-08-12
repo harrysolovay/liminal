@@ -8,10 +8,10 @@ Effect.gen(function*() {
   yield* conversation
 
   // Run isolated with an untouched state.
-  yield* conversation.pipe(L.root)
+  yield* conversation.pipe(L.thread)
 
   // Run isolated with a copy of the current state.
   yield* conversation.pipe(L.branch)
 }).pipe(
-  L.root,
+  L.thread,
 )

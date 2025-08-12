@@ -68,7 +68,7 @@ Effect.gen(function*() {
     iterationsRequired: iterations,
   }
 }).pipe(
-  L.root,
+  L.thread,
   Effect.scoped,
   Effect.provide([ModelLive, BunContext.layer]),
   Effect.runFork,

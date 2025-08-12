@@ -8,23 +8,26 @@ import type { Sequencer } from "../util/Sequencer.ts"
 import { Self } from "./Self.ts"
 import { sequence } from "./sequence.ts"
 
-/** Isolate the effect with a new strand in context. */
-export const branch: Sequencer<never, Thread> = flow(
-  sequence,
-  Effect.provideServiceEffect(
-    Self,
-    Effect.gen(function*() {
-      const parent = yield* Self
-      return Thread({
-        parent: Option.some(parent),
-        events: yield* PubSub.unbounded<LEvent>(),
-        state: ThreadState.make({
-          fqn: parent.state.fqn,
-          system: parent.state.system,
-          messages: [...parent.state.messages ?? []],
-        }),
-        tools: parent.tools.pipe(Option.map((v) => new Set(v))),
-      })
+export interface branch extends Sequencer<never, Thread>, Effect.Effect<Thread, never, Thread> {}
+
+const make = Effect.gen(function*() {
+  const parent = yield* Self
+  return Thread({
+    parent: Option.some(parent),
+    events: yield* PubSub.unbounded<LEvent>(),
+    state: ThreadState.make({
+      fqn: parent.state.fqn,
+      system: parent.state.system,
+      messages: [...parent.state.messages ?? []],
     }),
+    tools: parent.tools.pipe(Option.map((v) => new Set(v))),
+  })
+})
+
+export const branch: branch = Object.assign(
+  flow(
+    sequence,
+    Effect.provideServiceEffect(Self, make),
   ),
+  make,
 )

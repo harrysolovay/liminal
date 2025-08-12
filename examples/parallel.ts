@@ -53,7 +53,7 @@ Effect.gen(function*() {
     Effect.flatMap(fs.readFileString),
   )
 
-  const reviews = yield* L.root(
+  const reviews = yield* L.thread(
     L.system`
       You are a technical lead summarizing multiple code reviews. Review the supplied code.
     `,
@@ -63,7 +63,7 @@ Effect.gen(function*() {
     }),
   )
 
-  const summary = yield* L.root(
+  const summary = yield* L.thread(
     L.system`You are a technical lead summarizing multiple code reviews.`,
     L.user`Please summarize the following code reviews.`,
     L.userJson(reviews),

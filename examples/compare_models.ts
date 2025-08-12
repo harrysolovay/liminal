@@ -33,7 +33,7 @@ Effect.gen(function*() {
     Effect.flatMap((key) => Console.log(rewrites[key])),
   )
 }).pipe(
-  L.root,
+  L.thread,
   Effect.scoped,
   Effect.provide([ModelLive, ClientLive]),
   Effect.runFork,

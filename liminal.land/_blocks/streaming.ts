@@ -14,7 +14,7 @@ Effect.gen(function*() {
     Effect.forkDaemon,
   )
 }).pipe(
-  L.root,
+  L.thread,
   Effect.provide([BunTerminal.layer, ModelLive]),
   Effect.runFork,
 )

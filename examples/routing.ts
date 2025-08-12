@@ -12,7 +12,7 @@ const CLASSIFICATION_SYSTEM_PROMPTS = {
 }
 
 Effect.gen(function*() {
-  const classification = yield* L.root(
+  const classification = yield* L.thread(
     L.system`
       Classify this supplied customer query:
 
@@ -30,7 +30,7 @@ Effect.gen(function*() {
     }),
   )
 
-  const specialist = yield* L.root(
+  const specialist = yield* L.thread(
     L.system(CLASSIFICATION_SYSTEM_PROMPTS[classification.type]),
     L.assistant,
   ).pipe(

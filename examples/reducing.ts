@@ -29,7 +29,7 @@ Effect.gen(function*() {
   yield* L.user`So please reiterate your thoughts on this creative journey.`
   yield* L.assistant
 }).pipe(
-  L.root,
+  L.thread,
   Effect.scoped,
   Effect.provide(ModelLive),
   Effect.runFork,

@@ -16,6 +16,6 @@ Effect.gen(function*() {
   )
   yield* Console.log(LPretty.message(message))
 }).pipe(
-  L.root,
+  L.thread,
   Effect.runFork,
 )
