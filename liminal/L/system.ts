@@ -1,9 +1,9 @@
 import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
-import { raw } from "./raw.ts"
+import { raw } from "../raw.ts"
+import type { Thread } from "../Thread.ts"
+import type { Taggable } from "../util/Taggable.ts"
 import { Self } from "./Self.ts"
-import type { Thread } from "./Thread.ts"
-import type { Taggable } from "./util/Taggable.ts"
 
 /** Set the system instruction for the current strand. */
 export const system: Taggable<Option.Option<string>, never, Thread> = Effect.fnUntraced(function*(a0, ...aRest) {

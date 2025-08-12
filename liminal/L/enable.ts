@@ -2,9 +2,9 @@ import type { AiTool, AnyStructSchema, Handler } from "@effect/ai/AiTool"
 import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
 import type { Schema } from "effect/Schema"
+import type { Thread } from "../Thread.ts"
+import type { NeverTool } from "../util/NeverTool.ts"
 import { Self } from "./Self.ts"
-import type { Thread } from "./Thread.ts"
-import type { NeverTool } from "./util/NeverTool.ts"
 
 export const enable = <
   K extends string,

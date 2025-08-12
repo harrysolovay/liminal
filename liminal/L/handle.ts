@@ -2,9 +2,9 @@ import * as Effect from "effect/Effect"
 import type { RuntimeFiber } from "effect/Fiber"
 import * as Scope from "effect/Scope"
 import * as Stream from "effect/Stream"
-import type { LEvent } from "./LEvent.ts"
+import type { LEvent } from "../LEvent.ts"
+import type { Thread } from "../Thread.ts"
 import { Self } from "./Self.ts"
-import type { Thread } from "./Thread.ts"
 
 /** Attach an event handler to process the events of the current strand. */
 export const listen: <A, E, R>(

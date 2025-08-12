@@ -1,8 +1,8 @@
 import type { Message } from "@effect/ai/AiInput"
 import * as Effect from "effect/Effect"
-import { MessagesAppended } from "./LEvent.ts"
+import { MessagesAppended } from "../LEvent.ts"
+import type { Thread } from "../Thread.ts"
 import { Self } from "./Self.ts"
-import type { Thread } from "./Thread.ts"
 
 /** Append messages to the current strand's message list. */
 export const append: (

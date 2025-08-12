@@ -2,9 +2,8 @@ import type { AiError } from "@effect/ai/AiError"
 import type { AiLanguageModel } from "@effect/ai/AiLanguageModel"
 import type { AiModel } from "@effect/ai/AiModel"
 import * as Effect from "effect/Effect"
-import { assistant } from "../assistant.ts"
+import * as L from "../L.ts"
 import type { Thread } from "../Thread.ts"
-import { user } from "../user.ts"
 
 export const coalesce: <E, R, M extends Array<AiModel<any, any>>>(
   effect: Effect.Effect<any, E, R>,
@@ -18,13 +17,13 @@ export const coalesce: <E, R, M extends Array<AiModel<any, any>>>(
     const all = yield* Effect.all(models.map((model) => effect.pipe(Effect.provide(model)))) as Effect.Effect<
       Array<unknown>
     >
-    yield* user`
+    yield* L.user`
       Coalesce the following items into a single item:
 
       ---
 
       ${all.map((item) => JSON.stringify(item, null, 2)).join("\n\n---")}
     `
-    return yield* assistant
+    return yield* L.assistant
   },
 )

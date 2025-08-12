@@ -1,9 +1,9 @@
 import * as AiInput from "@effect/ai/AiInput"
 import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
-import { append } from "./append.ts"
+import { append } from "./L/append.ts"
+import { Self } from "./L/Self.ts"
 import { raw } from "./raw.ts"
-import { Self } from "./Self.ts"
 import type { Thread } from "./Thread.ts"
 import { type Taggable } from "./util/Taggable.ts"
 
