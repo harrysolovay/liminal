@@ -1,6 +1,6 @@
 import * as Effect from "effect/Effect"
-import { normalizeRaw } from "./util/fixRaw.ts"
-import type { TaggableArg0 } from "./util/Taggable.ts"
+import { normalizeRaw } from "../util/normalizeRaw.ts"
+import type { TaggableArg0 } from "../util/Taggable.ts"
 
 export const raw: <
   A0 extends TaggableArg0 | Effect.Effect<string | undefined, any, any>,
