@@ -1,5 +1,5 @@
 import { Effect } from "effect"
-import { L } from "liminal"
+import L from "liminal"
 
 // ---cut---
 export const refine = (content: string) =>

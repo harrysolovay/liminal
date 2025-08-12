@@ -1,5 +1,5 @@
 import { Effect, Schema } from "effect"
-import { L } from "liminal"
+import L from "liminal"
 
 // ---cut---
 Effect.gen(function*() {

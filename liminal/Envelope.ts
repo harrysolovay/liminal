@@ -7,43 +7,42 @@ import { raw } from "./raw.ts"
 import type { Thread } from "./Thread.ts"
 import { type Taggable } from "./util/Taggable.ts"
 
-export interface Addresses {
+export interface MessageHeaders {
   readonly to: Array<Thread>
   readonly cc?: Array<Thread> | undefined
   readonly bcc?: Array<Thread> | undefined
 }
 
 export interface EnvelopeMembers {
-  readonly addresses: Addresses
+  readonly headers: MessageHeaders
   readonly cc: (...cc: Array<Thread>) => Envelope
   readonly bcc: (...bcc: Array<Thread>) => Envelope
 }
 
 export interface Envelope extends Taggable<void, never, Thread>, EnvelopeMembers {}
 
-export const Envelope = (addresses: Addresses): Envelope =>
+// TODO: cc, bcc
+export const Envelope = (headers: MessageHeaders): Envelope =>
   Object.assign(
     Effect.fnUntraced(function*(a0, ...aRest) {
       const { state: { fqn } } = yield* Self
       const name = Option.getOrElse(fqn, () => "anonymous-entity")
       const text = yield* raw(a0, aRest)
-      if (text) {
-        // TODO: cc, bcc
-        const { to, cc: _cc, bcc: _bcc } = addresses
-        for (const recipient of to) {
-          yield* append(AiInput.UserMessage.make({
-            parts: [
-              AiInput.TextPart.make({
-                text: yield* raw`[FROM: ${name} ]\n${text}`,
-              }),
-            ],
-          })).pipe(Effect.provideService(Self, recipient))
-        }
+      if (!text) return
+      const { to, cc: _cc, bcc: _bcc } = headers
+      for (const recipient of to) {
+        yield* append(AiInput.UserMessage.make({
+          parts: [
+            AiInput.TextPart.make({
+              text: yield* raw`[FROM: ${name} ]\n${text}`,
+            }),
+          ],
+        })).pipe(Effect.provideService(Self, recipient))
       }
     }) satisfies Taggable<void, never, Thread>,
     {
-      addresses,
-      cc: (...cc) => Envelope({ ...addresses, cc }),
-      bcc: (...bcc) => Envelope({ ...addresses, bcc }),
+      headers,
+      cc: (...cc) => Envelope({ ...headers, cc }),
+      bcc: (...bcc) => Envelope({ ...headers, bcc }),
     } satisfies EnvelopeMembers,
   )

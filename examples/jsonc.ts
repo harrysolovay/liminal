@@ -1,5 +1,5 @@
 import { Array, Console, Effect, Schema } from "effect"
-import { L, LPretty } from "liminal"
+import L, { LPretty } from "liminal"
 
 const ExampleSchema = Schema.Struct({
   inner: Schema.String.pipe(

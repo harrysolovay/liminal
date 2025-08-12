@@ -2,7 +2,7 @@ import { Command, FileSystem } from "@effect/platform"
 import { BunContext } from "@effect/platform-bun"
 import { Effect, flow, Schema } from "effect"
 import * as Console from "effect/Console"
-import { L } from "liminal"
+import L from "liminal"
 import { ModelLive } from "./_layers.ts"
 
 // TODO: use this for actual docs
