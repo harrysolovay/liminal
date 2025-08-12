@@ -5,12 +5,13 @@ import * as AiToolkit from "@effect/ai/AiToolkit"
 import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
 import { append } from "./append.ts"
-import { type Thread, threadTag } from "./Thread.ts"
+import { Self } from "./Self.ts"
+import type { Thread } from "./Thread.ts"
 
 /** Infer an assistant message and append it to the conversation. */
 export const assistant: Effect.Effect<string, AiError, AiLanguageModel | Thread> = Effect.gen(function*() {
   const model = yield* AiLanguageModel
-  const { state, tools } = yield* threadTag
+  const { state, tools } = yield* Self
   let { text, results } = yield* model.generateText({
     system: Option.getOrUndefined(state.system),
     prompt: state.messages,

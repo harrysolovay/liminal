@@ -1,5 +1,4 @@
 import { Message } from "@effect/ai/AiInput"
-import * as Context from "effect/Context"
 import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
 import { type Pipeable, pipeArguments } from "effect/Pipeable"
@@ -7,6 +6,7 @@ import * as PubSub from "effect/PubSub"
 import * as Schema from "effect/Schema"
 import type { Mutable } from "effect/Types"
 import type { LEvent } from "./LEvent.ts"
+import { Self } from "./Self.ts"
 import { sequence } from "./sequence.ts"
 import type { NeverTool } from "./util/NeverTool.ts"
 import { prefix } from "./util/prefix.ts"
@@ -32,9 +32,6 @@ export class ThreadState extends Schema.Class<ThreadState>(prefix("ThreadState")
     })
 }
 
-export const ThreadTypeId: unique symbol = Symbol.for(prefix("Thread"))
-export type ThreadTypeId = typeof ThreadTypeId
-
 export interface ThreadInit {
   /** The parent thread. */
   parent: Option.Option<Thread>
@@ -46,10 +43,15 @@ export interface ThreadInit {
   tools: Option.Option<Set<NeverTool>>
 }
 
-/** A conversation isolate. */
-export interface Thread extends Sequencer<Thread>, ThreadInit, Pipeable {
+export const ThreadTypeId: unique symbol = Symbol.for(prefix("Thread"))
+export type ThreadTypeId = typeof ThreadTypeId
+
+interface ThreadMembers extends ThreadInit, Pipeable {
   readonly [ThreadTypeId]: ThreadTypeId
 }
+
+/** A conversation isolate. */
+export interface Thread extends Sequencer<Thread>, ThreadMembers {}
 
 export const Thread = (init: ThreadInit): Thread => {
   const members = {
@@ -58,13 +60,10 @@ export const Thread = (init: ThreadInit): Thread => {
     pipe() {
       return pipeArguments(self, arguments)
     },
-  } satisfies Omit<Thread, keyof Function>
-  const self: Thread = Object.assign(
-    ((...args) => sequence(...args).pipe(Effect.provideService(threadTag, self))) satisfies Sequencer<Thread>,
-    members as never,
-  )
+  } satisfies ThreadMembers
+  const self = Object.assign(
+    ((...args) => sequence(...args).pipe(Effect.provideService(Self, self))) satisfies Sequencer<Thread>,
+    members,
+  ) as Thread
   return self
 }
-
-/** @internal */
-export const threadTag: Context.Tag<Thread, Thread> = Context.GenericTag<Thread>(prefix("threadTag"))

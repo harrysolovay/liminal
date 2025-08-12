@@ -6,7 +6,8 @@ import * as Option from "effect/Option"
 import * as Schema from "effect/Schema"
 import * as SchemaAST from "effect/SchemaAST"
 import { append } from "./append.ts"
-import { type Thread, threadTag } from "./Thread.ts"
+import { Self } from "./Self.ts"
+import type { Thread } from "./Thread.ts"
 import { encodeJsonc, type JsonValue } from "./util/JsonValue.ts"
 
 /** Infer a structured assistant message and append its JSON representation to the conversation. */
@@ -19,7 +20,7 @@ export const assistantSchema: {
   ): Effect.Effect<O, AiError, AiLanguageModel | Thread>
 } = Effect.fnUntraced(function*(schema) {
   const model = yield* AiLanguageModel
-  const { state: { system, messages } } = yield* threadTag
+  const { state: { system, messages } } = yield* Self
 
   const isSchema = Schema.isSchema(schema)
   const schema_ = isSchema ? schema : Schema.Struct(schema) as Schema.Schema.AnyNoContext
