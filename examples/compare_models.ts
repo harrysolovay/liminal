@@ -12,13 +12,13 @@ Effect.gen(function*() {
   yield* L.user`Rewrite it in whatever way you think best.`
 
   const rewrites = yield* Effect.all({
-    a: L.branch(L.assistant),
+    a: L.branched(L.assistant),
     b: L.assistant.pipe(
-      L.branch,
+      L.branched,
       Effect.provide(OpenAiLanguageModel.model("gpt-4-turbo")),
     ),
     c: L.assistant.pipe(
-      L.branch,
+      L.branched,
       Effect.provide(OpenAiLanguageModel.model("gpt-3.5-turbo")),
     ),
   }, { concurrency: "unbounded" })
@@ -33,7 +33,7 @@ Effect.gen(function*() {
     Effect.flatMap((key) => Console.log(rewrites[key])),
   )
 }).pipe(
-  L.strand,
+  L.scoped,
   Effect.scoped,
   Effect.provide([ModelLive, ClientLive]),
   Effect.runFork,

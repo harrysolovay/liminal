@@ -36,7 +36,7 @@ Effect.gen(function*() {
           })
           return { file, implementation }
         },
-        (e) => L.strand(e),
+        (e) => L.scoped(e),
       ),
     ),
     { concurrency: "unbounded" },
@@ -44,7 +44,7 @@ Effect.gen(function*() {
 
   yield* Console.log({ plan, changes })
 }).pipe(
-  L.strand,
+  L.scoped,
   Effect.provide(ModelLive),
   Effect.runFork,
 )

@@ -8,7 +8,7 @@ Effect.gen(function*() {
   yield* L.user`Hey.`
   yield* L.assistant
 }).pipe(
-  L.strand,
+  L.scoped,
   Effect.provide(ModelLive),
   Effect.scoped,
   Effect.runFork,

@@ -1,7 +1,7 @@
 import * as Effect from "effect/Effect"
-import type { Sequence } from "./util/Sequence"
+import type { Sequencer } from "./util/Sequencer"
 
-export const sequence: Sequence = (...steps) =>
+export const sequence: Sequencer = (...steps) =>
   Effect.all(steps, {
     concurrency: 1,
   }).pipe(

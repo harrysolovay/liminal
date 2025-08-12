@@ -5,17 +5,17 @@ import * as AiToolkit from "@effect/ai/AiToolkit"
 import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
 import * as Stream from "effect/Stream"
-import { Strand } from "./Strand"
+import { Thread } from "./ThreadInitial"
 
 /** Get a streamed inference from the assistant without appending it to the strand's messages. */
 export const assistantStream: Stream.Stream<
   AiResponse,
   AiError,
-  AiLanguageModel | Strand
+  AiLanguageModel | Thread
 > = Stream.unwrap(
   Effect.gen(function*() {
     const model = yield* AiLanguageModel
-    const { system, messages, tools } = yield* Strand
+    const { system, messages, tools } = yield* Thread
     return model.streamText({
       system: Option.getOrUndefined(system),
       prompt: messages,

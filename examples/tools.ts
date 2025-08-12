@@ -57,7 +57,7 @@ const DadJokeToolHandlers = AiToolkit.make(DadJokeTool).toLayer(
   }),
 )
 
-await L.strand(
+await L.scoped(
   L.enable(DadJokeTool),
   L.user`Generate a dad joke about pirates.`,
   L.assistant,

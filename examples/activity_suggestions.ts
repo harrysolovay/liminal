@@ -23,7 +23,7 @@ Effect.gen(function*() {
     i++
   }
 }).pipe(
-  L.strand,
+  L.scoped,
   Effect.scoped,
   Effect.provide(ModelLive),
   Effect.runFork,

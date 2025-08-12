@@ -4,23 +4,25 @@ import * as Option from "effect/Option"
 import * as PubSub from "effect/PubSub"
 import type { LEvent } from "./LEvent.ts"
 import { sequence } from "./sequence.ts"
-import { Strand } from "./Strand.ts"
-import type { Sequence } from "./util/Sequence.ts"
+import { Thread } from "./ThreadInitial.ts"
+import type { Sequencer } from "./util/Sequencer.ts"
 
 /** Isolate the effect with a new strand in context. */
-export const branch: Sequence<never, Strand> = flow(
+export const branched: Sequencer<never, Thread> = flow(
   sequence,
   Effect.provideServiceEffect(
-    Strand,
+    Thread,
     Effect.gen(function*() {
-      const parent = yield* Strand
-      return Strand.of({
+      const parent = yield* Thread
+      // TODO
+      return Thread.of(Object.assign({
+        id: parent.id,
         parent: Option.some(parent),
         system: Option.map(parent.system, identity),
         events: yield* PubSub.unbounded<LEvent>(),
         messages: parent.messages.slice(),
         tools: new Set(parent.tools),
-      })
+      }))
     }),
   ),
 )

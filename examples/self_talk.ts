@@ -19,7 +19,7 @@ Effect.gen(function*() {
 
   let i = 0
   while (i < 3) {
-    yield* L.branch(
+    yield* L.branched(
       L.user`Please reply to the last message on my behalf.`,
       L.assistant,
     ).pipe(
@@ -31,7 +31,7 @@ Effect.gen(function*() {
   yield* L.user`Please summarize the key points from our conversation.`
   return yield* L.assistant
 }).pipe(
-  L.strand,
+  L.scoped,
   Effect.scoped,
   Effect.provide(ModelLive),
   Effect.runFork,

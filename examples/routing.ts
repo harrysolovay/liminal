@@ -12,7 +12,7 @@ const CLASSIFICATION_SYSTEM_PROMPTS = {
 }
 
 Effect.gen(function*() {
-  const classification = yield* L.strand(
+  const classification = yield* L.scoped(
     L.system`
       Classify this supplied customer query:
 
@@ -30,7 +30,7 @@ Effect.gen(function*() {
     }),
   )
 
-  const specialist = yield* L.strand(
+  const specialist = yield* L.scoped(
     L.system(CLASSIFICATION_SYSTEM_PROMPTS[classification.type]),
     L.assistant,
   ).pipe(

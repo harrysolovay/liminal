@@ -1,11 +1,11 @@
 import type { DefaultTheme } from "vitepress/theme"
 
 export const sidebar: DefaultTheme.Sidebar = [
-  // {
-  //   text: "llms.txt",
-  //   link: "llms-full.txt",
-  //   target: "blank",
-  // },
+  {
+    text: "llms.txt",
+    link: "llms-full.txt",
+    target: "blank",
+  },
   {
     text: "Examples",
     link: "https://github.com/harrysolovay/liminal/tree/main/examples",
@@ -32,6 +32,15 @@ export const sidebar: DefaultTheme.Sidebar = [
       { text: "Tools", link: "/tools" },
       { text: "Streaming", link: "/streaming" },
       { text: "Events", link: "/events" },
+      { text: "Entity", link: "/entity" },
+    ],
+  },
+  {
+    text: "Patterns",
+    base: "/patterns",
+    items: [
+      { text: "Routing", link: "/route" },
+      { text: "Model Amalgamation", link: "/model" },
     ],
   },
 ]
