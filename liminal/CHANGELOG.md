@@ -1,5 +1,11 @@
 # liminal
 
+## 0.16.0
+
+### Minor Changes
+
+- 2e96076: Refactoring "strands" into "threads", which can provide a handle with which to operate on the thread context outside of the thread's sequencers arguments.
+
 ## 0.15.0
 
 ### Minor Changes
