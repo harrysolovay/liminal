@@ -10,7 +10,7 @@ import { sequence } from "./sequence.ts"
 
 export interface branch extends Sequencer<never, Thread>, Effect.Effect<Thread, never, Thread> {}
 
-const make = Effect.gen(function*() {
+const branch_ = Effect.gen(function*() {
   const parent = yield* Self
   return Thread({
     parent: Option.some(parent),
@@ -27,7 +27,7 @@ const make = Effect.gen(function*() {
 export const branch: branch = Object.assign(
   flow(
     sequence,
-    Effect.provideServiceEffect(Self, make),
+    Effect.provideServiceEffect(Self, branch_),
   ),
-  make,
+  branch_,
 )

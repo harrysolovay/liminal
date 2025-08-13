@@ -10,5 +10,5 @@ export const userJson: <A, I extends JsonValue>(
   schema?: Schema.Schema<A, I>,
 ) => Effect.Effect<void, never, Thread> = Effect.fnUntraced(function*(value, schema) {
   const encoded = schema ? encodeJsonc(schema)(value) : JSON.stringify(value, null, 2)
-  return yield* user`\`\`\`json${schema ? "c" : ""}${"\n"}${encoded}${"\n"}\`\`\``
+  return yield* user`\`\`\`json${schema ? "c" : ""}\n${encoded}\n\`\`\``
 })

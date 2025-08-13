@@ -27,14 +27,14 @@ export const Envelope = (headers: MessageHeaders): Envelope =>
     Effect.fnUntraced(function*(a0, ...aRest) {
       const { state: { fqn } } = yield* Self
       const name = Option.getOrElse(fqn, () => "anonymous-entity")
-      const text = yield* raw(a0, aRest)
+      const text = yield* raw(a0, ...aRest)
       if (!text) return
       const { to, cc: _cc, bcc: _bcc } = headers
       for (const recipient of to) {
         yield* append(AiInput.UserMessage.make({
           parts: [
             AiInput.TextPart.make({
-              text: yield* raw`[FROM: ${name} ]\n${text}`,
+              text: `[FROM: ${name}]\n${text}`,
             }),
           ],
         })).pipe(Effect.provideService(Self, recipient))

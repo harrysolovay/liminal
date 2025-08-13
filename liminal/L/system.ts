@@ -9,6 +9,6 @@ import { Self } from "./Self.ts"
 export const system: Taggable<Option.Option<string>, never, Thread> = Effect.fnUntraced(function*(a0, ...aRest) {
   const { state } = yield* Self
   const { system } = state
-  state.system = a0 ? Option.some(yield* raw(a0, aRest)) : Option.none()
+  state.system = a0 ? Option.some(yield* raw(a0, ...aRest)) : Option.none()
   return system
 })

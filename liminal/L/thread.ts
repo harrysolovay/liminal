@@ -10,7 +10,7 @@ import { sequence } from "./sequence.ts"
 
 export interface thread extends Sequencer<Thread>, Effect.Effect<Thread> {}
 
-const make = Effect.gen(function*() {
+const thread_ = Effect.gen(function*() {
   return Thread({
     parent: yield* Effect.serviceOption(Self),
     events: yield* PubSub.unbounded<LEvent>(),
@@ -22,7 +22,7 @@ const make = Effect.gen(function*() {
 export const thread: thread = Object.assign(
   flow(
     sequence,
-    Effect.provideServiceEffect(Self, make),
+    Effect.provideServiceEffect(Self, thread_),
   ),
-  make,
+  thread_,
 )

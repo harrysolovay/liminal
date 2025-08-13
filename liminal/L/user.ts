@@ -7,7 +7,7 @@ import { raw } from "./raw.ts"
 
 /** Append a user message to the conversation. */
 export const user: Taggable<void, never, Thread> = (a0, ...aRest) =>
-  raw(a0, aRest).pipe(
+  raw(a0, ...aRest).pipe(
     Effect.flatMap((text) =>
       text
         ? append(
