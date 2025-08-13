@@ -1,6 +1,6 @@
 import * as Effect from "effect/Effect"
 import * as Schema from "effect/Schema"
-import * as L from "../L.ts"
+import * as L from "../L/L.ts"
 import { Thread } from "../Thread.ts"
 
 export const byDescription: <R extends Record<string, Effect.All.EffectAny>>(routes: R) => Effect.Effect<

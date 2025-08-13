@@ -1,29 +1,22 @@
 import type { AiError } from "@effect/ai/AiError"
 import { AiLanguageModel } from "@effect/ai/AiLanguageModel"
 import type { AiResponse } from "@effect/ai/AiResponse"
-import * as AiToolkit from "@effect/ai/AiToolkit"
 import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
 import * as Stream from "effect/Stream"
 import type { Thread } from "../Thread.ts"
 import { Self } from "./Self.ts"
+import { toolkit } from "./toolkit.ts"
 
 /** Get a stream of an assistant message (does not append the message to the thread). */
-export const assistantStream: Stream.Stream<
-  AiResponse,
-  AiError,
-  AiLanguageModel | Thread
-> = Stream.unwrap(
+export const assistantStream: Stream.Stream<AiResponse, AiError, AiLanguageModel | Thread> = Stream.unwrap(
   Effect.gen(function*() {
     const model = yield* AiLanguageModel
-    const { state: { system, messages }, tools } = yield* Self
+    const { state: { system, messages: prompt } } = yield* Self
     return model.streamText({
       system: Option.getOrUndefined(system),
-      prompt: messages,
-      toolkit: tools.pipe(
-        Option.map((tools) => AiToolkit.make(...tools)),
-        Option.getOrUndefined,
-      ) as never,
+      prompt,
+      toolkit,
     })
   }),
 )

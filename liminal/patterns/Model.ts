@@ -2,7 +2,7 @@ import type { AiError } from "@effect/ai/AiError"
 import type { AiLanguageModel } from "@effect/ai/AiLanguageModel"
 import type { AiModel } from "@effect/ai/AiModel"
 import * as Effect from "effect/Effect"
-import * as L from "../L.ts"
+import * as L from "../L/L.ts"
 import type { Thread } from "../Thread.ts"
 
 export const coalesce: <E, R, M extends Array<AiModel<any, any>>>(
