@@ -1,8 +1,9 @@
 import { AiTool, AiToolkit } from "@effect/ai"
 import { FetchHttpClient, HttpClient, HttpClientRequest, HttpClientResponse } from "@effect/platform"
-import { Console, Effect, flow, Option, Schema } from "effect"
-import { L } from "liminal"
+import { Effect, flow, Option, Schema } from "effect"
+import L from "liminal"
 import { ModelLive } from "./_layers.ts"
+import { logger } from "./_logger.ts"
 
 const DadJokeTool = AiTool.make("GetDadJoke", {
   description: "Get a hilarious dad joke from the ICanHazDadJoke API",
@@ -48,21 +49,21 @@ class ICanHazDadJoke extends Effect.Service<ICanHazDadJoke>()("ICanHazDadJoke", 
   }),
 }) {}
 
-const DadJokeToolHandlers = AiToolkit.make(DadJokeTool).toLayer(
-  AiToolkit.make(DadJokeTool).of({
-    GetDadJoke: ({ searchTerm }) =>
-      ICanHazDadJoke.search(searchTerm).pipe(
-        Effect.provide(ICanHazDadJoke.Default),
-      ),
-  }),
-)
+const DadJokeToolHandlers = AiToolkit.make(DadJokeTool).toLayer({
+  GetDadJoke: ({ searchTerm }) =>
+    ICanHazDadJoke.search(searchTerm).pipe(
+      Effect.provide(ICanHazDadJoke.Default),
+    ),
+})
 
-await L.strand(
-  L.enable(DadJokeTool),
-  L.user`Generate a dad joke about pirates.`,
-  L.assistant,
-).pipe(
-  Effect.flatMap(Console.log),
+Effect.gen(function*() {
+  yield* logger
+  yield* L.enable(DadJokeTool)
+  yield* L.user`Generate a dad joke about pirates.`
+  yield* L.assistant
+}).pipe(
+  L.thread,
+  Effect.scoped,
   Effect.provide([ModelLive, DadJokeToolHandlers]),
-  Effect.runPromise,
+  Effect.runFork,
 )

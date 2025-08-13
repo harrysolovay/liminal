@@ -66,7 +66,7 @@ Liminal's effects and effect factories are accessible from the `L` namespace.
 
 ```ts twoslash
 // @noErrors
-import { L } from "liminal"
+import  L  from "liminal"
 
 L.
 //^|
@@ -90,7 +90,7 @@ The error message we return is opaque; the caller lacks information about why
 validation failed.
 
 Let's use Liminal to infer a helpful validation error message. Also note how we
-`pipe` the effect into `L.strand` to mark the boundary of the conversation.
+`pipe` the effect into `L.thread` to mark the boundary of the conversation.
 
 <<< @/_blocks/validateEmail.ts{7,10,13,15}
 

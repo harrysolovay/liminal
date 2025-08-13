@@ -1,7 +1,7 @@
 import { Terminal } from "@effect/platform"
 import { BunTerminal } from "@effect/platform-bun"
 import { Effect, Stream } from "effect"
-import { L } from "liminal"
+import L from "liminal"
 import { ModelLive } from "./_layers.ts"
 
 Effect.gen(function*() {
@@ -12,7 +12,7 @@ Effect.gen(function*() {
     Effect.forkDaemon,
   )
 }).pipe(
-  L.strand,
+  L.thread,
   Effect.provide([BunTerminal.layer, ModelLive]),
   Effect.runFork,
 )

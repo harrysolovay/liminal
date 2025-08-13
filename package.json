@@ -19,6 +19,7 @@
   "devDependencies": {
     "@changesets/cli": "^2.29.5",
     "@cloudflare/workers-types": "^4.20250810.0",
+    "@effect/cli": "^0.69.0",
     "@effect/language-service": "^0.23.5",
     "@effect/platform-bun": "^0.77.1",
     "@effect/vitest": "^0.25.0",

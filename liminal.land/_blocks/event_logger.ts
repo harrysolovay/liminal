@@ -1,5 +1,5 @@
 import { Console, Effect, flow } from "effect"
-import { L, LPretty } from "liminal"
+import L, { LPretty } from "liminal"
 import { ModelLive } from "./ModelLive"
 
 Effect.gen(function*() {
@@ -11,7 +11,7 @@ Effect.gen(function*() {
   yield* L.user`Welcome to the cotton club.`
   yield* L.assistant
 }).pipe(
-  L.strand,
+  L.thread,
   Effect.scoped,
   Effect.provide(ModelLive),
   Effect.runFork,

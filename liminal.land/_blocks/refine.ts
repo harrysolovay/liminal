@@ -1,5 +1,5 @@
 import { Effect } from "effect"
-import { L } from "liminal"
+import L from "liminal"
 
 // ---cut---
 export const refine = (content: string) =>
@@ -16,5 +16,5 @@ export const refine = (content: string) =>
   }).pipe(
     // Denotes the boundary of the conversation.
     // Conceptually similar to `Effect.scoped`.
-    L.strand,
+    L.thread,
   )

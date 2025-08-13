@@ -1,5 +1,5 @@
 import { Effect } from "effect"
-import { L } from "liminal"
+import L from "liminal"
 
 // ---cut---
 import { AiToolkit } from "@effect/ai"
@@ -24,7 +24,7 @@ Effect.gen(function*() {
   const reply = yield* L.assistant
   reply satisfies string
 }).pipe(
-  L.strand,
+  L.thread,
   Effect.provide([ModelLive, HandlerLive]),
   Effect.runFork,
 )

@@ -22,7 +22,7 @@ An effect is a conversation.
 ```ts
 import { FileSystem } from "@effect/platform"
 import { Effect } from "effect"
-import { L } from "liminal"
+import L from "liminal"
 
 const conversation = Effect.gen(function*() {
   // Set system instruction.
@@ -55,7 +55,7 @@ const conversation = Effect.gen(function*() {
   // Re-append messages.
   yield* L.append(...messages)
 }).pipe(
-  L.strand,
+  L.thread,
 )
 ```
 

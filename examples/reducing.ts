@@ -1,5 +1,5 @@
 import { Effect } from "effect"
-import { L } from "liminal"
+import L from "liminal"
 import { ModelLive } from "./_layers.ts"
 import { logger } from "./_logger.ts"
 
@@ -19,7 +19,7 @@ Effect.gen(function*() {
   yield* L.user`Any advice for me as I further-explore this project?`
   yield* L.assistant
 
-  const summary = yield* L.strand(
+  const summary = yield* L.branch(
     L.user`Please summarize our conversation.`,
     L.assistant,
   )
@@ -29,7 +29,7 @@ Effect.gen(function*() {
   yield* L.user`So please reiterate your thoughts on this creative journey.`
   yield* L.assistant
 }).pipe(
-  L.strand,
+  L.thread,
   Effect.scoped,
   Effect.provide(ModelLive),
   Effect.runFork,

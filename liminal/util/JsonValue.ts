@@ -42,10 +42,10 @@ class EncodeJsoncContext {
     })
 }
 
-const encodeAst: (
+const encodeAst = (
   ast: SchemaAST.AST,
   refinement?: SchemaAST.Refinement,
-) => (value: unknown, ctx: EncodeJsoncContext) => Effect.Effect<string> = (ast, refinement) => {
+): (value: unknown, ctx: EncodeJsoncContext) => Effect.Effect<string> => {
   switch (ast._tag) {
     case "TypeLiteral": {
       return Effect.fnUntraced(function*(value, ctx) {

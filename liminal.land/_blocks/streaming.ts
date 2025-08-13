@@ -1,4 +1,4 @@
-import { L } from "liminal"
+import L from "liminal"
 import { ModelLive } from "./ModelLive.ts"
 
 // ---cut---
@@ -14,7 +14,7 @@ Effect.gen(function*() {
     Effect.forkDaemon,
   )
 }).pipe(
-  L.strand,
+  L.thread,
   Effect.provide([BunTerminal.layer, ModelLive]),
   Effect.runFork,
 )

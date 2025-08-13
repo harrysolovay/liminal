@@ -1,6 +1,6 @@
 import { OpenAiLanguageModel } from "@effect/ai-openai"
 import { Console, Effect, Schema } from "effect"
-import { L } from "liminal"
+import L from "liminal"
 import { ClientLive, ModelLive } from "./_layers.ts"
 import { logger } from "./_logger.ts"
 
@@ -33,7 +33,7 @@ Effect.gen(function*() {
     Effect.flatMap((key) => Console.log(rewrites[key])),
   )
 }).pipe(
-  L.strand,
+  L.thread,
   Effect.scoped,
   Effect.provide([ModelLive, ClientLive]),
   Effect.runFork,

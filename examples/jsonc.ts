@@ -1,5 +1,5 @@
 import { Array, Console, Effect, Schema } from "effect"
-import { L, LPretty } from "liminal"
+import L, { LPretty } from "liminal"
 
 const ExampleSchema = Schema.Struct({
   inner: Schema.String.pipe(
@@ -16,6 +16,6 @@ Effect.gen(function*() {
   )
   yield* Console.log(LPretty.message(message))
 }).pipe(
-  L.strand,
+  L.thread,
   Effect.runFork,
 )

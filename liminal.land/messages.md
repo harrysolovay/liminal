@@ -21,11 +21,11 @@ Message
 
 ## `L.messages`
 
-To access the messages of the strand, use `L.messages`.
+To access the messages of the thread, use `L.messages`.
 
 ```ts
 import { Effect } from "effect"
-import { L } from "liminal"
+import L from "liminal"
 // ---cut---
 Effect.gen(function*() {
   const messages = yield* L.messages
@@ -43,11 +43,11 @@ parts.
 
 ## `L.user`
 
-Append a user message to the current strand's message list.
+Append a user message to the thread.
 
 ```ts
 import { Effect, Schema } from "effect"
-import { L } from "liminal"
+import L from "liminal"
 
 // ---cut---
 Effect.gen(function*() {
@@ -61,13 +61,13 @@ Effect.gen(function*() {
 
 ## `L.userJson`
 
-Append the stringified JSON-serializable value to the current strand's messages.
-Optionally provide a schema, the annotations of which will be added as JSONC
-comments to the resulting JSON string contained within the new message.
+Append the stringified JSON-serializable value to the thread. Optionally provide
+a schema, the annotations of which will be added as JSONC comments to the
+resulting JSON string contained within the new message.
 
 ```ts {5-9}
 import { Effect, Schema } from "effect"
-import { L } from "liminal"
+import L from "liminal"
 
 Effect.gen(function*() {
   yield* L.userJson({
@@ -83,7 +83,7 @@ used to JSONC-encode the JSON with descriptions about corresponding values.
 
 ```ts
 import { Array, Console, Effect, Schema } from "effect"
-import { L, LPretty } from "liminal"
+import L, { LPretty } from "liminal"
 
 const ExampleSchema = Schema.Struct({
   inner: Schema.String.pipe(
@@ -111,12 +111,11 @@ The resulting message looks as follows.
 
 ## `L.assistant`
 
-Infer a message from the model and append it to the current strand's message
-list.
+Infer a message from the model and append it to the thread.
 
 ```ts {4}
 import { Effect, Schema } from "effect"
-import { L } from "liminal"
+import L from "liminal"
 
 // ---cut---
 Effect.gen(function*() {
@@ -136,7 +135,7 @@ Use Effect Schema to describe structured output requirements.
 
 ```ts {4} twoslash
 import { Effect, Schema } from "effect"
-import { L } from "liminal"
+import L from "liminal"
 // ---cut---
 Effect.gen(function*() {
   yield* L.user`Is Halloween the best holiday?`
@@ -151,7 +150,7 @@ We could of course also provide more complex structures, such as structs.
 
 ```ts {4-9} twoslash
 import { Effect, Schema } from "effect"
-import { L } from "liminal"
+import L from "liminal"
 
 // ---cut---
 Effect.gen(function*() {
@@ -178,7 +177,7 @@ wrapping, and directly pass the fields.
 
 ```ts {4-7}
 import { Effect, Schema } from "effect"
-import { L } from "liminal"
+import L from "liminal"
 // ---cut---
 Effect.gen(function*() {
   yield* L.user`When is halloween?`
@@ -194,11 +193,11 @@ Effect.gen(function*() {
 
 ## `L.clear`
 
-Clear the current strand's list of messages.
+Clear the thread.
 
 ```ts {11}
 import { Effect } from "effect"
-import { L } from "liminal"
+import L from "liminal"
 declare const assertEquals: (a: unknown, b: unknown) => void
 // ---cut---
 Effect.gen(function*() {
@@ -210,7 +209,7 @@ Effect.gen(function*() {
   // Clear the messages.
   yield* L.clear
 
-  // The strand's message list is now empty.
+  // The thread is now empty.
   const messages = yield* L.messages
   assertEquals(messages, [])
 })
@@ -218,6 +217,6 @@ Effect.gen(function*() {
 
 ## `L.append`
 
-Append raw Effect AI messages to strand's message list.
+Append raw Effect AI messages to the thread.
 
 <<< @/_blocks/raw_append.ts {7,10-16}

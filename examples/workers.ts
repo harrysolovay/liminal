@@ -1,5 +1,5 @@
 import { Console, Effect, Schema } from "effect"
-import { L } from "liminal"
+import L from "liminal"
 import { ModelLive } from "./_layers.ts"
 
 const IMPLEMENTATION_PROMPTS = {
@@ -36,7 +36,7 @@ Effect.gen(function*() {
           })
           return { file, implementation }
         },
-        (e) => L.strand(e),
+        (e) => L.thread(e),
       ),
     ),
     { concurrency: "unbounded" },
@@ -44,7 +44,7 @@ Effect.gen(function*() {
 
   yield* Console.log({ plan, changes })
 }).pipe(
-  L.strand,
+  L.thread,
   Effect.provide(ModelLive),
   Effect.runFork,
 )

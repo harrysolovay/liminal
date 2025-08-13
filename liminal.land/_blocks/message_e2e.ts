@@ -1,6 +1,6 @@
 import { Message } from "@effect/ai/AiInput"
 import { Effect, pipe, Schema } from "effect"
-import { L } from "liminal"
+import L from "liminal"
 
 const conversation = Effect.gen(function*() {
   yield* L.user`...`

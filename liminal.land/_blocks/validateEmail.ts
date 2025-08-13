@@ -1,5 +1,5 @@
 import { Effect } from "effect"
-import { L } from "liminal"
+import L from "liminal"
 declare const EMAIL_REGEX: RegExp
 
 // ---cut---
@@ -17,5 +17,5 @@ export const validateEmail = (email: string) =>
     // Infer and return the message.
     return yield* L.assistant
   }).pipe(
-    L.strand,
+    L.thread,
   )

@@ -1,5 +1,5 @@
 import { Effect, Schema } from "effect"
-import { L } from "liminal"
+import L from "liminal"
 import { ModelLive } from "./_layers.ts"
 import { logger } from "./_logger.ts"
 
@@ -37,7 +37,7 @@ Effect.gen(function*() {
   }
   return { copy, qualityMetrics }
 }).pipe(
-  L.strand,
+  L.thread,
   Effect.scoped,
   Effect.provide(ModelLive),
   Effect.runFork,

@@ -1,7 +1,7 @@
 import { FileSystem, Path } from "@effect/platform"
 import { BunContext } from "@effect/platform-bun"
 import { Console, Effect, Schema } from "effect"
-import { L } from "liminal"
+import L from "liminal"
 import { ModelLive } from "./_layers.ts"
 
 const Lmh = Schema.Literal("lower", "medium", "high")
@@ -53,7 +53,7 @@ Effect.gen(function*() {
     Effect.flatMap(fs.readFileString),
   )
 
-  const reviews = yield* L.strand(
+  const reviews = yield* L.thread(
     L.system`
       You are a technical lead summarizing multiple code reviews. Review the supplied code.
     `,
@@ -63,7 +63,7 @@ Effect.gen(function*() {
     }),
   )
 
-  const summary = yield* L.strand(
+  const summary = yield* L.thread(
     L.system`You are a technical lead summarizing multiple code reviews.`,
     L.user`Please summarize the following code reviews.`,
     L.userJson(reviews),

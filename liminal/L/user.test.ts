@@ -2,7 +2,7 @@ import { TextPart, UserMessage } from "@effect/ai/AiInput"
 import { expect, it } from "@effect/vitest"
 import * as Effect from "effect/Effect"
 import { messages } from "./messages.ts"
-import { strand } from "./strand_.ts"
+import { thread } from "./thread.ts"
 import { user } from "./user.ts"
 
 it.effect("test success", () =>
@@ -26,5 +26,5 @@ it.effect("test success", () =>
       }),
     ])
   }).pipe(
-    strand,
+    thread,
   ))

@@ -1,5 +1,5 @@
 import { Effect } from "effect"
-import { L } from "liminal"
+import L from "liminal"
 
 // ---cut---
 Effect.gen(function*() {
@@ -7,7 +7,7 @@ Effect.gen(function*() {
 
   const variants = yield* Effect.all(
     ["Rap", "Rock", "Pop"].map((genre) =>
-      L.branch(
+      L.thread(
         L.user(genre),
         L.assistant,
       )

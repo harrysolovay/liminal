@@ -1,6 +1,6 @@
 import { OpenAiLanguageModel } from "@effect/ai-openai"
 import { Console, Effect, Layer, Schema } from "effect"
-import { L } from "liminal"
+import L from "liminal"
 import { ClientLive, ModelLive } from "./_layers.ts"
 
 const CLASSIFICATION_SYSTEM_PROMPTS = {
@@ -12,7 +12,7 @@ const CLASSIFICATION_SYSTEM_PROMPTS = {
 }
 
 Effect.gen(function*() {
-  const classification = yield* L.strand(
+  const classification = yield* L.thread(
     L.system`
       Classify this supplied customer query:
 
@@ -30,7 +30,7 @@ Effect.gen(function*() {
     }),
   )
 
-  const specialist = yield* L.strand(
+  const specialist = yield* L.thread(
     L.system(CLASSIFICATION_SYSTEM_PROMPTS[classification.type]),
     L.assistant,
   ).pipe(

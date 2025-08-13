@@ -1,7 +1,7 @@
 import { Terminal } from "@effect/platform"
 import { BunTerminal } from "@effect/platform-bun"
 import { Effect, Schema } from "effect"
-import { L } from "liminal"
+import L from "liminal"
 import { ModelLive } from "./_layers.ts"
 import { logger } from "./_logger.ts"
 
@@ -28,7 +28,7 @@ Effect.gen(function*() {
   yield* L.user`Where can I stay there, what can I do there, how do I get there?`
   return yield* L.assistant
 }).pipe(
-  L.strand,
+  L.thread,
   Effect.scoped,
   Effect.provide([ModelLive, BunTerminal.layer]),
   Effect.runFork,
