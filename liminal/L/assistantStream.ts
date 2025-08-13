@@ -8,7 +8,7 @@ import * as Stream from "effect/Stream"
 import type { Thread } from "../Thread.ts"
 import { Self } from "./Self.ts"
 
-/** Get a streamed inference from the assistant without appending it to the strand's messages. */
+/** Get a stream of an assistant message (does not append the message to the thread). */
 export const assistantStream: Stream.Stream<
   AiResponse,
   AiError,

@@ -5,10 +5,10 @@ import type { Taggable } from "../util/Taggable.ts"
 import { raw } from "./raw.ts"
 import { Self } from "./Self.ts"
 
-/** Set the system instruction for the current strand. */
+/** Set the thread's system instruction. */
 export const system: Taggable<Option.Option<string>, never, Thread> = Effect.fnUntraced(function*(a0, ...aRest) {
-  const conversation = yield* Self
-  const { state: { system } } = conversation
-  conversation.state.system = a0 ? Option.some(yield* raw(a0, aRest)) : Option.none()
+  const { state } = yield* Self
+  const { system } = state
+  state.system = a0 ? Option.some(yield* raw(a0, aRest)) : Option.none()
   return system
 })

@@ -6,7 +6,7 @@ import type { LEvent } from "../LEvent.ts"
 import type { Thread } from "../Thread.ts"
 import { Self } from "./Self.ts"
 
-/** Attach an event handler to process the events of the current strand. */
+/** Attach an event handler to process thread events. */
 export const listen: <A, E, R>(
   f: (event: LEvent) => Effect.Effect<A, E, R>,
 ) => Effect.Effect<RuntimeFiber<void, E>, never, Thread | R | Scope.Scope> = Effect.fnUntraced(function*(f) {

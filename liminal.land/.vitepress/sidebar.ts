@@ -22,17 +22,17 @@ export const sidebar: DefaultTheme.Sidebar = [
     text: "Concepts",
     items: [
       { text: "Effects", link: "/effects" },
-      { text: "Strands", link: "/strands" },
+      { text: "Threads", link: "/threads" },
     ],
   },
   {
     text: "Conversation",
     items: [
       { text: "Messages", link: "/messages" },
+      { text: "Envelopes", link: "/Envelopes" },
       { text: "Tools", link: "/tools" },
-      { text: "Streaming", link: "/streaming" },
       { text: "Events", link: "/events" },
-      { text: "Entity", link: "/entity" },
+      { text: "Streaming", link: "/streaming" },
     ],
   },
   {

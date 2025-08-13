@@ -51,15 +51,15 @@ Effect.gen(function*() {
 
 ## Conversations as Context
 
-Liminal also uses Effect's dependency injection to provide the current
-conversation isolate, the [Strand](/strands), to subtrees of your program.
+Liminal also uses Effect's dependency injection to provide the current the
+[thread](/threads) (a conversation isolate), to subtrees of your program.
 
 When we `yield*` message effects, they retrieve and operate on the current
 conversation from the fiber context.
 
 ```ts twoslash
 import { Effect } from "effect"
-import { L } from "liminal"
+import L from "liminal"
 // ---cut---
 const conversation = Effect.gen(function*() {
   yield* L.user`...`
@@ -69,7 +69,7 @@ const conversation = Effect.gen(function*() {
 })
 ```
 
-We provide strands (represented as Effect
+We provide threads (represented as Effect
 [layers](https://effect.website/docs/requirements-management/layers/)) to denote
 the boundary of the conversation.
 
@@ -77,4 +77,4 @@ the boundary of the conversation.
 
 ---
 
-Lets further-explore the behavior of strands in the next chapter.
+Lets further-explore the behavior of threads in the next chapter.

@@ -4,10 +4,9 @@ import { MessagesCleared } from "../LEvent.ts"
 import type { Thread } from "../Thread.ts"
 import { Self } from "./Self.ts"
 
-/** Clear the strand's conversation. */
+/** Clear the thread of messages. */
 export const clear: Effect.Effect<Array<Message>, never, Thread> = Effect.gen(function*() {
-  const strand = yield* Self
-  const { state, events } = strand
+  const { state, events } = yield* Self
   const cleared = state.messages
   state.messages = []
   yield* events.publish(MessagesCleared.make({ cleared }))

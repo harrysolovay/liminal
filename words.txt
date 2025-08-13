@@ -52,7 +52,6 @@ serde
 shikijs
 shoutout
 solovay
-strandard
 stringifying
 subconversations
 subscope

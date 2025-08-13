@@ -1,8 +1,8 @@
-# Liminal Strands <Badge type="warning" text="beta" />
+# Liminal Threads <Badge type="warning" text="beta" />
 
-## `Strand` Overview
+## `Thread` Overview
 
-A strand is a container for a conversation. Each strand tracks a few properties:
+A thread is a container of several properties:
 
 1. A option of a system instruction.
 2. A list of model-agnostic messages. The messages can be of varying role and
@@ -11,27 +11,27 @@ A strand is a container for a conversation. Each strand tracks a few properties:
 4. A pubsub with which we can subscribe to conversation events such as
    messaging.
 
-## `L.strand`
+## `L.thread`
 
-`L.strand` isolates the target effect with a new strand containing an empty
+`L.thread` isolates the target effect with a new thread containing an empty
 message list and no system instruction nor tools.
 
 ```ts twoslash
 import { Effect } from "effect"
-import { L } from "liminal"
+import L from "liminal"
 declare const conversation: Effect.Effect<void>
 // ---cut---
-L.strand(conversation)
+L.thread(conversation)
 ```
 
 ## `L.branch`
 
-`L.branch` isolates the target effect with a new strand containing a copy of
-current strand's messages, tools and system.
+`L.branch` isolates the target effect with a new thread containing a copy of
+parent's messages, tools and system instruction.
 
 ```ts twoslash
 import { Effect } from "effect"
-import { L, Strand } from "liminal"
+import L from "liminal"
 declare const conversation: Effect.Effect<void>
 // ---cut---
 Effect.gen(function*() {
@@ -41,10 +41,3 @@ Effect.gen(function*() {
   yield* conversation.pipe(L.branch)
 })
 ```
-
-## `Strand.layer`
-
-In the case that you wish to manually create and provide a strand, you can do so
-as follows.
-
-<<< @/_blocks/StrandLive.ts
