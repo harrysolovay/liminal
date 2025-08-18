@@ -4,7 +4,8 @@
 
 @custom-variant dark (&:is(.dark *));
 
-html, body {
+html,
+body {
   height: 100%;
   font-family: "Inconsolata", mono;
 }
@@ -124,6 +125,7 @@ html, body {
     from {
       height: 0;
     }
+
     to {
       height: var(--radix-accordion-content-height);
     }
@@ -133,6 +135,7 @@ html, body {
     from {
       height: var(--radix-accordion-content-height);
     }
+
     to {
       height: 0;
     }
@@ -143,6 +146,7 @@ html, body {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }

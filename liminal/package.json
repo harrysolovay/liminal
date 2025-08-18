@@ -6,16 +6,24 @@
     "url": "https://github.com/harrysolovay/liminal.git",
     "directory": "liminal"
   },
-  "peerDependencies": {
-    "@effect/ai": "^0.25.2",
-    "effect": "^3.17.7"
-  },
   "exports": {
-    ".": "./index.ts",
+    ".": {
+      "import": "./dist/index.js",
+      "bun": "./index.ts"
+    },
     "./package.json": "./package.json",
-    "./patterns/Route": "./patterns/Route.ts",
-    "./patterns/Model": "./patterns/Model.ts",
-    "./patterns/Debate": "./patterns/Debate.ts"
+    "./patterns/Route": {
+      "import": "./dist/patterns/Route.js",
+      "bun": "./patterns/Route.ts"
+    },
+    "./patterns/Model": {
+      "import": "./dist/patterns/Model.js",
+      "bun": "./patterns/Model.ts"
+    },
+    "./patterns/Debate": {
+      "import": "./dist/patterns/Debate.js",
+      "bun": "./patterns/Debate.ts"
+    }
   },
   "description": "An Effect AI toolkit for conversation state management.",
   "homepage": "https://liminal.land",
@@ -27,5 +35,9 @@
     "provenance": true
   },
   "sideEffects": false,
-  "type": "module"
+  "type": "module",
+  "peerDependencies": {
+    "@effect/ai": "^0.25.2",
+    "effect": "^3.17.7"
+  }
 }

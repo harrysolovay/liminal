@@ -3,6 +3,7 @@
   "references": [
     { "path": "./examples" },
     { "path": "./liminal" },
+    { "path": "./liminal-pg" },
     { "path": "./liminal.im/client" },
     { "path": "./liminal.im/domain" },
     { "path": "./liminal.im/worker" },

@@ -16,7 +16,7 @@ const branch_ = Effect.gen(function*() {
     parent: Option.some(parent),
     events: yield* PubSub.unbounded<LEvent>(),
     state: ThreadState.make({
-      fqn: parent.state.fqn,
+      name: parent.state.name,
       system: parent.state.system,
       messages: [...parent.state.messages ?? []],
     }),

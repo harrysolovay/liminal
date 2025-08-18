@@ -12,13 +12,13 @@ import type { NeverTool } from "./util/NeverTool.ts"
 import { prefix } from "./util/prefix.ts"
 import type { Sequencer } from "./util/Sequencer.ts"
 
-export const ThreadFqnTypeId: unique symbol = Symbol.for(prefix("ThreadFqn"))
-export const ThreadFqn = Schema.String.pipe(Schema.brand(ThreadFqnTypeId))
-export type ThreadFqn = typeof ThreadFqn["Type"]
+export const ThreadNameTypeId: unique symbol = Symbol.for(prefix("ThreadNameTypeId"))
+export type ThreadName = Schema.brand<typeof Schema.String, typeof ThreadNameTypeId>
+export const ThreadName: ThreadName = Schema.String.pipe(Schema.brand(ThreadNameTypeId))
 
 export class ThreadState extends Schema.Class<ThreadState>(prefix("ThreadState"))({
   /** The key with which the thread is referenced by others. */
-  fqn: Schema.Option(ThreadFqn),
+  name: Schema.Option(ThreadName),
   /** The system prompt to be passed along to the model. */
   system: Schema.Option(Schema.String),
   /** The messages based off of which the model infers the next message. */
@@ -26,7 +26,7 @@ export class ThreadState extends Schema.Class<ThreadState>(prefix("ThreadState")
 }) {
   static default = (): ThreadState =>
     ThreadState.make({
-      fqn: Option.none(),
+      name: Option.none(),
       system: Option.none(),
       messages: [],
     })
@@ -34,11 +34,11 @@ export class ThreadState extends Schema.Class<ThreadState>(prefix("ThreadState")
 
 export interface ThreadInit {
   /** The parent thread. */
-  parent: Option.Option<Thread>
+  readonly parent: Option.Option<Thread>
   /** The pubsub with which thread-specific events are emitted. */
-  events: PubSub.PubSub<LEvent>
+  readonly events: PubSub.PubSub<LEvent>
   /** The state of the current thread. */
-  state: Mutable<ThreadState>
+  readonly state: Mutable<ThreadState>
   /** The tools to be made accessible to the model. */
   tools: Option.Option<Set<NeverTool>>
 }
