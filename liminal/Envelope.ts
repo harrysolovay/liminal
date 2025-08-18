@@ -25,8 +25,8 @@ export interface Envelope extends Taggable<void, never, Thread>, EnvelopeMembers
 export const Envelope = (headers: MessageHeaders): Envelope =>
   Object.assign(
     Effect.fnUntraced(function*(a0, ...aRest) {
-      const { state: { name: fqn } } = yield* Self
-      const name = Option.getOrElse(fqn, () => "anonymous-entity")
+      const { state: { name } } = yield* Self
+      const name_ = Option.getOrElse(name, () => "anonymous-entity")
       const text = yield* raw(a0, ...aRest)
       if (!text) return
       const { to, cc: _cc, bcc: _bcc } = headers
@@ -34,7 +34,7 @@ export const Envelope = (headers: MessageHeaders): Envelope =>
         yield* append(AiInput.UserMessage.make({
           parts: [
             AiInput.TextPart.make({
-              text: `[FROM: ${name}]\n${text}`,
+              text: `[FROM: ${name_}]\n${text}`,
             }),
           ],
         })).pipe(Effect.provideService(Self, recipient))
