@@ -24,3 +24,6 @@ export const LEvent: Schema.Union<[
   typeof MessagesAppendedEvent,
   typeof MessagesClearedEvent,
 ]> = Schema.Union(SystemSetEvent, MessagesAppendedEvent, MessagesClearedEvent)
+
+export const encodeLEvent = Schema.encode(LEvent)
+export const decodeLEvent = Schema.decode(LEvent)

@@ -12,6 +12,6 @@
   "exclude": [],
   "references": [
     { "path": "../liminal" },
-    { "path": "../liminal-pg" }
+    { "path": "../liminal-sqlite" }
   ]
 }

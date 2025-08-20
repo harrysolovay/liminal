@@ -9,7 +9,6 @@
         "@effect/language-service": "^0.23.5",
         "@effect/platform-bun": "^0.77.1",
         "@effect/vitest": "^0.25.0",
-        "@electric-sql/pglite": "^0.3.7",
         "@types/bun": "^1.2.19",
         "alchemy": "^0.57.2",
         "dpdm": "^3.14.0",
@@ -33,11 +32,11 @@
         "@effect/cli": "^0.69.0",
         "@effect/platform-bun": "^0.77.0",
         "@effect/sql-drizzle": "^0.43.0",
-        "@effect/sql-pg": "^0.45.0",
+        "@effect/sql-sqlite-bun": "^0.45.0",
         "@electric-sql/pglite": "^0.3.7",
         "effect": "^3.17.5",
         "liminal": "workspace:*",
-        "liminal-pg": "workspace:*",
+        "liminal-sqlite": "workspace:*",
       },
     },
     "liminal": {
@@ -48,8 +47,8 @@
         "effect": "^3.17.7",
       },
     },
-    "liminal-pg": {
-      "name": "liminal-pg",
+    "liminal-sqlite": {
+      "name": "liminal-sqlite",
       "version": "0.0.0",
       "peerDependencies": {
         "@effect/ai": "^0.25.2",
@@ -421,7 +420,7 @@
 
     "@effect/sql-drizzle": ["@effect/sql-drizzle@0.43.0", "", { "peerDependencies": { "@effect/sql": "^0.44.0", "drizzle-orm": ">=0.43.1 <0.50", "effect": "^3.17.0" } }, "sha512-udfXOY+8RVCXZSqMH0wo3OTbIOc4RpGNq4XA+jv6QAa0NkMHytPYT5CtpqoQesnJKOgAlxU3pyQEvjl69amcNQ=="],
 
-    "@effect/sql-pg": ["@effect/sql-pg@0.45.0", "", { "dependencies": { "@opentelemetry/semantic-conventions": "^1.33.0", "postgres": "^3.4.4" }, "peerDependencies": { "@effect/experimental": "^0.54.0", "@effect/platform": "^0.90.0", "@effect/sql": "^0.44.0", "effect": "^3.17.0" } }, "sha512-zDBY5be4IiPWE0e+wC16QY3RO0mFxNkSRWD8Zb7bATlLICkZzgBTZjRRbpp9UUpSiHD/5gWM9pzTwB33RT78fQ=="],
+    "@effect/sql-sqlite-bun": ["@effect/sql-sqlite-bun@0.45.0", "", { "dependencies": { "@opentelemetry/semantic-conventions": "^1.33.0" }, "peerDependencies": { "@effect/experimental": "^0.54.0", "@effect/platform": "^0.90.0", "@effect/sql": "^0.44.0", "effect": "^3.17.0" } }, "sha512-XB54Y0EuxhCg4XcRXXn/eYd+wQADAzuRsbq1jLs36b8+zjLX05Y64xuQr+d1ZoxDECBIBNj8LDnBUgVWqH2c/Q=="],
 
     "@effect/typeclass": ["@effect/typeclass@0.36.0", "", { "peerDependencies": { "effect": "^3.17.0" } }, "sha512-+8xYvX4tjD7gKwGYzOyFh90I+ptdXzoNHLQTSa8kGh/xOVZMIGYb0VgLoNHE02UsuVrB+JJJuBmKLdd5TeDTPg=="],
 
@@ -1469,7 +1468,7 @@
 
     "liminal-examples": ["liminal-examples@workspace:examples"],
 
-    "liminal-pg": ["liminal-pg@workspace:liminal-pg"],
+    "liminal-sqlite": ["liminal-sqlite@workspace:liminal-sqlite"],
 
     "liminal.land": ["liminal.land@workspace:liminal.land"],
 

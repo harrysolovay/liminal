@@ -1,7 +1,7 @@
 import { Effect } from "effect"
 import L from "liminal"
-import { bind } from "liminal-pg"
-import { ModelLive } from "./_layers.ts"
+import { sqliteThread } from "liminal-sqlite"
+import { DbLive, ModelLive } from "./_layers.ts"
 import { logger } from "./_logger.ts"
 
 Effect.gen(function*() {
@@ -9,8 +9,10 @@ Effect.gen(function*() {
   yield* L.user`Hey.`
   yield* L.assistant
 }).pipe(
-  bind("fqn"),
-  Effect.provide(ModelLive),
+  sqliteThread({
+    threadId: "some-id",
+  }),
+  Effect.provide([ModelLive, DbLive]),
   Effect.scoped,
   Effect.runFork,
 )

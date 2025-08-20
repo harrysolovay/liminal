@@ -1,5 +1,5 @@
 {
-  "name": "liminal-pg",
+  "name": "liminal-sqlite",
   "version": "0.0.0",
   "repository": {
     "type": "git",

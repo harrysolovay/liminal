@@ -8,7 +8,11 @@
     }
   ],
   "enableGlobDot": true,
-  "dictionaries": ["project-words"],
-  "ignorePaths": ["LICENSE"],
+  "dictionaries": [
+    "project-words"
+  ],
+  "ignorePaths": [
+    "LICENSE"
+  ],
   "useGitignore": true
 }

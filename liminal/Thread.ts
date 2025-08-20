@@ -1,4 +1,5 @@
 import { Message } from "@effect/ai/AiInput"
+import * as Brand from "effect/Brand"
 import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
 import { type Pipeable, pipeArguments } from "effect/Pipeable"
@@ -13,8 +14,10 @@ import { prefix } from "./util/prefix.ts"
 import type { Sequencer } from "./util/Sequencer.ts"
 
 export const ThreadNameTypeId: unique symbol = Symbol.for(prefix("ThreadNameTypeId"))
-export type ThreadName = Schema.brand<typeof Schema.String, typeof ThreadNameTypeId>
-export const ThreadName: ThreadName = Schema.String.pipe(Schema.brand(ThreadNameTypeId))
+export type ThreadName = string & Brand.Brand<typeof ThreadNameTypeId>
+export const ThreadName: Schema.brand<typeof Schema.String, typeof ThreadNameTypeId> = Schema.String.pipe(
+  Schema.brand(ThreadNameTypeId),
+)
 
 export class ThreadState extends Schema.Class<ThreadState>(prefix("ThreadState"))({
   /** The key with which the thread is referenced by others. */

@@ -4,7 +4,7 @@
   "workspaces": [
     "examples",
     "liminal",
-    "liminal-pg",
+    "liminal-sqlite",
     "liminal.im/*",
     "liminal.land"
   ],
@@ -24,7 +24,6 @@
     "@effect/language-service": "^0.23.5",
     "@effect/platform-bun": "^0.77.1",
     "@effect/vitest": "^0.25.0",
-    "@electric-sql/pglite": "^0.3.7",
     "@types/bun": "^1.2.19",
     "alchemy": "^0.57.2",
     "dpdm": "^3.14.0",

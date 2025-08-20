@@ -8,7 +8,7 @@ import type { Sequencer } from "../util/Sequencer.ts"
 import { Self } from "./Self.ts"
 import { sequence } from "./sequence.ts"
 
-export interface branch extends Sequencer<never, Thread>, Effect.Effect<Thread, never, Thread> {}
+export interface branch extends Sequencer<never, never, Thread>, Effect.Effect<Thread, never, Thread> {}
 
 const branch_ = Effect.gen(function*() {
   const parent = yield* Self
