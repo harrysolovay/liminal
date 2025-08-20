@@ -1,5 +1,5 @@
 {
-  "extends": "../tsconfig.base",
+  "extends": "../../tsconfig.base",
   "compilerOptions": {
     "noEmit": false,
     "outDir": "dist",
@@ -15,5 +15,5 @@
     ]
   },
   "include": ["."],
-  "references": [{ "path": "../liminal" }]
+  "references": [{ "path": "../../liminal" }]
 }

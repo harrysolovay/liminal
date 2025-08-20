@@ -1,6 +1,6 @@
+import { sqliteThread } from "@liminal/sqlite"
 import { Effect } from "effect"
 import L from "liminal"
-import { sqliteThread } from "liminal-sqlite"
 import { DbLive, ModelLive } from "./_layers.ts"
 import { logger } from "./_logger.ts"
 

@@ -26,6 +26,7 @@ ljson
 llms
 llmstext
 llmstxt
+lmnl
 logit
 mastra
 metaarray

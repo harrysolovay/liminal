@@ -1,11 +1,11 @@
 {
-  "name": "@liminal.im/worker",
+  "name": "@lmnl.im/worker",
   "private": true,
   "type": "module",
   "dependencies": {
     "@clerk/backend": "^2.7.0",
     "@effect/platform": "^0.90.1",
-    "@liminal.im/domain": "workspace:*",
+    "@lmnl.im/domain": "workspace:*",
     "effect": "^3.17.7",
     "liminal": "workspace:*"
   }

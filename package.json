@@ -4,8 +4,8 @@
   "workspaces": [
     "examples",
     "liminal",
-    "liminal-sqlite",
-    "liminal.im/*",
+    "@liminal/*",
+    "lmnl.im/*",
     "liminal.land"
   ],
   "scripts": {

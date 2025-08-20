@@ -21,6 +21,16 @@
         "vitest": "^3.2.4",
       },
     },
+    "@liminal/sqlite": {
+      "name": "@liminal/sqlite",
+      "version": "0.0.0",
+      "peerDependencies": {
+        "@effect/sql-drizzle": "^0.43.0",
+        "drizzle-orm": "^0.44.4",
+        "effect": "^3.17.7",
+        "liminal": "^0.16.0",
+      },
+    },
     "examples": {
       "name": "liminal-examples",
       "dependencies": {
@@ -34,9 +44,9 @@
         "@effect/sql-drizzle": "^0.43.0",
         "@effect/sql-sqlite-bun": "^0.45.0",
         "@electric-sql/pglite": "^0.3.7",
+        "@liminal/sqlite": "workspace:*",
         "effect": "^3.17.5",
         "liminal": "workspace:*",
-        "liminal-sqlite": "workspace:*",
       },
     },
     "liminal": {
@@ -47,24 +57,26 @@
         "effect": "^3.17.7",
       },
     },
-    "liminal-sqlite": {
-      "name": "liminal-sqlite",
-      "version": "0.0.0",
-      "peerDependencies": {
-        "@effect/ai": "^0.25.2",
-        "@effect/sql-drizzle": "^0.43.0",
-        "drizzle-orm": "^0.44.4",
+    "liminal.land": {
+      "name": "liminal.land",
+      "devDependencies": {
+        "@shikijs/vitepress-twoslash": "^3.9.2",
+        "@types/markdown-it-footnote": "^3.0.4",
         "effect": "^3.17.7",
-        "liminal": "^0.16.0",
+        "liminal": "workspace:*",
+        "markdown-it-footnote": "^4.0.0",
+        "markdown-it-steps": "^0.2.0",
+        "vitepress": "^1.6.4",
+        "vitepress-plugin-llms": "^1.7.2",
       },
     },
-    "liminal.im/client": {
-      "name": "@liminal.im/client",
+    "lmnl.im/client": {
+      "name": "@lmnl.im/client",
       "dependencies": {
         "@clerk/clerk-react": "^5.40.0",
         "@effect-atom/atom-react": "^0.1.5",
         "@effect/platform": "^0.90.1",
-        "@liminal.im/domain": "workspace:*",
+        "@lmnl.im/domain": "workspace:*",
         "clsx": "^2.1.1",
         "effect": "^3.17.7",
         "react": "^19.1.1",
@@ -81,35 +93,22 @@
         "vite-tsconfig-paths": "^5.1.4",
       },
     },
-    "liminal.im/domain": {
-      "name": "@liminal.im/domain",
+    "lmnl.im/domain": {
+      "name": "@lmnl.im/domain",
       "dependencies": {
         "@effect/ai": "^0.25.2",
         "@effect/platform": "^0.90.1",
         "effect": "^3.17.7",
       },
     },
-    "liminal.im/worker": {
-      "name": "@liminal.im/worker",
+    "lmnl.im/worker": {
+      "name": "@lmnl.im/worker",
       "dependencies": {
         "@clerk/backend": "^2.7.0",
         "@effect/platform": "^0.90.1",
-        "@liminal.im/domain": "workspace:*",
+        "@lmnl.im/domain": "workspace:*",
         "effect": "^3.17.7",
         "liminal": "workspace:*",
-      },
-    },
-    "liminal.land": {
-      "name": "liminal.land",
-      "devDependencies": {
-        "@shikijs/vitepress-twoslash": "^3.9.2",
-        "@types/markdown-it-footnote": "^3.0.4",
-        "effect": "^3.17.7",
-        "liminal": "workspace:*",
-        "markdown-it-footnote": "^4.0.0",
-        "markdown-it-steps": "^0.2.0",
-        "vitepress": "^1.6.4",
-        "vitepress-plugin-llms": "^1.7.2",
       },
     },
   },
@@ -582,11 +581,13 @@
 
     "@libsql/win32-x64-msvc": ["@libsql/win32-x64-msvc@0.5.17", "", { "os": "win32", "cpu": "x64" }, "sha512-f5bGH8+3A5sn6Lrqg8FsQ09a1pYXPnKGXGTFiAYlfQXVst1tUTxDTugnuWcJYKXyzDe/T7ccxyIZXeSmPOhq8A=="],
 
-    "@liminal.im/client": ["@liminal.im/client@workspace:liminal.im/client"],
+    "@liminal/sqlite": ["@liminal/sqlite@workspace:@liminal/sqlite"],
 
-    "@liminal.im/domain": ["@liminal.im/domain@workspace:liminal.im/domain"],
+    "@lmnl.im/client": ["@lmnl.im/client@workspace:lmnl.im/client"],
 
-    "@liminal.im/worker": ["@liminal.im/worker@workspace:liminal.im/worker"],
+    "@lmnl.im/domain": ["@lmnl.im/domain@workspace:lmnl.im/domain"],
+
+    "@lmnl.im/worker": ["@lmnl.im/worker@workspace:lmnl.im/worker"],
 
     "@manypkg/find-root": ["@manypkg/find-root@1.1.0", "", { "dependencies": { "@babel/runtime": "^7.5.5", "@types/node": "^12.7.1", "find-up": "^4.1.0", "fs-extra": "^8.1.0" } }, "sha512-mki5uBvhHzO8kYYix/WRy2WX8S3B5wdVSc9D6KcU5lQNglP2yt58/VfLuAK49glRXChosY8ap2oJ1qgma3GUVA=="],
 
@@ -1467,8 +1468,6 @@
     "liminal": ["liminal@workspace:liminal"],
 
     "liminal-examples": ["liminal-examples@workspace:examples"],
-
-    "liminal-sqlite": ["liminal-sqlite@workspace:liminal-sqlite"],
 
     "liminal.land": ["liminal.land@workspace:liminal.land"],
 
