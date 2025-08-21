@@ -49,7 +49,9 @@ Effect.gen(function*() {
   const path = yield* Path.Path
   const fs = yield* FileSystem.FileSystem
 
-  const code = yield* path.fromFileUrl(new URL(import.meta.url)).pipe(
+  const code = yield* path.fromFileUrl(
+    new URL(import.meta.url),
+  ).pipe(
     Effect.flatMap(fs.readFileString),
   )
 
@@ -66,7 +68,9 @@ Effect.gen(function*() {
   const summary = yield* L.thread(
     L.system`You are a technical lead summarizing multiple code reviews.`,
     L.user`Please summarize the following code reviews.`,
-    F.stringify(reviews).pipe(L.user),
+    L.user(
+      F.json(reviews),
+    ),
     L.assistant,
   )
 

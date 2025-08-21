@@ -1,6 +1,6 @@
 import * as Effect from "effect/Effect"
 import type { Sequencer } from "../util/Sequencer.ts"
-import { prev } from "./prev1.ts"
+import { prev } from "./prev.ts"
 
 export const sequence: Sequencer = Effect.fnUntraced(function*(...steps) {
   let acc: unknown

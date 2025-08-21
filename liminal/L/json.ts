@@ -3,7 +3,7 @@ import type * as Schema from "effect/Schema"
 import { encodeJsonc, type JsonValue } from "../util/JsonValue.ts"
 
 /** Stringify and append some JSON as a user message to the conversation. */
-export const stringify: <A, I extends JsonValue>(
+export const json: <A, I extends JsonValue>(
   value: A,
   schema?: Schema.Schema<A, I>,
 ) => Effect.Effect<string> = Effect.fnUntraced(function*(value, schema) {

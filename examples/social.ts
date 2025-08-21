@@ -8,12 +8,16 @@ Effect.gen(function*() {
 
   yield* daniel(
     L.user`I'm on a date with ${julia}. What should I ask her about herself?`,
-    L.assistant.pipe(L.to(julia).bcc(julia, julia)),
+    L.assistant.pipe(
+      L.send({ to: [julia] }),
+    ),
   )
 
   yield* julia(
     L.user`${daniel} just asked me a question. How shall I respond?`,
-    L.assistant.pipe(L.to(daniel)),
+    L.assistant.pipe(
+      L.send({ to: [daniel] }),
+    ),
   )
 }).pipe(
   Effect.provide(ModelLive),

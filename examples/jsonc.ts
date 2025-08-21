@@ -10,7 +10,7 @@ const ExampleSchema = Schema.Struct({
 })
 
 Effect.gen(function*() {
-  yield* F.stringify({ inner: "value" }, ExampleSchema).pipe(
+  yield* F.json({ inner: "value" }, ExampleSchema).pipe(
     L.user,
   )
   const message = yield* yield* L.messages.pipe(

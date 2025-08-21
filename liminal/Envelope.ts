@@ -1,48 +1,16 @@
-import * as AiInput from "@effect/ai/AiInput"
-import * as Effect from "effect/Effect"
-import * as Option from "effect/Option"
-import { append } from "./L/append.ts"
-import { raw } from "./L/raw.ts"
-import { self } from "./L/self.ts"
-import type { Thread } from "./Thread.ts"
-import { type Taggable } from "./util/Taggable.ts"
+import { Thread } from "./Thread.ts"
 
-export interface MessageHeaders {
-  readonly to: Array<Thread>
-  readonly cc?: Array<Thread> | undefined
-  readonly bcc?: Array<Thread> | undefined
-}
-
-export interface EnvelopeMembers {
-  readonly headers: MessageHeaders
-  readonly cc: (...cc: Array<Thread>) => Envelope
-  readonly bcc: (...bcc: Array<Thread>) => Envelope
-}
-
-export interface Envelope extends Taggable<void, never, Thread>, EnvelopeMembers {}
-
-// TODO: cc, bcc
-export const Envelope = (headers: MessageHeaders): Envelope =>
-  Object.assign(
-    Effect.fnUntraced(function*(a0, ...aRest) {
-      const { state: { name } } = yield* self
-      const name_ = Option.getOrElse(name, () => "anonymous-entity")
-      const text = yield* raw(a0, ...aRest)
-      if (!text) return
-      const { to, cc: _cc, bcc: _bcc } = headers
-      for (const recipient of to) {
-        yield* append(AiInput.UserMessage.make({
-          parts: [
-            AiInput.TextPart.make({
-              text: `[FROM: ${name_}]\n${text}`,
-            }),
-          ],
-        })).pipe(Effect.provideService(self, recipient))
-      }
-    }) satisfies Taggable<void, never, Thread>,
-    {
-      headers,
-      cc: (...cc) => Envelope({ ...headers, cc }),
-      bcc: (...bcc) => Envelope({ ...headers, bcc }),
-    } satisfies EnvelopeMembers,
-  )
+export type Envelope =
+  & ({
+    to: Array<Thread>
+    cc?: never
+  } | {
+    to?: never
+    cc: Array<Thread>
+  } | {
+    to: Array<Thread>
+    cc: Array<Thread>
+  })
+  & {
+    bcc?: Array<Thread>
+  }
