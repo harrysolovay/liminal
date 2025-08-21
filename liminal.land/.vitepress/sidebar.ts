@@ -30,8 +30,15 @@ export const sidebar: DefaultTheme.Sidebar = [
     items: [
       { text: "Messages", link: "/messages" },
       { text: "Envelopes", link: "/Envelopes" },
-      { text: "Tools", link: "/tools" },
+      { text: "Digests", link: "/Digests" },
       { text: "Events", link: "/events" },
+      { text: "Persistence", link: "/Persistence" },
+    ],
+  },
+  {
+    text: "Advanced",
+    items: [
+      { text: "Tools", link: "/tools" },
       { text: "Streaming", link: "/streaming" },
     ],
   },

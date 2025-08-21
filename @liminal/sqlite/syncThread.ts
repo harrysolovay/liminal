@@ -1,4 +1,3 @@
-import { Message } from "@effect/ai/AiInput"
 import { SqliteDrizzle } from "@effect/sql-drizzle/Sqlite"
 import { SqlError } from "@effect/sql/SqlError"
 import { and, eq, gte, type InferInsertModel } from "drizzle-orm"
@@ -8,16 +7,10 @@ import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
 import type { ParseError } from "effect/ParseResult"
 import * as PubSub from "effect/PubSub"
-import * as Schema from "effect/Schema"
 import * as Scope from "effect/Scope"
-import L, { encodeLEvent, type LEvent, type Sequencer, Thread, ThreadName, ThreadState } from "liminal"
+import L, { encodeLEvent, type LEvent, messageCodec, type Sequencer, Thread, ThreadId, ThreadState } from "liminal"
 import { extractRow0OrDie } from "./_common.ts"
 import * as T from "./tables/index.ts"
-
-const messageCodec = {
-  decode: Schema.decode(Message),
-  encode: Schema.encode(Message),
-}
 
 const create = Effect.gen(function*() {
   const db = yield* SqliteDrizzle
@@ -30,10 +23,10 @@ const create = Effect.gen(function*() {
     .pipe(extractRow0OrDie)
 
   const thread = Thread({
+    id: ThreadId.make(threadId),
     parent: yield* Effect.serviceOption(L.self),
     events: yield* PubSub.unbounded<LEvent>(),
     state: ThreadState.make({
-      name: Option.none(),
       system: Option.none(),
       messages: [],
     }),
@@ -44,9 +37,8 @@ const create = Effect.gen(function*() {
 
 const hydrate = Effect.fnUntraced(function*(threadId: string) {
   const db = yield* SqliteDrizzle
-  const { name, system, clearedAtTimestamp } = yield* db
+  const { system, clearedAtTimestamp } = yield* db
     .select({
-      name: T.threads.name,
       system: T.threads.system,
       clearedAt: T.threads.clearedAt,
       clearedAtTimestamp: T.events.timestamp,
@@ -75,10 +67,10 @@ const hydrate = Effect.fnUntraced(function*(threadId: string) {
       ),
     )
   return Thread({
+    id: ThreadId.make(threadId),
     parent: yield* Effect.serviceOption(L.self),
     events: yield* PubSub.unbounded<LEvent>(),
     state: ThreadState.make({
-      name: Option.fromNullable(name).pipe(Option.map(ThreadName.make)),
       system: Option.fromNullable(system),
       messages,
     }),

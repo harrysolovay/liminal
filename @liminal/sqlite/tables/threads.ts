@@ -5,7 +5,6 @@ import { pk } from "./tables_common/pk.ts"
 export const threads = sqliteTable("threads", {
   id: pk(),
   system: text(),
-  name: text(),
   parent: text().references((): SQLiteColumn => events.id),
   head: text().references((): SQLiteColumn => events.id),
   clearedAt: text().references((): SQLiteColumn => events.id),

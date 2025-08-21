@@ -13,10 +13,10 @@ export interface branch extends Sequencer<never, never, Thread>, Effect.Effect<T
 const branch_ = Effect.gen(function*() {
   const parent = yield* self
   return Thread({
+    id: parent.id,
     parent: Option.some(parent),
     events: yield* PubSub.unbounded<LEvent>(),
     state: ThreadState.make({
-      name: parent.state.name,
       system: parent.state.system,
       messages: [...parent.state.messages ?? []],
     }),

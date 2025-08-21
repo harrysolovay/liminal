@@ -1,6 +1,5 @@
 import { Message } from "@effect/ai/AiInput"
 import * as Schema from "effect/Schema"
-import { ThreadName } from "./Thread.ts"
 
 /** Event in which the thread's system is set to a new string. */
 export class SystemSetEvent extends Schema.TaggedClass<SystemSetEvent>("SystemSetEvent")("system_set", {
@@ -14,11 +13,6 @@ export class MessagesAppendedEvent
   })
 {}
 
-/** Event in which the thread name is changed. */
-export class ThreadRenamedEvent extends Schema.TaggedClass<ThreadRenamedEvent>("ThreadRenamedEvent")("thread_renamed", {
-  name: Schema.Option(ThreadName),
-}) {}
-
 /** Event in which the thread is cleared of messages. */
 export class ThreadClearedEvent
   extends Schema.TaggedClass<ThreadClearedEvent>("MessagesClearedEvent")("messages_cleared", {})
@@ -27,12 +21,10 @@ export class ThreadClearedEvent
 export type LEvent = typeof LEvent["Type"]
 export const LEvent: Schema.Union<[
   typeof SystemSetEvent,
-  typeof ThreadRenamedEvent,
   typeof MessagesAppendedEvent,
   typeof ThreadClearedEvent,
 ]> = Schema.Union(
   SystemSetEvent,
-  ThreadRenamedEvent,
   MessagesAppendedEvent,
   ThreadClearedEvent,
 )
