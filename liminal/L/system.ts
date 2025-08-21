@@ -4,7 +4,7 @@ import { SystemSetEvent } from "../LEvent.ts"
 import type { Thread } from "../Thread.ts"
 import type { Taggable } from "../util/Taggable.ts"
 import { raw } from "./raw.ts"
-import { self } from "./self1.ts"
+import { self } from "./self.ts"
 
 /** Set the thread's system instruction. */
 export const system: Taggable<Option.Option<string>, never, Thread> = Effect.fnUntraced(function*(a0, ...aRest) {

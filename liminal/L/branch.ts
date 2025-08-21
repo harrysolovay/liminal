@@ -5,7 +5,7 @@ import * as PubSub from "effect/PubSub"
 import type { LEvent } from "../LEvent.ts"
 import { Thread, ThreadState } from "../Thread.ts"
 import type { Sequencer } from "../util/Sequencer.ts"
-import { self } from "./self1.ts"
+import { self } from "./self.ts"
 import { sequence } from "./sequence.ts"
 
 export interface branch extends Sequencer<never, never, Thread>, Effect.Effect<Thread, never, Thread> {}

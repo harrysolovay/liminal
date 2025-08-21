@@ -2,7 +2,7 @@ import type { Message } from "@effect/ai/AiInput"
 import * as Effect from "effect/Effect"
 import { MessagesAppendedEvent } from "../LEvent.ts"
 import type { Thread } from "../Thread.ts"
-import { self } from "./self1.ts"
+import { self } from "./self.ts"
 
 /** Append messages to the thread. */
 export const append: (

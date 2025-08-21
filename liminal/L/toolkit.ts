@@ -2,7 +2,7 @@ import * as AiToolkit from "@effect/ai/AiToolkit"
 import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
 import type { NeverTool } from "../util/NeverTool.ts"
-import { self } from "./self1.ts"
+import { self } from "./self.ts"
 
 export const toolkit = self.pipe(
   Effect.flatMap(({ tools }) =>

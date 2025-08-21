@@ -5,7 +5,7 @@ import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
 import type { Thread } from "../Thread.ts"
 import { append } from "./append.ts"
-import { self } from "./self1.ts"
+import { self } from "./self.ts"
 import { toolkit } from "./toolkit.ts"
 
 /** Infer an assistant message and append it to the thread. */

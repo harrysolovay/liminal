@@ -2,7 +2,7 @@ import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
 import { ThreadRenamedEvent } from "../LEvent.ts"
 import { Thread, ThreadName } from "../Thread.ts"
-import { self } from "./self1.ts"
+import { self } from "./self.ts"
 
 // MORE THAN JUST NAME: metadata
 export const rename: (name: string) => Effect.Effect<void, never, Thread> = Effect.fnUntraced(function*(name) {

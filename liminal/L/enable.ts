@@ -4,7 +4,7 @@ import * as Option from "effect/Option"
 import type { Schema } from "effect/Schema"
 import type { Thread } from "../Thread.ts"
 import type { NeverTool } from "../util/NeverTool.ts"
-import { self } from "./self1.ts"
+import { self } from "./self.ts"
 
 export const enable = <
   K extends string,

@@ -3,7 +3,7 @@ import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
 import { append } from "./L/append.ts"
 import { raw } from "./L/raw.ts"
-import { self } from "./L/self1.ts"
+import { self } from "./L/self.ts"
 import type { Thread } from "./Thread.ts"
 import { type Taggable } from "./util/Taggable.ts"
 

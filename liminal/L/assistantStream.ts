@@ -5,7 +5,7 @@ import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
 import * as Stream from "effect/Stream"
 import type { Thread } from "../Thread.ts"
-import { self } from "./self1.ts"
+import { self } from "./self.ts"
 import { toolkit } from "./toolkit.ts"
 
 /** Get a stream of an assistant message (does not append the message to the thread). */

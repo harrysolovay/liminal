@@ -4,7 +4,7 @@ import * as Scope from "effect/Scope"
 import * as Stream from "effect/Stream"
 import type { LEvent } from "../LEvent.ts"
 import type { Thread } from "../Thread.ts"
-import { self } from "./self1.ts"
+import { self } from "./self.ts"
 
 /** Attach an event handler to process thread events. */
 export const listen: <A, E, R>(

@@ -8,7 +8,7 @@ import * as SchemaAST from "effect/SchemaAST"
 import type { Thread } from "../Thread.ts"
 import { encodeJsonc, type JsonValue } from "../util/JsonValue.ts"
 import { append } from "./append.ts"
-import { self } from "./self1.ts"
+import { self } from "./self.ts"
 
 /** Infer a structured assistant message and append its JSON representation to the conversation. */
 export const assistantSchema: {
