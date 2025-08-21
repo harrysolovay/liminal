@@ -13,6 +13,13 @@ Effect.gen(function*() {
   yield* L.user`Great, please teach something interesting about this choice of subtopic.`
   yield* L.assistant
 
+  yield* L.sequence(
+    L.user`Decide on a subtopic for us to discuss within the domain of technological futurism.`,
+    L.assistant,
+    L.user`Great, please teach something interesting about this choice of subtopic.`,
+    L.assistant,
+  )
+
   let i = 0
   while (i < 3) {
     yield* L.branch(

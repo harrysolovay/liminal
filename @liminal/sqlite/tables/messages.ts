@@ -6,9 +6,9 @@ import { pk } from "./tables_common/pk.ts"
 import { threads } from "./threads.ts"
 
 export const messages = sqliteTable("messages", {
-  previousMessageId: text(),
-  messageId: pk(),
-  threadId: text().notNull().references((): SQLiteColumn => threads.threadId),
+  parentId: text().references((): SQLiteColumn => messages.id),
+  id: pk(),
+  threadId: text().notNull().references((): SQLiteColumn => threads.id),
   message: text({ mode: "json" }).notNull().$type<Schema.Schema.Encoded<typeof Message>>(),
-  eventId: text().references((): SQLiteColumn => events.eventId).notNull(),
+  eventId: text().references((): SQLiteColumn => events.id).notNull(),
 })

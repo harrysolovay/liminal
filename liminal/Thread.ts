@@ -6,7 +6,7 @@ import { type Pipeable, pipeArguments } from "effect/Pipeable"
 import * as PubSub from "effect/PubSub"
 import * as Schema from "effect/Schema"
 import type { Mutable } from "effect/Types"
-import { Self } from "./L/Self.ts"
+import { self } from "./L/self1.ts"
 import { sequence } from "./L/sequence.ts"
 import type { LEvent } from "./LEvent.ts"
 import type { NeverTool } from "./util/NeverTool.ts"
@@ -65,7 +65,7 @@ export const Thread = (init: ThreadInit): Thread => {
     },
   } satisfies ThreadMembers
   const self = Object.assign(
-    ((...args) => sequence(...args).pipe(Effect.provideService(Self, self))) satisfies Sequencer<Thread>,
+    ((...args) => sequence(...args).pipe(Effect.provideService(self, self))) satisfies Sequencer<Thread>,
     members,
   ) as Thread
   return self

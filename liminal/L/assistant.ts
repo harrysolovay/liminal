@@ -5,13 +5,13 @@ import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
 import type { Thread } from "../Thread.ts"
 import { append } from "./append.ts"
-import { Self } from "./Self.ts"
+import { self } from "./self1.ts"
 import { toolkit } from "./toolkit.ts"
 
 /** Infer an assistant message and append it to the thread. */
 export const assistant: Effect.Effect<string, AiError, AiLanguageModel | Thread> = Effect.gen(function*() {
   const model = yield* AiLanguageModel
-  const { state: { system, messages: prompt } } = yield* Self
+  const { state: { system, messages: prompt } } = yield* self
   let { text, results } = yield* model.generateText({
     system: Option.getOrUndefined(system),
     prompt,

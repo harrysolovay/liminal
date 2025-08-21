@@ -5,14 +5,14 @@ import * as PubSub from "effect/PubSub"
 import type { LEvent } from "../LEvent.ts"
 import { Thread, ThreadState } from "../Thread.ts"
 import type { Sequencer } from "../util/Sequencer.ts"
-import { Self } from "./Self.ts"
+import { self } from "./self1.ts"
 import { sequence } from "./sequence.ts"
 
 export interface thread extends Sequencer<Thread>, Effect.Effect<Thread> {}
 
 const thread_ = Effect.gen(function*() {
   return Thread({
-    parent: yield* Effect.serviceOption(Self),
+    parent: yield* Effect.serviceOption(self),
     events: yield* PubSub.unbounded<LEvent>(),
     state: ThreadState.default(),
     tools: Option.none(),
@@ -22,7 +22,7 @@ const thread_ = Effect.gen(function*() {
 export const thread: thread = Object.assign(
   flow(
     sequence,
-    Effect.provideServiceEffect(Self, thread_),
+    Effect.provideServiceEffect(self, thread_),
   ),
   thread_,
 )

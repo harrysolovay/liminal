@@ -3,7 +3,7 @@ import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
 import { append } from "./L/append.ts"
 import { raw } from "./L/raw.ts"
-import { Self } from "./L/Self.ts"
+import { self } from "./L/self1.ts"
 import type { Thread } from "./Thread.ts"
 import { type Taggable } from "./util/Taggable.ts"
 
@@ -25,7 +25,7 @@ export interface Envelope extends Taggable<void, never, Thread>, EnvelopeMembers
 export const Envelope = (headers: MessageHeaders): Envelope =>
   Object.assign(
     Effect.fnUntraced(function*(a0, ...aRest) {
-      const { state: { name } } = yield* Self
+      const { state: { name } } = yield* self
       const name_ = Option.getOrElse(name, () => "anonymous-entity")
       const text = yield* raw(a0, ...aRest)
       if (!text) return
@@ -37,7 +37,7 @@ export const Envelope = (headers: MessageHeaders): Envelope =>
               text: `[FROM: ${name_}]\n${text}`,
             }),
           ],
-        })).pipe(Effect.provideService(Self, recipient))
+        })).pipe(Effect.provideService(self, recipient))
       }
     }) satisfies Taggable<void, never, Thread>,
     {

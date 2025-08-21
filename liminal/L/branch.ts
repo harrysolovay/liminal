@@ -5,13 +5,13 @@ import * as PubSub from "effect/PubSub"
 import type { LEvent } from "../LEvent.ts"
 import { Thread, ThreadState } from "../Thread.ts"
 import type { Sequencer } from "../util/Sequencer.ts"
-import { Self } from "./Self.ts"
+import { self } from "./self1.ts"
 import { sequence } from "./sequence.ts"
 
 export interface branch extends Sequencer<never, never, Thread>, Effect.Effect<Thread, never, Thread> {}
 
 const branch_ = Effect.gen(function*() {
-  const parent = yield* Self
+  const parent = yield* self
   return Thread({
     parent: Option.some(parent),
     events: yield* PubSub.unbounded<LEvent>(),
@@ -27,7 +27,7 @@ const branch_ = Effect.gen(function*() {
 export const branch: branch = Object.assign(
   flow(
     sequence,
-    Effect.provideServiceEffect(Self, branch_),
+    Effect.provideServiceEffect(self, branch_),
   ),
   branch_,
 )
