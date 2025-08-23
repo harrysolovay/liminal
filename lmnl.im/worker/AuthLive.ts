@@ -1,6 +1,6 @@
 import { verifyToken } from "@clerk/backend"
 import * as HttpApiError from "@effect/platform/HttpApiError"
-import { Auth, UserId } from "@liminal.im/domain"
+import { Auth, UserId } from "@lmnl.im/domain"
 import * as Effect from "effect/Effect"
 import * as Layer from "effect/Layer"
 import * as Redacted from "effect/Redacted"

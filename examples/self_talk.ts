@@ -1,14 +1,19 @@
 import { Effect } from "effect"
-import L from "liminal"
+import { L } from "liminal"
+import { system } from "./_common.ts"
 import { ModelLive } from "./_layers.ts"
 import { logger } from "./_logger.ts"
-import { SYSTEM } from "./_messages.ts"
 
 Effect.gen(function*() {
   yield* logger
+  yield* system
+
+  yield* L.user`Decide on a subtopic for us to discuss within the domain of technological futurism.`
+  yield* L.assistant
+  yield* L.user`Great, please teach something interesting about this choice of subtopic.`
+  yield* L.assistant
 
   yield* L.sequence(
-    L.system(SYSTEM),
     L.user`Decide on a subtopic for us to discuss within the domain of technological futurism.`,
     L.assistant,
     L.user`Great, please teach something interesting about this choice of subtopic.`,

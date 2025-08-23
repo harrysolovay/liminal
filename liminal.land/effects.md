@@ -59,7 +59,7 @@ conversation from the fiber context.
 
 ```ts twoslash
 import { Effect } from "effect"
-import L from "liminal"
+import { L } from "liminal"
 // ---cut---
 const conversation = Effect.gen(function*() {
   yield* L.user`...`

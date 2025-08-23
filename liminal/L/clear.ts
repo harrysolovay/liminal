@@ -1,14 +1,14 @@
 import type { Message } from "@effect/ai/AiInput"
 import * as Effect from "effect/Effect"
-import { MessagesCleared } from "../LEvent.ts"
+import { ThreadClearedEvent } from "../LEvent.ts"
 import type { Thread } from "../Thread.ts"
-import { Self } from "./Self.ts"
+import { self } from "./self.ts"
 
 /** Clear the thread of messages. */
 export const clear: Effect.Effect<Array<Message>, never, Thread> = Effect.gen(function*() {
-  const { state, events } = yield* Self
+  const { state, events } = yield* self
   const cleared = state.messages
   state.messages = []
-  yield* events.publish(MessagesCleared.make({ cleared }))
+  yield* events.publish(ThreadClearedEvent.make({ cleared }))
   return cleared
 })

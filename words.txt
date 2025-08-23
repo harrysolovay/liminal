@@ -21,11 +21,13 @@ iconoir
 inferencing
 inheritables
 initdb
+inspectable
 langgraphjs
 ljson
 llms
 llmstext
 llmstxt
+lmnl
 logit
 mastra
 metaarray
@@ -65,6 +67,7 @@ traceparent
 tsdocs
 twoslash
 typebox
+unixepoch
 vali
 valibot
 vite

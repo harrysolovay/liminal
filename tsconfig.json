@@ -3,9 +3,10 @@
   "references": [
     { "path": "./examples" },
     { "path": "./liminal" },
-    { "path": "./liminal.im/client" },
-    { "path": "./liminal.im/domain" },
-    { "path": "./liminal.im/worker" },
+    { "path": "./@liminal/sqlite" },
+    { "path": "./lmnl.im/client" },
+    { "path": "./lmnl.im/domain" },
+    { "path": "./lmnl.im/worker" },
     { "path": "./liminal.land/_blocks" },
     { "path": "./liminal.land/.vitepress" },
     { "path": "./tsconfig.root.json" }

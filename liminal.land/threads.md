@@ -18,7 +18,7 @@ message list and no system instruction nor tools.
 
 ```ts twoslash
 import { Effect } from "effect"
-import L from "liminal"
+import { L } from "liminal"
 declare const conversation: Effect.Effect<void>
 // ---cut---
 L.thread(conversation)
@@ -31,7 +31,7 @@ parent's messages, tools and system instruction.
 
 ```ts twoslash
 import { Effect } from "effect"
-import L from "liminal"
+import { L } from "liminal"
 declare const conversation: Effect.Effect<void>
 // ---cut---
 Effect.gen(function*() {

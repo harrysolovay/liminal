@@ -1,5 +1,5 @@
 import { Console, Effect, Schema } from "effect"
-import L from "liminal"
+import { L } from "liminal"
 import { ModelLive } from "./_layers.ts"
 
 const IMPLEMENTATION_PROMPTS = {

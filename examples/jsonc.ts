@@ -1,5 +1,5 @@
 import { Array, Console, Effect, Schema } from "effect"
-import L, { LPretty } from "liminal"
+import { F, L, LPretty } from "liminal"
 
 const ExampleSchema = Schema.Struct({
   inner: Schema.String.pipe(
@@ -10,7 +10,9 @@ const ExampleSchema = Schema.Struct({
 })
 
 Effect.gen(function*() {
-  yield* L.userJson({ inner: "value" }, ExampleSchema)
+  yield* F.json({ inner: "value" }, ExampleSchema).pipe(
+    L.user,
+  )
   const message = yield* yield* L.messages.pipe(
     Effect.map(Array.head),
   )

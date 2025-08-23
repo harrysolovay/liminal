@@ -27,7 +27,7 @@
       "type": "shell",
       "command": "bunx vite",
       "options": {
-        "cwd": "liminal.im/client"
+        "cwd": "lmnl.im/client"
       },
       "problemMatcher": []
     },

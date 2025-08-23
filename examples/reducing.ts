@@ -1,5 +1,5 @@
 import { Effect } from "effect"
-import L from "liminal"
+import { L } from "liminal"
 import { ModelLive } from "./_layers.ts"
 import { logger } from "./_logger.ts"
 

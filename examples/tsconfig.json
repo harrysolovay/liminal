@@ -10,5 +10,8 @@
   },
   "include": ["."],
   "exclude": [],
-  "references": [{ "path": "../liminal" }]
+  "references": [
+    { "path": "../liminal" },
+    { "path": "../@liminal/sqlite" }
+  ]
 }

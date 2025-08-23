@@ -4,13 +4,14 @@
   "workspaces": [
     "examples",
     "liminal",
-    "liminal.im/*",
+    "@liminal/*",
+    "lmnl.im/*",
     "liminal.land"
   ],
   "scripts": {
     "prepare": "ts-patch install -s",
     "build": "tsc -b",
-    "build:watch": "tsc -b -w",
+    "watch": "tsc -b -w",
     "test": "vitest run",
     "test:watch": "vitest run -w",
     "changeset": "changeset",
@@ -27,7 +28,10 @@
     "alchemy": "^0.57.2",
     "dpdm": "^3.14.0",
     "dprint": "^0.50.1",
+    "drizzle-kit": "^0.31.4",
+    "drizzle-orm": "^0.44.4",
     "ts-patch": "^3.3.0",
+    "tstyche": "^4.3.0",
     "typescript": "^5.9.2",
     "vitepress-plugin-llms": "^1.7.2",
     "vitest": "^3.2.4"

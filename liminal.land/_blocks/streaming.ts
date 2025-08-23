@@ -1,4 +1,4 @@
-import L from "liminal"
+import { L } from "liminal"
 import { ModelLive } from "./ModelLive.ts"
 
 // ---cut---
