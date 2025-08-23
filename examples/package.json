@@ -12,7 +12,6 @@
     "@effect/platform-bun": "^0.77.0",
     "@effect/sql-drizzle": "^0.43.0",
     "@effect/sql-sqlite-bun": "^0.45.0",
-    "@electric-sql/pglite": "^0.3.7",
     "effect": "^3.17.5",
     "liminal": "workspace:*",
     "@liminal/sqlite": "workspace:*"
