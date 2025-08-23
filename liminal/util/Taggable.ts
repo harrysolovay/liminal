@@ -1,6 +1,6 @@
 import * as Effect from "effect/Effect"
 
-export type Taggable<A, E, R> = <L extends Array<unknown>, E1 = never, R1 = never>(
+export type Taggable<A, E = never, R = never> = <L extends Array<unknown>, E1 = never, R1 = never>(
   template?: TaggableArg0 | Effect.Effect<string | undefined, E1, R1>,
   ...substitutions: L
 ) => Effect.Effect<

@@ -25,7 +25,7 @@ To access the messages of the thread, use `L.messages`.
 
 ```ts
 import { Effect } from "effect"
-import L from "liminal"
+import { L } from "liminal"
 // ---cut---
 Effect.gen(function*() {
   const messages = yield* L.messages
@@ -47,7 +47,7 @@ Append a user message to the thread.
 
 ```ts
 import { Effect, Schema } from "effect"
-import L from "liminal"
+import { L } from "liminal"
 
 // ---cut---
 Effect.gen(function*() {
@@ -67,7 +67,7 @@ resulting JSON string contained within the new message.
 
 ```ts {5-9}
 import { Effect, Schema } from "effect"
-import L from "liminal"
+import { L } from "liminal"
 
 Effect.gen(function*() {
   yield* L.userJson({
@@ -115,7 +115,7 @@ Infer a message from the model and append it to the thread.
 
 ```ts {4}
 import { Effect, Schema } from "effect"
-import L from "liminal"
+import { L } from "liminal"
 
 // ---cut---
 Effect.gen(function*() {
@@ -135,7 +135,7 @@ Use Effect Schema to describe structured output requirements.
 
 ```ts {4} twoslash
 import { Effect, Schema } from "effect"
-import L from "liminal"
+import { L } from "liminal"
 // ---cut---
 Effect.gen(function*() {
   yield* L.user`Is Halloween the best holiday?`
@@ -150,7 +150,7 @@ We could of course also provide more complex structures, such as structs.
 
 ```ts {4-9} twoslash
 import { Effect, Schema } from "effect"
-import L from "liminal"
+import { L } from "liminal"
 
 // ---cut---
 Effect.gen(function*() {
@@ -177,7 +177,7 @@ wrapping, and directly pass the fields.
 
 ```ts {4-7}
 import { Effect, Schema } from "effect"
-import L from "liminal"
+import { L } from "liminal"
 // ---cut---
 Effect.gen(function*() {
   yield* L.user`When is halloween?`
@@ -197,7 +197,7 @@ Clear the thread.
 
 ```ts {11}
 import { Effect } from "effect"
-import L from "liminal"
+import { L } from "liminal"
 declare const assertEquals: (a: unknown, b: unknown) => void
 // ---cut---
 Effect.gen(function*() {

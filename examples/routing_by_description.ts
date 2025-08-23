@@ -1,7 +1,7 @@
 import { Prompt } from "@effect/cli"
 import { BunContext } from "@effect/platform-bun"
 import { Array, Effect, Schema } from "effect"
-import L from "liminal"
+import { L } from "liminal"
 import { ModelLive } from "./_layers.ts"
 import { logger } from "./_logger.ts"
 

@@ -31,8 +31,8 @@ export const sidebar: DefaultTheme.Sidebar = [
       { text: "Messages", link: "/messages" },
       { text: "Envelopes", link: "/Envelopes" },
       { text: "Digests", link: "/Digests" },
-      { text: "Events", link: "/events" },
       { text: "Persistence", link: "/Persistence" },
+      { text: "Events", link: "/events" },
     ],
   },
   {

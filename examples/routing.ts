@@ -1,6 +1,6 @@
 import { OpenAiLanguageModel } from "@effect/ai-openai"
 import { Console, Effect, Layer, Schema } from "effect"
-import L from "liminal"
+import { L } from "liminal"
 import { ClientLive, ModelLive } from "./_layers.ts"
 
 const CLASSIFICATION_SYSTEM_PROMPTS = {

@@ -2,7 +2,6 @@ import { Message } from "@effect/ai/AiInput"
 import * as Brand from "effect/Brand"
 import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
-import { type Pipeable, pipeArguments } from "effect/Pipeable"
 import * as PubSub from "effect/PubSub"
 import * as Schema from "effect/Schema"
 import type { Mutable } from "effect/Types"
@@ -48,7 +47,7 @@ export interface ThreadInit {
 export const ThreadTypeId: unique symbol = Symbol.for(prefix("Thread"))
 export type ThreadTypeId = typeof ThreadTypeId
 
-interface ThreadMembers extends ThreadInit, Pipeable {
+interface ThreadMembers extends ThreadInit {
   readonly [ThreadTypeId]: ThreadTypeId
 }
 
@@ -59,9 +58,6 @@ export const Thread = (init: ThreadInit): Thread => {
   const members = {
     [ThreadTypeId]: ThreadTypeId,
     ...init,
-    pipe() {
-      return pipeArguments(self, arguments)
-    },
   } satisfies ThreadMembers
   const self_ = Object.assign(
     ((...args) => sequence(...args).pipe(Effect.provideService(self, self_))) satisfies Sequencer<Thread>,

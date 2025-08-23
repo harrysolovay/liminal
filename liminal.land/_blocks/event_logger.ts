@@ -1,5 +1,5 @@
 import { Console, Effect, flow } from "effect"
-import L, { LPretty } from "liminal"
+import { L, LPretty } from "liminal"
 import { ModelLive } from "./ModelLive"
 
 Effect.gen(function*() {

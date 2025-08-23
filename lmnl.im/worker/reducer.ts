@@ -1,5 +1,5 @@
 import { Effect } from "effect"
-import L from "liminal"
+import { L } from "liminal"
 
 export default Effect.fn(function*(message: string) {
   yield* L.user(message)
