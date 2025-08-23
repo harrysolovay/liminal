@@ -22,7 +22,7 @@ const RelationshipsLive = Relationships.layer(
   }),
 )
 
-L.thread(
+L.sequence(
   L.user`My childhood dog Lola was the sweetest oddball. I miss her dearly.`,
   Relationships.digest,
   L.clear,
@@ -30,7 +30,9 @@ L.thread(
   L.user`I'm feeling melancholy. Why might that be?`,
   L.assistant,
 ).pipe(
-  L.thread,
+  L.provide(
+    L.thread,
+  ),
   Effect.provide(
     Layer.provideMerge(RelationshipsLive, ModelLive),
   ),

@@ -37,7 +37,9 @@ Effect.gen(function*() {
   }
   return { copy, qualityMetrics }
 }).pipe(
-  L.thread,
+  L.provide(
+    L.thread,
+  ),
   Effect.scoped,
   Effect.provide(ModelLive),
   Effect.runFork,

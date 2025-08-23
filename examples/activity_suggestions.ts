@@ -23,7 +23,9 @@ Effect.gen(function*() {
     i++
   }
 }).pipe(
-  L.thread,
+  L.provide(
+    L.thread,
+  ),
   Effect.scoped,
   Effect.provide(ModelLive),
   Effect.runFork,

@@ -15,7 +15,7 @@ export const ModelLive = OpenAiLanguageModel.model("gpt-4o-mini").pipe(
 )
 
 export const DbLive = SqliteDrizzle.layer.pipe(
-  Layer.provide(SqliteClient.layer({
+  Layer.provideMerge(SqliteClient.layer({
     filename: "examples/examples.db",
   })),
 )

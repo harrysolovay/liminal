@@ -28,7 +28,9 @@ Effect.gen(function*() {
   yield* L.user`Where can I stay there, what can I do there, how do I get there?`
   return yield* L.assistant
 }).pipe(
-  L.thread,
+  L.provide(
+    L.thread,
+  ),
   Effect.scoped,
   Effect.provide([ModelLive, BunTerminal.layer]),
   Effect.runFork,

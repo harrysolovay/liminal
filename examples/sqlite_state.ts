@@ -9,9 +9,7 @@ Effect.gen(function*() {
   yield* L.user`Hey.`
   return yield* L.assistant
 }).pipe(
-  syncThread({
-    threadId: "some-id",
-  }),
+  syncThread(),
   Effect.provide([ModelLive, DbLive]),
   Effect.scoped,
   Effect.runFork,

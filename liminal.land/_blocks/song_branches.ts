@@ -7,9 +7,13 @@ Effect.gen(function*() {
 
   const variants = yield* Effect.all(
     ["Rap", "Rock", "Pop"].map((genre) =>
-      L.thread(
+      L.sequence(
         L.user(genre),
         L.assistant,
+      ).pipe(
+        L.provide(
+          L.thread,
+        ),
       )
     ),
     { concurrency: "unbounded" },

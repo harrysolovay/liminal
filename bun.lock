@@ -25,6 +25,9 @@
     "@liminal/sqlite": {
       "name": "@liminal/sqlite",
       "version": "0.0.0",
+      "devDependencies": {
+        "drizzle-kit": "^0.31.4",
+      },
       "peerDependencies": {
         "@effect/sql-drizzle": "^0.43.0",
         "drizzle-orm": "^0.44.4",

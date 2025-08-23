@@ -1,0 +1,29 @@
+CREATE TABLE IF NOT EXISTS events (
+	parentId text,
+	id text PRIMARY KEY NOT NULL,
+	threadId text NOT NULL,
+	event text NOT NULL,
+	timestamp integer DEFAULT (unixepoch() * 1000) NOT NULL,
+	FOREIGN KEY (parentId) REFERENCES events(parentId) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (threadId) REFERENCES threads(id) ON UPDATE no action ON DELETE no action
+);
+CREATE TABLE IF NOT EXISTS messages (
+	parentId text,
+	id text PRIMARY KEY NOT NULL,
+	threadId text NOT NULL,
+	message text NOT NULL,
+	eventId text NOT NULL,
+	FOREIGN KEY (parentId) REFERENCES messages(id) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (threadId) REFERENCES threads(id) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (eventId) REFERENCES events(id) ON UPDATE no action ON DELETE no action
+);
+CREATE TABLE IF NOT EXISTS threads (
+	id text PRIMARY KEY NOT NULL,
+	system text,
+	parent text,
+	head text,
+	clearedAt text,
+	FOREIGN KEY (parent) REFERENCES events(id) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (head) REFERENCES events(id) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (clearedAt) REFERENCES events(id) ON UPDATE no action ON DELETE no action
+);

@@ -41,12 +41,16 @@ Effect.gen(function*() {
       ))
       return [docPath, maybeChanges] as const
     }),
-    L.branch,
+    L.provide(
+      L.branch,
+    ),
   )))
 
   yield* Console.log(suggestions)
 }).pipe(
-  L.thread,
+  L.provide(
+    L.thread,
+  ),
   Effect.provide([ModelLive, BunContext.layer]),
   Effect.runFork,
 )

@@ -6,7 +6,7 @@ import { ModelLive } from "./_layers.ts"
 
 const Lmh = Schema.Literal("lower", "medium", "high")
 
-const security = L.branch(
+const security = L.sequence(
   L.system`
     You are an expert in code security. Focus on identifying security
     vulnerabilities, injection risks, and authentication issues.
@@ -17,9 +17,13 @@ const security = L.branch(
     riskLevel: Lmh,
     suggestions: Schema.Array(Schema.String),
   }),
+).pipe(
+  L.provide(
+    L.branch,
+  ),
 )
 
-const performance = L.branch(
+const performance = L.sequence(
   L.system`
     You are an expert in code performance. Focus on identifying performance
     bottlenecks, memory leaks, and optimization opportunities.
@@ -30,9 +34,13 @@ const performance = L.branch(
     impact: Lmh,
     optimizations: Schema.Array(Schema.String),
   }),
+).pipe(
+  L.provide(
+    L.branch,
+  ),
 )
 
-const maintainability = L.branch(
+const maintainability = L.sequence(
   L.system`
     You are an expert in code quality. Focus on code structure,
     readability, and adherence to best practices.
@@ -43,6 +51,10 @@ const maintainability = L.branch(
     qualityScore: Schema.Int,
     recommendations: Schema.Array(Schema.String),
   }),
+).pipe(
+  L.provide(
+    L.branch,
+  ),
 )
 
 Effect.gen(function*() {
@@ -55,7 +67,7 @@ Effect.gen(function*() {
     Effect.flatMap(fs.readFileString),
   )
 
-  const reviews = yield* L.thread(
+  const reviews = yield* L.sequence(
     L.system`
       You are a technical lead summarizing multiple code reviews. Review the supplied code.
     `,
@@ -63,15 +75,23 @@ Effect.gen(function*() {
     Effect.all({ security, performance, maintainability }, {
       concurrency: "unbounded",
     }),
+  ).pipe(
+    L.provide(
+      L.thread,
+    ),
   )
 
-  const summary = yield* L.thread(
+  const summary = yield* L.sequence(
     L.system`You are a technical lead summarizing multiple code reviews.`,
     L.user`Please summarize the following code reviews.`,
     L.user(
       F.json(reviews),
     ),
     L.assistant,
+  ).pipe(
+    L.provide(
+      L.thread,
+    ),
   )
 
   yield* Console.log({ reviews, summary })

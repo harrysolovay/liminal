@@ -12,7 +12,7 @@ const CLASSIFICATION_SYSTEM_PROMPTS = {
 }
 
 Effect.gen(function*() {
-  const classification = yield* L.thread(
+  const classification = yield* L.sequence(
     L.system`
       Classify this supplied customer query:
 
@@ -28,12 +28,19 @@ Effect.gen(function*() {
       type: Schema.Literal("general", "refund", "technical"),
       complex: Schema.Boolean,
     }),
+  ).pipe(
+    L.provide(
+      L.thread,
+    ),
   )
 
-  const specialist = yield* L.thread(
+  const specialist = yield* L.sequence(
     L.system(CLASSIFICATION_SYSTEM_PROMPTS[classification.type]),
     L.assistant,
   ).pipe(
+    L.provide(
+      L.thread,
+    ),
     Effect.provide(
       classification.complex ? OpenAiLanguageModel.model("gpt-4o-mini") : Layer.empty,
     ),

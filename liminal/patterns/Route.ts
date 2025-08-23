@@ -9,13 +9,17 @@ export const byDescription: <R extends Record<string, Effect.All.EffectAny>>(rou
   ([R[keyof R]] extends [never] ? never : Effect.Effect.Context<R[keyof R]>) | Thread
 > = Effect.fnUntraced(function*(routes) {
   const descriptions = Object.keys(routes)
-  const description = yield* L.branch(
+  const description = yield* L.sequence(
     L.user`
       Which of the following descriptions best matches the current conversation?
 
       - ${descriptions.join("\n -")}
     `,
     L.assistantSchema(Schema.Literal(...descriptions)),
+  ).pipe(
+    L.provide(
+      L.branch,
+    ),
   )
   return yield* routes[description]!
 })

@@ -62,7 +62,9 @@ Effect.gen(function*() {
   yield* L.user`Generate a dad joke about pirates.`
   yield* L.assistant
 }).pipe(
-  L.thread,
+  L.provide(
+    L.thread,
+  ),
   Effect.scoped,
   Effect.provide([ModelLive, DadJokeToolHandlers]),
   Effect.runFork,

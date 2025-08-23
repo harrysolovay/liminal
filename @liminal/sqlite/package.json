@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "@liminal/sqlite",
   "version": "0.0.0",
   "repository": {
@@ -12,17 +13,13 @@
       "bun": "./index.ts"
     },
     "./package.json": "./package.json",
-    "./schemas": {
-      "import": "./dist/schemas/index.js",
-      "bun": "./schemas/index.ts"
+    "./tables": {
+      "import": "./dist/tables/index.js",
+      "bun": "./tables/index.ts"
     }
   },
   "description": "SQLite storage adapter for Liminal threads.",
   "license": "Apache-2.0",
-  "publishConfig": {
-    "access": "public",
-    "provenance": true
-  },
   "sideEffects": false,
   "type": "module",
   "peerDependencies": {
@@ -30,5 +27,11 @@
     "drizzle-orm": "^0.44.4",
     "effect": "^3.17.7",
     "liminal": "^0.16.0"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.31.4"
+  },
+  "scripts": {
+    "drizzle": "drizzle-kit generate"
   }
 }
