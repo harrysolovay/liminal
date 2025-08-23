@@ -1,5 +1,5 @@
 import { HttpApiBuilder } from "@effect/platform"
-import { Api } from "@liminal.im/domain"
+import { Api } from "@lmnl.im/domain"
 import { Effect } from "effect"
 
 export const ApiLive = HttpApiBuilder.group(

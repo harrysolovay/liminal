@@ -1,5 +1,5 @@
 import { FetchHttpClient, HttpApiClient } from "@effect/platform"
-import { Api } from "@liminal.im/domain"
+import { Api } from "@lmnl.im/domain"
 import { Effect, Layer, Schema } from "effect"
 
 export class ImClient extends Effect.Service<ImClient>()("Client", {

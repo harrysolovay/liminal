@@ -1,6 +1,6 @@
 import { HttpApiBuilder, HttpApiSwagger, HttpServer } from "@effect/platform"
 import { BunHttpServer } from "@effect/platform-bun"
-import { Api } from "@liminal.im/domain"
+import { Api } from "@lmnl.im/domain"
 import { Effect, Layer } from "effect"
 import { ApiLive } from "./ApiLive.ts"
 import { AuthLive } from "./AuthLive.ts"
