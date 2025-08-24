@@ -12,7 +12,7 @@ const Activity = Schema.Struct({
 })
 
 Effect.gen(function*() {
-  yield* logger
+  yield* L.listen(logger)
   yield* L.system`When you are asked a question, answer without asking for clarification.`
   yield* L.user`I'm planning a trip to florida and want a suggestion for a fun activity.`
   let i = 0

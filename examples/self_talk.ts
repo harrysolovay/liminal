@@ -5,7 +5,7 @@ import { ModelLive } from "./_layers.ts"
 import { logger } from "./_logger.ts"
 
 Effect.gen(function*() {
-  yield* logger
+  yield* L.listen(logger)
   yield* system
 
   yield* L.user`Decide on a subtopic for us to discuss within the domain of technological futurism.`

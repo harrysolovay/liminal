@@ -8,7 +8,7 @@ import { logger } from "./_logger.ts"
 const TEXT = "..."
 
 Effect.gen(function*() {
-  yield* logger
+  yield* L.listen(logger)
 
   yield* L.user`
     You are an expert literary translator. Translate the supplied text to the

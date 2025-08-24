@@ -19,14 +19,12 @@ export const sync: (init?: {
   SqlError | ParseError,
   SqlClient | SqliteDrizzle | Scope.Scope
 > = Effect.fnUntraced(function*(init) {
-  const sql = yield* SqlClient
-  yield* sql.unsafe(MIGRATION)
+  yield* migration
 
   const { threadId, thread, head } = yield* (
     init?.threadId ? hydrate(init.threadId) : create
   )
-
-  const listen = L.listen(
+  yield* L.listen(
     Effect.fnUntraced(function*(event) {
       const db = yield* SqliteDrizzle
       const { eventId } = yield* db
@@ -69,9 +67,7 @@ export const sync: (init?: {
           break
         }
         case "messages_cleared": {
-          yield* db
-            .delete(T.messages)
-            .where(eq(T.threads.id, threadId))
+          yield* db.delete(T.messages).where(eq(T.threads.id, threadId))
           break
         }
       }
@@ -81,8 +77,47 @@ export const sync: (init?: {
       Effect.succeed(thread),
     ),
   )
-  yield* listen
   return thread
+})
+
+const migration = Effect.gen(function*() {
+  console.log("Performing migration.")
+
+  yield* SqlClient.pipe(Effect.flatMap((v) =>
+    v.unsafe(`
+      CREATE TABLE IF NOT EXISTS events (
+      	parentId text,
+      	id text PRIMARY KEY NOT NULL,
+      	threadId text NOT NULL,
+      	event text NOT NULL,
+      	timestamp integer DEFAULT (unixepoch() * 1000) NOT NULL,
+      	FOREIGN KEY (parentId) REFERENCES events(parentId) ON UPDATE no action ON DELETE no action,
+      	FOREIGN KEY (threadId) REFERENCES threads(id) ON UPDATE no action ON DELETE no action
+      );
+
+      CREATE TABLE IF NOT EXISTS messages (
+      	parentId text,
+      	id text PRIMARY KEY NOT NULL,
+      	threadId text NOT NULL,
+      	message text NOT NULL,
+      	eventId text NOT NULL,
+      	FOREIGN KEY (parentId) REFERENCES messages(id) ON UPDATE no action ON DELETE no action,
+      	FOREIGN KEY (threadId) REFERENCES threads(id) ON UPDATE no action ON DELETE no action,
+      	FOREIGN KEY (eventId) REFERENCES events(id) ON UPDATE no action ON DELETE no action
+      );
+
+      CREATE TABLE IF NOT EXISTS threads (
+      	id text PRIMARY KEY NOT NULL,
+      	system text,
+      	parent text,
+      	head text,
+      	clearedAt text,
+      	FOREIGN KEY (parent) REFERENCES events(id) ON UPDATE no action ON DELETE no action,
+      	FOREIGN KEY (head) REFERENCES events(id) ON UPDATE no action ON DELETE no action,
+      	FOREIGN KEY (clearedAt) REFERENCES events(id) ON UPDATE no action ON DELETE no action
+      );
+    `)
+  ))
 })
 
 const create = Effect.gen(function*() {
@@ -157,37 +192,3 @@ const hydrate = Effect.fnUntraced(function*(threadId: string) {
   })
   return { thread, threadId, head }
 })
-
-const MIGRATION = `
-  CREATE TABLE IF NOT EXISTS events (
-  	parentId text,
-  	id text PRIMARY KEY NOT NULL,
-  	threadId text NOT NULL,
-  	event text NOT NULL,
-  	timestamp integer DEFAULT (unixepoch() * 1000) NOT NULL,
-  	FOREIGN KEY (parentId) REFERENCES events(parentId) ON UPDATE no action ON DELETE no action,
-  	FOREIGN KEY (threadId) REFERENCES threads(id) ON UPDATE no action ON DELETE no action
-  );
-
-  CREATE TABLE IF NOT EXISTS messages (
-  	parentId text,
-  	id text PRIMARY KEY NOT NULL,
-  	threadId text NOT NULL,
-  	message text NOT NULL,
-  	eventId text NOT NULL,
-  	FOREIGN KEY (parentId) REFERENCES messages(id) ON UPDATE no action ON DELETE no action,
-  	FOREIGN KEY (threadId) REFERENCES threads(id) ON UPDATE no action ON DELETE no action,
-  	FOREIGN KEY (eventId) REFERENCES events(id) ON UPDATE no action ON DELETE no action
-  );
-
-  CREATE TABLE IF NOT EXISTS threads (
-  	id text PRIMARY KEY NOT NULL,
-  	system text,
-  	parent text,
-  	head text,
-  	clearedAt text,
-  	FOREIGN KEY (parent) REFERENCES events(id) ON UPDATE no action ON DELETE no action,
-  	FOREIGN KEY (head) REFERENCES events(id) ON UPDATE no action ON DELETE no action,
-  	FOREIGN KEY (clearedAt) REFERENCES events(id) ON UPDATE no action ON DELETE no action
-  );
-`

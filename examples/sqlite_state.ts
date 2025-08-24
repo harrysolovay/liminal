@@ -5,7 +5,7 @@ import { DbLive, ModelLive } from "./_layers.ts"
 import { logger } from "./_logger.ts"
 
 Effect.gen(function*() {
-  yield* logger
+  yield* L.listen(logger)
   yield* L.user`Hey.`
   return yield* L.assistant
 }).pipe(

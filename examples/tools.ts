@@ -57,7 +57,7 @@ const DadJokeToolHandlers = AiToolkit.make(DadJokeTool).toLayer({
 })
 
 Effect.gen(function*() {
-  yield* logger
+  yield* L.listen(logger)
   yield* L.enable(DadJokeTool)
   yield* L.user`Generate a dad joke about pirates.`
   yield* L.assistant

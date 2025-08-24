@@ -6,7 +6,7 @@ import { ModelLive } from "./_layers.ts"
 import { logger } from "./_logger.ts"
 
 Effect.gen(function*() {
-  yield* logger
+  yield* L.listen(logger)
 
   const [email, name, message] = yield* Prompt.all([
     Prompt.text({ message: "What is your email?" }),
