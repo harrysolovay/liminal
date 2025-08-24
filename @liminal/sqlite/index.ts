@@ -1,1 +1,1 @@
-export * from "./syncThread.ts"
+export * from "./sync.ts"

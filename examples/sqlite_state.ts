@@ -1,4 +1,4 @@
-import { syncThread } from "@liminal/sqlite"
+import { sync } from "@liminal/sqlite"
 import { Effect } from "effect"
 import { L } from "liminal"
 import { DbLive, ModelLive } from "./_layers.ts"
@@ -9,7 +9,9 @@ Effect.gen(function*() {
   yield* L.user`Hey.`
   return yield* L.assistant
 }).pipe(
-  syncThread(),
+  L.provide(
+    sync(),
+  ),
   Effect.provide([ModelLive, DbLive]),
   Effect.scoped,
   Effect.runFork,
