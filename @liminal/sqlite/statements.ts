@@ -8,8 +8,10 @@ export const statements = [
 	\`timestamp\` integer DEFAULT (unixepoch() * 1000) NOT NULL,
 	FOREIGN KEY (\`parentId\`) REFERENCES \`events\`(\`id\`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (\`threadId\`) REFERENCES \`threads\`(\`id\`) ON UPDATE no action ON DELETE no action
-);`,
-  `CREATE TABLE IF NOT EXISTS \`messages\` (
+);
+`,
+  `
+CREATE TABLE IF NOT EXISTS \`messages\` (
 	\`parentId\` text,
 	\`id\` text PRIMARY KEY NOT NULL,
 	\`threadId\` text NOT NULL,
@@ -18,8 +20,10 @@ export const statements = [
 	FOREIGN KEY (\`parentId\`) REFERENCES \`messages\`(\`id\`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (\`threadId\`) REFERENCES \`threads\`(\`id\`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (\`eventId\`) REFERENCES \`events\`(\`id\`) ON UPDATE no action ON DELETE no action
-);`,
-  `CREATE TABLE IF NOT EXISTS \`threads\` (
+);
+`,
+  `
+CREATE TABLE IF NOT EXISTS \`threads\` (
 	\`id\` text NOT NULL,
 	\`system\` text,
 	\`parent\` text,

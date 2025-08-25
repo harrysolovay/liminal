@@ -8,7 +8,17 @@ import * as String from "effect/String"
 
 Effect.gen(function*() {
   yield* Command.string(
-    Command.make("bun", "drizzle-kit", "generate"),
+    Command.make(
+      "bun",
+      "drizzle-kit",
+      "generate",
+      "--schema",
+      "tables",
+      "--out",
+      "migrations",
+      "--dialect",
+      "sqlite",
+    ),
   ).pipe(
     Effect.flatMap(Console.log),
   )
@@ -17,21 +27,17 @@ Effect.gen(function*() {
   const statements = yield* fs.readDirectory("migrations").pipe(
     Effect.flatMap(flow(
       Array.filter((v) => v.endsWith(".sql")),
-      Array.map((v) =>
-        fs.readFileString(path.join("migrations", v)).pipe(
-          Effect.map((v) =>
-            v.split("--> statement-breakpoint").map(flow(
-              String.trim,
-              String.replaceAll(/`/, "\\`"),
-              String.replace(/CREATE TABLE/g, "CREATE TABLE IF NOT EXISTS"),
-            ))
-          ),
-        )
-      ),
-      (v) =>
-        Effect.all(v, {
-          concurrency: "unbounded",
-        }),
+      Array.map(flow(
+        (v) => path.join("migrations", v),
+        fs.readFileString,
+        Effect.map(flow(
+          String.trim,
+          String.replaceAll("`", "\\`"),
+          String.replaceAll("CREATE TABLE", "CREATE TABLE IF NOT EXISTS"),
+          String.split("--> statement-breakpoint"),
+        )),
+      )),
+      (v) => Effect.all(v, { concurrency: "unbounded" }),
     )),
     Effect.map(Array.flatten),
   )
