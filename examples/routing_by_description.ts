@@ -22,7 +22,7 @@ Effect.gen(function*() {
   `
 
   // Rephrase the customer's message.
-  const rephrased = yield* L.sequence(
+  const rephrased = yield* L.line(
     L.user`What are some other ways of phrasing the customer's request?`,
     L.assistantSchema(Schema.Array(Schema.String)),
   ).pipe(
@@ -47,7 +47,7 @@ Effect.gen(function*() {
   `
 
   // Ask the model for the most fitting route.
-  const route = yield* L.sequence(
+  const route = yield* L.line(
     L.user`
       Which of the following descriptions best matches the current conversation?
 

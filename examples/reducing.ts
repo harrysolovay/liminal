@@ -19,7 +19,7 @@ Effect.gen(function*() {
   yield* L.user`Any advice for me as I further-explore this project?`
   yield* L.assistant
 
-  const summary = yield* L.sequence(
+  const summary = yield* L.line(
     L.user`Please summarize our conversation.`,
     L.assistant,
   ).pipe(

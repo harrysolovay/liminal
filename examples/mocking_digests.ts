@@ -22,7 +22,7 @@ const RelationshipsLive = Relationships.layer(
   }),
 )
 
-L.sequence(
+L.line(
   L.user`My childhood dog Lola was the sweetest oddball. I miss her dearly.`,
   Relationships.digest,
   L.clear,

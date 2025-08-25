@@ -6,7 +6,7 @@ import { ModelLive } from "./_layers.ts"
 
 const Lmh = Schema.Literal("lower", "medium", "high")
 
-const security = L.sequence(
+const security = L.line(
   L.system`
     You are an expert in code security. Focus on identifying security
     vulnerabilities, injection risks, and authentication issues.
@@ -23,7 +23,7 @@ const security = L.sequence(
   ),
 )
 
-const performance = L.sequence(
+const performance = L.line(
   L.system`
     You are an expert in code performance. Focus on identifying performance
     bottlenecks, memory leaks, and optimization opportunities.
@@ -40,7 +40,7 @@ const performance = L.sequence(
   ),
 )
 
-const maintainability = L.sequence(
+const maintainability = L.line(
   L.system`
     You are an expert in code quality. Focus on code structure,
     readability, and adherence to best practices.
@@ -67,7 +67,7 @@ Effect.gen(function*() {
     Effect.flatMap(fs.readFileString),
   )
 
-  const reviews = yield* L.sequence(
+  const reviews = yield* L.line(
     L.system`
       You are a technical lead summarizing multiple code reviews. Review the supplied code.
     `,
@@ -81,7 +81,7 @@ Effect.gen(function*() {
     ),
   )
 
-  const summary = yield* L.sequence(
+  const summary = yield* L.line(
     L.system`You are a technical lead summarizing multiple code reviews.`,
     L.user`Please summarize the following code reviews.`,
     L.user(

@@ -12,7 +12,7 @@ const CLASSIFICATION_SYSTEM_PROMPTS = {
 }
 
 Effect.gen(function*() {
-  const classification = yield* L.sequence(
+  const classification = yield* L.line(
     L.system`
       Classify this supplied customer query:
 
@@ -34,7 +34,7 @@ Effect.gen(function*() {
     ),
   )
 
-  const specialist = yield* L.sequence(
+  const specialist = yield* L.line(
     L.system(CLASSIFICATION_SYSTEM_PROMPTS[classification.type]),
     L.assistant,
   ).pipe(

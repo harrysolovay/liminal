@@ -5,12 +5,11 @@ import * as Option from "effect/Option"
 import * as PubSub from "effect/PubSub"
 import * as Schema from "effect/Schema"
 import type { Mutable } from "effect/Types"
+import { line } from "./L/line.ts"
 import { self } from "./L/self.ts"
-import { sequence } from "./L/sequence.ts"
 import type { LEvent } from "./LEvent.ts"
 import type { NeverTool } from "./util/NeverTool.ts"
 import { prefix } from "./util/prefix.ts"
-import type { Sequencer } from "./util/Sequencer.ts"
 
 export const ThreadIdTypeId: unique symbol = Symbol.for(prefix("ThreadNameTypeId"))
 export type ThreadId = string & Brand.Brand<typeof ThreadIdTypeId>
@@ -52,7 +51,7 @@ interface ThreadMembers extends ThreadInit {
 }
 
 /** A conversation isolate. */
-export interface Thread extends Sequencer<Thread>, ThreadMembers, Effect.Effect<ThreadId> {}
+export interface Thread extends line<Thread>, ThreadMembers, Effect.Effect<ThreadId> {}
 
 export const Thread = (init: ThreadInit): Thread => {
   const members = {
@@ -60,7 +59,7 @@ export const Thread = (init: ThreadInit): Thread => {
     ...init,
   } satisfies ThreadMembers
   const self_ = Object.assign(
-    ((...args) => sequence(...args).pipe(Effect.provideService(self, self_))) satisfies Sequencer<Thread>,
+    ((...args) => line(...args).pipe(Effect.provideService(self, self_))) satisfies line<Thread>,
     Effect.succeed(init.id),
     members,
   ) as Thread

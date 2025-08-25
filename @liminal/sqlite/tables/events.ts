@@ -6,7 +6,7 @@ import { pk } from "./tables_common/pk.ts"
 import { threads } from "./threads.ts"
 
 export const events = sqliteTable("events", {
-  parentId: text().references((): SQLiteColumn => events.parentId),
+  parentId: text().references((): SQLiteColumn => events.id),
   id: pk(),
   threadId: text().notNull().references((): SQLiteColumn => threads.id),
   event: text({ mode: "json" }).notNull().$type<Schema.Schema.Encoded<typeof LEvent>>(),

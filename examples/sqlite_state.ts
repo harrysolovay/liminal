@@ -2,17 +2,19 @@ import { sync } from "@liminal/sqlite"
 import { Effect } from "effect"
 import { L } from "liminal"
 import { DbLive, ModelLive } from "./_layers.ts"
-import { logger } from "./_logger.ts"
+// import { logger } from "./_logger.ts"
 
 Effect.gen(function*() {
-  yield* L.listen(logger)
   yield* L.user`Hey.`
-  return yield* L.assistant
+  yield* L.assistant
+  console.log(yield* L.messages)
 }).pipe(
   L.provide(
-    sync(),
+    sync({
+      threadId: "sqlite-state-sync",
+    }),
   ),
-  Effect.provide([ModelLive, DbLive]),
   Effect.scoped,
+  Effect.provide([ModelLive, DbLive]),
   Effect.runFork,
 )

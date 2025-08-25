@@ -9,70 +9,19 @@ import type { ParseError } from "effect/ParseResult"
 import * as PubSub from "effect/PubSub"
 import * as Scope from "effect/Scope"
 import { encodeLEvent, L, type LEvent, messageCodec, Thread, ThreadId, ThreadState } from "liminal"
-import { extractRow0OrDie } from "./_common.ts"
+import { extractRow0, extractRow0OrDie } from "./_common.ts"
 import * as T from "./tables/index.ts"
 
-export const sync: (init?: {
-  readonly threadId?: string | undefined
+export const sync: (init: {
+  readonly threadId: string
 }) => Effect.Effect<
   Thread,
   SqlError | ParseError,
   SqlClient | SqliteDrizzle | Scope.Scope
-> = Effect.fnUntraced(function*(init) {
+> = Effect.fnUntraced(function*({ threadId }) {
   yield* migration
-
-  const { threadId, thread, head } = yield* (
-    init?.threadId ? hydrate(init.threadId) : create
-  )
-  yield* L.listen(
-    Effect.fnUntraced(function*(event) {
-      const db = yield* SqliteDrizzle
-      const { eventId } = yield* db
-        .insert(T.events)
-        .values({
-          threadId,
-          event: yield* encodeLEvent(event),
-          parentId: head,
-        })
-        .returning({
-          eventId: T.events.id,
-        })
-        .pipe(extractRow0OrDie)
-      switch (event._tag) {
-        case "system_set": {
-          yield* db
-            .update(T.threads)
-            .set({
-              system: Option.getOrUndefined(event.system),
-            })
-            .where(eq(T.threads.id, threadId))
-          break
-        }
-        case "messages_appended": {
-          const encoded = yield* Effect.all(
-            event.messages.map((message) =>
-              messageCodec.encode(message).pipe(
-                Effect.map(
-                  (message): InferInsertModel<typeof T.messages> => ({ message, eventId, threadId }),
-                ),
-              )
-            ),
-          )
-          yield* db
-            .insert(T.messages)
-            .values(encoded)
-            .returning({
-              messageId: T.messages.id,
-            })
-          break
-        }
-        case "messages_cleared": {
-          yield* db.delete(T.messages).where(eq(T.threads.id, threadId))
-          break
-        }
-      }
-    }),
-  ).pipe(
+  const { thread, head } = yield* ensure(threadId)
+  yield* L.listen(yield* handler(threadId, head)).pipe(
     L.provide(
       Effect.succeed(thread),
     ),
@@ -80,77 +29,62 @@ export const sync: (init?: {
   return thread
 })
 
-const migration = Effect.gen(function*() {
-  console.log("Performing migration.")
-
-  yield* SqlClient.pipe(Effect.flatMap((v) =>
-    v.unsafe(`
-      CREATE TABLE IF NOT EXISTS events (
-      	parentId text,
-      	id text PRIMARY KEY NOT NULL,
-      	threadId text NOT NULL,
-      	event text NOT NULL,
-      	timestamp integer DEFAULT (unixepoch() * 1000) NOT NULL,
-      	FOREIGN KEY (parentId) REFERENCES events(parentId) ON UPDATE no action ON DELETE no action,
-      	FOREIGN KEY (threadId) REFERENCES threads(id) ON UPDATE no action ON DELETE no action
-      );
-
-      CREATE TABLE IF NOT EXISTS messages (
-      	parentId text,
-      	id text PRIMARY KEY NOT NULL,
-      	threadId text NOT NULL,
-      	message text NOT NULL,
-      	eventId text NOT NULL,
-      	FOREIGN KEY (parentId) REFERENCES messages(id) ON UPDATE no action ON DELETE no action,
-      	FOREIGN KEY (threadId) REFERENCES threads(id) ON UPDATE no action ON DELETE no action,
-      	FOREIGN KEY (eventId) REFERENCES events(id) ON UPDATE no action ON DELETE no action
-      );
-
-      CREATE TABLE IF NOT EXISTS threads (
-      	id text PRIMARY KEY NOT NULL,
-      	system text,
-      	parent text,
-      	head text,
-      	clearedAt text,
-      	FOREIGN KEY (parent) REFERENCES events(id) ON UPDATE no action ON DELETE no action,
-      	FOREIGN KEY (head) REFERENCES events(id) ON UPDATE no action ON DELETE no action,
-      	FOREIGN KEY (clearedAt) REFERENCES events(id) ON UPDATE no action ON DELETE no action
-      );
-    `)
-  ))
-})
-
-const create = Effect.gen(function*() {
-  const db = yield* SqliteDrizzle
-  const { threadId } = yield* db
-    .insert(T.threads)
-    .values({})
-    .returning({
-      threadId: T.threads.id,
-    })
-    .pipe(
-      Effect.catchTag("SqlError", (e) => {
-        console.log(e)
-        return Effect.die(undefined)
-      }),
-    )
-    .pipe(extractRow0OrDie)
-  const thread = Thread({
-    id: ThreadId.make(threadId),
-    parent: yield* Effect.serviceOption(L.self),
-    events: yield* PubSub.unbounded<LEvent>(),
-    state: ThreadState.make({
-      system: Option.none(),
-      messages: [],
-    }),
-    tools: Option.none(),
+const handler = Effect.fnUntraced(function*(
+  threadId: string,
+  head: string | null,
+) {
+  return Effect.fnUntraced(function*(event: LEvent) {
+    const db = yield* SqliteDrizzle
+    const { eventId } = yield* db
+      .insert(T.events)
+      .values({
+        threadId,
+        event: yield* encodeLEvent(event),
+        parentId: head,
+      })
+      .returning({
+        eventId: T.events.id,
+      })
+      .pipe(extractRow0OrDie)
+    switch (event._tag) {
+      case "system_set": {
+        yield* db
+          .update(T.threads)
+          .set({
+            system: Option.getOrUndefined(event.system),
+          })
+          .where(eq(T.threads.id, threadId))
+        break
+      }
+      case "messages_appended": {
+        const encoded = yield* Effect.all(
+          event.messages.map((message) =>
+            messageCodec.encode(message).pipe(
+              Effect.map(
+                (message): InferInsertModel<typeof T.messages> => ({ message, eventId, threadId }),
+              ),
+            )
+          ),
+        )
+        yield* db
+          .insert(T.messages)
+          .values(encoded)
+          .returning({
+            messageId: T.messages.id,
+          })
+        break
+      }
+      case "messages_cleared": {
+        yield* db.delete(T.messages).where(eq(T.threads.id, threadId))
+        break
+      }
+    }
   })
-  return { thread, threadId, head: null }
 })
 
-const hydrate = Effect.fnUntraced(function*(threadId: string) {
+const ensure = Effect.fnUntraced(function*(threadId: string) {
   const db = yield* SqliteDrizzle
-  const { system, clearedAtTimestamp, head } = yield* db
+  const exists = yield* db
     .select({
       system: T.threads.system,
       clearedAt: T.threads.clearedAt,
@@ -159,7 +93,9 @@ const hydrate = Effect.fnUntraced(function*(threadId: string) {
     })
     .from(T.threads)
     .innerJoin(T.events, eq(T.threads.clearedAt, T.events.id))
-    .pipe(extractRow0OrDie)
+    .pipe(extractRow0)
+  if (!exists) return yield* create(threadId)
+  const { clearedAtTimestamp, system, head } = exists
   const messages = yield* db
     .select({
       encoded: T.messages.message,
@@ -190,5 +126,74 @@ const hydrate = Effect.fnUntraced(function*(threadId: string) {
     }),
     tools: Option.none(),
   })
-  return { thread, threadId, head }
+  return { thread, head }
+})
+
+const create = Effect.fnUntraced(function*(threadId: string) {
+  const db = yield* SqliteDrizzle
+  yield* db
+    .insert(T.threads)
+    .values({
+      id: threadId,
+    })
+    .returning({
+      threadId: T.threads.id,
+    })
+    .pipe(
+      Effect.catchTag("SqlError", (e) => {
+        console.log(e)
+        return Effect.die(undefined)
+      }),
+    )
+    .pipe(extractRow0OrDie)
+  const thread = Thread({
+    id: ThreadId.make(threadId),
+    parent: yield* Effect.serviceOption(L.self),
+    events: yield* PubSub.unbounded<LEvent>(),
+    state: ThreadState.make({
+      system: Option.none(),
+      messages: [],
+    }),
+    tools: Option.none(),
+  })
+  return { thread, head: null }
+})
+
+const migration = Effect.gen(function*() {
+  const sql = yield* SqlClient
+  yield* sql.unsafe(`
+    CREATE TABLE IF NOT EXISTS events (
+    	parentId text,
+    	id text PRIMARY KEY NOT NULL,
+    	threadId text NOT NULL,
+    	event text NOT NULL,
+    	timestamp integer DEFAULT (unixepoch() * 1000) NOT NULL,
+    	FOREIGN KEY (parentId) REFERENCES events(id) ON UPDATE no action ON DELETE no action,
+    	FOREIGN KEY (threadId) REFERENCES threads(id) ON UPDATE no action ON DELETE no action
+    );
+  `)
+  yield* sql.unsafe(`
+    CREATE TABLE IF NOT EXISTS messages (
+    	parentId text,
+    	id text PRIMARY KEY NOT NULL,
+    	threadId text NOT NULL,
+    	message text NOT NULL,
+    	eventId text NOT NULL,
+    	FOREIGN KEY (parentId) REFERENCES messages(id) ON UPDATE no action ON DELETE no action,
+    	FOREIGN KEY (threadId) REFERENCES threads(id) ON UPDATE no action ON DELETE no action,
+    	FOREIGN KEY (eventId) REFERENCES events(id) ON UPDATE no action ON DELETE no action
+    );
+  `)
+  yield* sql.unsafe(`
+    CREATE TABLE IF NOT EXISTS threads (
+    	id text PRIMARY KEY NOT NULL,
+    	system text,
+    	parent text,
+    	head text,
+    	clearedAt text,
+    	FOREIGN KEY (parent) REFERENCES events(id) ON UPDATE no action ON DELETE no action,
+    	FOREIGN KEY (head) REFERENCES events(id) ON UPDATE no action ON DELETE no action,
+    	FOREIGN KEY (clearedAt) REFERENCES events(id) ON UPDATE no action ON DELETE no action
+    );
+  `)
 })
