@@ -1,5 +1,11 @@
 # liminal
 
+## 0.17.0
+
+### Minor Changes
+
+- 8212083: Refactor L.sequence -> L.line. Decouple thread effects from the providing of effects via L.provide.
+
 ## 0.16.0
 
 ### Minor Changes
