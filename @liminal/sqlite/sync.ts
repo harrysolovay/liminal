@@ -10,6 +10,7 @@ import * as PubSub from "effect/PubSub"
 import * as Scope from "effect/Scope"
 import { encodeLEvent, L, type LEvent, messageCodec, Thread, ThreadId, ThreadState } from "liminal"
 import { extractRow0, extractRow0OrDie } from "./_common.ts"
+import { statements } from "./statements.ts"
 import * as T from "./tables/index.ts"
 
 export const sync: (init: {
@@ -19,7 +20,10 @@ export const sync: (init: {
   SqlError | ParseError,
   SqlClient | SqliteDrizzle | Scope.Scope
 > = Effect.fnUntraced(function*({ threadId }) {
-  yield* migration
+  const sql = yield* SqlClient
+  for (const statement of statements) {
+    yield* sql.unsafe(statement)
+  }
   const { thread, head } = yield* ensure(threadId)
   yield* L.listen(yield* handler(threadId, head)).pipe(
     L.provide(
@@ -157,43 +161,4 @@ const create = Effect.fnUntraced(function*(threadId: string) {
     tools: Option.none(),
   })
   return { thread, head: null }
-})
-
-const migration = Effect.gen(function*() {
-  const sql = yield* SqlClient
-  yield* sql.unsafe(`
-    CREATE TABLE IF NOT EXISTS events (
-    	parentId text,
-    	id text PRIMARY KEY NOT NULL,
-    	threadId text NOT NULL,
-    	event text NOT NULL,
-    	timestamp integer DEFAULT (unixepoch() * 1000) NOT NULL,
-    	FOREIGN KEY (parentId) REFERENCES events(id) ON UPDATE no action ON DELETE no action,
-    	FOREIGN KEY (threadId) REFERENCES threads(id) ON UPDATE no action ON DELETE no action
-    );
-  `)
-  yield* sql.unsafe(`
-    CREATE TABLE IF NOT EXISTS messages (
-    	parentId text,
-    	id text PRIMARY KEY NOT NULL,
-    	threadId text NOT NULL,
-    	message text NOT NULL,
-    	eventId text NOT NULL,
-    	FOREIGN KEY (parentId) REFERENCES messages(id) ON UPDATE no action ON DELETE no action,
-    	FOREIGN KEY (threadId) REFERENCES threads(id) ON UPDATE no action ON DELETE no action,
-    	FOREIGN KEY (eventId) REFERENCES events(id) ON UPDATE no action ON DELETE no action
-    );
-  `)
-  yield* sql.unsafe(`
-    CREATE TABLE IF NOT EXISTS threads (
-    	id text PRIMARY KEY NOT NULL,
-    	system text,
-    	parent text,
-    	head text,
-    	clearedAt text,
-    	FOREIGN KEY (parent) REFERENCES events(id) ON UPDATE no action ON DELETE no action,
-    	FOREIGN KEY (head) REFERENCES events(id) ON UPDATE no action ON DELETE no action,
-    	FOREIGN KEY (clearedAt) REFERENCES events(id) ON UPDATE no action ON DELETE no action
-    );
-  `)
 })

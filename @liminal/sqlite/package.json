@@ -12,11 +12,7 @@
       "import": "./dist/index.js",
       "bun": "./index.ts"
     },
-    "./package.json": "./package.json",
-    "./tables": {
-      "import": "./dist/tables/index.js",
-      "bun": "./tables/index.ts"
-    }
+    "./package.json": "./package.json"
   },
   "description": "SQLite storage adapter for Liminal threads.",
   "license": "Apache-2.0",
@@ -30,8 +26,5 @@
   },
   "devDependencies": {
     "drizzle-kit": "^0.31.4"
-  },
-  "scripts": {
-    "drizzle": "drizzle-kit generate"
   }
 }
