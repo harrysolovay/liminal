@@ -11,7 +11,7 @@ const ExampleSchema = Schema.Struct({
 })
 
 Effect.gen(function*() {
-  yield* L.listen(logger)
+  yield* logger
   yield* F.json({ inner: "value" }, ExampleSchema).pipe(
     L.user,
   )

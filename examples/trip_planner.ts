@@ -6,8 +6,7 @@ import { ModelLive } from "./_layers.ts"
 import { logger } from "./_logger.ts"
 
 Effect.gen(function*() {
-  yield* L.listen(logger)
-
+  yield* logger
   const term = yield* Terminal.Terminal
   yield* term.display("From which city are you departing?\n")
   yield* L.user`

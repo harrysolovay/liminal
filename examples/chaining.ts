@@ -4,7 +4,7 @@ import { ModelLive } from "./_layers.ts"
 import { logger } from "./_logger.ts"
 
 Effect.gen(function*() {
-  yield* L.listen(logger)
+  yield* logger
   yield* L.system`Write persuasive marketing copy for: Buffy The Vampire Slayer.`
   yield* L.user`Please generate the first draft.`
   let copy = yield* L.assistant

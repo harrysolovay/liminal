@@ -4,11 +4,11 @@ import { ModelLive } from "./_layers.ts"
 import { logger } from "./_logger.ts"
 
 Effect.gen(function*() {
-  yield* L.listen(logger)
+  yield* logger
   yield* L.system`
-    Unless otherwise specified, do not ask follow-up questions; Always reply to the best of your ability using the information you have.
+    Unless otherwise specified, do not ask follow-up questions;
+    Always reply to the best of your ability using the information you have.
   `
-
   yield* L.user`Decide on a subtopic for us to discuss within the domain of technological futurism.`
   yield* L.assistant
   yield* L.user`Great, please teach something interesting about this choice of subtopic.`

@@ -36,7 +36,9 @@ Effect.gen(function*() {
           })
           return { file, implementation }
         },
-        L.provide(L.thread),
+        L.provide(
+          L.thread,
+        ),
       ),
     ),
     { concurrency: "unbounded" },

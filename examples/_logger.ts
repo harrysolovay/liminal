@@ -1,6 +1,6 @@
 import type { Message } from "@effect/ai/AiInput"
 import { Console, Effect, flow } from "effect"
-import type { LEvent } from "liminal"
+import { L, type LEvent } from "liminal"
 
 const GRAY = "\x1b[90m"
 const RESET = "\x1b[0m"
@@ -44,8 +44,8 @@ const message = ({ _tag, parts }: Message): string => {
   return value
 }
 
-export const logger = flow(
+export const logger = L.listen(flow(
   event,
   Console.log,
   Effect.andThen(Console.log()), // Line-break between events.
-)
+))

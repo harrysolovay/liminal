@@ -28,23 +28,20 @@ class ICanHazDadJoke extends Effect.Service<ICanHazDadJoke>()("ICanHazDadJoke", 
         ),
       )),
     )
-    const search: (searchTerm: string) => Effect.Effect<string> = Effect.fn(
-      function*(searchTerm) {
-        const { results: [{ joke } = {}] } = yield* client.get("/search", {
-          acceptJson: true,
-          urlParams: { searchTerm },
-        }).pipe(
-          Effect.flatMap(HttpClientResponse.schemaBodyJson(Schema.Struct({
-            results: Schema.Array(Schema.Struct({
-              id: Schema.String,
-              joke: Schema.String,
-            })),
-          }))),
-        )
-        return yield* Option.fromNullable(joke)
-      },
-      (e) => e.pipe(Effect.orDie),
-    )
+    const search: (searchTerm: string) => Effect.Effect<string> = Effect.fn(function*(searchTerm) {
+      const { results: [{ joke } = {}] } = yield* client.get("/search", {
+        acceptJson: true,
+        urlParams: { searchTerm },
+      }).pipe(
+        Effect.flatMap(HttpClientResponse.schemaBodyJson(Schema.Struct({
+          results: Schema.Array(Schema.Struct({
+            id: Schema.String,
+            joke: Schema.String,
+          })),
+        }))),
+      )
+      return yield* Option.fromNullable(joke)
+    }, (e) => e.pipe(Effect.orDie))
     return { search }
   }),
 }) {}
@@ -57,7 +54,7 @@ const DadJokeToolHandlers = AiToolkit.make(DadJokeTool).toLayer({
 })
 
 Effect.gen(function*() {
-  yield* L.listen(logger)
+  yield* logger
   yield* L.enable(DadJokeTool)
   yield* L.user`Generate a dad joke about pirates.`
   yield* L.assistant
