@@ -1,4 +1,4 @@
-import { Array, Effect, Schema } from "effect"
+import { Array, Console, Effect, Schema } from "effect"
 import { F, L } from "liminal"
 import { logger } from "./_logger.ts"
 
@@ -15,9 +15,10 @@ Effect.gen(function*() {
   yield* F.json({ inner: "value" }, ExampleSchema).pipe(
     L.user,
   )
-  yield* yield* L.messages.pipe(
+  const message0 = yield* yield* L.messages.pipe(
     Effect.map(Array.head),
   )
+  yield* Console.log(message0)
 }).pipe(
   L.provide(
     L.thread,

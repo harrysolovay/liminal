@@ -2,7 +2,6 @@
   "compilerOptions": {
     "allowImportingTsExtensions": true,
     "composite": true,
-    "incremental": true,
     "declaration": true,
     "erasableSyntaxOnly": true,
     "esModuleInterop": true,

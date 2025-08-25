@@ -25,7 +25,7 @@ export const sync: (init: {
     yield* sql.unsafe(statement)
   }
   const { thread, head } = yield* ensure(threadId)
-  yield* L.listen(yield* handler(threadId, head)).pipe(
+  yield* L.listen(handler(threadId, head)).pipe(
     L.provide(
       Effect.succeed(thread),
     ),
@@ -33,11 +33,8 @@ export const sync: (init: {
   return thread
 })
 
-const handler = Effect.fnUntraced(function*(
-  threadId: string,
-  head: string | null,
-) {
-  return Effect.fnUntraced(function*(event: LEvent) {
+const handler = (threadId: string, head: string | null) =>
+  Effect.fnUntraced(function*(event: LEvent) {
     const db = yield* SqliteDrizzle
     const { eventId } = yield* db
       .insert(T.events)
@@ -84,7 +81,6 @@ const handler = Effect.fnUntraced(function*(
       }
     }
   })
-})
 
 const ensure = Effect.fnUntraced(function*(threadId: string) {
   const db = yield* SqliteDrizzle

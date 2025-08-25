@@ -14,7 +14,7 @@
     },
     "./package.json": "./package.json"
   },
-  "description": "SQLite storage adapter for Liminal threads.",
+  "description": "SQLite persistence for Liminal.",
   "license": "Apache-2.0",
   "sideEffects": false,
   "type": "module",
@@ -23,8 +23,5 @@
     "drizzle-orm": "^0.44.4",
     "effect": "^3.17.7",
     "liminal": "^0.16.0"
-  },
-  "devDependencies": {
-    "drizzle-kit": "^0.31.4"
   }
 }
