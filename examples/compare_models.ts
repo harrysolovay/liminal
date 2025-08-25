@@ -6,20 +6,31 @@ import { logger } from "./_logger.ts"
 
 Effect.gen(function*() {
   yield* logger
-
   yield* L.user`Write a rap about type-level programming in TypeScript`
   yield* L.assistant
   yield* L.user`Rewrite it in whatever way you think best.`
 
   const rewrites = yield* Effect.all({
-    a: L.branch(L.assistant),
+    a: L.assistant.pipe(
+      L.provide(
+        L.branch,
+      ),
+    ),
     b: L.assistant.pipe(
-      L.branch,
-      Effect.provide(OpenAiLanguageModel.model("gpt-4-turbo")),
+      L.provide(
+        L.branch,
+      ),
+      Effect.provide(
+        OpenAiLanguageModel.model("gpt-4-turbo"),
+      ),
     ),
     c: L.assistant.pipe(
-      L.branch,
-      Effect.provide(OpenAiLanguageModel.model("gpt-3.5-turbo")),
+      L.provide(
+        L.branch,
+      ),
+      Effect.provide(
+        OpenAiLanguageModel.model("gpt-3.5-turbo"),
+      ),
     ),
   }, { concurrency: "unbounded" })
 
@@ -33,7 +44,9 @@ Effect.gen(function*() {
     Effect.flatMap((key) => Console.log(rewrites[key])),
   )
 }).pipe(
-  L.thread,
+  L.provide(
+    L.thread,
+  ),
   Effect.scoped,
   Effect.provide([ModelLive, ClientLive]),
   Effect.runFork,

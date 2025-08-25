@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "@liminal/sqlite",
   "version": "0.0.0",
   "repository": {
@@ -11,18 +12,10 @@
       "import": "./dist/index.js",
       "bun": "./index.ts"
     },
-    "./package.json": "./package.json",
-    "./schemas": {
-      "import": "./dist/schemas/index.js",
-      "bun": "./schemas/index.ts"
-    }
+    "./package.json": "./package.json"
   },
-  "description": "SQLite storage adapter for Liminal threads.",
+  "description": "SQLite persistence for Liminal.",
   "license": "Apache-2.0",
-  "publishConfig": {
-    "access": "public",
-    "provenance": true
-  },
   "sideEffects": false,
   "type": "module",
   "peerDependencies": {

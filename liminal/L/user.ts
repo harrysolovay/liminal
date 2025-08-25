@@ -1,13 +1,23 @@
 import { TextPart, UserMessage } from "@effect/ai/AiInput"
 import * as Effect from "effect/Effect"
 import type { Thread } from "../Thread.ts"
-import type { Taggable } from "../util/Taggable.ts"
+import type { ExtractE, ExtractR } from "../util/extract.ts"
+import { normalize, type TaggableArg0, type TaggableArgRest } from "../util/Taggable.ts"
 import { append } from "./append.ts"
-import { raw } from "./raw.ts"
 
-/** Append a user message to the conversation. */
-export const user: Taggable<void, never, Thread> = (a0, ...aRest) =>
-  raw(a0, ...aRest).pipe(
+/** Append a user message to the thread. */
+export const user = <
+  A0 extends TaggableArg0,
+  ARest extends TaggableArgRest<A0>,
+>(
+  a0: A0,
+  ...aRest: ARest
+): Effect.Effect<
+  void,
+  ExtractE<A0 | ARest[number]>,
+  ExtractR<A0 | ARest[number]> | Thread
+> =>
+  normalize(a0, ...aRest).pipe(
     Effect.flatMap((text) =>
       text
         ? append(

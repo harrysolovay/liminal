@@ -19,9 +19,13 @@ Effect.gen(function*() {
   yield* L.user`Any advice for me as I further-explore this project?`
   yield* L.assistant
 
-  const summary = yield* L.branch(
+  const summary = yield* L.line(
     L.user`Please summarize our conversation.`,
     L.assistant,
+  ).pipe(
+    L.provide(
+      L.branch,
+    ),
   )
   yield* L.clear
   yield* L.user`Let's resume our discussion from the following summary: ${summary}`
@@ -29,7 +33,9 @@ Effect.gen(function*() {
   yield* L.user`So please reiterate your thoughts on this creative journey.`
   yield* L.assistant
 }).pipe(
-  L.thread,
+  L.provide(
+    L.thread,
+  ),
   Effect.scoped,
   Effect.provide(ModelLive),
   Effect.runFork,

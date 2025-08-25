@@ -22,9 +22,13 @@ Effect.gen(function*() {
   `
 
   // Rephrase the customer's message.
-  const rephrased = yield* L.branch(
+  const rephrased = yield* L.line(
     L.user`What are some other ways of phrasing the customer's request?`,
     L.assistantSchema(Schema.Array(Schema.String)),
+  ).pipe(
+    L.provide(
+      L.branch,
+    ),
   )
 
   // For each rephrasing, perform a search for relevant context.
@@ -43,7 +47,7 @@ Effect.gen(function*() {
   `
 
   // Ask the model for the most fitting route.
-  const route = yield* L.branch(
+  const route = yield* L.line(
     L.user`
       Which of the following descriptions best matches the current conversation?
 
@@ -54,6 +58,10 @@ Effect.gen(function*() {
     L.assistantSchema(
       Schema.Literal("support", "sales", "other"),
     ),
+  ).pipe(
+    L.provide(
+      L.branch,
+    ),
   )
 
   // Route to the subsequent effect.
@@ -61,7 +69,9 @@ Effect.gen(function*() {
 
   // Mark the fn as the conversation's boundary.
 }).pipe(
-  L.thread,
+  L.provide(
+    L.thread,
+  ),
   Effect.provide([ModelLive, BunContext.layer]),
   Effect.scoped,
   Effect.runFork,

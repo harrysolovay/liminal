@@ -1,6 +1,8 @@
+@liminal/sqlite/migrations
 *.tsbuildinfo
 .DS_Store
 .env
+examples/*.db*
 dist
 liminal.land/.vitepress/cache
 liminal.land/.vitepress/dist
