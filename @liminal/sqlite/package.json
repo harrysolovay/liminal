@@ -22,6 +22,6 @@
     "@effect/sql-drizzle": "^0.43.0",
     "drizzle-orm": "^0.44.4",
     "effect": "^3.17.7",
-    "liminal": "^0.16.0"
+    "liminal": "^0.17.0"
   }
 }
