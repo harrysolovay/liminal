@@ -1,3 +1,4 @@
+@liminal/sqlite/migrations
 *.tsbuildinfo
 .DS_Store
 .env
