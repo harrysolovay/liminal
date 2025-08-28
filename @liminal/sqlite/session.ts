@@ -4,6 +4,7 @@ import { SqlError } from "@effect/sql/SqlError"
 import { eq, type InferInsertModel } from "drizzle-orm"
 import * as Array from "effect/Array"
 import * as Effect from "effect/Effect"
+import * as FiberSet from "effect/FiberSet"
 import * as Option from "effect/Option"
 import type { ParseError } from "effect/ParseResult"
 import * as PubSub from "effect/PubSub"
@@ -15,7 +16,11 @@ import * as T from "./tables/index.ts"
 
 export const session: (init: {
   readonly threadId: string
-}) => Effect.Effect<Thread, SqlError | ParseError, SqlClient.SqlClient | Scope.Scope> = Effect.fnUntraced(
+}) => Effect.Effect<
+  Thread,
+  SqlError | ParseError,
+  SqlClient.SqlClient | Scope.Scope
+> = Effect.fnUntraced(
   function*({ threadId }) {
     const sql = yield* SqlClient.SqlClient
     for (const statement of statements) {
@@ -44,6 +49,7 @@ const ensure = Effect.fnUntraced(function*(threadId: string) {
       head: T.threads.head,
     })
     .from(T.threads)
+    .where(eq(T.threads.id, threadId))
     .pipe(extractRow0)
   if (exists?.id) {
     const { system, head } = exists
@@ -63,10 +69,10 @@ const ensure = Effect.fnUntraced(function*(threadId: string) {
         ),
       )
     const thread = Thread({
-      scope: yield* Scope.make(),
       id: ThreadId.make(threadId),
       parent: yield* Effect.serviceOption(L.self),
       events: yield* PubSub.unbounded<LEvent>(),
+      daemons: yield* FiberSet.make<void, never>(),
       state: ThreadState.make({
         system: Option.fromNullable(system),
         messages,
@@ -77,10 +83,10 @@ const ensure = Effect.fnUntraced(function*(threadId: string) {
   }
   yield* db.insert(T.threads).values({ id: threadId })
   const thread = Thread({
-    scope: yield* Scope.make(),
     id: ThreadId.make(threadId),
     parent: yield* Effect.serviceOption(L.self),
     events: yield* PubSub.unbounded<LEvent>(),
+    daemons: yield* FiberSet.make<void, never>(),
     state: ThreadState.make({
       system: Option.none(),
       messages: [],
@@ -102,7 +108,13 @@ const handler = (threadId: string, head: string | null) => {
         parentId: head,
       })
       .returning({ eventId: T.events.id })
-      .pipe(extractRow0OrDie)
+      .pipe(
+        Effect.catchTag("SqlError", (v) => {
+          console.log("here::", v.cause)
+          return Effect.die(undefined)
+        }),
+        extractRow0OrDie,
+      )
     switch (event._tag) {
       case "system_set": {
         yield* db

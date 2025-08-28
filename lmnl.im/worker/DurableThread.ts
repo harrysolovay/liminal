@@ -25,7 +25,7 @@ export class DurableThread extends Effect.gen(function*() {
     yield* L.user`${messages.length ? "Next" : "First"} passage please.`
     yield* L.assistant
   }).pipe(
-    L.make(
+    L.scoped(
       session({ threadId }),
     ),
   )

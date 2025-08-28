@@ -36,10 +36,9 @@ Effect.gen(function*() {
   }
   return { copy, qualityMetrics }
 }).pipe(
-  L.make(
+  L.scoped(
     L.thread,
   ),
-  Effect.scoped,
   Effect.provide(ModelLive),
   Effect.runFork,
 )

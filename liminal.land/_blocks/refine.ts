@@ -16,7 +16,7 @@ export const refine = (content: string) =>
   }).pipe(
     // Denotes the boundary of the conversation.
     // Conceptually similar to `Effect.scoped`.
-    L.make(
+    L.scoped(
       L.thread,
     ),
   )

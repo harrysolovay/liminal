@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.base",
-  "include": [".", "../../@liminal/workerd/DurableClass.ts"],
+  "include": ["."],
   "references": [
     { "path": "../../@liminal/sqlite" },
     { "path": "../../@liminal/workerd" },

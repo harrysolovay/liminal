@@ -13,7 +13,7 @@ export default {
 
     yield* Console.log(res)
   }).pipe(
-    L.make(
+    L.scoped(
       session({
         threadId: "router",
       }),

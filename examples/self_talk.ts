@@ -20,7 +20,7 @@ Effect.gen(function*() {
       L.user`Please reply to the last message on my behalf.`,
       L.assistant,
     ).pipe(
-      L.make(
+      L.scoped(
         L.branch,
       ),
       L.user,
@@ -31,10 +31,9 @@ Effect.gen(function*() {
   yield* L.user`Please summarize the key points from our conversation.`
   yield* L.assistant
 }).pipe(
-  L.make(
+  L.scoped(
     L.thread,
   ),
-  Effect.scoped,
   Effect.provide(ModelLive),
   Effect.runFork,
 )

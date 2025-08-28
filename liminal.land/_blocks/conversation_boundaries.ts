@@ -9,19 +9,19 @@ Effect.gen(function*() {
 
   // Run isolated with an untouched state.
   yield* conversation.pipe(
-    L.make(
+    L.scoped(
       L.thread,
     ),
   )
 
   // Run isolated with a copy of the current state.
   yield* conversation.pipe(
-    L.make(
+    L.scoped(
       L.branch,
     ),
   )
 }).pipe(
-  L.make(
+  L.scoped(
     L.thread,
   ),
 )

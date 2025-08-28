@@ -1,7 +1,7 @@
 import { OpenAiLanguageModel } from "@effect/ai-openai"
 import { Console, Effect, Schema } from "effect"
 import { L } from "liminal"
-import { ClientLive, ModelLive } from "./_layers.ts"
+import { ModelLive, OpenaiClientLive } from "./_layers.ts"
 import { logger } from "./_logger.ts"
 
 Effect.gen(function*() {
@@ -12,12 +12,12 @@ Effect.gen(function*() {
 
   const rewrites = yield* Effect.all({
     a: L.assistant.pipe(
-      L.make(
+      L.scoped(
         L.branch,
       ),
     ),
     b: L.assistant.pipe(
-      L.make(
+      L.scoped(
         L.branch,
       ),
       Effect.provide(
@@ -25,7 +25,7 @@ Effect.gen(function*() {
       ),
     ),
     c: L.assistant.pipe(
-      L.make(
+      L.scoped(
         L.branch,
       ),
       Effect.provide(
@@ -44,10 +44,9 @@ Effect.gen(function*() {
     Effect.flatMap((key) => Console.log(rewrites[key])),
   )
 }).pipe(
-  L.make(
+  L.scoped(
     L.thread,
   ),
-  Effect.scoped,
-  Effect.provide([ModelLive, ClientLive]),
+  Effect.provide([ModelLive, OpenaiClientLive]),
   Effect.runFork,
 )

@@ -36,7 +36,7 @@ Effect.gen(function*() {
           })
           return { file, implementation }
         },
-        L.make(
+        L.scoped(
           L.thread,
         ),
       ),
@@ -46,7 +46,7 @@ Effect.gen(function*() {
 
   yield* Console.log({ plan, changes })
 }).pipe(
-  L.make(
+  L.scoped(
     L.thread,
   ),
   Effect.provide(ModelLive),

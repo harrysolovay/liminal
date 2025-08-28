@@ -17,7 +17,7 @@ export const validateEmail = (email: string) =>
     // Infer and return the message.
     return yield* L.assistant
   }).pipe(
-    L.make(
+    L.scoped(
       L.thread,
     ),
   )

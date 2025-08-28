@@ -1,34 +1,36 @@
 import { session } from "@liminal/sqlite"
 import { Effect } from "effect"
 import { L } from "liminal"
-import { DbLive, ModelLive } from "./_layers.ts"
-import { logger } from "./_logger.ts"
+import { ModelLive, SqlClientLive } from "./_layers.ts"
 
 Effect.gen(function*() {
-  // let i = 0
-  // yield* L.listen(() =>
-  //   Effect.sleep(5000).pipe(
-  //     Effect.andThen(() => Effect.log(`ITERATION: ${i++}`)),
-  //   )
-  // )
-  yield* logger
   const messages = yield* L.messages
-  yield* L.setSystem`
+  console.log({ n: messages.length })
+  const isFirst = !messages.length
+  if (isFirst) {
+    yield* L.setSystem`
       Never ask for clarification.
 
       Write passages of a scary story.
 
       Keep the story moving along and evolving forever.
     `
-  yield* L.user`${messages.length ? "Next" : "First"} passage please.`
-  yield* L.assistant
+  }
+  const passage = yield* L.line(
+    L.user`${isFirst ? "First" : "Next"} passage please.`,
+    L.assistant,
+  ).pipe(
+    L.scoped(
+      L.branch,
+    ),
+  )
+  yield* L.user(passage)
 }).pipe(
-  L.make(
+  L.scoped(
     session({
       threadId: "sqlite-state-sync",
     }),
   ),
-  Effect.scoped,
-  Effect.provide([ModelLive, DbLive]),
+  Effect.provide([ModelLive, SqlClientLive]),
   Effect.runFork,
 )

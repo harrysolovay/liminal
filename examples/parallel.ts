@@ -18,7 +18,7 @@ const security = L.line(
     suggestions: Schema.Array(Schema.String),
   }),
 ).pipe(
-  L.make(
+  L.scoped(
     L.branch,
   ),
 )
@@ -35,7 +35,7 @@ const performance = L.line(
     optimizations: Schema.Array(Schema.String),
   }),
 ).pipe(
-  L.make(
+  L.scoped(
     L.branch,
   ),
 )
@@ -52,7 +52,7 @@ const maintainability = L.line(
     recommendations: Schema.Array(Schema.String),
   }),
 ).pipe(
-  L.make(
+  L.scoped(
     L.branch,
   ),
 )
@@ -76,7 +76,7 @@ Effect.gen(function*() {
       concurrency: "unbounded",
     }),
   ).pipe(
-    L.make(
+    L.scoped(
       L.thread,
     ),
   )
@@ -89,7 +89,7 @@ Effect.gen(function*() {
     ),
     L.assistant,
   ).pipe(
-    L.make(
+    L.scoped(
       L.thread,
     ),
   )

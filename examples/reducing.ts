@@ -23,7 +23,7 @@ Effect.gen(function*() {
     L.user`Please summarize our conversation.`,
     L.assistant,
   ).pipe(
-    L.make(
+    L.scoped(
       L.branch,
     ),
   )
@@ -33,10 +33,9 @@ Effect.gen(function*() {
   yield* L.user`So please reiterate your thoughts on this creative journey.`
   yield* L.assistant
 }).pipe(
-  L.make(
+  L.scoped(
     L.thread,
   ),
-  Effect.scoped,
   Effect.provide(ModelLive),
   Effect.runFork,
 )

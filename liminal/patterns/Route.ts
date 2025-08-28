@@ -17,7 +17,7 @@ export const byDescription: <R extends Record<string, Effect.All.EffectAny>>(rou
     `,
     L.assistantSchema(Schema.Literal(...descriptions)),
   ).pipe(
-    L.make(
+    L.scoped(
       L.branch,
     ),
   )
