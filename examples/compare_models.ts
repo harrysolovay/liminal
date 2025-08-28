@@ -12,12 +12,12 @@ Effect.gen(function*() {
 
   const rewrites = yield* Effect.all({
     a: L.assistant.pipe(
-      L.provide(
+      L.make(
         L.branch,
       ),
     ),
     b: L.assistant.pipe(
-      L.provide(
+      L.make(
         L.branch,
       ),
       Effect.provide(
@@ -25,7 +25,7 @@ Effect.gen(function*() {
       ),
     ),
     c: L.assistant.pipe(
-      L.provide(
+      L.make(
         L.branch,
       ),
       Effect.provide(
@@ -44,7 +44,7 @@ Effect.gen(function*() {
     Effect.flatMap((key) => Console.log(rewrites[key])),
   )
 }).pipe(
-  L.provide(
+  L.make(
     L.thread,
   ),
   Effect.scoped,

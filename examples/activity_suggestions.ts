@@ -13,7 +13,7 @@ const Activity = Schema.Struct({
 
 Effect.gen(function*() {
   yield* logger
-  yield* L.system`When you are asked a question, answer without asking for clarification.`
+  yield* L.setSystem`When you are asked a question, answer without asking for clarification.`
   yield* L.user`I'm planning a trip to florida and want a suggestion for a fun activity.`
   let i = 0
   const activities: Array<typeof Activity.Type> = []
@@ -23,7 +23,7 @@ Effect.gen(function*() {
     i++
   }
 }).pipe(
-  L.provide(
+  L.make(
     L.thread,
   ),
   Effect.scoped,

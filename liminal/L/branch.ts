@@ -1,6 +1,7 @@
 import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
 import * as PubSub from "effect/PubSub"
+import * as Scope from "effect/Scope"
 import type { LEvent } from "../LEvent.ts"
 import { Thread, ThreadState } from "../Thread.ts"
 import { self } from "./self.ts"
@@ -8,6 +9,7 @@ import { self } from "./self.ts"
 export const branch: Effect.Effect<Thread, never, Thread> = Effect.gen(function*() {
   const parent = yield* self
   return Thread({
+    scope: yield* Scope.make(),
     id: parent.id,
     parent: Option.some(parent),
     events: yield* PubSub.unbounded<LEvent>(),

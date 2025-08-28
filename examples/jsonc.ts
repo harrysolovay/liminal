@@ -20,7 +20,7 @@ Effect.gen(function*() {
   )
   yield* Console.log(message0)
 }).pipe(
-  L.provide(
+  L.make(
     L.thread,
   ),
   Effect.scoped,

@@ -5,7 +5,7 @@ import { logger } from "./_logger.ts"
 
 Effect.gen(function*() {
   yield* logger
-  yield* L.system`Write persuasive marketing copy for: Buffy The Vampire Slayer.`
+  yield* L.setSystem`Write persuasive marketing copy for: Buffy The Vampire Slayer.`
   yield* L.user`Please generate the first draft.`
   let copy = yield* L.assistant
   yield* L.user`
@@ -36,7 +36,7 @@ Effect.gen(function*() {
   }
   return { copy, qualityMetrics }
 }).pipe(
-  L.provide(
+  L.make(
     L.thread,
   ),
   Effect.scoped,

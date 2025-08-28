@@ -13,7 +13,7 @@ const CLASSIFICATION_SYSTEM_PROMPTS = {
 
 Effect.gen(function*() {
   const classification = yield* L.line(
-    L.system`
+    L.setSystem`
       Classify this supplied customer query:
 
       Determine:
@@ -29,16 +29,16 @@ Effect.gen(function*() {
       complex: Schema.Boolean,
     }),
   ).pipe(
-    L.provide(
+    L.make(
       L.thread,
     ),
   )
 
   const specialist = yield* L.line(
-    L.system(CLASSIFICATION_SYSTEM_PROMPTS[classification.type]),
+    L.setSystem(CLASSIFICATION_SYSTEM_PROMPTS[classification.type]),
     L.assistant,
   ).pipe(
-    L.provide(
+    L.make(
       L.thread,
     ),
     Effect.provide(

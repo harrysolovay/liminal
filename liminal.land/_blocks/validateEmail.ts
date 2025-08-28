@@ -9,7 +9,7 @@ export const validateEmail = (email: string) =>
     if (EMAIL_REGEX.test(email)) return
 
     // Otherwise, set the system prompt.
-    yield* L.system`You are an email-validating assistant.`
+    yield* L.setSystem`You are an email-validating assistant.`
 
     // If invalid, ask why.
     yield* L.user`Why is the following email is invalid?: "${email}".`
@@ -17,7 +17,7 @@ export const validateEmail = (email: string) =>
     // Infer and return the message.
     return yield* L.assistant
   }).pipe(
-    L.provide(
+    L.make(
       L.thread,
     ),
   )

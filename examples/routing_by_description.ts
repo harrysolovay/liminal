@@ -26,7 +26,7 @@ Effect.gen(function*() {
     L.user`What are some other ways of phrasing the customer's request?`,
     L.assistantSchema(Schema.Array(Schema.String)),
   ).pipe(
-    L.provide(
+    L.make(
       L.branch,
     ),
   )
@@ -59,7 +59,7 @@ Effect.gen(function*() {
       Schema.Literal("support", "sales", "other"),
     ),
   ).pipe(
-    L.provide(
+    L.make(
       L.branch,
     ),
   )
@@ -69,7 +69,7 @@ Effect.gen(function*() {
 
   // Mark the fn as the conversation's boundary.
 }).pipe(
-  L.provide(
+  L.make(
     L.thread,
   ),
   Effect.provide([ModelLive, BunContext.layer]),

@@ -27,7 +27,7 @@ Effect.gen(function*() {
   yield* L.user`Where can I stay there, what can I do there, how do I get there?`
   return yield* L.assistant
 }).pipe(
-  L.provide(
+  L.make(
     L.thread,
   ),
   Effect.scoped,

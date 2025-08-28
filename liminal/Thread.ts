@@ -4,6 +4,7 @@ import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
 import * as PubSub from "effect/PubSub"
 import * as Schema from "effect/Schema"
+import * as Scope from "effect/Scope"
 import type { Mutable } from "effect/Types"
 import { line } from "./L/line.ts"
 import { self } from "./L/self.ts"
@@ -31,6 +32,8 @@ export class ThreadState extends Schema.Class<ThreadState>(prefix("ThreadState")
 }
 
 export interface ThreadInit {
+  /** A scope from which thread-bound resources can be forked. */
+  readonly scope: Scope.CloseableScope
   /** The unique id of the thread. */
   readonly id: ThreadId
   /** The parent thread. */

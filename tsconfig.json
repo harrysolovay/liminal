@@ -4,6 +4,7 @@
     { "path": "./examples" },
     { "path": "./liminal" },
     { "path": "./@liminal/sqlite" },
+    { "path": "./@liminal/workerd" },
     { "path": "./lmnl.im/client" },
     { "path": "./lmnl.im/domain" },
     { "path": "./lmnl.im/worker" },

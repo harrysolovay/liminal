@@ -7,6 +7,11 @@ import { flow } from "effect/Function"
 import * as String from "effect/String"
 
 Effect.gen(function*() {
+  const fs = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
+  yield* fs.remove("migrations").pipe(
+    Effect.ignore,
+  )
   yield* Command.string(
     Command.make(
       "bun",
@@ -22,8 +27,6 @@ Effect.gen(function*() {
   ).pipe(
     Effect.flatMap(Console.log),
   )
-  const fs = yield* FileSystem.FileSystem
-  const path = yield* Path.Path
   const statements = yield* fs.readDirectory("migrations").pipe(
     Effect.flatMap(flow(
       Array.filter((v) => v.endsWith(".sql")),

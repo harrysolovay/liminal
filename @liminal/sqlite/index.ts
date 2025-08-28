@@ -1,2 +1,2 @@
-export * from "./sync.ts"
+export * from "./session.ts"
 export * from "./tables/index.ts"

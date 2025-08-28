@@ -1,7 +1,9 @@
 {
   "extends": "../../tsconfig.base",
-  "include": ["."],
+  "include": [".", "../../@liminal/workerd/DurableClass.ts"],
   "references": [
+    { "path": "../../@liminal/sqlite" },
+    { "path": "../../@liminal/workerd" },
     { "path": "../../liminal" },
     { "path": "../domain" }
   ]

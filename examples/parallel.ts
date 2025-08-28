@@ -7,7 +7,7 @@ import { ModelLive } from "./_layers.ts"
 const Lmh = Schema.Literal("lower", "medium", "high")
 
 const security = L.line(
-  L.system`
+  L.setSystem`
     You are an expert in code security. Focus on identifying security
     vulnerabilities, injection risks, and authentication issues.
   `,
@@ -18,13 +18,13 @@ const security = L.line(
     suggestions: Schema.Array(Schema.String),
   }),
 ).pipe(
-  L.provide(
+  L.make(
     L.branch,
   ),
 )
 
 const performance = L.line(
-  L.system`
+  L.setSystem`
     You are an expert in code performance. Focus on identifying performance
     bottlenecks, memory leaks, and optimization opportunities.
   `,
@@ -35,13 +35,13 @@ const performance = L.line(
     optimizations: Schema.Array(Schema.String),
   }),
 ).pipe(
-  L.provide(
+  L.make(
     L.branch,
   ),
 )
 
 const maintainability = L.line(
-  L.system`
+  L.setSystem`
     You are an expert in code quality. Focus on code structure,
     readability, and adherence to best practices.
   `,
@@ -52,7 +52,7 @@ const maintainability = L.line(
     recommendations: Schema.Array(Schema.String),
   }),
 ).pipe(
-  L.provide(
+  L.make(
     L.branch,
   ),
 )
@@ -68,7 +68,7 @@ Effect.gen(function*() {
   )
 
   const reviews = yield* L.line(
-    L.system`
+    L.setSystem`
       You are a technical lead summarizing multiple code reviews. Review the supplied code.
     `,
     L.user(code),
@@ -76,20 +76,20 @@ Effect.gen(function*() {
       concurrency: "unbounded",
     }),
   ).pipe(
-    L.provide(
+    L.make(
       L.thread,
     ),
   )
 
   const summary = yield* L.line(
-    L.system`You are a technical lead summarizing multiple code reviews.`,
+    L.setSystem`You are a technical lead summarizing multiple code reviews.`,
     L.user`Please summarize the following code reviews.`,
     L.user(
       F.json(reviews),
     ),
     L.assistant,
   ).pipe(
-    L.provide(
+    L.make(
       L.thread,
     ),
   )

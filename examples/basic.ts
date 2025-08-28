@@ -8,7 +8,7 @@ L.line(
   L.user`Hey.`,
   L.assistant,
 ).pipe(
-  L.provide(
+  L.make(
     L.thread,
   ),
   Effect.provide(ModelLive),

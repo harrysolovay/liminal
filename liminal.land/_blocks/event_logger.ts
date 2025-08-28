@@ -11,7 +11,7 @@ Effect.gen(function*() {
   yield* L.user`Welcome to the cotton club.`
   yield* L.assistant
 }).pipe(
-  L.provide(
+  L.make(
     L.thread,
   ),
   Effect.scoped,

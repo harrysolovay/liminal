@@ -22,14 +22,21 @@
     "@liminal/sqlite": {
       "name": "@liminal/sqlite",
       "version": "0.0.0",
-      "devDependencies": {
-        "drizzle-kit": "^0.31.4",
-      },
       "peerDependencies": {
         "@effect/sql-drizzle": "^0.43.0",
         "drizzle-orm": "^0.44.4",
         "effect": "^3.17.7",
-        "liminal": "^0.16.0",
+        "liminal": "^0.17.0",
+      },
+    },
+    "@liminal/workerd": {
+      "name": "@liminal/workerd",
+      "version": "0.0.0",
+      "peerDependencies": {
+        "@effect/sql-drizzle": "^0.43.0",
+        "@effect/sql-sqlite-do": "^0.22.1",
+        "drizzle-orm": "^0.44.4",
+        "effect": "^3.17.7",
       },
     },
     "examples": {
@@ -51,7 +58,7 @@
     },
     "liminal": {
       "name": "liminal",
-      "version": "0.16.0",
+      "version": "0.17.0",
       "peerDependencies": {
         "@effect/ai": "^0.25.2",
         "effect": "^3.17.7",
@@ -279,6 +286,8 @@
 
     "@effect/sql-sqlite-bun": ["@effect/sql-sqlite-bun@0.45.0", "", { "dependencies": { "@opentelemetry/semantic-conventions": "^1.33.0" }, "peerDependencies": { "@effect/experimental": "^0.54.0", "@effect/platform": "^0.90.0", "@effect/sql": "^0.44.0", "effect": "^3.17.0" } }, "sha512-XB54Y0EuxhCg4XcRXXn/eYd+wQADAzuRsbq1jLs36b8+zjLX05Y64xuQr+d1ZoxDECBIBNj8LDnBUgVWqH2c/Q=="],
 
+    "@effect/sql-sqlite-do": ["@effect/sql-sqlite-do@0.22.1", "", { "peerDependencies": { "@effect/experimental": "^0.54.6", "@effect/sql": "^0.44.2", "effect": "^3.17.7" } }, "sha512-bVCmIPq+gq1kCdsBimqkERkraISRlNirmnLGZ0SaJiRi/42kypgfy+7qyuky0e6NmpHWv2dnLi49M/c2k+CZrg=="],
+
     "@effect/typeclass": ["@effect/typeclass@0.36.0", "", { "peerDependencies": { "effect": "^3.17.0" } }, "sha512-+8xYvX4tjD7gKwGYzOyFh90I+ptdXzoNHLQTSa8kGh/xOVZMIGYb0VgLoNHE02UsuVrB+JJJuBmKLdd5TeDTPg=="],
 
     "@effect/vitest": ["@effect/vitest@0.25.0", "", { "peerDependencies": { "effect": "^3.17.0", "vitest": "^3.2.0" } }, "sha512-FpOKYdhe3LaOoYn0cm5W9cD9bk2qwr2A+ujMhiDVxN7MMgndFsOd8uxcWjZRX6tWjzU2aKvZXFKGEp93GAmXug=="],
@@ -398,6 +407,8 @@
     "@libsql/win32-x64-msvc": ["@libsql/win32-x64-msvc@0.5.17", "", { "os": "win32", "cpu": "x64" }, "sha512-f5bGH8+3A5sn6Lrqg8FsQ09a1pYXPnKGXGTFiAYlfQXVst1tUTxDTugnuWcJYKXyzDe/T7ccxyIZXeSmPOhq8A=="],
 
     "@liminal/sqlite": ["@liminal/sqlite@workspace:@liminal/sqlite"],
+
+    "@liminal/workerd": ["@liminal/workerd@workspace:@liminal/workerd"],
 
     "@lmnl.im/client": ["@lmnl.im/client@workspace:lmnl.im/client"],
 

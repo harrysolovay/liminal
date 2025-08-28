@@ -6,7 +6,7 @@ import { logger } from "./_logger.ts"
 Effect.gen(function*() {
   yield* logger
 
-  yield* L.system`
+  yield* L.setSystem`
     Write persuasive marketing copy for: Buffy The Vampire Slayer.
     Focus on benefits and emotional appeal.
   `
@@ -23,7 +23,7 @@ Effect.gen(function*() {
     L.user`Please summarize our conversation.`,
     L.assistant,
   ).pipe(
-    L.provide(
+    L.make(
       L.branch,
     ),
   )
@@ -33,7 +33,7 @@ Effect.gen(function*() {
   yield* L.user`So please reiterate your thoughts on this creative journey.`
   yield* L.assistant
 }).pipe(
-  L.provide(
+  L.make(
     L.thread,
   ),
   Effect.scoped,

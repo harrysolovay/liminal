@@ -11,7 +11,7 @@ Effect.gen(function*() {
         L.user(genre),
         L.assistant,
       ).pipe(
-        L.provide(
+        L.make(
           L.thread,
         ),
       )

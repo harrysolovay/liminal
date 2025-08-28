@@ -30,7 +30,7 @@ L.line(
   L.user`I'm feeling melancholy. Why might that be?`,
   L.assistant,
 ).pipe(
-  L.provide(
+  L.make(
     L.thread,
   ),
   Effect.provide(
