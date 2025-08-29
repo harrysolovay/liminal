@@ -3,8 +3,10 @@ import * as Brand from "effect/Brand"
 import * as Effect from "effect/Effect"
 import * as FiberSet from "effect/FiberSet"
 import * as Option from "effect/Option"
+import * as Pipeable from "effect/Pipeable"
 import * as PubSub from "effect/PubSub"
 import * as Schema from "effect/Schema"
+import * as Scope from "effect/Scope"
 import type { Mutable } from "effect/Types"
 import { line } from "./L/line.ts"
 import { self } from "./L/self.ts"
@@ -32,25 +34,24 @@ export class ThreadState extends Schema.Class<ThreadState>(prefix("ThreadState")
 }
 
 export interface ThreadInit {
+  /** Scope representing the thread's lifetime. */
+  readonly scope: Scope.Scope
   /** The unique id of the thread. */
   readonly id: ThreadId
   /** The parent thread. */
   readonly parent: Option.Option<Thread>
   /** The pubsub with which thread-specific events are emitted. */
   readonly events: PubSub.PubSub<LEvent>
-  /** Daemon forks. Useful for ensuring handlers and digests complete before closing thread scope. */
-  readonly daemons: FiberSet.FiberSet<void, never>
+  /** Child fibers, such as event handlers and digests. */
+  readonly fibers: FiberSet.FiberSet<void, never>
   /** The state of the current thread. */
   readonly state: Mutable<ThreadState>
   /** The tools to be made accessible to the model. */
   tools: Option.Option<Set<NeverTool>>
 }
 
-export const ThreadTypeId: unique symbol = Symbol.for(prefix("Thread"))
-export type ThreadTypeId = typeof ThreadTypeId
-
 interface ThreadMembers extends ThreadInit {
-  readonly [ThreadTypeId]: ThreadTypeId
+  scoped: <A, E, R>(x: Effect.Effect<A, E, R>) => Effect.Effect<A, E, Exclude<R, Scope.Scope>>
 }
 
 /** A conversation isolate. */
@@ -58,13 +59,18 @@ export interface Thread extends line<Thread>, ThreadMembers, Effect.Effect<Threa
 
 export const Thread = (init: ThreadInit): Thread => {
   const members = {
-    [ThreadTypeId]: ThreadTypeId,
     ...init,
+    scoped: Effect.provideService(Scope.Scope, init.scope),
   } satisfies ThreadMembers
   const self_ = Object.assign(
     ((...args) => line(...args).pipe(Effect.provideService(self, self_))) satisfies line<Thread>,
     Effect.succeed(init.id),
     members,
+    {
+      pipe() {
+        return Pipeable.pipeArguments(this, arguments)
+      },
+    },
   ) as Thread
   return self_
 }

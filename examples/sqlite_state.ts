@@ -5,7 +5,6 @@ import { ModelLive, SqlClientLive } from "./_layers.ts"
 
 Effect.gen(function*() {
   const messages = yield* L.messages
-  console.log({ n: messages.length })
   const isFirst = !messages.length
   if (isFirst) {
     yield* L.setSystem`

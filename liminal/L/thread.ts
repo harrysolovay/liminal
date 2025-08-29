@@ -9,10 +9,11 @@ import { self } from "./self.ts"
 
 export const thread: Effect.Effect<Thread, never, Scope.Scope> = Effect.gen(function*() {
   return Thread({
+    scope: yield* Scope.Scope,
     id: ThreadId.make(crypto.randomUUID()),
     parent: yield* Effect.serviceOption(self),
     events: yield* PubSub.unbounded<LEvent>(),
-    daemons: yield* FiberSet.make<void, never>(),
+    fibers: yield* FiberSet.make<void, never>(),
     state: ThreadState.default(),
     tools: Option.none(),
   })

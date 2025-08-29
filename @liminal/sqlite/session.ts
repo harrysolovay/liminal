@@ -69,10 +69,11 @@ const ensure = Effect.fnUntraced(function*(threadId: string) {
         ),
       )
     const thread = Thread({
+      scope: yield* Scope.Scope,
       id: ThreadId.make(threadId),
       parent: yield* Effect.serviceOption(L.self),
       events: yield* PubSub.unbounded<LEvent>(),
-      daemons: yield* FiberSet.make<void, never>(),
+      fibers: yield* FiberSet.make<void, never>(),
       state: ThreadState.make({
         system: Option.fromNullable(system),
         messages,
@@ -83,10 +84,11 @@ const ensure = Effect.fnUntraced(function*(threadId: string) {
   }
   yield* db.insert(T.threads).values({ id: threadId })
   const thread = Thread({
+    scope: yield* Scope.Scope,
     id: ThreadId.make(threadId),
     parent: yield* Effect.serviceOption(L.self),
     events: yield* PubSub.unbounded<LEvent>(),
-    daemons: yield* FiberSet.make<void, never>(),
+    fibers: yield* FiberSet.make<void, never>(),
     state: ThreadState.make({
       system: Option.none(),
       messages: [],
@@ -108,13 +110,7 @@ const handler = (threadId: string, head: string | null) => {
         parentId: head,
       })
       .returning({ eventId: T.events.id })
-      .pipe(
-        Effect.catchTag("SqlError", (v) => {
-          console.log("here::", v.cause)
-          return Effect.die(undefined)
-        }),
-        extractRow0OrDie,
-      )
+      .pipe(extractRow0OrDie)
     switch (event._tag) {
       case "system_set": {
         yield* db
@@ -133,6 +129,7 @@ const handler = (threadId: string, head: string | null) => {
             )
           ),
         )
+        console.log(JSON.stringify(encoded), "\n\n")
         yield* db.insert(T.messages).values(encoded)
         break
       }

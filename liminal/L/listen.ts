@@ -1,10 +1,10 @@
 import * as Effect from "effect/Effect"
-import * as FiberSet from "effect/FiberSet"
 import { flow } from "effect/Function"
 import * as Scope from "effect/Scope"
 import * as Stream from "effect/Stream"
 import type { LEvent } from "../LEvent.ts"
 import type { Thread } from "../Thread.ts"
+import { logCauseDie } from "../util/logCauseDie.ts"
 import { self } from "./self.ts"
 
 /** Attach an event handler to process thread events. */
@@ -19,15 +19,11 @@ export const listen: <E, R>(
   const fiber = yield* Stream.fromQueue(dequeue).pipe(
     Stream.runForEach(flow(
       f,
-      Effect.orDie, // TODO
-      Effect.forkDaemon,
-      Effect.flatMap((fiber) =>
-        FiberSet.add(thread.daemons, fiber, {
-          propagateInterruption: true,
-        })
-      ),
+      logCauseDie,
+      Effect.fork,
     )),
-    Effect.forkDaemon,
+    Effect.forkScoped,
+    thread.scoped,
   )
   yield* latch.open
   return fiber

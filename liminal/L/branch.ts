@@ -9,11 +9,13 @@ import { self } from "./self.ts"
 
 export const branch: Effect.Effect<Thread, never, Thread | Scope.Scope> = Effect.gen(function*() {
   const parent = yield* self
+  const scope = yield* Scope.Scope
   return Thread({
+    scope,
     id: parent.id,
     parent: Option.some(parent),
     events: yield* PubSub.unbounded<LEvent>(),
-    daemons: yield* FiberSet.make<void, never>(),
+    fibers: yield* FiberSet.make<void, never>(),
     state: ThreadState.make({
       system: parent.state.system,
       messages: [...parent.state.messages ?? []],
