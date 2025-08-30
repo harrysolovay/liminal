@@ -5,7 +5,7 @@ import { logger } from "./_logger.ts"
 
 Effect.gen(function*() {
   yield* logger
-  yield* L.system`
+  yield* L.setSystem`
     Unless otherwise specified, do not ask follow-up questions;
     Always reply to the best of your ability using the information you have.
   `
@@ -20,7 +20,7 @@ Effect.gen(function*() {
       L.user`Please reply to the last message on my behalf.`,
       L.assistant,
     ).pipe(
-      L.provide(
+      L.scoped(
         L.branch,
       ),
       L.user,
@@ -31,10 +31,9 @@ Effect.gen(function*() {
   yield* L.user`Please summarize the key points from our conversation.`
   yield* L.assistant
 }).pipe(
-  L.provide(
+  L.scoped(
     L.thread,
   ),
-  Effect.scoped,
   Effect.provide(ModelLive),
   Effect.runFork,
 )

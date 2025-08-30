@@ -1,22 +1,35 @@
-import { sync } from "@liminal/sqlite"
-import { Console, Effect } from "effect"
+import { session } from "@liminal/sqlite"
+import { Effect } from "effect"
 import { L } from "liminal"
-import { DbLive, ModelLive } from "./_layers.ts"
+import { ModelLive, SqlClientLive } from "./_layers.ts"
 
 Effect.gen(function*() {
   const messages = yield* L.messages
-  yield* L.user(
-    messages.length ? "The next passage please." : "Tell me a scary story.",
+  const isFirst = !messages.length
+  if (isFirst) {
+    yield* L.setSystem`
+      Never ask for clarification.
+
+      Write passages of a scary story.
+
+      Keep the story moving along and evolving forever.
+    `
+  }
+  const passage = yield* L.line(
+    L.user`${isFirst ? "First" : "Next"} passage please.`,
+    L.assistant,
+  ).pipe(
+    L.scoped(
+      L.branch,
+    ),
   )
-  const next = yield* L.assistant
-  yield* Console.log(next)
+  yield* L.user(passage)
 }).pipe(
-  L.provide(
-    sync({
+  L.scoped(
+    session({
       threadId: "sqlite-state-sync",
     }),
   ),
-  Effect.scoped,
-  Effect.provide([ModelLive, DbLive]),
+  Effect.provide([ModelLive, SqlClientLive]),
   Effect.runFork,
 )

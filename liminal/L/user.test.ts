@@ -2,7 +2,7 @@ import { TextPart, UserMessage } from "@effect/ai/AiInput"
 import { expect, it } from "@effect/vitest"
 import * as Effect from "effect/Effect"
 import { messages } from "./messages.ts"
-import { provide } from "./provide.ts"
+import { scoped } from "./scoped.ts"
 import { thread } from "./thread.ts"
 import { user } from "./user.ts"
 
@@ -26,8 +26,4 @@ it.effect("test success", () =>
         ],
       }),
     ])
-  }).pipe(
-    provide(
-      thread,
-    ),
-  ))
+  }).pipe(scoped(thread)))

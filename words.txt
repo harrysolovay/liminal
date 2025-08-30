@@ -74,4 +74,5 @@ vite
 vitepress
 vitest
 vtype
+workerd
 yieldable

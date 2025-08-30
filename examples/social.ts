@@ -21,5 +21,6 @@ Effect.gen(function*() {
   )
 }).pipe(
   Effect.provide(ModelLive),
+  Effect.scoped,
   Effect.runFork,
 )

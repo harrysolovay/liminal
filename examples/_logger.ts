@@ -1,5 +1,5 @@
 import type { Message } from "@effect/ai/AiInput"
-import { Console, Effect, flow } from "effect"
+import { Console, Effect, flow, Option } from "effect"
 import { L, type LEvent } from "liminal"
 
 const GRAY = "\x1b[90m"
@@ -14,11 +14,13 @@ const event: (event: LEvent) => string = (event) => {
       break
     }
     case "messages_cleared": {
-      text += "messages cleared."
       break
     }
     case "system_set": {
-      text += `system set: ${event.system}.`
+      text += Option.match(event.system, {
+        onSome: (v) => `some: "${v}"`,
+        onNone: () => "none",
+      })
       break
     }
   }

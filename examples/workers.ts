@@ -9,7 +9,7 @@ const IMPLEMENTATION_PROMPTS = {
 }
 
 Effect.gen(function*() {
-  yield* L.system`You are a senior software architect planning feature implementations.`
+  yield* L.setSystem`You are a senior software architect planning feature implementations.`
   yield* L.user`Analyze this feature request and create an implementation plan:`
   yield* L.user`Alert administrators via text whenever site traffic exceeds a certain threshold.`
 
@@ -28,7 +28,7 @@ Effect.gen(function*() {
     plan.files.map(
       Effect.fn(
         function*(file) {
-          yield* L.system(IMPLEMENTATION_PROMPTS[file.changeType])
+          yield* L.setSystem(IMPLEMENTATION_PROMPTS[file.changeType])
           yield* L.user`Implement the changes for ${file.filePath} to support: ${file.purpose}`
           const implementation = yield* L.assistantSchema({
             explanation: Schema.String,
@@ -36,7 +36,7 @@ Effect.gen(function*() {
           })
           return { file, implementation }
         },
-        L.provide(
+        L.scoped(
           L.thread,
         ),
       ),
@@ -46,7 +46,7 @@ Effect.gen(function*() {
 
   yield* Console.log({ plan, changes })
 }).pipe(
-  L.provide(
+  L.scoped(
     L.thread,
   ),
   Effect.provide(ModelLive),

@@ -8,10 +8,9 @@ L.line(
   L.user`Hey.`,
   L.assistant,
 ).pipe(
-  L.provide(
+  L.scoped(
     L.thread,
   ),
   Effect.provide(ModelLive),
-  Effect.scoped,
   Effect.runFork,
 )

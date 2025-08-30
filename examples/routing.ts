@@ -1,7 +1,7 @@
 import { OpenAiLanguageModel } from "@effect/ai-openai"
 import { Console, Effect, Layer, Schema } from "effect"
 import { L } from "liminal"
-import { ClientLive, ModelLive } from "./_layers.ts"
+import { ModelLive, OpenaiClientLive } from "./_layers.ts"
 
 const CLASSIFICATION_SYSTEM_PROMPTS = {
   general: "You are an expert customer service representative handling general inquiries.",
@@ -13,7 +13,7 @@ const CLASSIFICATION_SYSTEM_PROMPTS = {
 
 Effect.gen(function*() {
   const classification = yield* L.line(
-    L.system`
+    L.setSystem`
       Classify this supplied customer query:
 
       Determine:
@@ -29,16 +29,16 @@ Effect.gen(function*() {
       complex: Schema.Boolean,
     }),
   ).pipe(
-    L.provide(
+    L.scoped(
       L.thread,
     ),
   )
 
   const specialist = yield* L.line(
-    L.system(CLASSIFICATION_SYSTEM_PROMPTS[classification.type]),
+    L.setSystem(CLASSIFICATION_SYSTEM_PROMPTS[classification.type]),
     L.assistant,
   ).pipe(
-    L.provide(
+    L.scoped(
       L.thread,
     ),
     Effect.provide(
@@ -48,6 +48,6 @@ Effect.gen(function*() {
 
   yield* Console.log({ classification, specialist })
 }).pipe(
-  Effect.provide([ModelLive, ClientLive]),
+  Effect.provide([ModelLive, OpenaiClientLive]),
   Effect.runFork,
 )
